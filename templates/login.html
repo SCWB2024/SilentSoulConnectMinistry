@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Login — SoulStart{% endblock %}
+{% block content %}
+
+<section class="hero hero-day" style="background-image:url('{{ url_for('static', filename='img/hero_day.jpg') }}')">
+  <div class="hero-inner" style="padding:24px 22px;">
+    <h1>Admin Login</h1>
+    <p class="muted">Authorized access only.</p>
+  </div>
+</section>
+
+<div class="card" role="region" aria-labelledby="login-title">
+  <h3 id="login-title" class="sr-only">Sign in</h3>
+
+  <form method="post" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label for="password">Password</label>
+    <input id="password" type="password" name="password" required autocomplete="current-password" minlength="8" autofocus>
+
+    <button type="submit" class="btn small">Sign in</button>
+    <a class="btn soft" href="{{ url_for('home') }}">🏠 Back Home</a>
+
+    {% if error %}
+      <p class="err" role="alert" aria-live="polite">{{ error }}</p>
+    {% endif %}
+  </form>
+</div>
+{% endblock %}

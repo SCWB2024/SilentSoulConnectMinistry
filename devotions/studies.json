@@ -1,0 +1,24 @@
+[
+  {
+    "title": "Calling on His Name",
+    "blurb": "A six-day study on prayer and connecting with God through His Spirit.",
+    "label": "6-day study",
+    "image": "img/studies/calling.jpg",
+    "link": "/static/studies/calling-on-his-name.html",
+    "date": "2025-10-06"
+  },
+  {
+    "title": "Restored Faith in Motion",
+    "blurb": "Faith that rises again when life gets heavy.",
+    "label": "Coming soon",
+    "image": "img/studies/restored.jpg",
+    "link": ""
+  },
+  {
+    "title": "Faith to Rise",
+    "blurb": "Trusting God in new beginnings.",
+    "label": "Coming soon",
+    "image": "img/studies/faith-to-rise.jpg",
+    "link": ""
+  }
+]

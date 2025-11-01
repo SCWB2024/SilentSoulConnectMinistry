@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}About — SoulStart{% endblock %}
+
+<section class="hero" style="background-image:url('{{ url_for('static', filename='img/hero_day.jpg') }}')">
+  <div class="hero-inner">
+    <h1>About Silent SoulConnect Ministry</h1>
+    <p class="sub">More of Him, less of us — Jesus at the center.</p>
+  </div>
+</section>
+
+{% block content %}
+  <h1>About Silent SoulConnect Ministry</h1>
+  <p class="subtle">More of Him, less of us — Jesus at the center.</p>
+
+  <div class="card">
+    <h3>Our Heart</h3>
+    <p>
+      We serve the Deaf and Hard of Hearing community through accessible devotionals, prayer, and study.
+      SoulStart invites you to rise in faith and rest in grace — every day, morning and night.
+    </p>
+    <p>
+      “For the message of the cross is the power of God.” (1 Corinthians 1:18)
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>Who We Are</h3>
+    <p>
+      Led by an evangelist and counselor, we point to the hope of Christ —
+      through Scripture, prayer, and practical love. This space is for reflection, restoration, and action.
+    </p>
+  </div>
+
+  <p><a class="btn soft" href="{{ url_for('home') }}">🏠 Back Home</a></p>
+{% endblock %}

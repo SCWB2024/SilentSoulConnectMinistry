@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Feedback — SoulStart{% endblock %}
+{% block content %}
+<section class="hero hero-day" style="background-image:url('{{ url_for('static', filename='img/hero_day.jpg') }}')">
+  <div class="hero-inner" style="padding:24px 22px;">
+    <h1>💬 Feedback</h1>
+    <p class="muted">Share an idea, bug, or encouragement. Thank you!</p>
+  </div>
+</section>
+
+<div class="card">
+  {% if ok is sameas true %}<p class="ok">Thanks — received!</p>{% elif ok is sameas false %}<p class="err">Sorry, could not save right now.</p>{% endif %}
+  <form method="post" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Name (optional)</label>
+    <input type="text" name="name" placeholder="Your name">
+
+    <label>Contact (optional)</label>
+    <input type="text" name="contact" placeholder="Email or phone">
+
+    <label>Your message</label>
+    <textarea name="message" rows="5" placeholder="How can we improve?"></textarea>
+
+    <button class="btn" type="submit">Send</button>
+    <a class="btn soft" href="{{ url_for('home') }}">🏠 Home</a>
+    <a class="btn soft" href="{{ url_for('donation') }}">💚 Give</a>
+  </form>
+</div>
+{% endblock %}

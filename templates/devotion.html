@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}{{ "Night" if mode == "night" else "Today" }} — SoulStart{% endblock %}
+
+{% block content %}
+<section class="hero {{ hero_class }}"
+        {% if hero_bg %}style="background-image:url('{{ url_for('static', filename=hero_bg) }}')" {% endif %}>
+  <div class="hero-inner" style="padding:28px 22px;">
+    <h1>{{ "Night" if mode == "night" else "Today’s Devotions" }}</h1>
+    <p class="muted">{{ today.strftime("%A, %B %d, %Y") }}</p>
+  </div>
+</section>
+
+{% set has = entry.title or entry.verse_ref or entry.verse_text or (entry.points and entry.points|length>0) %}
+{% if has %}
+  <article class="card{% if mode=='night' %} night-tone{% endif %}">
+    <h3 class="card-title">
+      {{ "🌙 Night — " if mode=="night" else "🌅 Morning — " }}
+      {{ entry.title or "Devotion" }}
+    </h3>
+
+    {% if entry.verse_ref or entry.verse_text %}
+      <p><strong>📖 {{ entry.verse_ref or "" }}</strong>
+        {% if entry.verse_text %} — {{ entry.verse_text }}{% endif %}
+      </p>
+    {% endif %}
+
+    {% if entry.points and entry.points|length > 0 %}
+      <ul>
+        {% for p in entry.points %}
+          <li>{{ p }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if entry.closing %}<p>✍️ {{ entry.closing }}</p>{% endif %}
+
+    {% if entry.prayer %}
+      <p>🙏 {{ entry.prayer }}</p>
+    {% else %}
+      {% if mode == "night" %}
+        <p>🙏 Lord, quiet my mind and keep me in Your care. Amen.</p>
+      {% else %}
+        <p>🙏 Lord, order my steps today. Amen.</p>
+      {% endif %}
+    {% endif %}
+
+    <p style="margin-top:12px">
+      <a class="btn" href="{{ join_url }}" target="_blank" rel="noopener">💬 Join WhatsApp</a>
+      <a class="btn soft" href="{{ url_for('home') }}">🏠 Back Home</a>
+    </p>
+  </article>
+
+{% else %}
+  <div class="card{% if mode=='night' %} night-tone{% endif %}">
+    <p class="muted">No devotion entry found for this date.</p>
+    <p><a class="btn soft" href="{{ url_for('home') }}">🏠 Back Home</a></p>
+  </div>
+{% endif %}
+{% endblock %}

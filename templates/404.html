@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Not Found — SoulStart{% endblock %}
+{% block content %}
+<section class="hero hero-day" style="background-image:url('{{ url_for('static', filename='img/hero_day.jpg') }}')">
+  <div class="hero-inner" style="padding:24px 22px;">
+    <h1>404 — Page Not Found</h1>
+    <p class="muted">That link doesn’t exist. Try the home page or today’s devotion.</p>
+    <p>
+      <a class="btn" href="{{ url_for('home') }}">🏠 Home</a>
+      <a class="btn soft" href="{{ url_for('today') }}">📅 Today</a>
+    </p>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} — Study{% endblock %}
+{% block content %}
+<section class="hero hero-day" style="background-image:url('{{ url_for('static', filename='img/hero_day.jpg') }}')">
+  <div class="hero-inner" style="padding:24px 22px;">
+    <h1>{{ title }}</h1>
+    {% if subtitle %}<p class="muted">{{ subtitle }}</p>{% endif %}
+    {% if date_str %}<p class="tag">Updated: {{ date_str }}</p>{% endif %}
+  </div>
+</section>
+
+<div class="center" style="margin:10px 0 14px;">
+  <a class="btn soft small" href="{{ url_for('study') }}">⬅️ Back to Study Hub</a>
+  <a class="btn soft small" href="{{ url_for('home') }}">🏠 Home</a>
+</div>
+
+<article id="studyContent" class="card" role="article">
+  <h2 class="sr-only">{{ title }}</h2>
+  {{ content|safe }}
+</article>
+
+{% if reflection_points %}
+<section class="card" style="margin-top:12px;">
+  <h2>Reflection</h2>
+  <ul class="clean">
+    {% for p in reflection_points %}<li>{{ p }}</li>{% endfor %}
+  </ul>
+</section>
+{% endif %}
+{% endblock %}

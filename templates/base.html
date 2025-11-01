@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>{% block title %}SoulStart Devotion{% endblock %}</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}"/>
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+  <!-- Social cards -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="SoulStart — Faith to Rise, Grace to Rest">
+  <meta property="og:description" content="Daily devotion for Sunrise & Sunset, prayer requests, and study resources.">
+  <meta property="og:image" content="{{ url_for('static', filename='img/hero_day.jpg', _external=True) }}">
+  <meta property="og:url" content="{{ request.url_root }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SoulStart — Faith to Rise, Grace to Rest">
+  <meta name="twitter:description" content="Daily devotion for Sunrise & Sunset, prayer requests, and study resources.">
+  <meta name="twitter:image" content="{{ url_for('static', filename='img/hero_day.jpg', _external=True) }}">
+
+  <style nonce="{{ csp_nonce() }}">
+    .fab{position:fixed; z-index:1000; width:56px; height:56px; border-radius:999px;
+         display:flex; align-items:center; justify-content:center; font-size:24px;
+         box-shadow:0 10px 24px rgba(0,0,0,.22); cursor:grab; user-select:none}
+    .fab:active{cursor:grabbing}
+    .fab-donate{background:#10b981; color:#fff; right:18px; bottom:88px}
+    .topnav a.active{font-weight:800; text-decoration:underline}
+  </style>
+</head>
+
+<body class="{{ page_bg_class or '' }}"
+      style="{% if page_bg_url %}--page-bg:url('{{ page_bg_url }}'){% endif %}">
+  {% if page_bg_class == 'bg-video' and page_bg_video %}
+  <video class="bg-video" autoplay muted loop playsinline preload="metadata" poster="{{ page_bg_poster or '' }}">
+    <source src="{{ page_bg_video }}" type="video/mp4">
+  </video>
+{% endif %}
+
+  <header class="header brand" role="banner">
+    <div class="brand">
+      <img src="{{ url_for('static', filename='img/sscm_logo.png') }}" alt="Silent SoulConnect Ministry" class="logo">
+      <div>
+        <div class="title">Silent SoulConnect Ministry</div>
+        <div class="sub">{{ theme or "Faith to Rise, Grace to Rest" }}</div>
+      </div>
+    </div>
+
+    <nav class="topnav" role="navigation" aria-label="Main">
+      <a href="{{ url_for('home') }}"      class="{{ 'active' if active=='home' else '' }}"      {% if active=='home' %}aria-current="page"{% endif %}>Home</a>
+      <a href="{{ url_for('today') }}"     class="{{ 'active' if active=='today' else '' }}"     {% if active=='today' %}aria-current="page"{% endif %}>Today</a>
+      <a href="{{ url_for('study') }}"     class="{{ 'active' if active=='study' else '' }}"     {% if active=='study' %}aria-current="page"{% endif %}>Study</a>
+      <a href="{{ url_for('verses') }}"    class="{{ 'active' if active=='verses' else '' }}"    {% if active=='verses' %}aria-current="page"{% endif %}>Verses</a>
+      <a href="{{ url_for('prayer') }}"    class="{{ 'active' if active=='prayer' else '' }}"    {% if active=='prayer' %}aria-current="page"{% endif %}>Prayer</a>
+      <a href="{{ url_for('about') }}"     class="{{ 'active' if active=='about' else '' }}"     {% if active=='about' %}aria-current="page"{% endif %}>About</a>
+      <a href="{{ url_for('volunteer') }}" class="{{ 'active' if active=='volunteer' else '' }}" {% if active=='volunteer' %}aria-current="page"{% endif %}>Volunteer</a>
+      <a href="{{ url_for('feedback_view') }}" class="{{ 'active' if active=='feedback' else '' }}" {% if active=='feedback' %}aria-current="page"{% endif %}>Feedback</a>
+      {% if is_authed %}
+        <a href="{{ url_for('admin')  }}" class="{{ 'active' if active=='admin' else '' }}" {% if active=='admin' %}aria-current="page"{% endif %}>Admin</a>
+        <a href="{{ url_for('logout') }}" class="muted">Logout</a>
+      {% else %}
+        <a href="{{ url_for('admin')  }}" class="{{ 'active' if active=='admin' else '' }}" {% if active=='admin' %}aria-current="page"{% endif %}>Admin</a>
+      {% endif %}
+    </nav>
+
+    <a href="{{ url_for('donation') }}" class="fab fab-donate" aria-label="Give">💚</a>
+  </header>
+
+  <main class="main" role="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="muted">© {{ (today or none) and today.year or "" }} SSCM • {{ theme or "" }}</div>
+    <div class="footer-actions">
+      <a class="btn green" href="{{ join_url }}" target="_blank" rel="noopener">💬 WhatsApp Group</a>
+      <a class="btn soft" href="{{ url_for('home') }}">🏠 Home</a>
+      <button class="btn soft" id="shareSite">🔗 Share site</button>
+    </div>
+  </footer>
+
+  <!-- Global Verse Modal -->
+  <dialog id="verseModal" class="verse-modal" aria-labelledby="vm-ref">
+    <div class="vm-wrap">
+      <button class="vm-close" aria-label="Close">&times;</button>
+      <img id="vm-img" src="" alt="Verse image">
+      <div class="vm-text">
+        <div id="vm-ref" class="vm-ref"></div>
+        <div id="vm-cap" class="vm-cap"></div>
+        <div class="vm-actions">
+          <button class="btn small" id="vm-download">⬇️ Download</button>
+          <button class="btn soft small" id="vm-share">🔗 Share</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <script nonce="{{ csp_nonce() }}">
+    // Share site
+    (function(){
+      const btn = document.getElementById('shareSite');
+      if (!btn) return;
+      btn.addEventListener('click', async () => {
+        const siteUrl = window.location.origin;
+        const data = {
+          title: 'Silent SoulConnect Ministry',
+          text: 'Faith to Rise, Grace to Rest — daily devotions, study & prayer.',
+          url: siteUrl
+        };
+        if (navigator.share) {
+          try { await navigator.share(data); } catch(e){}
+        } else {
+          try { await navigator.clipboard.writeText(siteUrl); alert('🔗 Link copied!'); }
+          catch(e){ alert('Unable to copy, please share manually.'); }
+        }
+      });
+    })();
+
+    // Draggable Donate FAB
+    (function () {
+      const fab = document.querySelector('.fab-donate');
+      if (!fab) return;
+      let dragging = false, offsetX = 0, offsetY = 0;
+      const start = (x, y) => {
+        const r = fab.getBoundingClientRect();
+        dragging = true; offsetX = x - r.left; offsetY = y - r.top;
+        fab.style.transition = 'none';
+      };
+      const move = (x, y) => {
+        if (!dragging) return;
+        const maxX = window.innerWidth  - fab.offsetWidth  - 6;
+        const maxY = window.innerHeight - fab.offsetHeight - 6;
+        const nx = Math.max(6, Math.min(x - offsetX, maxX));
+        const ny = Math.max(6, Math.min(y - offsetY, maxY));
+        fab.style.left = nx + 'px'; fab.style.top = ny + 'px';
+      };
+      const end = () => { dragging = false; fab.style.transition = ''; };
+      fab.addEventListener('mousedown', e => { e.preventDefault(); start(e.clientX, e.clientY); });
+      document.addEventListener('mousemove', e => move(e.clientX, e.clientY));
+      document.addEventListener('mouseup', end);
+      fab.addEventListener('touchstart', e => { const t = e.touches[0]; start(t.clientX, t.clientY); }, {passive:true});
+      fab.addEventListener('touchmove',  e => { const t = e.touches[0]; move(t.clientX, t.clientY); }, {passive:true});
+      fab.addEventListener('touchend', end);
+      if (!fab.style.left) fab.style.left = 'calc(100vw - 72px)';
+      if (!fab.style.top)  fab.style.top  = 'calc(100vh - 120px)';
+    })();
+
+    // Global Verse Modal helpers
+    (function(){
+      const modal  = document.getElementById('verseModal');
+      const vmImg  = document.getElementById('vm-img');
+      const vmRef  = document.getElementById('vm-ref');
+      const vmCap  = document.getElementById('vm-cap');
+      const closeB = document.querySelector('.vm-close');
+      const dlBtn  = document.getElementById('vm-download');
+      const shBtn  = document.getElementById('vm-share');
+
+      function openModal(src, ref, cap){
+        vmImg.src = src || '';
+        vmRef.textContent = ref || '';
+        vmCap.textContent = cap || '';
+        if (typeof modal.showModal === 'function') modal.showModal();
+        else modal.setAttribute('open','open');
+      }
+      function closeModal(){
+        vmImg.src = '';
+        if (typeof modal.close === 'function') modal.close();
+        else modal.removeAttribute('open');
+      }
+      function safeName(s){ return (s || 'verse').toLowerCase().replace(/[^a-z0-9]+/g,'_') + '.png'; }
+      function downloadCurrent(){
+        if (!vmImg.src) return;
+        const a = document.createElement('a');
+        a.href = vmImg.src;
+        a.download = safeName(vmRef.textContent);
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      }
+      async function shareCurrent(){
+        const title = vmRef.textContent || 'Verse';
+        const text  = vmCap.textContent || '';
+        const url   = vmImg.src || '';
+        if (navigator.share){ try { await navigator.share({ title, text, url }); } catch(e){} }
+        else { try { await navigator.clipboard.writeText(url); alert('Image link copied!'); } catch(e){} }
+      }
+      window.__openVerseModal = openModal;
+      closeB.addEventListener('click', closeModal);
+      modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+      window.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+      dlBtn.addEventListener('click', downloadCurrent);
+      shBtn.addEventListener('click', shareCurrent);
+    })();
+  </script>
+</body>
+</html>

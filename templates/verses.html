@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Theme Verses — SoulStart{% endblock %}
+{% block content %}
+
+<section class="hero glass">
+  <div class="hero-inner" style="padding:24px 22px;">
+    <h1>Theme Verses</h1>
+    <p class="muted">Tap a card to open the verse with its caption.</p>
+  </div>
+</section>
+
+{% if cards and cards|length > 0 %}
+  <div class="verse-grid compact" aria-label="Theme verse cards">
+    {% for c in cards %}
+    <figure class="verse-card"
+            tabindex="0"
+            role="button"
+            aria-label="Open {{ c.ref }}"
+            data-ref="{{ c.ref }}"
+            data-caption="{{ c.caption }}"
+            data-src="{{ c.src }}">
+      <img src="{{ c.src }}" alt="{{ c.ref }}">
+      <figcaption>{{ c.ref }}</figcaption>
+    </figure>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="card"><p class="muted">No verse cards found.</p></div>
+{% endif %}
+
+<div class="center mt-4">
+  <a class="btn soft" href="{{ url_for('home') }}">🏠 Back Home</a>
+</div>
+
+<script nonce="{{ csp_nonce() }}">
+(function(){
+  // Wire per-card open handlers to the global modal helpers from base.html
+  const open = window.__openVerseModal;
+  if (!open) return;
+  document.querySelectorAll('.verse-card').forEach(card=>{
+    const go=()=>open(card.dataset.src, card.dataset.ref, card.dataset.caption);
+    card.addEventListener('click', go);
+    card.addEventListener('keydown', e=>{
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); }
+    });
+  });
+})();
+</script>
+{% endblock %}

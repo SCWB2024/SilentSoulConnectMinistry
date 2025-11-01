@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}Admin — SoulStart{% endblock %}
+{% block content %}
+
+<section class="hero hero-day" style="background-image:url('{{ url_for('static', filename='img/hero_day.jpg') }}')">
+  <div class="hero-inner" style="padding:24px 22px;">
+    <h1>⚙️ Admin Dashboard</h1>
+    <p class="muted">Manage outreach, requests, and WhatsApp delivery.</p>
+  </div>
+</section>
+
+<div class="card admin-card">
+  <h3>Send WhatsApp</h3>
+
+  <form id="waForm" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <div class="row">
+      <label>Date</label>
+      <input type="date" name="date" value="{{ today_str }}">
+      <label>Mode</label>
+      <select name="mode">
+        <option value="both">Both (Morning & Night)</option>
+        <option value="morning">Morning only</option>
+        <option value="night">Night only</option>
+        <option value="verses">Verses</option>
+      </select>
+    </div>
+
+    <div class="row">
+      <label>Chat (optional)</label>
+      <input type="text" name="chat" placeholder="Silent SoulConnect">
+      <label>Paste delay (s)</label>
+      <input type="number" name="paste_delay" value="8" min="0" step="1" style="width:6rem">
+    </div>
+
+    <div class="row">
+      <label><input type="checkbox" name="send"> Auto-send</label>
+      <label><input type="checkbox" name="open_only"> Open only</label>
+      <label><input type="checkbox" name="dry_run"> Dry run (print only)</label>
+    </div>
+
+    <button class="btn" type="submit" id="waSubmit">Send</button>
+  </form>
+
+  <pre id="status" class="status hidden" aria-live="polite"></pre>
+</div>
+
+<div class="card admin-card">
+  <h3>People</h3>
+  <p>
+    <a class="btn soft" href="{{ url_for('admin_requests') }}">📥 Prayer Requests</a>
+    <a class="btn soft" href="{{ url_for('admin_volunteers') }}">👐 Volunteers</a>
+    <a class="btn soft" href="{{ url_for('admin_feedback') }}">💬 Feedback</a>
+  </p>
+</div>
+
+<div class="center mt-4">
+  <a class="btn soft" href="{{ url_for('logout') }}">↪ Logout</a>
+  <a class="btn soft" href="{{ url_for('home') }}">🏠 Home</a>
+</div>
+
+<style nonce="{{ csp_nonce() }}">
+  .hidden { display:none; }
+  .status {
+    margin-top:12px; padding:12px; background:#0f1420; color:#e5e7eb;
+    border-radius:8px; max-height:320px; overflow:auto; font-size:0.9rem;
+  }
+  .row { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin:8px 0; }
+  .row label { font-weight:600; }
+</style>
+
+<script nonce="{{ csp_nonce() }}">
+(function(){
+  const form = document.getElementById('waForm');
+  const submit = document.getElementById('waSubmit');
+  const status = document.getElementById('status');
+
+  function show(data){
+    status.classList.remove('hidden');
+    try { status.textContent = JSON.stringify(data, null, 2); }
+    catch { status.textContent = String(data); }
+  }
+
+  function summarize(api){
+    if (!api || typeof api !== 'object') return api;
+    if (Array.isArray(api.results)){
+      const brief = api.results.map(r => ({
+        mode: r.mode, ok: r.ok, code: r.returncode,
+        hint: (r.stderr && r.stderr.slice(-160)) || undefined
+      }));
+      return { ok: api.ok, results: brief };
+    }
+    return api;
+  }
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    status.classList.add('hidden');
+    submit.disabled = true; submit.textContent = 'Sending…';
+
+    const fd = new FormData(form);
+    try {
+      const res = await fetch('{{ url_for("admin_whatsapp_send") }}', {
+        method: 'POST', body: fd, credentials: 'same-origin'
+      });
+      let data = await res.json().catch(()=>({ok:false,error:'Bad response'}));
+      show(summarize(data));
+    } catch(err){
+      show({ok:false,error:String(err)});
+    } finally {
+      submit.disabled = false; submit.textContent = 'Send';
+    }
+  });
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Home — SoulStart{% endblock %}
+{% block content %}
+
+<!-- Page-scoped CSS (CSP nonce) -->
+<style nonce="{{ csp_nonce() }}">
+  /* apply hero background only when we have one */
+  .hero.dynamic {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .share-row { display:flex; gap:.5rem; flex-wrap:wrap; }
+</style>
+
+<section class="hero {% if hero_bg %}dynamic{% endif %} {{ hero_class }}">
+  {% if hero_bg %}
+    <!-- use data attr; no inline style -->
+    <div id="heroBgCarrier" data-bg="{{ url_for('static', filename=hero_bg) }}"></div>
+  {% endif %}
+  <div class="hero-inner">
+    <h1>Come, all who are thirsty</h1>
+    <p class="muted">SoulStart — daily devotion to stir faith and bring rest.</p>
+    {% if hero_title %}<p class="tag">Today: {{ hero_title }}</p>{% endif %}
+    <p class="cta">
+      <a class="btn" href="{{ url_for('today') }}">📅 Open Today</a>
+      <a class="btn" href="{{ url_for('verses') }}">📖 Verses</a>
+      <a class="btn" href="{{ join_url }}" target="_blank" rel="noopener">💬 Join WhatsApp</a>
+    </p>
+  </div>
+</section>
+
+<div class="card">
+  <h3>Quick Links</h3>
+  <p>
+    <a class="btn small" href="{{ url_for('today') }}">📅 Today</a>
+    <a class="btn small" href="{{ url_for('study') }}">📘 Study Hub</a>
+    <a class="btn small" href="{{ url_for('verses') }}">📖 Verses</a>
+    <a class="btn small" href="{{ url_for('prayer') }}">🙏 Prayer</a>
+    <a class="btn small" href="{{ url_for('about') }}">✝️ About</a>
+  </p>
+</div>
+
+<div class="share-row">
+  <!-- URL-encode for safety -->
+  <a class="btn soft small" href="https://api.whatsapp.com/send?text={{ request.url_root|trim|urlencode }}">
+    💬 Share on WhatsApp
+  </a>
+  <button class="btn soft small" id="copyLinkBtn">
+    🔗 Copy Link
+  </button>
+</div>
+
+<!-- Page-scoped JS (CSP nonce) -->
+<script nonce="{{ csp_nonce() }}">
+  (function () {
+    // set hero background from data attr (no inline style attrs)
+    const carrier = document.getElementById('heroBgCarrier');
+    if (carrier) {
+      const url = carrier.getAttribute('data-bg');
+      const hero = carrier.closest('.hero');
+      if (url && hero) hero.style.backgroundImage = `url('${url}')`;
+    }
+
+    // copy link button
+    const btn = document.getElementById('copyLinkBtn');
+    if (btn) {
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(window.location.origin + '/');
+          alert('Link copied!');
+        } catch (e) {
+          alert('Unable to copy, please copy manually.');
+        }
+      });
+    }
+  })();
+</script>
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Admin — Prayer Requests{% endblock %}
+{% block content %}
+
+<section class="hero hero-day" style="background-image:url('{{ url_for('static', filename='img/prayer.jpg') }}')">
+  <div class="hero-inner" style="padding:24px 22px;">
+    <h1>🙏 Prayer Requests</h1>
+    <p class="muted">All submitted requests are listed below for review and follow-up.</p>
+  </div>
+</section>
+
+{% if items and items|length > 0 %}
+<div class="card admin-card" style="overflow:auto;">
+  <table style="width:100%; border-collapse:collapse;">
+    <thead>
+      <tr>
+        <th>When</th>
+        <th>Name</th>
+        <th>Contact</th>
+        <th>Request</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in items %}
+      <tr>
+        <td>{{ r.ts }}</td>
+        <td><strong>{{ r.name or "Anonymous" }}</strong></td>
+        <td>{{ r.contact or "—" }}</td>
+        <td>{{ r.request }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="card"><p class="muted">No prayer requests yet.</p></div>
+{% endif %}
+
+<div class="center mt-4">
+  <a class="btn soft" href="{{ url_for('admin') }}">⬅️ Back to Admin</a>
+  <a class="btn soft" href="{{ url_for('home') }}">🏠 Home</a>
+</div>
+
+<style nonce="{{ csp_nonce() }}">
+  table th, table td {
+    text-align:left;
+    border-bottom:1px solid var(--border);
+    padding:8px;
+    font-size:.95rem;
+  }
+  thead {
+    background:#f8fafc;
+    font-weight:700;
+  }
+</style>
+
+{% endblock %}

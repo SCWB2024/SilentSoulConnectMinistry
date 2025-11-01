@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Prayer — SoulStart{% endblock %}
+{% block content %}
+
+<section class="hero" style="background-image:url('{{ url_for('static', filename='img/prayer.jpg') }}')">
+  <div class="hero-inner" style="padding:48px 20px;">
+    <h1>Prayer Request</h1>
+    <p class="muted">Share your burden. We will lift it together.</p>
+
+    {% if ok is defined %}
+      {% if ok %}
+        <p class="ok fade">✅ Thank you. Your request was received.</p>
+      {% else %}
+        <p class="err fade">❌ Sorry, something went wrong. Please try again.</p>
+      {% endif %}
+    {% endif %}
+
+    <form method="post" class="prayer-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label for="name">Name (optional)</label>
+      <input id="name" name="name" type="text" placeholder="Your name">
+
+      <label for="contact">Contact (optional)</label>
+      <input id="contact" name="contact" type="text" placeholder="Email or phone">
+
+      <label for="request">Your prayer request</label>
+      <textarea id="request" name="request" rows="5" required placeholder="Write your request here..."></textarea>
+
+      <button class="btn" type="submit">Send</button>
+      <a class="btn soft" href="{{ url_for('home') }}">🏠 Back Home</a>
+    </form>
+  </div>
+</section>
+{% endblock %}

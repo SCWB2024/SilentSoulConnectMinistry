@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Volunteer — SoulStart{% endblock %}
+{% block content %}
+
+<section class="hero hero-day" style="background:url('{{ url_for('static', filename='img/serve_bg.jpg') }}') center/cover;">
+  <div class="hero-inner" style="padding:48px 20px;">
+    <h1>Offer Your Skills</h1>
+    <p class="muted">“Small as a mustard seed — growing by grace.”</p>
+  </div>
+</section>
+
+<div class="card">
+  <h3>Serve with Your Hands &amp; Heart</h3>
+  <p>We welcome gifts in ASL/ISL, teaching, media, editing, tech, design, admin, prayer, or outreach.</p>
+
+  {% if ok %}<p class="ok">✅ Thank you! We’ve received your offer to serve.</p>{% elif err %}<p class="err">{{ err }}</p>{% endif %}
+
+  <form method="post" class="prayer-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label for="name">Your Name*</label>
+    <input id="name" name="name" required>
+    <label for="contact">Contact</label>
+    <input id="contact" name="contact" placeholder="you@example.com or +1 242…">
+    <label for="skills">Skills you can offer</label>
+    <input id="skills" name="skills" placeholder="ASL/ISL, teaching, web, media, design, admin, prayer…">
+    <label for="availability">Availability</label>
+    <input id="availability" name="availability" placeholder="e.g., Saturdays or evenings">
+    <label for="notes">Notes (optional)</label>
+    <textarea id="notes" name="notes" rows="4"></textarea>
+
+    <button class="btn" type="submit">Submit</button>
+    <a class="btn soft" href="{{ url_for('donation') }}">💚 Give</a>
+    <a class="btn soft" href="{{ url_for('home') }}">🏠 Home</a>
+  </form>
+</div>
+{% endblock %}

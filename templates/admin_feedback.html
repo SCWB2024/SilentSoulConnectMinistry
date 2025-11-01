@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Admin — Feedback{% endblock %}
+{% block content %}
+
+<section class="hero hero-day" style="background-image:url('{{ url_for('static', filename='img/hero_day.jpg') }}')">
+  <div class="hero-inner" style="padding:24px 22px;">
+    <h1>💬 Feedback</h1>
+    <p class="muted">Messages from users and visitors.</p>
+  </div>
+</section>
+
+<div class="card">
+  {% if items %}
+    <ul class="clean">
+      {% for f in items %}
+        <li style="margin-bottom:12px;">
+          <div class="muted">{{ f.ts }}</div>
+          <strong>{{ f.name or "Anonymous" }}</strong> — {{ f.contact or "No contact" }}<br>
+          {{ f.message }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="muted">No feedback yet.</p>
+  {% endif %}
+</div>
+
+<div class="center mt-4">
+  <a class="btn soft" href="{{ url_for('admin') }}">⬅️ Back to Admin</a>
+  <a class="btn soft" href="{{ url_for('home') }}">🏠 Home</a>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+
+# Envs / secrets
+.env
+*.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Videos / generated
+videos/
+tmp/
+*.mp4
+*.mov
+
+# VSCode / IDE
+.vscode/
+.idea/
+
+/_heavy/
+

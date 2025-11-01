@@ -1,0 +1,29 @@
+# render.yaml — SoulStart Devotion (Blueprint deploy)
+services:
+  - type: web
+    name: soulstart-devotion
+    runtime: python
+    repo: https://github.com/<YOUR-USERNAME>/<YOUR-REPO>.git
+    branch: main
+    plan: free
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    autoDeploy: true
+    healthCheckPath: /
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FORCE_HTTPS
+        value: "1"
+      - key: SITE_THEME
+        value: "Faith to Rise, Grace to Rest"
+      - key: JOIN_URL
+        value: "https://chat.whatsapp.com/CdkN2V0h8vCDg2AP4saYfG"
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+    # Optional persistent disk (keeps prayer/volunteer JSON across restarts; paid plan)
+    # disks:
+    #   - name: data
+    #     mountPath: /opt/render/project/src/devotions
+    #     sizeGB: 1

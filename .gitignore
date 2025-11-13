@@ -19,17 +19,10 @@ __pycache__/
 *.log
 *.bak
 
-# --- Heavy local-only media (allow web assets) ---
-# If you have very large archives, ignore them by folder, not by extension:
-# /soulstart/static/media/
-# /soulstart/static/videos/
-# /assets/
-
 # --- System Files ---
 .DS_Store
 Thumbs.db
 
-# --- Old / Dev / Backup Scripts (optional) ---
-soulstart_old.py
+# --- Old / Dev / Backup Scripts ---
 check_env.py
 video_sunset_sign.py

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Study Series — SoulStart{% endblock %}
+{% block content %}
+<section class="hero glass">
+  <div class="hero-inner">
+    <h1>Study Hub</h1>
+    <p class="muted">Choose a series to begin.</p>
+  </div>
+</section>
+
+<div class="grid cards">
+  {% for s in series %}
+    <a class="card clickable" href="{{ url_for('study_detail', series_name=s.key) }}">
+      <h3>{{ s.title }}</h3>
+      <p class="muted">Open {{ s.title }}</p>
+    </a>
+  {% else %}
+    <div class="card"><p class="muted">Place files like <code>templates/study/series1.html</code>.</p></div>
+  {% endfor %}
+</div>
+
+<div class="center mt-4">
+  <a class="btn soft" href="{{ url_for('home') }}">🏠 Home</a>
+</div>
+{% endblock %}

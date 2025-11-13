@@ -9,41 +9,24 @@
   </div>
 </section>
 
-{% if cards and cards|length > 0 %}
-  <div class="verse-grid compact" aria-label="Theme verse cards">
-    {% for c in cards %}
-    <figure class="verse-card"
-            tabindex="0"
-            role="button"
-            aria-label="Open {{ c.ref }}"
-            data-ref="{{ c.ref }}"
-            data-caption="{{ c.caption }}"
-            data-src="{{ c.src }}">
-      <img src="{{ c.src }}" alt="{{ c.ref }}">
-      <figcaption>{{ c.ref }}</figcaption>
-    </figure>
-    {% endfor %}
-  </div>
-{% else %}
-  <div class="card"><p class="muted">No verse cards found.</p></div>
-{% endif %}
+<div class="verses-grid" role="list">
+  {% for c in cards %}
+    <a role="listitem"
+       class="verse-card"
+       href="{{ c.src }}"
+       target="_blank"
+       rel="noopener"
+       aria-label="{{ c.ref }} — {{ c.caption }}">
+      <img src="{{ c.src }}" alt="{{ c.alt or c.ref }}">
+      <div class="cap"><strong>{{ c.ref }}</strong> {{ c.caption }}</div>
+    </a>
+  {% else %}
+    <div class="card"><p class="muted">No verse cards found. Check <code>static/img/verses/</code> and <code>verses.json</code>.</p></div>
+  {% endfor %}
+</div>
 
 <div class="center mt-4">
   <a class="btn soft" href="{{ url_for('home') }}">🏠 Back Home</a>
 </div>
 
-<script nonce="{{ csp_nonce() }}">
-(function(){
-  // Wire per-card open handlers to the global modal helpers from base.html
-  const open = window.__openVerseModal;
-  if (!open) return;
-  document.querySelectorAll('.verse-card').forEach(card=>{
-    const go=()=>open(card.dataset.src, card.dataset.ref, card.dataset.caption);
-    card.addEventListener('click', go);
-    card.addEventListener('keydown', e=>{
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); }
-    });
-  });
-})();
-</script>
 {% endblock %}

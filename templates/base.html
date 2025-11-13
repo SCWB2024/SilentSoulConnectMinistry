@@ -35,7 +35,7 @@
   <video class="bg-video" autoplay muted loop playsinline preload="metadata" poster="{{ page_bg_poster or '' }}">
     <source src="{{ page_bg_video }}" type="video/mp4">
   </video>
-{% endif %}
+  {% endif %}
 
   <header class="header brand" role="banner">
     <div class="brand">
@@ -145,50 +145,32 @@
       if (!fab.style.top)  fab.style.top  = 'calc(100vh - 120px)';
     })();
 
-    // Global Verse Modal helpers
-    (function(){
-      const modal  = document.getElementById('verseModal');
-      const vmImg  = document.getElementById('vm-img');
-      const vmRef  = document.getElementById('vm-ref');
-      const vmCap  = document.getElementById('vm-cap');
-      const closeB = document.querySelector('.vm-close');
-      const dlBtn  = document.getElementById('vm-download');
-      const shBtn  = document.getElementById('vm-share');
+    <button id="ttsToggle" class="btn" style="position:fixed;right:18px;bottom:92px;z-index:999">
+  🔊 Read Page
+</button>
+<script>
+(() => {
+  const btn = document.getElementById('ttsToggle');
+  if(!('speechSynthesis' in window)){ btn.style.display='none'; return; }
 
-      function openModal(src, ref, cap){
-        vmImg.src = src || '';
-        vmRef.textContent = ref || '';
-        vmCap.textContent = cap || '';
-        if (typeof modal.showModal === 'function') modal.showModal();
-        else modal.setAttribute('open','open');
-      }
-      function closeModal(){
-        vmImg.src = '';
-        if (typeof modal.close === 'function') modal.close();
-        else modal.removeAttribute('open');
-      }
-      function safeName(s){ return (s || 'verse').toLowerCase().replace(/[^a-z0-9]+/g,'_') + '.png'; }
-      function downloadCurrent(){
-        if (!vmImg.src) return;
-        const a = document.createElement('a');
-        a.href = vmImg.src;
-        a.download = safeName(vmRef.textContent);
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      }
-      async function shareCurrent(){
-        const title = vmRef.textContent || 'Verse';
-        const text  = vmCap.textContent || '';
-        const url   = vmImg.src || '';
-        if (navigator.share){ try { await navigator.share({ title, text, url }); } catch(e){} }
-        else { try { await navigator.clipboard.writeText(url); alert('Image link copied!'); } catch(e){} }
-      }
-      window.__openVerseModal = openModal;
-      closeB.addEventListener('click', closeModal);
-      modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-      window.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-      dlBtn.addEventListener('click', downloadCurrent);
-      shBtn.addEventListener('click', shareCurrent);
-    })();
-  </script>
+  let speaking=false;
+  const getText = () => {
+    // Read main content only; adjust selector to your layout
+    const el = document.querySelector('main') || document.body;
+    return el.innerText.replace(/\s+\n/g,'\n').trim();
+  };
+
+  btn.addEventListener('click', () => {
+    const synth = window.speechSynthesis;
+    if(speaking){ synth.cancel(); speaking=false; btn.textContent='🔊 Read Page'; return; }
+    const u = new SpeechSynthesisUtterance(getText());
+    u.rate = 1.0; u.pitch = 1.0;
+    synth.speak(u);
+    speaking=true; btn.textContent='⏹ Stop';
+    u.onend = () => { speaking=false; btn.textContent='🔊 Read Page'; };
+  });
+})();
+
+{% block page_scripts %}{% endblock %}
 </body>
 </html>

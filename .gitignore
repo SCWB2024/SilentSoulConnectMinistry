@@ -1,27 +1,35 @@
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.pkl
-
-# Envs / secrets
+# --- Environment & Secrets ---
 .env
 *.env
 
-# OS
+# --- Virtual Environment ---
+.venv/
+.venv-soulstart/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# --- Editor & Cache ---
+.vscode/
+.ruff_cache/
+.idea/
+
+# --- Logs & Temp Files ---
+*.log
+*.bak
+
+# --- Heavy local-only media (allow web assets) ---
+# If you have very large archives, ignore them by folder, not by extension:
+# /soulstart/static/media/
+# /soulstart/static/videos/
+# /assets/
+
+# --- System Files ---
 .DS_Store
 Thumbs.db
 
-# Videos / generated
-videos/
-tmp/
-*.mp4
-*.mov
-
-# VSCode / IDE
-.vscode/
-.idea/
-
-/_heavy/
-
+# --- Old / Dev / Backup Scripts (optional) ---
+soulstart_old.py
+check_env.py
+video_sunset_sign.py

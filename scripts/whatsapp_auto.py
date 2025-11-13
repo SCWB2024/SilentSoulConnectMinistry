@@ -1,8 +1,13 @@
-# whatsapp_auto.py  (v9.2 — reliable paste, chat search, auto-send)
+# whatsapp_auto.py  (v10.0 — single-run safe, site promo, cleaner env)
 # Modes:
 #   morning  -> loads SoulStart_Sunrise_<Mon>.json
 #   night    -> loads SoulStart_Sunset_<Mon>.json
 #   verses   -> loads verses.json (theme + links + 1 NLT line)
+#
+# Usage examples:
+#   python scripts/whatsapp_auto.py --mode morning --dry-run
+#   python scripts/whatsapp_auto.py --mode night --send --chat "Silent SoulConnect Ministry"
+#   python scripts/whatsapp_auto.py --mode verses --open-only
 
 from __future__ import annotations
 
@@ -18,9 +23,9 @@ from pathlib import Path
 from typing import Optional
 
 # ---------- settings (env-aware) ----------
-BASE_DIR = Path(__file__).resolve().parent
-DEVOTIONS_ROOT = Path(os.environ.get("DEVOTIONS_ROOT", str(BASE_DIR.parent / "devotions")))
-JOIN_URL = os.environ.get("JOIN_URL", "https://chat.whatsapp.com/CdkN2V0h8vCDg2AP4saYfG")
+BASE_DIR = Path(__file__).resolve().parent.parent  # project root
+DEVOTIONS_ROOT = Path(os.environ.get("DEVOTIONS_ROOT", str(BASE_DIR / "devotions")))
+SITE_URL = os.environ.get("SITE_URL", "https://soulstart.onrender.com/")  # 👈 promote site
 WHATSAPP_WEB_URL = "https://web.whatsapp.com/"
 
 # Waits
@@ -31,18 +36,9 @@ PAGE_BOOT_WAIT = int(os.environ.get("PAGE_BOOT_WAIT", "6"))  # initial load afte
 # Soft max—WhatsApp supports very long messages, but huge blocks are user-hostile
 MAX_RECOMMENDED_CHARS = int(os.environ.get("MAX_RECOMMENDED_CHARS", "4000"))
 
-
 # ---------- helpers ----------
 def is_macos() -> bool:
     return platform.system().lower() == "darwin"
-
-
-def open_web() -> None:
-    """Open WhatsApp Web and give browser time to render the shell."""
-    print(f"[Info] Opening: {WHATSAPP_WEB_URL}")
-    webbrowser.open(WHATSAPP_WEB_URL)
-    countdown("Waiting for WhatsApp Web to boot", PAGE_BOOT_WAIT)
-
 
 def countdown(label: str, seconds: int) -> None:
     if seconds <= 0:
@@ -52,6 +48,11 @@ def countdown(label: str, seconds: int) -> None:
         time.sleep(1)
     print(" " * 60, end="\r", flush=True)
 
+def open_web() -> None:
+    """Open WhatsApp Web and give browser time to render the shell."""
+    print(f"[Info] Opening: {WHATSAPP_WEB_URL}")
+    webbrowser.open(WHATSAPP_WEB_URL)
+    countdown("Waiting for WhatsApp Web to boot", PAGE_BOOT_WAIT)
 
 def read_json(path: Path):
     try:
@@ -61,14 +62,11 @@ def read_json(path: Path):
         print(f"[Warn] Could not read JSON: {path} ({e})")
         return None
 
-
 def month_folder_for(dt: datetime) -> Path:
     return DEVOTIONS_ROOT / dt.strftime("%B")
 
-
 def month_abbr(dt: datetime) -> str:
     return dt.strftime("%b")
-
 
 def file_for_mode(dt: datetime, mode: str) -> Path:
     abbr = month_abbr(dt)
@@ -79,7 +77,6 @@ def file_for_mode(dt: datetime, mode: str) -> Path:
     else:
         fname = f"SoulStart_Sunrise_{abbr}.json"
     return month_folder_for(dt) / fname
-
 
 def normalize_datestr(s: str) -> Optional[str]:
     s = (s or "").strip()
@@ -94,7 +91,6 @@ def normalize_datestr(s: str) -> Optional[str]:
         except Exception:
             continue
     return None
-
 
 def parse_today_entry(data, target_iso: str) -> Optional[dict]:
     if isinstance(data, dict):
@@ -118,8 +114,11 @@ def parse_today_entry(data, target_iso: str) -> Optional[dict]:
         return None
     return None
 
-
 def build_message_from_entry(mode: str, entry: dict, dt: datetime) -> str:
+    # Promote site instead of WhatsApp community
+    promo_label = "🔗 Visit our website"
+    promo_url = SITE_URL
+
     date_line = dt.strftime("%A, %B %d, %Y")
 
     def add(lines: list[str], val: Optional[str], prefix: str = "") -> None:
@@ -132,8 +131,6 @@ def build_message_from_entry(mode: str, entry: dict, dt: datetime) -> str:
     pts = [p for p in (entry.get("point1"), entry.get("point2"), entry.get("point3")) if p]
     closing = entry.get("closing")
     prayer = entry.get("prayer")
-    join_text = entry.get("join_text")
-    join_url = entry.get("join_url") or JOIN_URL
 
     scripture = entry.get("scripture") or entry.get("Scripture") or entry.get("verse")
     reflection = entry.get("reflection") or entry.get("note") or entry.get("thought")
@@ -171,8 +168,8 @@ def build_message_from_entry(mode: str, entry: dict, dt: datetime) -> str:
         if closing:
             add(lines, f"\n✍️ {closing}")
         add(lines, f"\n🙏 {prayer or ('Lord, order my steps today. Amen.' if mode == 'morning' else 'Lord, quiet my mind and keep me in Your care. Amen.')}")
-        if join_url:
-            add(lines, f"\n🔗 {join_text or 'Join our WhatsApp community'}\n{join_url}")
+        if promo_url:
+            add(lines, f"\n{promo_label}\n{promo_url}")
 
     elif is_legacy:
         theme_or_title = title or entry.get("theme")
@@ -187,8 +184,8 @@ def build_message_from_entry(mode: str, entry: dict, dt: datetime) -> str:
         if blessing:
             add(lines, f"\n🕊️ {blessing}")
         add(lines, f"\n🙏 {(morning_pr if mode == 'morning' else night_pr) or ('Lord, order my steps today. Amen.' if mode == 'morning' else 'Lord, quiet my mind and keep me in Your care. Amen.')}")
-        if join_url:
-            add(lines, f"\n🔗 {join_text or 'Join our WhatsApp community'}\n{join_url}")
+        if promo_url:
+            add(lines, f"\n{promo_label}\n{promo_url}")
 
     else:
         verse_only = entry.get("verse")
@@ -198,29 +195,28 @@ def build_message_from_entry(mode: str, entry: dict, dt: datetime) -> str:
         if note_only:
             add(lines, f"\n✍️ {note_only}")
         add(lines, f"\n🙏 {'Lord, order my steps today. Amen.' if mode == 'morning' else 'Lord, quiet my mind and keep me in Your care. Amen.'}")
-        if JOIN_URL:
-            add(lines, f"\n🔗 Join our WhatsApp community\n{JOIN_URL}")
+        if promo_url:
+            add(lines, f"\n{promo_label}\n{promo_url}")
 
     msg = "\n".join(lines).strip()
     if len(msg) > MAX_RECOMMENDED_CHARS:
         print(f"[Warn] Message is {len(msg)} chars (> {MAX_RECOMMENDED_CHARS}). Consider trimming.")
     return msg
 
-
 def fallback_message(mode: str, dt: datetime) -> str:
     date_line = dt.strftime("%A, %B %d, %Y")
-    if mode == "morning":
-        return (
-            f"🌅 Good morning! {date_line}\n\n"
-            "“This is the day the Lord has made; we will rejoice and be glad in it.” (Ps 118:24)\n\n"
-            "Lord, order my steps today. Amen."
-        )
-    return (
+    base = (
+        f"🌅 Good morning! {date_line}\n\n"
+        "“This is the day the Lord has made; we will rejoice and be glad in it.” (Ps 118:24)\n\n"
+        "Lord, order my steps today. Amen."
+    ) if mode == "morning" else (
         f"🌙 Good night! {date_line}\n\n"
         "“In peace I will lie down and sleep…” (Ps 4:8)\n\n"
         "Lord, quiet my mind and keep me in Your care. Amen."
     )
-
+    if SITE_URL:
+        base += f"\n\n🔗 Visit our website\n{SITE_URL}"
+    return base
 
 def get_message_from_json(mode: str, dt: datetime) -> str:
     if mode in ("morning", "night"):
@@ -267,19 +263,14 @@ def get_message_from_json(mode: str, dt: datetime) -> str:
             if ref:
                 lines.append(f"▪️ {ref}: {line or ''}".strip())
 
-        site_link = os.environ.get("SITE_URL", "")
-        if site_link:
-            lines.append(f"🔗 View today’s devotion: {site_link}")
-
-        if JOIN_URL:
-            lines.append(f"🔗 Join our WhatsApp community: {JOIN_URL}")
+        if SITE_URL:
+            lines.append(f"🔗 Visit our website: {SITE_URL}")
 
         return "\n".join(lines).strip()
 
     return fallback_message("morning", dt)
 
-
-def ensure_autogui() -> tuple:
+def ensure_autogui():
     try:
         import pyautogui  # type: ignore
         import pyperclip  # type: ignore
@@ -289,11 +280,10 @@ def ensure_autogui() -> tuple:
         print(f"        Details: {e}")
         sys.exit(2)
 
-
 def quick_search_chat(pyautogui, chat: str) -> None:
     """
-    Invoke WhatsApp Web quick search to jump to a chat by name.
-    Ctrl/Cmd+K is the new quick search in WA Web; fall back to Ctrl/Cmd+F then type.
+    Use WhatsApp Web quick search to jump to a chat by name.
+    Ctrl/Cmd+K is the current quick search; fallback to Ctrl/Cmd+F.
     """
     print(f"[Info] Selecting chat: {chat!r}")
     meta_key = "command" if is_macos() else "ctrl"
@@ -304,14 +294,12 @@ def quick_search_chat(pyautogui, chat: str) -> None:
         time.sleep(0.6)
         pyautogui.press("enter")
     except Exception:
-        # Fallback: Ctrl/Cmd+f then type + down + enter
         pyautogui.hotkey(meta_key, "f")
         time.sleep(0.2)
         pyautogui.typewrite(chat, interval=0.02)
         time.sleep(0.6)
         pyautogui.press("down")
         pyautogui.press("enter")
-
 
 def do_paste(text: str, paste_delay: int, auto_send: bool) -> None:
     pyautogui, pyperclip = ensure_autogui()
@@ -331,7 +319,6 @@ def do_paste(text: str, paste_delay: int, auto_send: bool) -> None:
     if auto_send:
         pyautogui.press("enter")
 
-
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Open WhatsApp Web and paste SoulStart message (morning/night/verses)."
@@ -345,7 +332,7 @@ def main() -> None:
     parser.add_argument("--chat", type=str, default=None, help="Quick-search and select a chat by name.")
     args = parser.parse_args()
 
-    # Select date
+    # Pick date
     if args.date:
         try:
             dt = datetime.strptime(args.date, "%Y-%m-%d")
@@ -358,6 +345,8 @@ def main() -> None:
     effective_mode = "morning" if args.mode == "custom" else args.mode
     msg = get_message_from_json(effective_mode, dt)
 
+    # Safety: never auto-send without an explicit --send
+    # Safety: only run once per invocation (guarded by __main__)
     if args.dry_run:
         print("\n----- DRY RUN: WhatsApp message preview -----\n")
         print(msg)
@@ -374,8 +363,8 @@ def main() -> None:
         quick_search_chat(pyautogui, args.chat)
 
     do_paste(msg, args.paste_delay, args.send)
+    print("✅ Message pasted" + (" and sent." if args.send else ". (Press Enter to send)") )
     sys.exit(0)
-
 
 if __name__ == "__main__":
     main()

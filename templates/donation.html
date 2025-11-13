@@ -49,6 +49,7 @@
     <p class="mt-4" style="flex:1;">
       {% if paypal_link %}
         <a class="btn brand" href="{{ paypal_link }}" target="_blank" rel="noopener" aria-label="Donate via PayPal">💳 Donate via PayPal</a>
+        <a class="btn btn-donate" href="{{ url_for('donation') }}">💚 Donate</a>
         <button class="btn soft" id="copyDonate">🔗 Copy donate link</button>
       {% else %}
         <span class="muted">PayPal link coming soon.</span>

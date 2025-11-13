@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>{% block title %}SoulStart Devotion{% endblock %}</title>
 
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
   <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
   <!-- Social cards -->
@@ -18,15 +18,6 @@
   <meta name="twitter:title" content="SoulStart — Faith to Rise, Grace to Rest">
   <meta name="twitter:description" content="Daily devotion for Sunrise & Sunset, prayer requests, and study resources.">
   <meta name="twitter:image" content="{{ url_for('static', filename='img/hero_day.jpg', _external=True) }}">
-
-  <style nonce="{{ csp_nonce() }}">
-    .fab{position:fixed; z-index:1000; width:56px; height:56px; border-radius:999px;
-         display:flex; align-items:center; justify-content:center; font-size:24px;
-         box-shadow:0 10px 24px rgba(0,0,0,.22); cursor:grab; user-select:none}
-    .fab:active{cursor:grabbing}
-    .fab-donate{background:#10b981; color:#fff; right:18px; bottom:88px}
-    .topnav a.active{font-weight:800; text-decoration:underline}
-  </style>
 </head>
 
 <body class="{{ page_bg_class or '' }}"
@@ -47,19 +38,19 @@
     </div>
 
     <nav class="topnav" role="navigation" aria-label="Main">
-      <a href="{{ url_for('home') }}"      class="{{ 'active' if active=='home' else '' }}"      {% if active=='home' %}aria-current="page"{% endif %}>Home</a>
-      <a href="{{ url_for('today') }}"     class="{{ 'active' if active=='today' else '' }}"     {% if active=='today' %}aria-current="page"{% endif %}>Today</a>
-      <a href="{{ url_for('study') }}"     class="{{ 'active' if active=='study' else '' }}"     {% if active=='study' %}aria-current="page"{% endif %}>Study</a>
-      <a href="{{ url_for('verses') }}"    class="{{ 'active' if active=='verses' else '' }}"    {% if active=='verses' %}aria-current="page"{% endif %}>Verses</a>
-      <a href="{{ url_for('prayer') }}"    class="{{ 'active' if active=='prayer' else '' }}"    {% if active=='prayer' %}aria-current="page"{% endif %}>Prayer</a>
-      <a href="{{ url_for('about') }}"     class="{{ 'active' if active=='about' else '' }}"     {% if active=='about' %}aria-current="page"{% endif %}>About</a>
-      <a href="{{ url_for('volunteer') }}" class="{{ 'active' if active=='volunteer' else '' }}" {% if active=='volunteer' %}aria-current="page"{% endif %}>Volunteer</a>
-      <a href="{{ url_for('feedback_view') }}" class="{{ 'active' if active=='feedback' else '' }}" {% if active=='feedback' %}aria-current="page"{% endif %}>Feedback</a>
+      <a href="{{ url_for('home') }}"              class="{{ 'active' if active=='home' else '' }}"      {% if active=='home' %}aria-current="page"{% endif %}>Home</a>
+      <a href="{{ url_for('today') }}"             class="{{ 'active' if active=='today' else '' }}"     {% if active=='today' %}aria-current="page"{% endif %}>Today</a>
+      <a href="{{ url_for('study') }}"             class="{{ 'active' if active=='study' else '' }}"     {% if active=='study' %}aria-current="page"{% endif %}>Study</a>
+      <a href="{{ url_for('verses') }}"            class="{{ 'active' if active=='verses' else '' }}"    {% if active=='verses' %}aria-current="page"{% endif %}>Verses</a>
+      <a href="{{ url_for('prayer') }}"            class="{{ 'active' if active=='prayer' else '' }}"    {% if active=='prayer' %}aria-current="page"{% endif %}>Prayer</a>
+      <a href="{{ url_for('about') }}"             class="{{ 'active' if active=='about' else '' }}"     {% if active=='about' %}aria-current="page"{% endif %}>About</a>
+      <a href="{{ url_for('volunteer') }}"         class="{{ 'active' if active=='volunteer' else '' }}" {% if active=='volunteer' %}aria-current="page"{% endif %}>Volunteer</a>
+      <a href="{{ url_for('feedback_view') }}"     class="{{ 'active' if active=='feedback' else '' }}"  {% if active=='feedback' %}aria-current="page"{% endif %}>Feedback</a>
       {% if is_authed %}
-        <a href="{{ url_for('admin')  }}" class="{{ 'active' if active=='admin' else '' }}" {% if active=='admin' %}aria-current="page"{% endif %}>Admin</a>
+        <a href="{{ url_for('admin') }}">Admin</a>
         <a href="{{ url_for('logout') }}" class="muted">Logout</a>
       {% else %}
-        <a href="{{ url_for('admin')  }}" class="{{ 'active' if active=='admin' else '' }}" {% if active=='admin' %}aria-current="page"{% endif %}>Admin</a>
+        <a href="{{ url_for('admin') }}">Admin</a>
       {% endif %}
     </nav>
 
@@ -79,98 +70,62 @@
     </div>
   </footer>
 
-  <!-- Global Verse Modal -->
-  <dialog id="verseModal" class="verse-modal" aria-labelledby="vm-ref">
-    <div class="vm-wrap">
-      <button class="vm-close" aria-label="Close">&times;</button>
-      <img id="vm-img" src="" alt="Verse image">
-      <div class="vm-text">
-        <div id="vm-ref" class="vm-ref"></div>
-        <div id="vm-cap" class="vm-cap"></div>
-        <div class="vm-actions">
-          <button class="btn small" id="vm-download">⬇️ Download</button>
-          <button class="btn soft small" id="vm-share">🔗 Share</button>
-        </div>
-      </div>
-    </div>
-  </dialog>
+  <!-- TTS button -->
+  <button id="ttsToggle" class="btn tts-btn" aria-label="Read page">🔊 Read Page</button>
 
-  <script nonce="{{ csp_nonce() }}">
-    // Share site
-    (function(){
-      const btn = document.getElementById('shareSite');
-      if (!btn) return;
-      btn.addEventListener('click', async () => {
-        const siteUrl = window.location.origin;
-        const data = {
-          title: 'Silent SoulConnect Ministry',
-          text: 'Faith to Rise, Grace to Rest — daily devotions, study & prayer.',
-          url: siteUrl
-        };
-        if (navigator.share) {
-          try { await navigator.share(data); } catch(e){}
-        } else {
-          try { await navigator.clipboard.writeText(siteUrl); alert('🔗 Link copied!'); }
-          catch(e){ alert('Unable to copy, please share manually.'); }
-        }
-      });
-    })();
+  <!-- Minimal JS (no modal, no extra garbage) -->
+  <script>
+  // Share site
+  (function(){
+    const btn = document.getElementById('shareSite');
+    if(!btn) return;
+    btn.addEventListener('click', async () => {
+      const url = window.location.origin;
+      const data = { title: 'Silent SoulConnect Ministry', text: 'Faith to Rise, Grace to Rest', url };
+      if (navigator.share) { try { await navigator.share(data);} catch(e){} }
+      else {
+        try { await navigator.clipboard.writeText(url); alert('🔗 Link copied!'); }
+        catch(e){ alert('Couldn’t copy link.'); }
+      }
+    });
+  })();
 
-    // Draggable Donate FAB
-    (function () {
-      const fab = document.querySelector('.fab-donate');
-      if (!fab) return;
-      let dragging = false, offsetX = 0, offsetY = 0;
-      const start = (x, y) => {
-        const r = fab.getBoundingClientRect();
-        dragging = true; offsetX = x - r.left; offsetY = y - r.top;
-        fab.style.transition = 'none';
-      };
-      const move = (x, y) => {
-        if (!dragging) return;
-        const maxX = window.innerWidth  - fab.offsetWidth  - 6;
-        const maxY = window.innerHeight - fab.offsetHeight - 6;
-        const nx = Math.max(6, Math.min(x - offsetX, maxX));
-        const ny = Math.max(6, Math.min(y - offsetY, maxY));
-        fab.style.left = nx + 'px'; fab.style.top = ny + 'px';
-      };
-      const end = () => { dragging = false; fab.style.transition = ''; };
-      fab.addEventListener('mousedown', e => { e.preventDefault(); start(e.clientX, e.clientY); });
-      document.addEventListener('mousemove', e => move(e.clientX, e.clientY));
-      document.addEventListener('mouseup', end);
-      fab.addEventListener('touchstart', e => { const t = e.touches[0]; start(t.clientX, t.clientY); }, {passive:true});
-      fab.addEventListener('touchmove',  e => { const t = e.touches[0]; move(t.clientX, t.clientY); }, {passive:true});
-      fab.addEventListener('touchend', end);
-      if (!fab.style.left) fab.style.left = 'calc(100vw - 72px)';
-      if (!fab.style.top)  fab.style.top  = 'calc(100vh - 120px)';
-    })();
+  // Draggable donate FAB
+  (function(){
+    const fab = document.querySelector('.fab-donate');
+    if(!fab) return;
+    let drag=false, ox=0, oy=0;
+    const start=(x,y)=>{ const r=fab.getBoundingClientRect(); drag=true; ox=x-r.left; oy=y-r.top; fab.style.transition='none'; };
+    const move=(x,y)=>{ if(!drag) return; const mx=innerWidth-fab.offsetWidth-6, my=innerHeight-fab.offsetHeight-6;
+      const nx=Math.max(6, Math.min(x-ox, mx)); const ny=Math.max(6, Math.min(y-oy, my)); fab.style.left=nx+'px'; fab.style.top=ny+'px'; };
+    const end=()=>{ drag=false; fab.style.transition=''; };
+    fab.addEventListener('mousedown', e=>{ e.preventDefault(); start(e.clientX,e.clientY); });
+    addEventListener('mousemove', e=>move(e.clientX,e.clientY));
+    addEventListener('mouseup', end);
+    fab.addEventListener('touchstart', e=>{ const t=e.touches[0]; start(t.clientX,t.clientY); }, {passive:true});
+    fab.addEventListener('touchmove', e=>{ const t=e.touches[0]; move(t.clientX,t.clientY); }, {passive:true});
+    fab.addEventListener('touchend', end);
+    if(!fab.style.left) fab.style.left='calc(100vw - 72px)';
+    if(!fab.style.top)  fab.style.top ='calc(100vh - 120px)';
+  })();
 
-    <button id="ttsToggle" class="btn" style="position:fixed;right:18px;bottom:92px;z-index:999">
-  🔊 Read Page
-</button>
-<script>
-(() => {
-  const btn = document.getElementById('ttsToggle');
-  if(!('speechSynthesis' in window)){ btn.style.display='none'; return; }
+  // Basic TTS
+  (function(){
+    const btn=document.getElementById('ttsToggle');
+    if(!('speechSynthesis' in window)){ btn.style.display='none'; return; }
+    let speaking=false;
+    btn.addEventListener('click', ()=>{
+      const synth=window.speechSynthesis;
+      if(speaking){ synth.cancel(); speaking=false; btn.textContent='🔊 Read Page'; return; }
+      const el=document.querySelector('main')||document.body;
+      const u=new SpeechSynthesisUtterance(el.innerText.replace(/\s+\n/g,'\n').trim());
+      u.rate=1.0; u.pitch=1.0;
+      synth.speak(u); speaking=true; btn.textContent='⏹ Stop';
+      u.onend=()=>{ speaking=false; btn.textContent='🔊 Read Page'; };
+    });
+  })();
+  </script>
 
-  let speaking=false;
-  const getText = () => {
-    // Read main content only; adjust selector to your layout
-    const el = document.querySelector('main') || document.body;
-    return el.innerText.replace(/\s+\n/g,'\n').trim();
-  };
-
-  btn.addEventListener('click', () => {
-    const synth = window.speechSynthesis;
-    if(speaking){ synth.cancel(); speaking=false; btn.textContent='🔊 Read Page'; return; }
-    const u = new SpeechSynthesisUtterance(getText());
-    u.rate = 1.0; u.pitch = 1.0;
-    synth.speak(u);
-    speaking=true; btn.textContent='⏹ Stop';
-    u.onend = () => { speaking=false; btn.textContent='🔊 Read Page'; };
-  });
-})();
-
-{% block page_scripts %}{% endblock %}
+  {% block page_scripts %}{% endblock %}
 </body>
 </html>

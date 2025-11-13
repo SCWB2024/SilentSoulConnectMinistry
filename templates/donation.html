@@ -1,86 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Give & Serve — SoulStart{% endblock %}
-
+{% block title %}Give & Serve • SoulStart{% endblock %}
 {% block content %}
-<section class="hero" style="background:url('{{ url_for('static', filename='img/acts_community.jpg') }}') center/cover;">
-  <div class="hero-inner" style="padding:60px 20px;">
-    <h1>Give &amp; Serve</h1>
-    <p class="muted">Acts of Faith • Gifts of the Heart</p>
-  </div>
+<section class="hero hero-muted">
+  <h1>Give & Serve</h1>
+  <p>Acts of Faith • Gifts of the Heart</p>
 </section>
 
-<div class="card">
-  <h3>Community in Action</h3>
-  <p><em>Acts 2:44–45</em> — “All the believers were together and had everything in common… and gave to anyone who had need.”</p>
-  <p>In the early church, generosity was more than coins — it was compassion in motion. Believers opened homes, shared bread, and offered their skills. Every gift became a thread in the tapestry of love.</p>
-  <p><strong>SSCM is small as a mustard seed</strong> — yet with your prayer, service, and support, we can <em>grow and blossom in Jesus’ way</em> (Matt. 13:31–32). Your offering helps us serve with clarity, accessibility, and care.</p>
+<div class="card pad">
+  {% if paypal_link %}
+    <a class="btn green" href="{{ paypal_link }}" target="_blank" rel="noopener">💚 Give via PayPal</a>
+  {% else %}
+    <p class="muted">PayPal link coming soon.</p>
+  {% endif %}
+  <a class="btn soft" href="{{ url_for('home') }}">🏠 Back Home</a>
 </div>
-
-{% if ok %}
-  <div class="card" role="status" aria-live="polite" style="border-color:#c6f6d5;background:#f0fff4;">
-    <p style="margin:0;">✅ <strong>Thank you!</strong> Your gift helps us serve with clarity, accessibility, and care.</p>
-  </div>
-{% endif %}
-
-<div class="cards" aria-label="What your gift supports">
-  <div class="card">
-    <h3>🎓 Training &amp; Empowerment</h3>
-    <p>Deaf-leadership growth, inclusive Bible tools, and skill-building workshops.</p>
-  </div>
-  <div class="card">
-    <h3>❤️ Community Care</h3>
-    <p>Practical assistance for those in need; accessible devotionals and study helps.</p>
-  </div>
-  <div class="card">
-    <h3>🖥️ Digital Ministry</h3>
-    <p>App/website development, captioned devotion media, and translation support.</p>
-  </div>
-</div>
-
-<div class="card">
-  <h3>How You Can Participate</h3>
-  <ul class="clean">
-    <li><strong>Give financially</strong> — fuel translation, media, and outreach.</li>
-    <li><strong>Serve with your skills</strong> — sign language, design, tech, media, mentoring.</li>
-    <li><strong>Pray &amp; share</strong> — become an advocate; invite others to join.</li>
-  </ul>
-
-  <div class="row" style="align-items:center; margin-top:10px;">
-    <p class="mt-4" style="flex:1;">
-      {% if paypal_link %}
-        <a class="btn brand" href="{{ paypal_link }}" target="_blank" rel="noopener" aria-label="Donate via PayPal">💳 Donate via PayPal</a>
-        <a class="btn btn-donate" href="{{ url_for('donation') }}">💚 Donate</a>
-        <button class="btn soft" id="copyDonate">🔗 Copy donate link</button>
-      {% else %}
-        <span class="muted">PayPal link coming soon.</span>
-      {% endif %}
-      <a class="btn soft" href="{{ url_for('prayer') }}">🙏 Send a Prayer Request</a>
-      <a class="btn soft" href="{{ url_for('volunteer') }}">👐 Offer Your Skills</a>
-      <a class="btn soft" href="{{ url_for('home') }}">🏠 Back Home</a>
-    </p>
-
-    {% if paypal_link %}
-      <figure style="margin:0; text-align:center;">
-        <img
-          src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data={{ paypal_link|urlencode }}"
-          alt="QR code to donate via PayPal"
-          width="180" height="180" loading="lazy">
-        <figcaption class="muted" style="font-size:.9rem; margin-top:6px;">Scan to donate</figcaption>
-      </figure>
-    {% endif %}
-  </div>
-</div>
-
-{% block scripts %}
-<script nonce="{{ csp_nonce() }}">
-  (function(){
-    const btn = document.getElementById('copyDonate');
-    if (!btn) return;
-    btn.addEventListener('click', async () => {
-      try { await navigator.clipboard.writeText('{{ paypal_link }}'); alert('Donate link copied!'); }
-      catch(e){ alert('Unable to copy.'); }
-    });
-  })();
-</script>
-{% endblock %}
 {% endblock %}

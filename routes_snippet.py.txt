@@ -1,0 +1,31 @@
+# -------- Study (super simple: open series#.html) --------
+@app.route("/study", endpoint="study")
+def study_index():
+    # discover series*.html in templates/study/
+    templates_root = Path(app.template_folder or "templates")
+    study_dir = templates_root / "study"
+    items = []
+    for p in sorted(study_dir.glob("series*.html")):
+        key = p.stem          # e.g. series1
+        title = key.replace("series", "Series ")
+        items.append({"key": key, "title": title})
+    return render_template("study/index.html",
+                           title="Study Series",
+                           series=items,
+                           theme=SITE_THEME,
+                           active="study")
+
+@app.route("/study/<series_name>", endpoint="study_detail")
+def study_detail(series_name: str):
+    # only allow series1..seriesN
+    if not series_name.startswith("series"):
+        return ("Study not found", 404)
+    template_rel = Path("study") / f"{series_name}.html"
+    template_abs = Path(app.template_folder or "templates") / template_rel
+    if not template_abs.exists():
+        return ("Study not found", 404)
+    # render that exact file
+    return render_template(str(template_rel).replace("\\", "/"),
+                           title=series_name.replace("series", "Series "),
+                           theme=SITE_THEME,
+                           active="study")

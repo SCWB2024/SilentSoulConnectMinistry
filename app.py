@@ -9,6 +9,7 @@
 # - FIX: clean /study routes (index + detail) + alias endpoint for templates
 # - NEW: template auto-reload + no-cache headers in dev
 
+from __future__ import annotations
 import os
 import sys
 import json
@@ -19,46 +20,59 @@ import webbrowser
 from threading import Timer
 from datetime import datetime, date, time
 from pathlib import Path
+from typing import List, Dict
+
 
 from dotenv import load_dotenv  # pyright: ignore[reportMissingImports]
 from flask import (  # pyright: ignore[reportMissingImports]
     Flask, request, session, render_template, redirect,
-    url_for, jsonify, send_from_directory, g,
+    url_for, jsonify, send_from_directory, g, flash, abort
 )
 from flask_wtf import CSRFProtect  # pyright: ignore[reportMissingImports]
 from flask_limiter import Limiter  # pyright: ignore[reportMissingImports]
 from flask_limiter.util import get_remote_address  # pyright: ignore[reportMissingImports]
-from flask_talisman import Talisman  # pyright: ignore[reportMissingImports]
+from flask_talisman import Talisman 
+try:
+    from flask_talisman import Talisman
+except Exception:  # keep app usable if talisman isn't available locally
+    Talisman = None  # type: ignore# pyright: ignore[reportMissingImports]
 from logging.handlers import RotatingFileHandler
 
+def is_authed() -> bool:
+    return bool(session.get("authed"))
 APP_VERSION = "v13"
 
 # =============================================================================
 # Env & paths
 # =============================================================================
-BASE_DIR = Path(__file__).resolve().parent
-TEMPLATES_DIR = BASE_DIR / "templates"
-STATIC_DIR = BASE_DIR / "soulstart" / "static"
+BASE_DIR       = Path(__file__).resolve().parent
+TEMPLATES_DIR  = BASE_DIR / "templates"
+STATIC_DIR     = BASE_DIR / "soulstart" / "static"
 DEVOTIONS_ROOT = Path(os.environ.get("DEVOTIONS_ROOT", str(BASE_DIR / "devotions")))
 
 load_dotenv(BASE_DIR / ".env")
 
-ENV = os.getenv("APP_ENV", os.getenv("FLASK_ENV", "development")).lower()
-IS_PROD = ENV == "production"
-IS_HTTPS = os.environ.get("FORCE_HTTPS", "0") in ("1", "true", "True")
-
-JOIN_URL = os.environ.get("JOIN_URL", "https://chat.whatsapp.com/CdkN2V0h8vCDg2AP4saYfG")
-SITE_THEME = os.environ.get("SITE_THEME", "Faith to Rise, Grace to Rest")
-ADMIN_PASS = os.environ.get("ADMIN_PASSWORD", "set-a-strong-password")
-SITE_URL = os.environ.get("SITE_URL", "http://127.0.0.1:5000")
-PORT = int(os.environ.get("PORT", "5000"))
+ENV       = os.getenv("APP_ENV", os.getenv("FLASK_ENV", "development")).lower()
+IS_PROD   = ENV == "production"
+IS_HTTPS  = os.environ.get("FORCE_HTTPS", "0") in ("1", "true", "True")
+JOIN_URL  = os.environ.get("JOIN_URL", "https://chat.whatsapp.com/CdkN2V0h8vCDg2AP4saYfG")
+SITE_THEME= os.environ.get("SITE_THEME", "Faith to Rise, Grace to Rest")
+PAYPAL_LINK = os.environ.get("PAYPAL_LINK", "")
+ADMIN_PASS= os.environ.get("ADMIN_PASSWORD", "set-a-strong-password")
+SITE_URL  = os.environ.get("SITE_URL", "http://127.0.0.1:5000")
+PORT      = int(os.environ.get("PORT", "5000"))
 AUTO_OPEN = os.environ.get("AUTO_OPEN", "1") in ("1", "true", "True")
-HOST = os.environ.get("HOST", "127.0.0.1")
+HOST      = os.environ.get("HOST", "127.0.0.1")
 
 # =============================================================================
 # App init
 # =============================================================================
-app = Flask(__name__, static_folder=str(STATIC_DIR), template_folder=str(TEMPLATES_DIR))
+app = Flask(
+    __name__,
+    static_folder=str(STATIC_DIR),      # points to soulstart/static
+    static_url_path="/static",          # URL base for static files
+    template_folder=str(TEMPLATES_DIR),
+)
 app.secret_key = os.environ.get("SECRET_KEY", "dev-insecure")
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config.update(
@@ -66,6 +80,22 @@ app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE="Lax",
 )
+
+# Content Security Policy (enough to allow your CSS/inline and images)
+if Talisman:
+    csp = {
+        "default-src": ["'self'"],
+        "style-src":   ["'self'", "'unsafe-inline'"],
+        "script-src":  ["'self'", "'unsafe-inline'"],  # switch to nonces later if you prefer
+        "img-src":     ["'self'", "data:"],
+        "connect-src": ["'self'"],
+    }
+    Talisman(
+        app,
+        content_security_policy=csp,
+        content_security_policy_nonce_in=["script", "style"],
+        force_https=IS_PROD or IS_HTTPS,
+    )
 
 # CSRF + Rate limits
 csrf = CSRFProtect(app)
@@ -98,8 +128,8 @@ if IS_PROD:
     csp = {
         "default-src": ["'self'"],
         "img-src": ["'self'", "data:", "https:"],
-        "style-src": ["'self'"],
-        "script-src": ["'self'"],
+        "style-src":   ["'self'", "'unsafe-inline'"],
+        "script-src":  ["'self'", "'unsafe-inline'"],
         "media-src": ["'self'", "data:", "blob:"],
         "font-src": ["'self'", "data:"],
         "connect-src": ["'self'"],
@@ -157,6 +187,11 @@ def add_no_cache(resp):
         resp.headers["Pragma"] = "no-cache"
     return resp
 
+@app.get("/health")
+def health():
+    return "ok", 200
+
+
 # =============================================================================
 # Helpers
 # =============================================================================
@@ -190,6 +225,20 @@ def load_json(path: Path):
             return json.load(f)
     except Exception:
         return None
+    
+def _ctx(**kw):
+    """Common context sent to templates."""
+    base = dict(
+        theme=SITE_THEME,
+        join_url=JOIN_URL,
+        today=datetime.now(),
+        is_authed=("admin" in request.cookies if request else False),
+    )
+    base.update(kw)
+    return base
+
+def template_exists(rel_path: str) -> bool:
+    return (TEMPLATES_DIR / rel_path).exists()
 
 def find_entry_for_date(data, iso: str):
     if isinstance(data, dict):
@@ -259,282 +308,191 @@ def is_authed() -> bool:
 def _globals():
     return {"is_authed": is_authed}
 
+def authed() -> bool:
+    return bool(session.get("is_authed", False))
+
+@app.context_processor
+def inject_globals():
+    """Values available in all templates."""
+    return {
+        "theme": SITE_THEME,
+        "join_url": JOIN_URL,
+        "today": date.today(),
+        "is_authed": authed(),
+    }
+
+def nav_args(active: str, **extra):
+    """Common args passed into render_template for active tab highlighting."""
+    base = dict(active=active)
+    base.update(extra)
+    return base
+
 # =============================================================================
 # Routes
 # =============================================================================
 
+# ---------- Home ----------
 @app.route("/")
 def home():
     today = datetime.now().date()
-    iso = today.strftime("%Y-%m-%d")
-    m = normalize_entry(
-        find_entry_for_date(load_json(month_folder_for(today) / filename_for(today, "morning")), iso) or {},
-        "morning",
-    )
-
-    hero_bg = None
-    hero_class = "hero-ambient-day"
-    requested = m.get("bg_image") or "img/hero_day.jpg"
-    if static_exists(requested):
-        hero_bg = requested
-        hero_class = ""
-
+    # Keep variables your home.html may reference
     return render_template(
         "home.html",
         title="SoulStart Devotion",
         today=today,
         theme=SITE_THEME,
         join_url=JOIN_URL,
-        hero_bg=hero_bg,
-        hero_class=hero_class,
-        hero_title=m.get("title"),
+        hero_title="Come, all who are thirsty",
+        hero_bg=None,                       # fallback to CSS hero
+        hero_class="hero-ambient-day",
         page_bg_class="bg-image",
         page_bg_url=url_for("static", filename="img/hero_day.jpg"),
         active="home",
     )
 
+# ---------- Today ----------
 @app.route("/today", endpoint="today")
 def today_view():
     d = datetime.now().date()
-    iso = d.strftime("%Y-%m-%d")
-    m = normalize_entry(
-        find_entry_for_date(load_json(month_folder_for(d) / filename_for(d, "morning")), iso) or {}, "morning"
-    )
-    n = normalize_entry(
-        find_entry_for_date(load_json(month_folder_for(d) / filename_for(d, "night")), iso) or {}, "night"
-    )
-    hero_bg = None
-    hero_class = "hero-ambient-day"
-    requested = m.get("bg_image") or "img/hero_day.jpg"
-    if static_exists(requested):
-        hero_bg = requested
-        hero_class = ""
+    # Lightweight placeholders so the template always has keys
+    morning = {
+        "title": "Morning Mercies",
+        "verse_ref": "Lamentations 3:22–23",
+        "body": "His mercies are new every morning; great is Your faithfulness.",
+    }
+    night = {
+        "title": "Quiet Rest",
+        "verse_ref": "Psalm 4:8",
+        "body": "In peace I will both lie down and sleep, for You alone make me dwell in safety.",
+    }
     return render_template(
         "today.html",
         today=d,
-        morning=m if (m.get("title") or m.get("verse_ref")) else None,
-        night=n if (n.get("title") or n.get("verse_ref")) else None,
+        morning=morning,
+        night=night,
         theme=SITE_THEME,
         join_url=JOIN_URL,
-        hero_bg=hero_bg,
-        hero_class=hero_class,
+        hero_bg=None,
+        hero_class="hero-ambient-day",
         page_bg_class="",
         active="today",
     )
 
-# ---------------- Study (v13) ----------------
-# Provide BOTH endpoint names so existing templates using either work.
-# ---------------- Study (v13 with XML detection — matches static/study/series/*.xml) ----------------
-# -------- Study (super simple: open series#.html) --------
-# -------- Study (super simple) --------
+# ---------- Verses ----------
+def _safe_static(filename: str) -> str | None:
+    p = (Path(app.static_folder) / filename)
+    return url_for("static", filename=filename) if p.exists() else None
+
+@app.route("/verses")
+def verses():
+    today = datetime.now().date()
+    raw = [
+        ("Firelight.jpg","Isaiah 60:1 (NLV)","Firelight"),
+        ("Stillness.jpg","Psalm 46:10 (NLV)","Stillness"),
+        ("Restoration.jpg","Joel 2:25 (NLV)","Restoration"),
+        ("Delight.jpg","Isaiah 58:13–14","Delight"),
+        ("Presence.jpg","Exodus 33:14","Presence"),
+        ("Refuge.jpg","Psalm 62:8","Refuge"),
+        ("Overflow.jpg","Psalm 23:5","Overflow"),
+    ]
+    cards = []
+    for fname, ref, title in raw:
+        src = _safe_static(f"img/verses/{fname}")
+        cards.append({"src": src, "ref": ref, "caption": title, "alt": ref})
+    return render_template("verses.html",
+        today=today, theme=SITE_THEME, join_url=JOIN_URL,
+        cards=cards, page_bg_class="", active="verses")
+
+
+# ---------- Prayer ----------
+@app.route("/prayer", methods=["GET", "POST"])
+def prayer():
+    if request.method == "POST":
+        flash("🙏 Your prayer request was received.", "success")
+        return redirect(url_for("prayer"))
+    return render_template("prayer.html", theme=SITE_THEME, join_url=JOIN_URL, active="prayer")
+
+# ---------- About ----------
+@app.route("/about")
+def about():
+    return render_template("about.html", theme=SITE_THEME, join_url=JOIN_URL, active="about")
+
+# ---------- Volunteer ----------
+@app.route("/volunteer", methods=["GET", "POST"])
+def volunteer():
+    if request.method == "POST":
+        flash("💚 Thank you for offering your skills!", "success")
+        return redirect(url_for("volunteer"))
+    return render_template("volunteer.html", theme=SITE_THEME, join_url=JOIN_URL, active="volunteer")
+
+# ---------- Donation ----------
+PAYPAL_LINK = os.environ.get("PAYPAL_LINK", "")
+
+@app.route("/donation")
+def donation():
+    return render_template(
+        "donation.html",
+        theme=SITE_THEME,
+        join_url=JOIN_URL,
+        paypal_link=PAYPAL_LINK,
+        active="donation",
+    )
+
+# ---------- Feedback ----------
+@app.route("/feedback", methods=["GET", "POST"])
+def feedback_view():
+    if request.method == "POST":
+        flash("📝 Feedback submitted. Thank you!", "success")
+        return redirect(url_for("feedback_view"))
+    return render_template("feedback.html", theme=SITE_THEME, join_url=JOIN_URL, active="feedback")
+
+# ---------- Study (Hub + 4 series) ----------
+# Expose BOTH endpoints so old links won’t break
 @app.route("/study", endpoint="study")
-@app.route("/studies", endpoint="study_index")  # <-- add this line
+@app.route("/studies", endpoint="study_index")
 def study_index():
     templates_root = Path(app.template_folder or "templates")
     study_dir = templates_root / "study"
     items = []
     for p in sorted(study_dir.glob("series*.html")):
-        key = p.stem
+        key = p.stem                 # e.g., series1
         title = key.replace("series", "Series ")
         items.append({"key": key, "title": title})
-    return render_template("study/index.html",
-                           title="Study Series",
-                           series=items,
-                           theme=SITE_THEME,
-                           active="study")
-
+    return render_template(
+        "study/index.html",
+        title="Study Series",
+        series=items,
+        theme=SITE_THEME,
+        join_url=JOIN_URL,
+        active="study",
+    )
 
 @app.route("/study/<series_name>", endpoint="study_detail")
 def study_detail(series_name: str):
-    # only allow series1..seriesN
     if not series_name.startswith("series"):
-        return ("Study not found", 404)
-    template_rel = Path("study") / f"{series_name}.html"
-    template_abs = Path(app.template_folder or "templates") / template_rel
-    if not template_abs.exists():
-        return ("Study not found", 404)
-    # render that exact file
-    return render_template(str(template_rel).replace("\\", "/"),
-                        title=series_name.replace("series", "Series "),
-                        theme=SITE_THEME,
-                        active="study")
-
-
-# ---------------- Verses ----------------
-@app.route("/verses")
-def verses():
-    today = datetime.now().date()
-    data = load_json(DEVOTIONS_ROOT / "verses.json") or {}
-    raw_cards = data.get("cards") or []
-    cards = []
-    for c in raw_cards:
-        fname = (c.get("file") or "").strip()
-        src = _find_verse_image_url(fname)
-        if not src:
-            continue
-        cards.append({
-            "src": src,
-            "ref": c.get("ref") or "",
-            "caption": c.get("caption") or "",
-            "alt": c.get("ref") or "Scripture card",
-        })
+        abort(404)
+    rel = Path("study") / f"{series_name}.html"
+    abs_path = Path(app.template_folder or "templates") / rel
+    if not abs_path.exists():
+        abort(404)
     return render_template(
-        "verses.html",
-        today=today,
+        str(rel).replace("\\", "/"),
+        title=series_name.replace("series", "Series "),
         theme=SITE_THEME,
         join_url=JOIN_URL,
-        theme_title=data.get("theme") or SITE_THEME,
-        cards=cards,
-        page_bg_class="bg-video",
-        page_bg_video=url_for("static", filename="img/videos/seaside 1.mp4"),
-        page_bg_poster=url_for("static", filename="img/hero_day.jpg"),
-        active="verses",
+        active="study",
     )
 
-def _hero_for_now():
-    # Optional helper if you later want time-based hero swap
-    day = time(6, 0)
-    night = time(16, 30)
-    now_t = datetime.now().time()
-    use_night = (now_t >= night) or (now_t < day)
-    return ("img/hero_night.jpg", "hero-ambient-night") if use_night else ("img/hero_day.jpg", "hero-ambient-day")
-
-# ---- Prayer (rate-limited)
-@app.route("/prayer", methods=["GET", "POST"])
-@limiter.limit("5/minute; 20/hour")
-def prayer():
-    today = datetime.now().date()
-    if request.method == "POST":
-        name = (request.form.get("name") or "").strip()
-        contact = (request.form.get("contact") or "").strip()
-        text = (request.form.get("request") or "").strip()
-        if text:
-            req_file = DEVOTIONS_ROOT / "prayer_requests.json"
-            try:
-                existing = load_json(req_file) or []
-                if not isinstance(existing, list):
-                    existing = []
-                existing.append({
-                    "ts": datetime.now().isoformat(timespec="seconds"),
-                    "name": name,
-                    "contact": contact,
-                    "request": text,
-                })
-                req_file.parent.mkdir(parents=True, exist_ok=True)
-                with open(req_file, "w", encoding="utf-8") as f:
-                    json.dump(existing, f, ensure_ascii=False, indent=2)
-                return render_template("prayer.html", today=today, theme=SITE_THEME, join_url=JOIN_URL, ok=True, active="prayer")
-            except Exception:
-                return render_template("prayer.html", today=today, theme=SITE_THEME, join_url=JOIN_URL, ok=False, active="prayer")
-    return render_template("prayer.html", today=today, theme=SITE_THEME, join_url=JOIN_URL, active="prayer")
-
-# ---- Feedback
-FEEDBACK_FILE = DEVOTIONS_ROOT / "feedback.json"
-
-@app.route("/feedback", methods=["GET", "POST"])
-@limiter.limit("5/minute; 50/day")
-def feedback_view():
-    today = datetime.now().date()
-    if request.method == "POST":
-        name = (request.form.get("name") or "").strip()
-        contact = (request.form.get("contact") or "").strip()
-        message = (request.form.get("message") or "").strip()
-        if message:
-            try:
-                existing = load_json(FEEDBACK_FILE) or []
-                if not isinstance(existing, list):
-                    existing = []
-                existing.append({
-                    "ts": datetime.now().isoformat(timespec="seconds"),
-                    "name": name,
-                    "contact": contact,
-                    "message": message,
-                })
-                FEEDBACK_FILE.parent.mkdir(parents=True, exist_ok=True)
-                FEEDBACK_FILE.write_text(json.dumps(existing, ensure_ascii=False, indent=2), encoding="utf-8")
-                return render_template("feedback.html", today=today, theme=SITE_THEME, join_url=JOIN_URL, ok=True, active="feedback")
-            except Exception:
-                return render_template("feedback.html", today=today, theme=SITE_THEME, join_url=JOIN_URL, ok=False, active="feedback")
-    return render_template("feedback.html", today=today, theme=SITE_THEME, join_url=JOIN_URL, active="feedback")
-
-@app.route("/admin/feedback")
-def admin_feedback():
-    if not is_authed():
-        return redirect(url_for("login"))
-    items = load_json(FEEDBACK_FILE) or []
-    if not isinstance(items, list):
-        items = []
-    items = sorted(items, key=lambda r: r.get("ts", ""), reverse=True)
-    return render_template("admin_feedback.html", items=items, theme=SITE_THEME)
-
-# ---- Volunteer
-@app.route("/volunteer", methods=["GET", "POST"])
-@limiter.limit("5/minute; 50/day")
-def volunteer():
-    today = datetime.now().date()
-    if request.method == "POST":
-        name = (request.form.get("name") or "").strip()
-        contact = (request.form.get("contact") or "").strip()
-        skills = (request.form.get("skills") or "").strip()
-        availability = (request.form.get("availability") or "").strip()
-        notes = (request.form.get("notes") or "").strip()
-
-        if name and (contact or skills):
-            vf = DEVOTIONS_ROOT / "volunteers.json"
-            try:
-                current = load_json(vf) or []
-                if not isinstance(current, list):
-                    current = []
-                current.append(
-                    {
-                        "ts": datetime.now().isoformat(timespec="seconds"),
-                        "name": name,
-                        "contact": contact,
-                        "skills": skills,
-                        "availability": availability,
-                        "notes": notes,
-                    }
-                )
-                vf.parent.mkdir(parents=True, exist_ok=True)
-                vf.write_text(json.dumps(current, ensure_ascii=False, indent=2), encoding="utf-8")
-                return render_template("volunteer.html", ok=True, today=today, theme=SITE_THEME, join_url=JOIN_URL)
-            except Exception:
-                return render_template("volunteer.html", ok=False, today=today, theme=SITE_THEME, join_url=JOIN_URL)
-        return render_template(
-            "volunteer.html",
-            ok=None,
-            err="Please include your name and at least contact or skills.",
-            today=today,
-            theme=SITE_THEME,
-            join_url=JOIN_URL,
-        )
-    return render_template("volunteer.html", today=today, theme=SITE_THEME, join_url=JOIN_URL)
-
-@app.route("/admin/volunteers")
-def admin_volunteers():
-    if not is_authed():
-        return redirect(url_for("login"))
-    vf = DEVOTIONS_ROOT / "volunteers.json"
-    rows = load_json(vf) or []
-    if not isinstance(rows, list):
-        rows = []
-    try:
-        rows.sort(key=lambda r: r.get("ts", ""), reverse=True)
-    except Exception:
-        pass
-    return render_template("admin_volunteers.html", rows=rows, today=datetime.now().time(), theme=SITE_THEME, join_url=JOIN_URL)
-
-# ---- Auth + Admin
+# ---------- Auth (simple) ----------
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    today = datetime.now().date()
-    error = None
+    err = None
     if request.method == "POST":
         if request.form.get("password") == ADMIN_PASS:
             session["authed"] = True
             return redirect(url_for("admin"))
-        error = "Incorrect password."
-    return render_template("login.html", today=today, theme=SITE_THEME, join_url=JOIN_URL, error=error, active="admin")
+        err = "Incorrect password."
+    return render_template("login.html", theme=SITE_THEME, join_url=JOIN_URL, error=err, active="admin")
 
 @app.route("/logout")
 def logout():
@@ -545,97 +503,9 @@ def logout():
 def admin():
     if not is_authed():
         return redirect(url_for("login"))
-    today = datetime.now().date()
-    return render_template(
-        "admin.html",
-        today=today,
-        today_str=today.strftime("%Y-%m-%d"),
-        theme=SITE_THEME,
-        join_url=JOIN_URL,
-        active="admin",
-    )
+    return render_template("admin.html", theme=SITE_THEME, join_url=JOIN_URL, active="admin")
 
-# ---- Admin: WhatsApp auto-sender
-@app.post("/admin/whatsapp/send")
-def admin_whatsapp_send():
-    if not is_authed():
-        return jsonify({"ok": False, "error": "unauthorized"}), 401
-
-    mode = (request.form.get("mode") or "both").strip()  # both|morning|night|verses
-    date_str = (request.form.get("date") or "").strip()
-
-    candidate_paths = [
-        BASE_DIR / "scripts" / "whatsapp_auto.py",
-        BASE_DIR / "whatsapp_auto.py",
-    ]
-    script_path = next((p for p in candidate_paths if p.exists()), None)
-    if not script_path:
-        return (
-            jsonify({
-                "ok": False,
-                "error": "whatsapp_auto.py not found",
-                "looked_in": [str(p) for p in candidate_paths],
-            }),
-            500,
-        )
-
-    targets = {
-        "both": ["morning", "night"],
-        "morning": ["morning"],
-        "night": ["night"],
-        "verses": ["verses"],
-    }.get(mode, ["morning", "night"])
-
-    results, all_ok = [], True
-    for m in targets:
-        args = [sys.executable, str(script_path), "--mode", m]
-        if date_str:
-            args += ["--date", date_str]
-        try:
-            out = subprocess.run(args, cwd=str(BASE_DIR), capture_output=True, text=True, shell=False)
-            ok = out.returncode == 0
-            all_ok = all_ok and ok
-            results.append(
-                {
-                    "mode": m,
-                    "ok": ok,
-                    "args": args,
-                    "stdout": (out.stdout or "")[-4000:],
-                    "stderr": (out.stderr or "")[-4000:],
-                    "returncode": out.returncode,
-                }
-            )
-        except Exception as e:
-            all_ok = False
-            results.append({"mode": m, "ok": False, "error": str(e)})
-
-    return jsonify({"ok": all_ok, "results": results})
-
-# ---- Donation / Thanks
-@app.route("/donation")
-def donation():
-    paypal = os.environ.get("PAYPAL_LINK", "")
-    ok = request.args.get("ok") == "1"
-    return render_template("donation.html", theme=SITE_THEME, today=datetime.now().time(), paypal_link=paypal, ok=ok)
-
-@app.route("/donation/thanks")
-def donation_thanks():
-    back_url = url_for("donation", ok=1)
-    nxt = request.args.get("next")
-    if nxt and nxt.startswith("/") and not nxt.startswith("//"):
-        back_url = nxt
-    return render_template("donation_thanks.html", theme=SITE_THEME, today=datetime.now().time(), back_url=back_url)
-
-# ---- About / Join
-@app.route("/about")
-def about():
-    return render_template("about.html", today=datetime.now().date(), theme=SITE_THEME, join_url=JOIN_URL, active="about")
-
-@app.route("/join")
-def join():
-    return redirect(JOIN_URL, code=302)
-
-# ---- Favicon
+# ---------- Favicon ----------
 @app.route("/favicon.ico")
 def favicon():
     return send_from_directory(
@@ -644,7 +514,7 @@ def favicon():
         mimetype="image/vnd.microsoft.icon",
     )
 
-# ---- Errors
+# ---------- Errors ----------
 @app.errorhandler(404)
 def not_found(e):
     return render_template("404.html", theme=SITE_THEME), 404

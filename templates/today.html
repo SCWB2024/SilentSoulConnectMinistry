@@ -1,37 +1,24 @@
 {% extends "base.html" %}
-{% block title %}Today — SoulStart{% endblock %}
+{% block title %}Today's Devotion{% endblock %}
 {% block content %}
-<section class="hero today {{ hero_class }}"
-         {% if hero_bg %}style="background-image:url('{{ url_for('static', filename=hero_bg) }}')" {% endif %}>
-  <div class="hero-inner">
-    <h1>Today’s Devotion</h1>
-    <p class="muted">{{ today.strftime("%A, %B %d, %Y") }}</p>
-  </div>
+<section class="hero hero-muted">
+  <h1>Today's Devotion</h1>
+  <p>{{ today.strftime("%A, %B %d, %Y") }}</p>
 </section>
 
-<div class="cards">
-  {% if morning %}
-  <article class="card">
-    <div class="card-head">🌅 Morning</div>
-    {% if morning.title %}<h3>{{ morning.title }}</h3>{% endif %}
-    {% if morning.verse_ref %}<p><strong>📖 {{ morning.verse_ref }}</strong> — {{ morning.verse_text }}</p>{% endif %}
-    {% if morning.points %}<ul>{% for p in morning.points %}<li>{{ p }}</li>{% endfor %}</ul>{% endif %}
-    {% if morning.prayer %}<p>🙏 {{ morning.prayer }}</p>{% endif %}
-  </article>
-  {% endif %}
+<div class="grid-2">
+  <div class="card morning">
+    <h4>🌅 Morning</h4>
+    <h3>{{ morning.title }}</h3>
+    <p><b>{{ morning.verse_ref }}</b></p>
+    <p>{{ morning.body }}</p>
+  </div>
 
-  {% if night %}
-  <article class="card night-tone">
-    <div class="card-head">🌙 Night</div>
-    {% if night.title %}<h3>{{ night.title }}</h3>{% endif %}
-    {% if night.verse_ref %}<p><strong>📖 {{ night.verse_ref }}</strong> — {{ night.verse_text }}</p>{% endif %}
-    {% if night.points %}<ul>{% for p in night.points %}<li>{{ p }}</li>{% endfor %}</ul>{% endif %}
-    {% if night.prayer %}<p>🙏 {{ night.prayer }}</p>{% endif %}
-  </article>
-  {% endif %}
+  <div class="card night dark">
+    <h4>🌙 Night</h4>
+    <h3>{{ night.title }}</h3>
+    <p><b>{{ night.verse_ref }}</b></p>
+    <p>{{ night.body }}</p>
+  </div>
 </div>
-
-{% if not (morning or night) %}
-  <div class="card"><p class="muted">No entries found for today.</p></div>
-{% endif %}
 {% endblock %}

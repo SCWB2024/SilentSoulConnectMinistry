@@ -18,6 +18,8 @@ services:
         value: "1"
       - key: SITE_THEME
         value: "Faith to Rise, Grace to Rest"
+      - key: PAYPAL_LINK 
+        value: "https://www.paypal.com/donate/?hosted_button_id=21H73722ER303860GND5CN2Y"
       - key: JOIN_URL
         value: "https://chat.whatsapp.com/CdkN2V0h8vCDg2AP4saYfG"
       - key: PYTHON_VERSION

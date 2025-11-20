@@ -1,45 +1,44 @@
 # app.py — SoulStart Devotion (HTTP dev, upgraded study routes) — v13 Full
-# -------------------------------------------------------------------------
-# - HTTP dev (no forced HTTPS)
-# - Auto-open browser on start
-# - CSP relaxed in dev; strict in prod with per-request nonces
-# - CSRF, rate limits, rotating logs
-# - WhatsApp subprocess uses current interpreter
-# - FIX: removed placeholder render_template lines in home()
-# - FIX: clean /study routes (index + detail) + alias endpoint for templates
-# - NEW: template auto-reload + no-cache headers in dev
-
 from __future__ import annotations
+
 import os
-import sys
 import json
 import secrets
 import logging
-import subprocess
 import webbrowser
 from threading import Timer
-from datetime import datetime, date, time
+from datetime import datetime, date
 from pathlib import Path
-from typing import List, Dict
-
 
 from dotenv import load_dotenv  # pyright: ignore[reportMissingImports]
 from flask import (  # pyright: ignore[reportMissingImports]
     Flask, request, session, render_template, redirect,
     url_for, jsonify, send_from_directory, g, flash, abort
 )
+from functools import wraps
 from flask_wtf import CSRFProtect  # pyright: ignore[reportMissingImports]
 from flask_limiter import Limiter  # pyright: ignore[reportMissingImports]
 from flask_limiter.util import get_remote_address  # pyright: ignore[reportMissingImports]
-from flask_talisman import Talisman 
 try:
-    from flask_talisman import Talisman
-except Exception:  # keep app usable if talisman isn't available locally
-    Talisman = None  # type: ignore# pyright: ignore[reportMissingImports]
+    from flask_talisman import Talisman  # pyright: ignore[reportMissingImports]
+except Exception:
+    Talisman = None  # type: ignore
+
 from logging.handlers import RotatingFileHandler
+
 
 def is_authed() -> bool:
     return bool(session.get("authed"))
+
+def require_auth(f):
+    """Redirect to login if session is not authed."""
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if not is_authed():
+            return redirect(url_for("login"))
+        return f(*args, **kwargs)
+    return wrapper
+
 APP_VERSION = "v13"
 
 # =============================================================================
@@ -52,20 +51,21 @@ DEVOTIONS_ROOT = Path(os.environ.get("DEVOTIONS_ROOT", str(BASE_DIR / "devotions
 
 load_dotenv(BASE_DIR / ".env")
 
-ENV       = os.getenv("APP_ENV", os.getenv("FLASK_ENV", "development")).lower()
-IS_PROD   = ENV == "production"
-IS_HTTPS  = os.environ.get("FORCE_HTTPS", "0") in ("1", "true", "True")
-JOIN_URL  = os.environ.get("JOIN_URL", "https://chat.whatsapp.com/CdkN2V0h8vCDg2AP4saYfG")
-SITE_THEME= os.environ.get("SITE_THEME", "Faith to Rise, Grace to Rest")
+ENV         = os.getenv("APP_ENV", os.getenv("FLASK_ENV", "development")).lower()
+IS_PROD     = ENV == "production"
+IS_HTTPS    = os.environ.get("FORCE_HTTPS", "0") in ("1", "true", "True")
+JOIN_URL    = os.environ.get("JOIN_URL", "https://chat.whatsapp.com/CdkN2V0h8vCDg2AP4saYfG")
+WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/CdkN2V0h8vCDg2AP4saYfG"
+SITE_THEME  = os.environ.get("SITE_THEME", "Faith to Rise, Grace to Rest")
 PAYPAL_LINK = os.environ.get("PAYPAL_LINK", "")
-ADMIN_PASS= os.environ.get("ADMIN_PASSWORD", "set-a-strong-password")
-SITE_URL  = os.environ.get("SITE_URL", "http://127.0.0.1:5000")
-PORT      = int(os.environ.get("PORT", "5000"))
-AUTO_OPEN = os.environ.get("AUTO_OPEN", "1") in ("1", "true", "True")
-HOST      = os.environ.get("HOST", "127.0.0.1")
+ADMIN_PASS  = os.environ.get("ADMIN_PASSWORD", "set-a-strong-password")
+SITE_URL    = os.environ.get("SITE_URL", "http://127.0.0.1:5000")
+PORT        = int(os.environ.get("PORT", "5000"))
+AUTO_OPEN   = os.environ.get("AUTO_OPEN", "1") in ("1", "true", "True")
+HOST        = os.environ.get("HOST", "127.0.0.1")
 
 # =============================================================================
-# App init
+# App init (single Flask app)
 # =============================================================================
 app = Flask(
     __name__,
@@ -81,12 +81,15 @@ app.config.update(
     SESSION_COOKIE_SAMESITE="Lax",
 )
 
-# Content Security Policy (enough to allow your CSS/inline and images)
+
+# -----------------------------------------------------------------------------
+# Security & middleware
+# -----------------------------------------------------------------------------
 if Talisman:
     csp = {
         "default-src": ["'self'"],
         "style-src":   ["'self'", "'unsafe-inline'"],
-        "script-src":  ["'self'", "'unsafe-inline'"],  # switch to nonces later if you prefer
+        "script-src":  ["'self'", "'unsafe-inline'"],
         "img-src":     ["'self'", "data:"],
         "connect-src": ["'self'"],
     }
@@ -97,16 +100,19 @@ if Talisman:
         force_https=IS_PROD or IS_HTTPS,
     )
 
-# CSRF + Rate limits
 csrf = CSRFProtect(app)
 limiter = Limiter(key_func=get_remote_address, app=app, default_limits=["200/day", "50/hour"])
 
+# -----------------------------------------------------------------------------
 # Logging
+# -----------------------------------------------------------------------------
 logs_dir = BASE_DIR / "logs"
 logs_dir.mkdir(parents=True, exist_ok=True)
 handler = RotatingFileHandler(logs_dir / "app.log", maxBytes=1_000_000, backupCount=5)
 handler.setLevel(logging.INFO)
-handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s: %(message)s [%(pathname)s:%(lineno)d]"))
+handler.setFormatter(
+    logging.Formatter("%(asctime)s %(levelname)s: %(message)s [%(pathname)s:%(lineno)d]")
+)
 app.logger.addHandler(handler)
 app.logger.info("App startup — %s", APP_VERSION)
 
@@ -332,51 +338,136 @@ def nav_args(active: str, **extra):
 # =============================================================================
 
 # ---------- Home ----------
-@app.route("/")
+@app.route("/", endpoint="home")
 def home():
-    today = datetime.now().date()
-    # Keep variables your home.html may reference
     return render_template(
         "home.html",
-        title="SoulStart Devotion",
-        today=today,
         theme=SITE_THEME,
         join_url=JOIN_URL,
-        hero_title="Come, all who are thirsty",
-        hero_bg=None,                       # fallback to CSS hero
-        hero_class="hero-ambient-day",
-        page_bg_class="bg-image",
-        page_bg_url=url_for("static", filename="img/hero_day.jpg"),
         active="home",
+        hero_bg=None,
+        hero_class="",
+        hero_title="",
     )
+
+from datetime import datetime, date
+from pathlib import Path
+import json, os
 
 # ---------- Today ----------
 @app.route("/today", endpoint="today")
 def today_view():
-    d = datetime.now().date()
-    # Lightweight placeholders so the template always has keys
+    today = date.today()
+    today_iso = today.isoformat()        # "2025-11-20"
+    month_full = today.strftime("%B")    # "November"
+    month_abbr = today.strftime("%b")    # "Nov"
+
+    # 🔹 SAFE FALLBACKS (never show an empty card)
     morning = {
         "title": "Morning Mercies",
         "verse_ref": "Lamentations 3:22–23",
+        "verse_text": "His mercies are new every morning; great is Your faithfulness.",
+        "encouragement_intro": "",
+        "point1": "",
+        "point2": "",
+        "point3": "",
+        "closing": "",
+        "prayer": "",
         "body": "His mercies are new every morning; great is Your faithfulness.",
     }
+
     night = {
         "title": "Quiet Rest",
         "verse_ref": "Psalm 4:8",
+        "verse_text": "In peace I will both lie down and sleep, for You alone make me dwell in safety.",
+        "encouragement_intro": "",
+        "point1": "",
+        "point2": "",
+        "point3": "",
+        "closing": "",
+        "prayer": "",
         "body": "In peace I will both lie down and sleep, for You alone make me dwell in safety.",
     }
+
+    # ---------- LOAD FROM devotions/<Month>/SoulStart_Sunrise_XXX.json ----------
+    root = Path(app.root_path)
+    devo_dir = root / "devotions" / month_full
+
+    sunrise_file = devo_dir / f"SoulStart_Sunrise_{month_abbr}.json"
+    sunset_file = devo_dir / f"SoulStart_Sunset_{month_abbr}.json"
+
+    def load_for_today(path: Path):
+        """Return the entry for today's date from a JSON file, or None."""
+        if not path.exists():
+            return None
+        try:
+            with path.open("r", encoding="utf-8") as f:
+                data = json.load(f)
+        except Exception as e:
+            app.logger.exception("Error reading %s: %s", path, e)
+            return None
+
+        # file can be list or single dict
+        if isinstance(data, list):
+            for item in data:
+                if isinstance(item, dict) and item.get("date") == today_iso:
+                    return item
+        elif isinstance(data, dict):
+            # either one devotion per file, or grouped by date
+            if data.get("date") == today_iso:
+                return data
+            if today_iso in data and isinstance(data[today_iso], dict):
+                return data[today_iso]
+        return None
+
+    sunrise = load_for_today(sunrise_file)
+    sunset = load_for_today(sunset_file)
+
+    if sunrise:
+        tmp = morning.copy()
+        tmp.update(sunrise)
+        morning = tmp
+
+    if sunset:
+        tmp = night.copy()
+        tmp.update(sunset)
+        night = tmp
+
+    # ---------- Build WhatsApp share text from MORNING ----------
+    date_str = today.strftime("%A, %B %d, %Y")
+    whatsapp_share_text = ""
+    if morning:
+        lines = [
+            f"🌅 SoulStart Sunrise – {date_str}",
+            "",
+            f"Theme {morning.get('title', '')}",
+            f"📖 Scripture: {morning.get('verse_ref', '')}-- "
+            f"\"{(morning.get('verse_text') or '').strip()}\"",
+            "",
+            (morning.get("encouragement_intro") or "").strip(),
+            "",
+            (morning.get("point1") or "").strip(),
+            (morning.get("point2") or "").strip(),
+            (morning.get("point3") or "").strip(),
+            (morning.get("closing") or "").strip(),
+            "",
+            f"🙏 Prayer:  {(morning.get('prayer') or '').strip()}",
+            "",
+            f"🔗 Share Us:  {WHATSAPP_GROUP_LINK}",
+        ]
+        whatsapp_share_text = "\n".join([l for l in lines if l])
+
     return render_template(
         "today.html",
-        today=d,
+        today=today,
         morning=morning,
         night=night,
+        whatsapp_share_text=whatsapp_share_text,
+        whatsapp_group_link=WHATSAPP_GROUP_LINK,
         theme=SITE_THEME,
-        join_url=JOIN_URL,
-        hero_bg=None,
-        hero_class="hero-ambient-day",
-        page_bg_class="",
         active="today",
     )
+
 
 # ---------- Verses ----------
 def _safe_static(filename: str) -> str | None:
@@ -500,10 +591,47 @@ def logout():
     return redirect(url_for("home"))
 
 @app.route("/admin")
+@require_auth
 def admin():
-    if not is_authed():
-        return redirect(url_for("login"))
-    return render_template("admin.html", theme=SITE_THEME, join_url=JOIN_URL, active="admin")
+    return render_template(
+        "admin.html",
+        theme=SITE_THEME,
+        join_url=JOIN_URL,
+        active="admin",
+        today_str=date.today().isoformat(),
+    )
+
+
+@app.route("/admin/whatsapp/send", methods=["POST"])
+@require_auth
+def admin_whatsapp_send():
+    form = request.form
+
+    payload = {
+        "date": form.get("date"),
+        "mode": form.get("mode"),
+        "chat": form.get("chat") or "Silent SoulConnect",
+        "paste_delay": form.get("paste_delay"),
+        "send": "send" in form,
+        "open_only": "open_only" in form,
+        "dry_run": "dry_run" in form,
+    }
+
+    app.logger.info("Admin WhatsApp request: %s", payload)
+
+    return jsonify({
+        "ok": True,
+        "message": "Admin WhatsApp endpoint stub — no messages actually sent.",
+        "received": payload,
+    })
+
+    app.logger.info("Admin WhatsApp request: %s", payload)
+
+    return jsonify({
+        "ok": True,
+        "message": "Admin WhatsApp endpoint stub — no messages actually sent.",
+        "received": payload,
+    })
 
 # ---------- Favicon ----------
 @app.route("/favicon.ico")
@@ -538,3 +666,4 @@ if __name__ == "__main__":
     if AUTO_OPEN:
         Timer(1.0, _open_browser).start()
     app.run(host=HOST, port=PORT, debug=True)
+

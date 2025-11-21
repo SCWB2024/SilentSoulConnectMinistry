@@ -22,6 +22,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
+# Force UTF-8 output so emojis don't crash on Windows
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 # ---------- settings (env-aware) ----------
 BASE_DIR = Path(__file__).resolve().parent.parent  # project root
 DEVOTIONS_ROOT = Path(os.environ.get("DEVOTIONS_ROOT", str(BASE_DIR / "devotions")))
@@ -346,13 +350,13 @@ def main() -> None:
     msg = get_message_from_json(effective_mode, dt)
 
     # Safety: never auto-send without an explicit --send
-    # Safety: only run once per invocation (guarded by __main__)
     if args.dry_run:
         print("\n----- DRY RUN: WhatsApp message preview -----\n")
         print(msg)
         print("\n----- END PREVIEW -----\n")
         sys.exit(0)
 
+    # Open WhatsApp Web
     open_web()
     if args.open_only:
         sys.exit(0)
@@ -360,11 +364,20 @@ def main() -> None:
     # Optional: aim the chat before pasting
     if args.chat:
         pyautogui, _ = ensure_autogui()
+
+        # Wait for WA UI to settle
+        time.sleep(2)
+        print("[Info] Focusing WhatsApp Web window…")
+        # Click somewhere in the page to ensure focus (adjust if needed)
+        pyautogui.click(300, 600)
+        time.sleep(0.5)
+
         quick_search_chat(pyautogui, args.chat)
 
     do_paste(msg, args.paste_delay, args.send)
-    print("✅ Message pasted" + (" and sent." if args.send else ". (Press Enter to send)") )
+    print("✅ Message pasted" + (" and sent." if args.send else ". (Press Enter to send)"))
     sys.exit(0)
+
 
 if __name__ == "__main__":
     main()

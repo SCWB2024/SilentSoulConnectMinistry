@@ -5,6 +5,8 @@ import os
 import json
 import secrets
 import logging
+import subprocess
+import sys
 import webbrowser
 from threading import Timer
 from datetime import datetime, date
@@ -48,6 +50,10 @@ BASE_DIR       = Path(__file__).resolve().parent
 TEMPLATES_DIR  = BASE_DIR / "templates"
 STATIC_DIR     = BASE_DIR / "soulstart" / "static"
 DEVOTIONS_ROOT = Path(os.environ.get("DEVOTIONS_ROOT", str(BASE_DIR / "devotions")))
+DATA_DIR = Path("data")
+DATA_DIR.mkdir(exist_ok=True)
+LOG_DIR = Path("logs")
+LOG_DIR.mkdir(exist_ok=True)
 
 load_dotenv(BASE_DIR / ".env")
 
@@ -601,56 +607,160 @@ def admin():
         today_str=date.today().isoformat(),
     )
 
-
-@app.route("/admin/whatsapp/send", methods=["POST"])
-@require_auth
-def admin_whatsapp_send():
-    form = request.form
-
-    payload = {
-        "date": form.get("date"),
-        "mode": form.get("mode"),
-        "chat": form.get("chat") or "Silent SoulConnect",
-        "paste_delay": form.get("paste_delay"),
-        "send": "send" in form,
-        "open_only": "open_only" in form,
-        "dry_run": "dry_run" in form,
-    }
-
-    app.logger.info("Admin WhatsApp request: %s", payload)
-
-    return jsonify({
-        "ok": True,
-        "message": "Admin WhatsApp endpoint stub — no messages actually sent.",
-        "received": payload,
-    })
-
-    app.logger.info("Admin WhatsApp request: %s", payload)
-
-    return jsonify({
-        "ok": True,
-        "message": "Admin WhatsApp endpoint stub — no messages actually sent.",
-        "received": payload,
-    })
-
-# ---------- Favicon ----------
-@app.route("/favicon.ico")
-def favicon():
-    return send_from_directory(
-        os.path.join(app.root_path, "static"),
-        "favicon.ico",
-        mimetype="image/vnd.microsoft.icon",
+@app.route("/admin/requests")
+def admin_requests():
+    """Admin view: prayer requests"""
+    file = DATA_DIR / "prayer_requests.json"
+    items = []
+    if file.exists():
+        with file.open("r", encoding="utf-8") as f:
+            try:
+                items = json.load(f)
+            except Exception:
+                items = []
+    return render_template(
+        "admin_requests.html",
+        items=items,
+        theme=SITE_THEME,
+        active="admin",
     )
 
-# ---------- Errors ----------
-@app.errorhandler(404)
-def not_found(e):
-    return render_template("404.html", theme=SITE_THEME), 404
 
-@app.errorhandler(500)
-def server_error(e):
-    app.logger.exception("Unhandled error: %s", e)
-    return render_template("500.html", theme=SITE_THEME), 500
+@app.route("/admin/feedback")
+def admin_feedback():
+    """Admin view: feedback messages"""
+    file = DATA_DIR / "feedback.json"
+    items = []
+    if file.exists():
+        with file.open("r", encoding="utf-8") as f:
+            try:
+                items = json.load(f)
+            except Exception:
+                items = []
+    return render_template(
+        "admin_feedback.html",
+        items=items,
+        theme=SITE_THEME,
+        active="admin",
+    )
+
+
+@app.route("/admin/volunteers")
+def admin_volunteers():
+    """Admin view: volunteer submissions"""
+    file = DATA_DIR / "volunteers.json"
+    rows = []
+    if file.exists():
+        with file.open("r", encoding="utf-8") as f:
+            try:
+                rows = json.load(f)
+            except Exception:
+                rows = []
+    return render_template(
+        "admin_volunteers.html",
+        rows=rows,
+        theme=SITE_THEME,
+        active="admin",
+    )
+
+
+@app.route("/admin/whatsapp/send", methods=["POST"])
+def admin_whatsapp_send():
+    """Handle Admin WhatsApp send form and trigger the automation script."""
+    # ----- 1. Read form inputs -----
+    date_str = request.form.get("date") or datetime.now().strftime("%Y-%m-%d")
+    mode = request.form.get("mode") or "both"
+    chat = request.form.get("chat") or "Silent SoulConnect"
+    paste_delay_str = request.form.get("paste_delay") or "8"
+
+    try:
+        paste_delay = int(paste_delay_str)
+    except ValueError:
+        paste_delay = 8
+
+    send_flag = "send" in request.form
+    open_only = "open_only" in request.form
+    dry_run = "dry_run" in request.form
+
+    # ----- 2. Build payload & log it -----
+    payload = {
+        "ts": datetime.now().isoformat(timespec="seconds"),
+        "date": date_str,
+        "mode": mode,
+        "chat": chat,
+        "paste_delay": paste_delay,
+        "send": send_flag,
+        "open_only": open_only,
+        "dry_run": dry_run,
+    }
+
+    LOG_DIR = Path("logs")
+    LOG_DIR.mkdir(exist_ok=True)
+    log_file = LOG_DIR / "admin_whatsapp_log.jsonl"
+    with log_file.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(payload) + "\n")
+
+    # ----- 3. Decide which modes to run -----
+    if mode == "both":
+        modes_to_run = ["morning", "night"]
+    elif mode in ("morning", "night", "verses"):
+        modes_to_run = [mode]
+    else:
+        # Fallback – treat unknown as morning
+        modes_to_run = ["morning"]
+
+    script_path = Path(__file__).parent / "scripts" / "whatsapp_auto.py"
+
+    # Base command (shared flags)
+    base_cmd = [
+        sys.executable,
+        str(script_path),
+        "--date", date_str,
+        "--paste-delay", str(paste_delay),
+    ]
+    if open_only:
+        base_cmd.append("--open-only")
+    if dry_run:
+        base_cmd.append("--dry-run")
+    if send_flag:
+        base_cmd.append("--send")
+
+    results = []
+
+    # ----- 4. Run once per mode (morning, night, verses) -----
+    for m in modes_to_run:
+        cmd = base_cmd + ["--mode", m]
+        try:
+            proc = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=600,
+            )
+            ok = proc.returncode == 0
+            stderr_tail = (proc.stderr or "")[-400:] if proc.stderr else ""
+            results.append({
+                "mode": m,
+                "ok": ok,
+                "returncode": proc.returncode,
+                "stderr": stderr_tail,
+            })
+        except Exception as exc:
+            results.append({
+                "mode": m,
+                "ok": False,
+                "returncode": -1,
+                "stderr": f"Exception: {exc}",
+            })
+
+    overall_ok = all(r["ok"] for r in results)
+
+    resp = {
+        "ok": overall_ok,
+        "results": results,
+        "meta": payload,
+    }
+    return jsonify(resp)
 
 # =============================================================================
 # Run (HTTP dev) + auto-open browser

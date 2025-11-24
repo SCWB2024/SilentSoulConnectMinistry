@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Admin — SoulStart{% endblock %}
+
+{% block content %}
+
+<section class="hero hero-night">
+  <div class="hero-inner" style="padding:24px 22px;">
+    <h1>Admin Dashboard</h1>
+    <p class="muted">Welcome, authorized admin.</p>
+  </div>
+</section>
+
+<div class="card" role="region" aria-labelledby="admin-overview-title">
+  <h2 id="admin-overview-title" class="h3">Overview</h2>
+  <p>You are signed in as admin. More controls can be added here later.</p>
+
+  <a class="btn soft" href="{{ url_for('home') }}">🏠 Back Home</a>
+  <a class="btn small" href="{{ url_for('logout') }}">🚪 Log out</a>
+</div>
+
+{% endblock %}

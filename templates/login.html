@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Login — SoulStart{% endblock %}
+
 {% block content %}
 
 <section class="hero hero-day" style="background-image:url('{{ url_for('static', filename='img/hero_day.jpg') }}')">
@@ -14,8 +15,22 @@
 
   <form method="post" novalidate>
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <label for="email">Email</label>
+    <input id="email"
+           type="email"
+           name="email"
+           placeholder="Enter admin email"
+           required
+           autocomplete="username">
+
     <label for="password">Password</label>
-    <input id="password" type="password" name="password" required autocomplete="current-password" minlength="8" autofocus>
+    <input id="password"
+           type="password"
+           name="password"
+           required
+           autocomplete="current-password"
+           minlength="8">
 
     <button type="submit" class="btn small">Sign in</button>
     <a class="btn soft" href="{{ url_for('home') }}">🏠 Back Home</a>
@@ -25,4 +40,5 @@
     {% endif %}
   </form>
 </div>
+
 {% endblock %}

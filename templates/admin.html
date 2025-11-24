@@ -20,7 +20,7 @@
       <input type="date" name="date" value="{{ today_str }}">
       <label>Mode</label>
       <select name="mode">
-        <option value="both">Both (Morning & Night)</option>
+        <option value="both">Both (Morning &amp; Night)</option>
         <option value="morning">Morning only</option>
         <option value="night">Night only</option>
         <option value="verses">Verses</option>
@@ -46,6 +46,7 @@
   <pre id="status" class="status hidden" aria-live="polite"></pre>
 </div>
 
+{# TEMPORARILY DISABLED UNTIL ROUTES EXIST
 <div class="card admin-card">
   <h3>People</h3>
   <p>
@@ -54,6 +55,7 @@
     <a class="btn soft" href="{{ url_for('admin_feedback') }}">📝 Feedback</a>
   </p>
 </div>
+#}
 
 <div class="center mt-4">
   <a class="btn soft" href="{{ url_for('logout') }}">↪ Logout</a>
@@ -97,21 +99,26 @@
   form.addEventListener('submit', async e => {
     e.preventDefault();
     status.classList.add('hidden');
-    submit.disabled = true; submit.textContent = 'Sending…';
+    submit.disabled = true;
+    submit.textContent = 'Sending…';
 
     const fd = new FormData(form);
     try {
       const res = await fetch('{{ url_for("admin_whatsapp_send") }}', {
-        method: 'POST', body: fd, credentials: 'same-origin'
+        method: 'POST',
+        body: fd,
+        credentials: 'same-origin'
       });
       let data = await res.json().catch(()=>({ok:false,error:'Bad response'}));
       show(summarize(data));
     } catch(err){
       show({ok:false,error:String(err)});
     } finally {
-      submit.disabled = false; submit.textContent = 'Send';
+      submit.disabled = false;
+      submit.textContent = 'Send';
     }
   });
 })();
 </script>
+
 {% endblock %}

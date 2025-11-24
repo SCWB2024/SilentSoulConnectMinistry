@@ -17,7 +17,6 @@ from flask import (  # pyright: ignore[reportMissingImports]
     Flask, current_app, request, session, render_template, redirect,
     url_for, jsonify, send_from_directory, g, flash, abort
 )
-from werkzeug.security import generate_password_hash
 from functools import wraps
 from flask_wtf import CSRFProtect  # pyright: ignore[reportMissingImports]
 from flask_limiter import Limiter  # pyright: ignore[reportMissingImports]
@@ -47,32 +46,72 @@ APP_VERSION = "v13"
 # =============================================================================
 # Env & paths
 # =============================================================================
-BASE_DIR       = Path(__file__).resolve().parent
-TEMPLATES_DIR  = BASE_DIR / "templates"
-STATIC_DIR     = BASE_DIR / "soulstart" / "static"
-DEVOTIONS_ROOT = Path(os.environ.get("DEVOTIONS_ROOT", str(BASE_DIR / "devotions")))
-DATA_DIR = Path("data")
+
+BASE_DIR = Path(__file__).resolve().parent
+TEMPLATES_DIR = BASE_DIR / "templates"
+STATIC_DIR = BASE_DIR / "soulstart" / "static"
+
+DEVOTIONS_ROOT = Path(
+    os.environ.get("DEVOTIONS_ROOT", str(BASE_DIR / "devotions"))
+)
+
+DATA_DIR = BASE_DIR / "data"
 DATA_DIR.mkdir(exist_ok=True)
-LOG_DIR = Path("logs")
+
+LOG_DIR = BASE_DIR / "logs"
 LOG_DIR.mkdir(exist_ok=True)
 
+# Load .env locally; on Render, env vars come from the dashboard
 load_dotenv(BASE_DIR / ".env")
 
-ENV         = os.getenv("APP_ENV", os.getenv("FLASK_ENV", "development")).lower()
-IS_PROD     = ENV == "production"
-IS_HTTPS    = os.environ.get("FORCE_HTTPS", "0") in ("1", "true", "True")
-JOIN_URL    = os.environ.get("JOIN_URL", "https://chat.whatsapp.com/CdkN2V0h8vCDg2AP4saYfG")
-WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/CdkN2V0h8vCDg2AP4saYfG"
-SITE_THEME  = os.environ.get("SITE_THEME", "Faith to Rise, Grace to Rest")
-PAYPAL_LINK = os.environ.get("PAYPAL_LINK", "")
-ADMIN_PASS  = os.environ.get("ADMIN_PASSWORD", "set-a-strong-password")
-ADMIN_EMAIL = sscministry@outlook.com 
-ADMIN_PASSWORD = Romans1014
-ADMIN_BOOTSTRAP_TOKEN = soulstart-2025-bootstrap
-SITE_URL    = os.environ.get("SITE_URL", "http://127.0.0.1:5000")
-PORT        = int(os.environ.get("PORT", "5000"))
-AUTO_OPEN   = os.environ.get("AUTO_OPEN", "1") in ("1", "true", "True")
-HOST        = os.environ.get("HOST", "127.0.0.1")
+ENV = os.getenv("APP_ENV", os.getenv("FLASK_ENV", "development")).lower()
+IS_PROD = ENV == "production"
+IS_HTTPS = os.environ.get("FORCE_HTTPS", "0").lower() in ("1", "true", "yes")
+
+JOIN_URL = os.environ.get(
+    "JOIN_URL",
+    "https://chat.whatsapp.com/CdkN2V0h8vCDg2AP4saYfG"
+)
+
+WHATSAPP_GROUP_LINK = os.environ.get(
+    "WHATSAPP_GROUP_LINK",
+    JOIN_URL, 
+)
+
+SITE_THEME = os.environ.get("SITE_THEME", "Faith to Rise, Grace to Rest")
+PAYPAL_LINK = os.environ.get("PAYPAL_LINK", "https://www.paypal.com/donate/?hosted_button_id=21H73722ER303860GND5CN2Y")
+
+# ---------------- Admin credentials ----------------
+# These MUST be set in .env locally and in Render's Environment tab.
+ADMIN_EMAIL = (os.environ.get("ADMIN_EMAIL", "sscministry@outlook.com") or "").strip().lower()
+ADMIN_PASSWORD = (os.environ.get("ADMIN_PASSWORD", "") or "").strip()
+ADMIN_BOOTSTRAP_TOKEN = os.environ.get(
+    "ADMIN_BOOTSTRAP_TOKEN",
+    "soulstart-2025-bootstrap",
+)
+
+# Backwards-compat for any old code still using ADMIN_PASS
+ADMIN_PASS = ADMIN_PASSWORD
+
+SITE_URL = os.environ.get("SITE_URL", "http://127.0.0.1:5000")
+PORT = int(os.environ.get("PORT", "5000"))
+AUTO_OPEN = os.environ.get("AUTO_OPEN", "1").lower() in ("1", "true", "yes")
+HOST = os.environ.get("HOST", "127.0.0.1")
+
+
+def verify_admin_credentials(email: str, password: str) -> bool:
+    """
+    Compare submitted credentials with the configured admin account.
+    Uses plain env values for now (no hashing) to keep behaviour simple.
+    """
+    if not ADMIN_PASSWORD:
+        # No password configured on the server
+        return False
+
+    return (
+        email.strip().lower() == ADMIN_EMAIL
+        and password.strip() == ADMIN_PASSWORD
+    )
 
 # =============================================================================
 # App init (single Flask app)
@@ -343,6 +382,11 @@ def nav_args(active: str, **extra):
     base.update(extra)
     return base
 
+@app.context_processor
+def inject_auth_flag():
+    return {"is_authed": is_authed()}
+
+
 # =============================================================================
 # Routes
 # =============================================================================
@@ -587,17 +631,38 @@ def study_detail(series_name: str):
 # ---------- Auth (simple) ----------
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    err = None
+    if is_authed():
+        return redirect(url_for("admin"))
+
+    error = None
+
     if request.method == "POST":
-        if request.form.get("password") == ADMIN_PASS:
+        email = (request.form.get("email") or "").strip().lower()
+        password = (request.form.get("password") or "").strip()
+
+        # Debug (optional; safe to remove later)
+        print("=== ADMIN LOGIN DEBUG ===")
+        print("Has ADMIN_EMAIL:", bool(ADMIN_EMAIL))
+        print("Has ADMIN_PASSWORD:", bool(ADMIN_PASSWORD))
+        print("Submitted email:", repr(email))
+        print("Env email:", repr(ADMIN_EMAIL))
+
+        if not ADMIN_PASSWORD:
+            error = "Admin login is not configured on the server."
+        elif verify_admin_credentials(email, password):
             session["authed"] = True
+            flash("Welcome back, Admin.", "success")
             return redirect(url_for("admin"))
-        err = "Incorrect password."
-    return render_template("login.html", theme=SITE_THEME, join_url=JOIN_URL, error=err, active="admin")
+        else:
+            error = "Incorrect email or password."
+
+    return render_template("login.html", error=error, active="login")
+
 
 @app.route("/logout")
 def logout():
-    session.clear()
+    session.pop("authed", None)
+    flash("You have been logged out.", "info")
     return redirect(url_for("home"))
 
 @app.route("/admin")

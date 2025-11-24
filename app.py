@@ -18,8 +18,6 @@ from flask import (  # pyright: ignore[reportMissingImports]
     url_for, jsonify, send_from_directory, g, flash, abort
 )
 from werkzeug.security import generate_password_hash
-from yourapp import app, db
-from yourapp.models import User  # adjust to your actual model import
 from functools import wraps
 from flask_wtf import CSRFProtect  # pyright: ignore[reportMissingImports]
 from flask_limiter import Limiter  # pyright: ignore[reportMissingImports]
@@ -768,30 +766,6 @@ def admin_whatsapp_send():
     }
     return jsonify(resp)
 
-@app.route("/one_time_bootstrap_admin")
-def one_time_bootstrap_admin():
-    token = request.args.get("token")
-    expected = current_app.config.get("ADMIN_BOOTSTRAP_TOKEN")
-
-    if not expected or token != expected:
-        abort(403)
-
-    admin_email = current_app.config.get("ADMIN_EMAIL")
-    admin_password = current_app.config.get("ADMIN_PASSWORD")
-
-    if not admin_email or not admin_password:
-        return "Admin email/password not configured.", 500
-
-    user = User.query.filter_by(email=admin_email).first()
-    if user is None:
-        user = User(email=admin_email, is_admin=True)
-        db.session.add(user)
-
-    user.password_hash = generate_password_hash(admin_password)
-    user.is_admin = True
-
-    db.session.commit()
-    return "Admin user created/updated successfully."
 
 # =============================================================================
 # Run (HTTP dev) + auto-open browser

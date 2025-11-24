@@ -14,9 +14,12 @@ from pathlib import Path
 
 from dotenv import load_dotenv  # pyright: ignore[reportMissingImports]
 from flask import (  # pyright: ignore[reportMissingImports]
-    Flask, request, session, render_template, redirect,
+    Flask, current_app, request, session, render_template, redirect,
     url_for, jsonify, send_from_directory, g, flash, abort
 )
+from werkzeug.security import generate_password_hash
+from yourapp import app, db
+from yourapp.models import User  # adjust to your actual model import
 from functools import wraps
 from flask_wtf import CSRFProtect  # pyright: ignore[reportMissingImports]
 from flask_limiter import Limiter  # pyright: ignore[reportMissingImports]
@@ -65,6 +68,9 @@ WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/CdkN2V0h8vCDg2AP4saYfG"
 SITE_THEME  = os.environ.get("SITE_THEME", "Faith to Rise, Grace to Rest")
 PAYPAL_LINK = os.environ.get("PAYPAL_LINK", "")
 ADMIN_PASS  = os.environ.get("ADMIN_PASSWORD", "set-a-strong-password")
+ADMIN_EMAIL = sscministry@outlook.com 
+ADMIN_PASSWORD = Romans1014
+ADMIN_BOOTSTRAP_TOKEN = soulstart-2025-bootstrap
 SITE_URL    = os.environ.get("SITE_URL", "http://127.0.0.1:5000")
 PORT        = int(os.environ.get("PORT", "5000"))
 AUTO_OPEN   = os.environ.get("AUTO_OPEN", "1") in ("1", "true", "True")
@@ -761,6 +767,31 @@ def admin_whatsapp_send():
         "meta": payload,
     }
     return jsonify(resp)
+
+@app.route("/one_time_bootstrap_admin")
+def one_time_bootstrap_admin():
+    token = request.args.get("token")
+    expected = current_app.config.get("ADMIN_BOOTSTRAP_TOKEN")
+
+    if not expected or token != expected:
+        abort(403)
+
+    admin_email = current_app.config.get("ADMIN_EMAIL")
+    admin_password = current_app.config.get("ADMIN_PASSWORD")
+
+    if not admin_email or not admin_password:
+        return "Admin email/password not configured.", 500
+
+    user = User.query.filter_by(email=admin_email).first()
+    if user is None:
+        user = User(email=admin_email, is_admin=True)
+        db.session.add(user)
+
+    user.password_hash = generate_password_hash(admin_password)
+    user.is_admin = True
+
+    db.session.commit()
+    return "Admin user created/updated successfully."
 
 # =============================================================================
 # Run (HTTP dev) + auto-open browser

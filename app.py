@@ -84,7 +84,7 @@ PAYPAL_LINK = os.environ.get("PAYPAL_LINK", "https://www.paypal.com/donate/?host
 # ---------------- Admin credentials ----------------
 # These MUST be set in .env locally and in Render's Environment tab.
 ADMIN_EMAIL = (os.environ.get("ADMIN_EMAIL", "sscministry@outlook.com") or "").strip().lower()
-ADMIN_PASSWORD = (os.environ.get("ADMIN_PASSWORD", "") or "").strip()
+ADMIN_PASSWORD = (os.environ.get("ADMIN_PASSWORD", "YourStrongPass") or "").strip()
 ADMIN_BOOTSTRAP_TOKEN = os.environ.get(
     "ADMIN_BOOTSTRAP_TOKEN",
     "soulstart-2025-bootstrap",

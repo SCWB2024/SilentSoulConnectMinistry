@@ -24,8 +24,9 @@ services:
         value: "https://chat.whatsapp.com/CdkN2V0h8vCDg2AP4saYfG"
       - key: PYTHON_VERSION
         value: "3.11.9"
-    # Optional persistent disk (keeps prayer/volunteer JSON across restarts; paid plan)
-    # disks:
-    #   - name: data
-    #     mountPath: /opt/render/project/src/devotions
-    #     sizeGB: 1
+
+      # --- ADD THESE ---
+      - key: ADMIN_EMAIL
+        value: "sscministry@outlook.com"
+      - key: ADMIN_PASSWORD
+        value: "SCWB_Admin9621"

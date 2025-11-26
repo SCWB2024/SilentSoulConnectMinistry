@@ -246,6 +246,37 @@ def add_no_cache(resp):
 def health():
     return "ok", 200
 
+# ---------------------------------------------------------------------------
+# Donation log helpers
+# ---------------------------------------------------------------------------
+
+DONATIONS_FILE = DATA_DIR / "donations.json"
+
+
+def load_json_list(path: Path):
+    """Load a JSON list from file; return [] on error/missing."""
+    if not path.exists():
+        return []
+    try:
+        with path.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+            if isinstance(data, list):
+                return data
+            return [data]
+    except Exception:
+        return []
+
+
+def append_json_list(path: Path, record: dict) -> None:
+    """Append a record to a JSON list file."""
+    items = load_json_list(path)
+    items.append(record)
+    try:
+        with path.open("w", encoding="utf-8") as f:
+            json.dump(items, f, ensure_ascii=False, indent=2)
+    except Exception:
+        # In worst case, do nothing rather than crash admin
+        pass
 
 # =============================================================================
 # Helpers
@@ -571,17 +602,83 @@ def volunteer():
     return render_template("volunteer.html", theme=SITE_THEME, join_url=JOIN_URL, active="volunteer")
 
 # ---------- Donation ----------
-PAYPAL_LINK = os.environ.get("PAYPAL_LINK", "")
+@app.route("/admin/donations", methods=["GET", "POST"])
+@require_auth
+def admin_donations():
+    error = None
+    success = None
+
+    if request.method == "POST":
+        donor_name = (request.form.get("donor_name") or "").strip()
+        amount_raw = (request.form.get("amount") or "").strip()
+        currency = (request.form.get("currency") or "USD").strip().upper()
+        note = (request.form.get("note") or "").strip()
+        date_str = (request.form.get("date") or "").strip()
+
+        if not date_str:
+            # default to today if not provided
+            date_str = datetime.now().date().isoformat()
+
+        try:
+            amount = float(amount_raw)
+        except ValueError:
+            amount = None
+
+        if amount is None or amount <= 0:
+            error = "Please enter a valid donation amount."
+        else:
+            record = {
+                "date": date_str,
+                "donor_name": donor_name,
+                "amount": amount,
+                "currency": currency,
+                "note": note,
+                "created_at": datetime.now().isoformat(timespec="seconds"),
+            }
+            append_json_list(DONATIONS_FILE, record)
+            success = "Donation recorded successfully."
+
+    # Always load current list
+    items = load_json_list(DONATIONS_FILE)
+
+    # Sort newest first by date/created_at
+    try:
+        items.sort(
+            key=lambda r: (r.get("date") or "", r.get("created_at") or ""),
+            reverse=True,
+        )
+    except Exception:
+        pass
+
+    total_amount = sum(
+        (r.get("amount") or 0) for r in items if isinstance(r.get("amount"), (int, float))
+    )
+
+    return render_template(
+        "admin_donations.html",
+        title="Donation Log",
+        items=items,
+        total_amount=total_amount,
+        active="admin",
+        error=error,
+        success=success,
+    )
 
 @app.route("/donation")
 def donation():
+    """
+    Public donation page used by the floating 💚 button.
+    Shows a PayPal button if PAYPAL_LINK is configured.
+    """
     return render_template(
         "donation.html",
         theme=SITE_THEME,
         join_url=JOIN_URL,
-        paypal_link=PAYPAL_LINK,
         active="donation",
+        paypal_link=PAYPAL_LINK,
     )
+
+
 
 # ---------- Feedback ----------
 @app.route("/feedback", methods=["GET", "POST"])
@@ -641,12 +738,7 @@ def login():
         password = (request.form.get("password") or "").strip()
 
         # Debug (optional; safe to remove later)
-        print("=== ADMIN LOGIN DEBUG ===")
-        print("Has ADMIN_EMAIL:", bool(ADMIN_EMAIL))
-        print("Has ADMIN_PASSWORD:", bool(ADMIN_PASSWORD))
-        print("Submitted email:", repr(email))
-        print("Env email:", repr(ADMIN_EMAIL))
-
+    
         if not ADMIN_PASSWORD:
             error = "Admin login is not configured on the server."
         elif verify_admin_credentials(email, password):
@@ -675,6 +767,13 @@ def admin():
         active="admin",
         today_str=date.today().isoformat(),
     )
+
+def load_report_json(path: Path):
+    ...
+PRAYER_REQUESTS_FILE = DATA_DIR / "prayer_requests.json"
+VOLUNTEERS_FILE      = DATA_DIR / "volunteers.json"
+FEEDBACK_FILE        = DATA_DIR / "feedback.json"
+DONATIONS_FILE       = DATA_DIR / "donations.json"
 
 @app.route("/admin/requests")
 def admin_requests():

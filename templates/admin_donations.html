@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} — Admin{% endblock %}
+
+{% block content %}
+<section class="hero hero-day" style="background-image:url('{{ url_for('static', filename='img/hero_day.jpg') }}')">
+  <div class="hero-inner" style="padding:24px 22px;">
+    <h1>{{ title }}</h1>
+    <p class="muted">Manual donation log for SoulStart / SSCM supporters.</p>
+  </div>
+</section>
+
+<div class="card admin-card">
+  <h3>Add Donation</h3>
+
+  {% if error %}
+    <p class="err" role="alert">{{ error }}</p>
+  {% endif %}
+  {% if success %}
+    <p class="ok" role="status">{{ success }}</p>
+  {% endif %}
+
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <div class="row">
+      <label for="date">Date</label>
+      <input id="date" type="date" name="date" value="{{ (items[0].date if items and items[0].date else '') if false else '' }}">
+    </div>
+
+    <div class="row">
+      <label for="donor_name">Donor Name (optional)</label>
+      <input id="donor_name" type="text" name="donor_name" placeholder="Anonymous or name">
+    </div>
+
+    <div class="row">
+      <label for="amount">Amount</label>
+      <input id="amount" type="number" step="0.01" min="0" name="amount" required style="max-width:8rem;">
+
+      <label for="currency">Currency</label>
+      <select id="currency" name="currency">
+        <option value="USD">USD</option>
+        <option value="BBD">BBD</option>
+        <option value="BSD">BSD</option>
+      </select>
+    </div>
+
+    <div class="row">
+      <label for="note">Note (optional)</label>
+      <input id="note" type="text" name="note" placeholder="Online PayPal / cash / purpose">
+    </div>
+
+    <button type="submit" class="btn small">Save Donation</button>
+    <a href="{{ url_for('admin') }}" class="btn soft">← Back to Admin</a>
+  </form>
+</div>
+
+<div class="card admin-card">
+  <h3>Donation History</h3>
+
+  {% if items %}
+    <p class="muted">Total: {{ total_amount }} {{ items[0].currency if items[0].currency else '' }}</p>
+    <div style="max-height:360px; overflow:auto;">
+      <table class="table-simple">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Donor</th>
+            <th>Amount</th>
+            <th>Currency</th>
+            <th>Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for d in items %}
+            <tr>
+              <td>{{ d.date or d.get('date') }}</td>
+              <td>{{ d.donor_name or d.get('donor_name') or '—' }}</td>
+              <td>{{ d.amount or d.get('amount') }}</td>
+              <td>{{ d.currency or d.get('currency') }}</td>
+              <td>{{ d.note or d.get('note') or '' }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="muted">No donations recorded yet.</p>
+  {% endif %}
+</div>
+
+<style nonce="{{ csp_nonce() }}">
+  .table-simple {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  .table-simple th, .table-simple td {
+    border-bottom: 1px solid #1f2933;
+    padding: 6px 8px;
+    text-align: left;
+  }
+  .table-simple th {
+    font-weight: 600;
+  }
+  .ok {
+    color: #16a34a;
+    font-weight: 600;
+  }
+  .err {
+    color: #dc2626;
+    font-weight: 600;
+  }
+  .row {
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    align-items:center;
+    margin:8px 0;
+  }
+</style>
+{% endblock %}
+

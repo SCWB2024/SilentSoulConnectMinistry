@@ -1,17 +1,41 @@
 {% extends "base.html" %}
-{% block title %}Give & Serve • SoulStart{% endblock %}
+{% block title %}Give & Serve — SoulStart{% endblock %}
+
 {% block content %}
-<section class="hero hero-muted">
-  <h1>Give & Serve</h1>
-  <p>Acts of Faith • Gifts of the Heart</p>
+<section class="hero hero-day" style="background-image:url('{{ url_for('static', filename='img/hero_day.jpg') }}')">
+  <div class="hero-inner" style="padding:24px 22px;">
+    <h1>Give &amp; Serve</h1>
+    <p class="muted">Acts of Faith • Gifts of the Heart</p>
+  </div>
 </section>
 
-<div class="card pad">
+<div class="card">
   {% if paypal_link %}
-    <a class="btn green" href="{{ paypal_link }}" target="_blank" rel="noopener">💚 Give via PayPal</a>
+    <p class="muted">
+      Your gift helps Silent SoulConnect Ministry reach Deaf and Hard-of-Hearing souls
+      with daily devotion, prayer, and Bible study.
+    </p>
+
+    <p>
+      <a href="{{ paypal_link }}" target="_blank" rel="noopener"
+         class="btn">
+        💚 Give via PayPal
+      </a>
+    </p>
+
+    <p class="muted" style="font-size:0.9rem;">
+      You will be redirected to our secure PayPal donation page in a new tab.
+    </p>
   {% else %}
     <p class="muted">PayPal link coming soon.</p>
   {% endif %}
-  <a class="btn soft" href="{{ url_for('home') }}">🏠 Back Home</a>
+
+  <p class="mt-2">
+    <a href="{{ url_for('home') }}" class="btn soft">🏠 Back Home</a>
+  </p>
 </div>
+
+<style nonce="{{ csp_nonce() }}">
+  .card p { margin-bottom: 0.75rem; }
+</style>
 {% endblock %}

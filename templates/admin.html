@@ -46,16 +46,15 @@
   <pre id="status" class="status hidden" aria-live="polite"></pre>
 </div>
 
-{# TEMPORARILY DISABLED UNTIL ROUTES EXIST
 <div class="card admin-card">
-  <h3>People</h3>
+  <h3>People & Reports</h3>
   <p>
     <a class="btn soft" href="{{ url_for('admin_requests') }}">📥 Prayer Requests</a>
     <a class="btn soft" href="{{ url_for('admin_volunteers') }}">👐 Volunteers</a>
     <a class="btn soft" href="{{ url_for('admin_feedback') }}">📝 Feedback</a>
+    <a class="btn soft" href="{{ url_for('admin_donations') }}">💚 Donation Log</a>
   </p>
 </div>
-#}
 
 <div class="center mt-4">
   <a class="btn soft" href="{{ url_for('logout') }}">↪ Logout</a>

@@ -1,28 +1,29 @@
 {% extends "base.html" %}
-{% block title %}Bible Study Hub — SoulStart{% endblock %}
-{% block content %}
+{% block title %}Study — SoulStart{% endblock %}
 
+{% block content %}
 <section class="hero hero-day" style="background-image:url('{{ url_for('static', filename='img/hero_day.jpg') }}')">
-  <div class="hero-inner" style="padding:28px 22px;">
-    <h1>📘 Bible Study Hub</h1>
-    <p class="muted">Weekly themes, outlines, and resources for group or personal study.</p>
+  <div class="hero-inner" style="padding:24px 22px;">
+    <h1>Study Series</h1>
+    <p class="muted">Bible lessons in simple language, ready for sign language and visual teaching.</p>
   </div>
 </section>
 
-<div class="study-grid">
-  <article class="study-card">
-    <figure class="study-media">
-      <img src="{{ url_for('static', filename='img/studies/calling.jpg') }}" alt="Calling on His Name">
-    </figure>
-    <div class="study-body">
-      <h3 class="study-title">Calling on His Name</h3>
-      <p>A six-day study on prayer and connecting with God through His Spirit.</p>
-      <a class="btn" href="{{ url_for('static', filename='studies/calling-on-his-name.html') }}">📖 Open Study</a>
-    </div>
-  </article>
-</div>
-
-<div class="center mt-4">
-  <a class="btn soft" href="{{ url_for('home') }}">🏠 Back Home</a>
+<div class="card">
+  {% if lessons %}
+    <ul>
+      {% for lesson in lessons %}
+        <li>
+          <strong>{{ lesson.title or lesson.get('title', 'Untitled') }}</strong><br>
+          <span class="muted">
+            {{ lesson.reference or lesson.get('reference', '') }}
+          </span><br>
+          <span>{{ lesson.summary or lesson.get('summary', '') }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="muted">Study plan is being prepared. Please check back soon.</p>
+  {% endif %}
 </div>
 {% endblock %}

@@ -51,15 +51,22 @@ BASE_DIR = Path(__file__).resolve().parent
 TEMPLATES_DIR = BASE_DIR / "templates"
 STATIC_DIR = BASE_DIR / "soulstart" / "static"
 
-DEVOTIONS_ROOT = Path(
-    os.environ.get("DEVOTIONS_ROOT", str(BASE_DIR / "devotions"))
-)
-
 DATA_DIR = BASE_DIR / "data"
 DATA_DIR.mkdir(exist_ok=True)
 
 LOG_DIR = BASE_DIR / "logs"
 LOG_DIR.mkdir(exist_ok=True)
+
+DEVOTIONS_ROOT = Path(
+    os.environ.get("DEVOTIONS_ROOT", str(BASE_DIR / "devotions"))
+)
+
+# ---- Now safe to define files ----
+VERSES_FILE = DATA_DIR / "verses.json"
+DONATIONS_FILE = DATA_DIR / "donations.json"
+REQUESTS_FILE = DATA_DIR / "requests.json"
+VOLUNTEERS_FILE = DATA_DIR / "volunteers.json"
+FEEDBACK_FILE = DATA_DIR / "feedback.json"
 
 # Load .env locally; on Render, env vars come from the dashboard
 load_dotenv(BASE_DIR / ".env")
@@ -553,31 +560,137 @@ def today_view():
         active="today",
     )
 
-
-# ---------- Verses ----------
+# ---------- Verses (Promise Cards) ----------
 def _safe_static(filename: str) -> str | None:
-    p = (Path(app.static_folder) / filename)
-    return url_for("static", filename=filename) if p.exists() else None
+    """Return static URL if file exists; else None."""
+    path = Path(app.static_folder) / filename
+    if path.exists():
+        return url_for("static", filename=filename)
+    return None
+
+
+def load_verses() -> list[dict]:
+    """
+    Load verse cards from data/verses.json if present.
+    Fallback to built-in defaults if missing or invalid.
+    """
+    fallback = [
+        {
+            "image": "Firelight.jpg",
+            "ref": "Isaiah 60:1 (NLV)",
+            "title": "Firelight",
+            "note": "God is calling you to rise and shine, even when life feels dark."
+        },
+        {
+            "image": "Stillness.jpg",
+            "ref": "Psalm 46:10 (NLV)",
+            "title": "Stillness",
+            "note": "A reminder to pause, breathe, and know that God is in control."
+        },
+        {
+            "image": "Restoration.jpg",
+            "ref": "Joel 2:25 (NLV)",
+            "title": "Restoration",
+            "note": "God can restore the years and moments that feel wasted or broken."
+        },
+        {
+            "image": "Delight.jpg",
+            "ref": "Isaiah 58:13–14",
+            "title": "Delight",
+            "note": "There is joy and freedom when we delight ourselves in the Lord."
+        },
+        {
+            "image": "Presence.jpg",
+            "ref": "Exodus 33:14",
+            "title": "Presence",
+            "note": "His presence brings rest to a tired mind and a heavy heart."
+        },
+        {
+            "image": "Refuge.jpg",
+            "ref": "Psalm 62:8",
+            "title": "Refuge",
+            "note": "You can pour out your heart; God is a safe place, not a harsh judge."
+        },
+        {
+            "image": "Overflow.jpg",
+            "ref": "Psalm 23:5",
+            "title": "Overflow",
+            "note": "Even in hard seasons, God can cause your cup to overflow with grace."
+        }
+    ]
+
+    if not VERSES_FILE.exists():
+        return fallback
+
+    try:
+        with VERSES_FILE.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+        if isinstance(data, list):
+            return data
+        return fallback
+    except Exception:
+        return fallback
+
 
 @app.route("/verses")
 def verses():
+    """Grid of theme verses."""
     today = datetime.now().date()
-    raw = [
-        ("Firelight.jpg","Isaiah 60:1 (NLV)","Firelight"),
-        ("Stillness.jpg","Psalm 46:10 (NLV)","Stillness"),
-        ("Restoration.jpg","Joel 2:25 (NLV)","Restoration"),
-        ("Delight.jpg","Isaiah 58:13–14","Delight"),
-        ("Presence.jpg","Exodus 33:14","Presence"),
-        ("Refuge.jpg","Psalm 62:8","Refuge"),
-        ("Overflow.jpg","Psalm 23:5","Overflow"),
-    ]
+    verses_data = load_verses()
+
     cards = []
-    for fname, ref, title in raw:
-        src = _safe_static(f"img/verses/{fname}")
-        cards.append({"src": src, "ref": ref, "caption": title, "alt": ref})
-    return render_template("verses.html",
-        today=today, theme=SITE_THEME, join_url=JOIN_URL,
-        cards=cards, page_bg_class="", active="verses")
+    for idx, v in enumerate(verses_data):
+        image = v.get("image", "")
+        src = _safe_static(f"img/verses/{image}") if image else None
+
+        cards.append({
+            "id": idx,
+            "src": src,
+            "ref": v.get("ref", "Untitled"),
+            "caption": v.get("title", ""),
+            "note": v.get("note", ""),
+            "alt": f"Theme verse — {v.get('ref', '')}"
+        })
+
+    return render_template(
+        "verses.html",
+        today=today,
+        theme=SITE_THEME,
+        join_url=JOIN_URL,
+        cards=cards,
+        page_bg_class="",
+        active="verses"
+    )
+
+
+@app.route("/verses/<int:card_id>")
+def verse_detail(card_id: int):
+    """Detail view for a single verse card."""
+    verses_data = load_verses()
+
+    if card_id < 0 or card_id >= len(verses_data):
+        abort(404)
+
+    v = verses_data[card_id]
+    image = v.get("image", "")
+    src = _safe_static(f"img/verses/{image}") if image else None
+
+    card = {
+        "id": card_id,
+        "src": src,
+        "ref": v.get("ref", "Untitled"),
+        "title": v.get("title", ""),
+        "note": v.get("note", ""),
+        "alt": f"Theme verse — {v.get('ref', '')}"
+    }
+
+    return render_template(
+        "verse_detail.html",
+        card=card,
+        theme=SITE_THEME,
+        join_url=JOIN_URL,
+        active="verses"
+    )
 
 
 # ---------- Prayer ----------
@@ -688,18 +801,55 @@ def feedback_view():
         return redirect(url_for("feedback_view"))
     return render_template("feedback.html", theme=SITE_THEME, join_url=JOIN_URL, active="feedback")
 
-# ---------- Study (Hub + 4 series) ----------
-# Expose BOTH endpoints so old links won’t break
+# ---------- Study (Hub + series pages) ----------
+
+STUDIES_META_FILE = DATA_DIR / "studies.json"
+
+
+def load_study_meta() -> dict:
+    """
+    Optional metadata for study series from data/studies.json.
+
+    Expected (recommended) shape:
+      {
+        "series1": {"title": "Series 1 – New Life", "tagline": "..."},
+        "series2": {"title": "Series 2 – Growing in Grace", ...}
+      }
+
+    If the file is missing or in a different shape, we just return {} and
+    fall back to filename-based titles, so nothing crashes.
+    """
+    if not STUDIES_META_FILE.exists():
+        return {}
+    try:
+        with STUDIES_META_FILE.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+        # If someone made it a list instead of dict, ignore and use default titles
+        return data if isinstance(data, dict) else {}
+    except Exception:
+        return {}
+
+
 @app.route("/study", endpoint="study")
 @app.route("/studies", endpoint="study_index")
 def study_index():
+    """List all available study series (Series 1, Series 2, etc.)."""
     templates_root = Path(app.template_folder or "templates")
     study_dir = templates_root / "study"
-    items = []
-    for p in sorted(study_dir.glob("series*.html")):
-        key = p.stem                 # e.g., series1
-        title = key.replace("series", "Series ")
-        items.append({"key": key, "title": title})
+    meta = load_study_meta()
+
+    items: list[dict] = []
+    if study_dir.exists():
+        for p in sorted(study_dir.glob("series*.html")):
+            key = p.stem  # e.g., "series1"
+            # Base title from filename
+            default_title = key.replace("series", "Series ").title()
+            # If metadata exists for this key, use that title instead
+            m = meta.get(key, {})
+            title = m.get("title", default_title)
+            tagline = m.get("tagline", "")
+            items.append({"key": key, "title": title, "tagline": tagline})
+
     return render_template(
         "study/index.html",
         title="Study Series",
@@ -709,21 +859,33 @@ def study_index():
         active="study",
     )
 
+
 @app.route("/study/<series_name>", endpoint="study_detail")
 def study_detail(series_name: str):
+    """
+    Render a specific study series template (series1.html, series2.html, etc).
+    Uses optional metadata from studies.json for a nicer page title.
+    """
     if not series_name.startswith("series"):
         abort(404)
+
     rel = Path("study") / f"{series_name}.html"
     abs_path = Path(app.template_folder or "templates") / rel
     if not abs_path.exists():
         abort(404)
+
+    meta = load_study_meta()
+    default_title = series_name.replace("series", "Series ").title()
+    page_title = meta.get(series_name, {}).get("title", default_title)
+
     return render_template(
         str(rel).replace("\\", "/"),
-        title=series_name.replace("series", "Series "),
+        title=page_title,
         theme=SITE_THEME,
         join_url=JOIN_URL,
         active="study",
     )
+
 
 # ---------- Auth (simple) ----------
 @app.route("/login", methods=["GET", "POST"])
@@ -833,9 +995,23 @@ def admin_volunteers():
 
 
 @app.route("/admin/whatsapp/send", methods=["POST"])
+@require_auth
 def admin_whatsapp_send():
     """Handle Admin WhatsApp send form and trigger the automation script."""
-    # ----- 1. Read form inputs -----
+
+    # --- Live guard: block automation on Render ---
+    if IS_PROD:
+        # Live site: do NOT try to automate WhatsApp.
+        return jsonify({
+            "ok": False,
+            "error": (
+                "WhatsApp auto-send is only available on your local "
+                "SoulStart console (desktop). On the live site, please "
+                "copy–paste the message into WhatsApp."
+            ),
+        }), 400
+
+    # ----- 1. Read form inputs (local desktop only) -----
     date_str = request.form.get("date") or datetime.now().strftime("%Y-%m-%d")
     mode = request.form.get("mode") or "both"
     chat = request.form.get("chat") or "Silent SoulConnect"

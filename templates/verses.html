@@ -11,17 +11,32 @@
 
 <div class="verses-grid" role="list">
   {% for c in cards %}
-    <a role="listitem"
-       class="verse-card"
-       href="{{ c.src }}"
-       target="_blank"
-       rel="noopener"
-       aria-label="{{ c.ref }} — {{ c.caption }}">
-      <img src="{{ c.src }}" alt="{{ c.alt or c.ref }}">
-      <div class="cap"><strong>{{ c.ref }}</strong> {{ c.caption }}</div>
-    </a>
+    {% if c.src %}
+      <a role="listitem"
+         class="verse-card"
+         href="{{ c.src }}"
+         target="_blank"
+         rel="noopener"
+         aria-label="{{ c.ref }} — {{ c.caption }}">
+        <img src="{{ c.src }}" alt="{{ c.alt or c.ref }}">
+        <div class="cap"><strong>{{ c.ref }}</strong> {{ c.caption }}</div>
+      </a>
+    {% else %}
+      <div role="listitem"
+           class="verse-card verse-card-missing"
+           aria-label="{{ c.ref }} — image missing">
+        <div class="cap">
+          <strong>{{ c.ref }}</strong> {{ c.caption }}<br>
+          <span class="muted">Image not found.</span>
+        </div>
+      </div>
+    {% endif %}
   {% else %}
-    <div class="card"><p class="muted">No verse cards found. Check <code>static/img/verses/</code> and <code>verses.json</code>.</p></div>
+    <div class="card">
+      <p class="muted">
+        No verse cards found. Check <code>static/img/verses/</code>.
+      </p>
+    </div>
   {% endfor %}
 </div>
 

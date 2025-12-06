@@ -1,40 +1,62 @@
-{
-  "theme": "Restored Faith in Motion",
-  "cards": [
-    {
-      "file": "Overflow.jpg",
-      "ref": "Overflow — John 7:38 (NLV)",
-      "caption": "You don’t have to force what God has already placed in you. Let it flow. Your presence is a wellspring—refreshing others with grace, truth, and light."
-    },
-    {
-      "file": "Refuge.jpg",
-      "ref": "Refuge — Psalm 91:1 (NLV)",
-      "caption": "You are covered. Even when storms rise, your shelter is divine. Rest in the shadow, and let your heart be still."
-    },
-    {
-      "file": "Firelight.jpg",
-      "ref": "Firelight — Isaiah 60:1 (NLV)",
-      "caption": "You were never meant to dim. Today, let your light speak—through advocacy, creativity, and holy fire. Chains break when you rise."
-    },
-    {
-      "file": "Stillness.jpg",
-      "ref": "Stillness — Psalm 46:10 (NLV)",
-      "caption": "Silence is not absence—it’s presence. In the still, God whispers. Listen with your spirit, and let peace be your compass."
-    },
-    {
-      "file": "Restoration.jpg",
-      "ref": "Restoration — Joel 2:25 (NLV)",
-      "caption": "Nothing is wasted. Every scar, every silence, every setback—God is restoring it all. You are being rebuilt with beauty."
-    },
-    {
-      "file": "Delight.jpg",
-      "ref": "Delight — Isaiah 58:13–14 (NLV)",
-      "caption": "Delight is holy. Let joy be your worship today. Prepare your heart for rest, and let gratitude overflow."
-    },
-    {
-      "file": "Presence.jpg",
-      "ref": "Presence — Exodus 33:14 (NLV)",
-      "caption": "You are not alone. God walks beside you—in every conversation, every breath, every moment. Let His presence be your peace."
-    }
-  ]
-}
+[
+  {
+    "image": "Firelight.jpg",
+    "ref": "Isaiah 60:1 (NLV)",
+    "title": "Firelight",
+    "note": "God is calling you to rise and shine, even when life feels dark."
+  },
+  {
+    "image": "Stillness.jpg",
+    "ref": "Psalm 46:10 (NLV)",
+    "title": "Stillness",
+    "note": "A reminder to pause, breathe, and know that God is in control."
+  },
+  {
+    "image": "Restoration.jpg",
+    "ref": "Joel 2:25 (NLV)",
+    "title": "Restoration",
+    "note": "God can restore the years and moments that feel wasted or broken."
+  },
+  {
+    "image": "Delight.jpg",
+    "ref": "Isaiah 58:13–14",
+    "title": "Delight",
+    "note": "There is joy and freedom when we delight ourselves in the Lord."
+  },
+  {
+    "image": "Presence.jpg",
+    "ref": "Exodus 33:14",
+    "title": "Presence",
+    "note": "His presence brings rest to a tired mind and a heavy heart."
+  },
+  {
+    "image": "Refuge.jpg",
+    "ref": "Psalm 62:8",
+    "title": "Refuge",
+    "note": "You can pour out your heart; God is a safe place, not a harsh judge."
+  },
+  {
+    "image": "Overflow.jpg",
+    "ref": "Psalm 23:5",
+    "title": "Overflow",
+    "note": "Even in hard seasons, God can cause your cup to overflow with grace."
+  },
+  {
+    "image": "Lampstand.png",
+    "ref": "Matthew 5:14",
+    "title": "Lampstand",
+    "note": "God is calling you to be the LIGHT."
+  },
+  {
+    "image": "Newcard.jpg",
+    "ref": "Romans 8:28",
+    "title": "Working Together",
+    "note": ""
+  },
+  {
+    "image": "Faith.png",
+    "ref": "Isaiah 26:3",
+    "title": "Faith in Action",
+    "note": ""
+  }
+]

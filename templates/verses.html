@@ -5,7 +5,7 @@
 <section class="hero glass">
   <div class="hero-inner" style="padding:24px 22px;">
     <h1>Theme Verses</h1>
-    <p class="muted">Tap a card to open the verse with its caption.</p>
+    <p class="muted">Tap a card to open the full verse and note.</p>
   </div>
 </section>
 
@@ -14,27 +14,33 @@
     {% if c.src %}
       <a role="listitem"
          class="verse-card"
-         href="{{ c.src }}"
-         target="_blank"
-         rel="noopener"
+         href="{{ url_for('verse_detail', card_id=c.id) }}"
          aria-label="{{ c.ref }} — {{ c.caption }}">
         <img src="{{ c.src }}" alt="{{ c.alt or c.ref }}">
-        <div class="cap"><strong>{{ c.ref }}</strong> {{ c.caption }}</div>
+        <div class="cap">
+          <strong>{{ c.ref }}</strong> {{ c.caption }}
+          {% if c.note %}
+            <div class="muted" style="margin-top:4px; font-size:0.9rem;">
+              {{ c.note }}
+            </div>
+          {% endif %}
+        </div>
       </a>
     {% else %}
       <div role="listitem"
            class="verse-card verse-card-missing"
            aria-label="{{ c.ref }} — image missing">
         <div class="cap">
-          <strong>{{ c.ref }}</strong> {{ c.caption }}<br>
-          <span class="muted">Image not found.</span>
+          <strong>{{ c.ref }}</strong> {{ c.caption }}
+          <div class="muted">Image not found.</div>
         </div>
       </div>
     {% endif %}
   {% else %}
     <div class="card">
       <p class="muted">
-        No verse cards found. Check <code>static/img/verses/</code>.
+        No verse cards found. Check <code>data/verses.json</code>
+        and <code>static/img/verses/</code>.
       </p>
     </div>
   {% endfor %}

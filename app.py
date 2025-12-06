@@ -68,6 +68,10 @@ REQUESTS_FILE = DATA_DIR / "requests.json"
 VOLUNTEERS_FILE = DATA_DIR / "volunteers.json"
 FEEDBACK_FILE = DATA_DIR / "feedback.json"
 
+# Devotions: year-based JSON files under data/devotions/
+DEVOTIONS_DIR = DATA_DIR / "devotions"
+DEVOTIONS_DIR.mkdir(exist_ok=True)
+
 # Load .env locally; on Render, env vars come from the dashboard
 load_dotenv(BASE_DIR / ".env")
 
@@ -394,35 +398,129 @@ def _find_verse_image_url(fname: str) -> str | None:
                 return url_for("static", filename=str(rel).replace("\\", "/"))
     return None
 
-def is_authed() -> bool:
-    return session.get("authed") is True
+# ---------- Devotions loader (year-based JSON: list OR dict) ----------
 
-@app.context_processor
-def _globals():
-    return {"is_authed": is_authed}
+def _devotions_file_for_year(year: int) -> Path:
+    """Return path like data/devotions/devotions_2026.json."""
+    return DEVOTIONS_DIR / f"devotions_{year}.json"
 
-def authed() -> bool:
-    return bool(session.get("is_authed", False))
 
-@app.context_processor
-def inject_globals():
-    """Values available in all templates."""
+def load_devotions_for_year(year: int) -> dict:
+    """
+    Load all devotions for a given year and normalize them into:
+      { "YYYY-MM-DD": { ... } }
+
+    Supports:
+    - New 2026 format:
+        [
+          { "date": "2026-01-01", "theme": "...", "morning": {...}, "night": {...} },
+          ...
+        ]
+    - Future dict format:
+        {
+          "2026-01-01": { "theme": "...", "morning": {...}, "night": {...} },
+          ...
+        }
+    """
+    path = _devotions_file_for_year(year)
+    if not path.exists():
+        return {}
+
+    try:
+        with path.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return {}
+
+    # Case 1: already dict keyed by date
+    if isinstance(data, dict):
+        return data
+
+    # Case 2: list of entries with "date"
+    if isinstance(data, list):
+        result: dict[str, dict] = {}
+        for entry in data:
+            if not isinstance(entry, dict):
+                continue
+            raw_date = entry.get("date", "")
+            if not raw_date:
+                continue
+            norm = normalize_date_str(str(raw_date)) or str(raw_date)
+            result[norm] = entry
+        return result
+
+    return {}
+
+
+def load_devotion_for(target_date: date, slot: str = "morning") -> dict | None:
+    """
+    Get devotion record for a given date and slot ('morning' or 'night').
+
+    Handles:
+    - New form:
+        { "date":"...", "theme":"...", "morning":{...}, "night":{...} }
+    - Legacy form where the day-block itself is the devotion content.
+
+    Returns a dict with normalized keys for the template:
+      title, theme, verse_ref, body, verse_text,
+      heart_picture, silent_soul_meaning, prayer, tags
+    """
+    all_for_year = load_devotions_for_year(target_date.year)
+    day_key = target_date.isoformat()
+    day_block = all_for_year.get(day_key)
+
+    if not isinstance(day_block, dict):
+        return None
+
+    # Detect if we have the new "morning"/"night" slots structure
+    has_slots = isinstance(day_block.get("morning"), dict) or isinstance(day_block.get("night"), dict)
+
+    if has_slots:
+        # New 2026-style structure
+        theme = day_block.get("theme", "")
+        slot_block = day_block.get(slot) or {}
+    else:
+        # Legacy: the whole entry is one devotion (no separate morning/night keys)
+        theme = day_block.get("theme") or day_block.get("Theme") or ""
+        slot_block = day_block
+
+    if not isinstance(slot_block, dict):
+        return None
+
+    # Choose a good "body" text: quiet soul meaning > closing > verse_text > body
+    body_text = (
+        slot_block.get("silent_soul_meaning")
+        or slot_block.get("closing")
+        or slot_block.get("verse_text")
+        or slot_block.get("body")
+        or ""
+    )
+
     return {
-        "theme": SITE_THEME,
-        "join_url": JOIN_URL,
-        "today": date.today(),
-        "is_authed": authed(),
+        "title": (
+            slot_block.get("title")
+            or slot_block.get("Theme")
+            or slot_block.get("theme")
+            or ""
+        ),
+        "theme": theme,
+        "verse_ref": (
+            slot_block.get("verse_ref")
+            or slot_block.get("scripture")
+            or ""
+        ),
+        "body": body_text,
+        "verse_text": slot_block.get("verse_text", ""),
+        "heart_picture": slot_block.get("heart_picture", ""),
+        "silent_soul_meaning": slot_block.get("silent_soul_meaning", ""),
+        "prayer": (
+            slot_block.get("prayer")
+            or slot_block.get("morning_prayer")
+            or slot_block.get("night_prayer")
+            or ""
+        ),
+        "tags": slot_block.get("tags") or [],
     }
-
-def nav_args(active: str, **extra):
-    """Common args passed into render_template for active tab highlighting."""
-    base = dict(active=active)
-    base.update(extra)
-    return base
-
-@app.context_processor
-def inject_auth_flag():
-    return {"is_authed": is_authed()}
 
 
 # =============================================================================
@@ -447,39 +545,41 @@ from pathlib import Path
 import json, os
 
 # ---------- Today ----------
+# ---------- Today (Sunrise / Sunset devotions) ----------
+
 @app.route("/today", endpoint="today")
 def today_view():
-    today = date.today()
-    today_iso = today.isoformat()        # "2025-11-20"
-    month_full = today.strftime("%B")    # "November"
-    month_abbr = today.strftime("%b")    # "Nov"
+    today = datetime.now().date()
 
-    # 🔹 SAFE FALLBACKS (never show an empty card)
+    # Default placeholders if a devotion is missing
     morning = {
         "title": "Morning Mercies",
         "verse_ref": "Lamentations 3:22–23",
-        "verse_text": "His mercies are new every morning; great is Your faithfulness.",
-        "encouragement_intro": "",
-        "point1": "",
-        "point2": "",
-        "point3": "",
-        "closing": "",
-        "prayer": "",
         "body": "His mercies are new every morning; great is Your faithfulness.",
     }
-
     night = {
         "title": "Quiet Rest",
         "verse_ref": "Psalm 4:8",
-        "verse_text": "In peace I will both lie down and sleep, for You alone make me dwell in safety.",
-        "encouragement_intro": "",
-        "point1": "",
-        "point2": "",
-        "point3": "",
-        "closing": "",
-        "prayer": "",
-        "body": "In peace I will both lie down and sleep, for You alone make me dwell in safety.",
+        "body": "In peace I will both lie down and sleep; for You alone, O Lord, make me dwell in safety.",
     }
+
+    m = load_devotion_for(today, "morning")
+    if m:
+        morning = m
+
+    n = load_devotion_for(today, "night")
+    if n:
+        night = n
+
+    return render_template(
+        "today.html",
+        today=today,
+        morning=morning,
+        night=night,
+        theme=SITE_THEME,
+        join_url=JOIN_URL,
+        active="today",
+    )
 
     # ---------- LOAD FROM devotions/<Month>/SoulStart_Sunrise_XXX.json ----------
     root = Path(app.root_path)
@@ -930,12 +1030,133 @@ def admin():
         today_str=date.today().isoformat(),
     )
 
-def load_report_json(path: Path):
-    ...
-PRAYER_REQUESTS_FILE = DATA_DIR / "prayer_requests.json"
-VOLUNTEERS_FILE      = DATA_DIR / "volunteers.json"
-FEEDBACK_FILE        = DATA_DIR / "feedback.json"
-DONATIONS_FILE       = DATA_DIR / "donations.json"
+# ---------- Admin: Manage Theme Verses ----------
+# ---------- Admin: Manage Theme Verses ----------
+
+@app.route("/admin/verses", methods=["GET", "POST"])
+@require_auth
+def admin_verses():
+    error: str | None = None
+    success: str | None = None
+
+    # List available images from the verses directory for the dropdown
+    verses_img_dir = Path(app.static_folder) / "img" / "verses"
+    try:
+        image_files = sorted([
+            f.name for f in verses_img_dir.iterdir()
+            if f.is_file() and f.suffix.lower() in (".jpg", ".jpeg", ".png")
+        ])
+    except Exception:
+        image_files = []
+
+    # Load current verses
+    verses = load_verses()
+
+    action = request.form.get("action") if request.method == "POST" else None
+
+    if request.method == "POST":
+        # ---------- DELETE ----------
+        if action == "delete":
+            idx_str = (request.form.get("index") or "").strip()
+            try:
+                idx = int(idx_str)
+            except ValueError:
+                error = "Invalid verse index."
+            else:
+                if 0 <= idx < len(verses):
+                    removed = verses.pop(idx)
+                    try:
+                        with VERSES_FILE.open("w", encoding="utf-8") as f:
+                            json.dump(verses, f, ensure_ascii=False, indent=2)
+                        ref = removed.get("ref", "")
+                        success = f"Deleted verse #{idx} ({ref})."
+                    except Exception as e:
+                        error = f"Could not save verses.json: {e}"
+                else:
+                    error = "Verse index out of range."
+
+        # ---------- UPDATE (EDIT) ----------
+        elif action == "update":
+            idx_str = (request.form.get("index") or "").strip()
+            try:
+                idx = int(idx_str)
+            except ValueError:
+                error = "Invalid verse index."
+            else:
+                if 0 <= idx < len(verses):
+                    rec = verses[idx]
+                    image = (request.form.get("image") or rec.get("image", "")).strip()
+                    ref = (request.form.get("ref") or rec.get("ref", "")).strip()
+                    title = (request.form.get("title") or rec.get("title", "")).strip()
+                    note = (request.form.get("note") or rec.get("note", "")).strip()
+
+                    rec["image"] = image
+                    rec["ref"] = ref
+                    rec["title"] = title
+                    rec["note"] = note
+
+                    try:
+                        with VERSES_FILE.open("w", encoding="utf-8") as f:
+                            json.dump(verses, f, ensure_ascii=False, indent=2)
+                        success = f"Updated verse #{idx}."
+                    except Exception as e:
+                        error = f"Could not save verses.json: {e}"
+                else:
+                    error = "Verse index out of range."
+
+        # ---------- ADD (DEFAULT) ----------
+        else:
+            image = (request.form.get("image") or "").strip()
+            ref = (request.form.get("ref") or "").strip()
+            title = (request.form.get("title") or "").strip()
+            note = (request.form.get("note") or "").strip()
+
+            if not image or not ref:
+                error = "Image filename and Scripture reference are required."
+            else:
+                if not title:
+                    title = ref
+
+                record = {
+                    "image": image,
+                    "ref": ref,
+                    "title": title,
+                    "note": note,
+                }
+                verses.append(record)
+                try:
+                    with VERSES_FILE.open("w", encoding="utf-8") as f:
+                        json.dump(verses, f, ensure_ascii=False, indent=2)
+                    success = "Verse added successfully."
+                except Exception as e:
+                    error = f"Could not save verses.json: {e}"
+
+    # Build preview cards
+    cards = []
+    for idx, v in enumerate(verses):
+        image = v.get("image", "")
+        src = _safe_static(f"img/verses/{image}") if image else None
+        cards.append({
+            "index": idx,
+            "src": src,
+            "image": image,
+            "ref": v.get("ref", ""),
+            "title": v.get("title", ""),
+            "note": v.get("note", ""),
+        })
+
+    return render_template(
+        "admin_verses.html",
+        cards=cards,
+        error=error,
+        success=success,
+        active="admin",
+        theme=SITE_THEME,
+        join_url=JOIN_URL,
+        image_files=image_files,
+    )
+
+
 
 @app.route("/admin/requests")
 def admin_requests():

@@ -203,6 +203,11 @@ p { margin: .4rem 0; }
 }
 
 /* --- SoulStart Home Page Hero Adjustments --- */
+.hero.night-tone {
+  background-color: #020617;
+  background-blend-mode: multiply;
+}
+
 .hero-container {
   padding: 1.5rem 0;
   text-align: center;

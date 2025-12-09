@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SoulStart Devotion – 2026 Q1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #0f172a;
+      color: #e5e7eb;
+      line-height: 1.6;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 3rem;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    header h1 {
+      margin: 0.25rem 0;
+      font-size: 1.8rem;
+    }
+    header p {
+      margin: 0.15rem 0;
+      color: #9ca3af;
+      font-size: 0.95rem;
+    }
+    .quarter-tag {
+      display: inline-block;
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+      background: #1f2937;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #a5b4fc;
+    }
+    .month-block {
+      margin-bottom: 2.5rem;
+      border-radius: 0.75rem;
+      padding: 1.25rem 1rem;
+      background: #020617;
+      border: 1px solid #1f2937;
+    }
+    .month-header {
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #1f2937;
+      padding-bottom: 0.3rem;
+    }
+    .month-header h2 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+    .month-header .month-theme {
+      margin: 0.15rem 0;
+      font-size: 0.9rem;
+      color: #93c5fd;
+    }
+    .day-block {
+      margin-bottom: 1.2rem;
+      padding: 0.9rem 0.7rem;
+      border-radius: 0.6rem;
+      background: #020617;
+      border: 1px solid #111827;
+    }
+    .day-heading {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.4rem;
+      margin-bottom: 0.5rem;
+    }
+    .day-heading h3 {
+      margin: 0;
+      font-size: 1rem;
+      color: #e5e7eb;
+    }
+    .day-heading .day-date {
+      font-size: 0.85rem;
+      color: #9ca3af;
+    }
+    .theme-label {
+      font-size: 0.9rem;
+      color: #a5b4fc;
+    }
+    .mn-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+    }
+    @media (min-width: 700px) {
+      .mn-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .dev-card {
+      border-radius: 0.6rem;
+      padding: 0.7rem 0.75rem;
+      background: #020617;
+      border: 1px solid #1f2937;
+    }
+    .dev-card h4 {
+      margin: 0 0 0.3rem;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #fde68a;
+    }
+    .dev-card p {
+      margin: 0.2rem 0;
+      font-size: 0.9rem;
+    }
+    .verse-ref {
+      font-weight: 600;
+      color: #bfdbfe;
+    }
+    .verse-text {
+      font-style: italic;
+      color: #e5e7eb;
+    }
+    .meaning-label {
+      font-weight: 600;
+      color: #a7f3d0;
+    }
+    .body-text {
+      white-space: pre-line;
+      margin-top: 0.25rem;
+    }
+    .prayer-label {
+      font-weight: 600;
+      color: #fca5a5;
+    }
+    .footer-note {
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: #6b7280;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="quarter-tag">SoulStart Devotion · 2026 Q1</div>
+    <h1>Silent Strength — Foundation &amp; Strength</h1>
+    <p>January – New Mercies · February – Rooted in Love &amp; Trust · March – Quiet Strength</p>
+    <p>Morning to start the day. Night to prepare the soul for sleep.</p>
+  </header>
+
+  {# devotions_by_month: {
+       "January": [ { date, theme, morning{...}, night{...} }, ... ],
+       "February": [...],
+       "March": [...]
+     }
+
+     month_themes: {
+       "January": "New Mercies — Silent Strength at the Start",
+       "February": "Rooted in Love & Trust — Silent Strength in God’s Care",
+       "March": "Quiet Strength — Walking Steady in the Storm"
+     }
+  #}
+
+  {% for month_name, items in devotions_by_month.items() %}
+    <section class="month-block" id="{{ month_name|lower }}">
+      <div class="month-header">
+        <h2>{{ month_name }} 2026</h2>
+        {% if month_themes and month_themes.get(month_name) %}
+          <p class="month-theme">{{ month_themes[month_name] }}</p>
+        {% endif %}
+      </div>
+
+      {% for d in items %}
+        <article class="day-block" id="day-{{ d.date }}">
+          <div class="day-heading">
+            <h3>
+              <span class="theme-label">{{ d.theme }}</span>
+            </h3>
+            <div class="day-date">
+              {{ d.date }}
+            </div>
+          </div>
+
+          <div class="mn-grid">
+            <!-- Morning -->
+            <div class="dev-card">
+              <h4>Morning</h4>
+              <p><span class="verse-ref">{{ d.morning.verse_ref }}</span></p>
+              <p class="verse-text">{{ d.morning.verse_text }}</p>
+              <p><span class="meaning-label">Meaning:</span> {{ d.morning.verse_meaning }}</p>
+              <p class="body-text">{{ d.morning.body }}</p>
+              <p><span class="prayer-label">Prayer:</span> {{ d.morning.prayer }}</p>
+            </div>
+
+            <!-- Night -->
+            <div class="dev-card">
+              <h4>Night</h4>
+              <p><span class="verse-ref">{{ d.night.verse_ref }}</span></p>
+              <p class="verse-text">{{ d.night.verse_text }}</p>
+              <p><span class="meaning-label">Meaning:</span> {{ d.night.verse_meaning }}</p>
+              <p class="body-text">{{ d.night.body }}</p>
+              <p><span class="prayer-label">Prayer:</span> {{ d.night.prayer }}</p>
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+    </section>
+  {% endfor %}
+
+  <div class="footer-note">
+    Silent SoulConnect Ministry · SoulStart Devotion · 2026 Q1 — Silent Strength
+  </div>
+</main>
+</body>
+</html>

@@ -27,3 +27,19 @@
 {"ts": "2025-11-30T07:51:00", "date": "2025-11-30", "mode": "morning", "chat": "Silent SoulConnect", "paste_delay": 8, "send": false, "open_only": false, "dry_run": false}
 {"ts": "2025-11-30T07:57:33", "date": "2025-11-30", "mode": "night", "chat": "SSCM Ministry", "paste_delay": 8, "send": false, "open_only": false, "dry_run": false}
 {"ts": "2025-12-01T06:49:28", "date": "2025-12-01", "mode": "morning", "chat": "SSCM Ministry", "paste_delay": 8, "send": false, "open_only": false, "dry_run": false}
+{"ts": "2025-12-02T06:48:12", "date": "2025-12-02", "mode": "morning", "chat": "Silent SoulConnect", "paste_delay": 8, "send": false, "open_only": false, "dry_run": false}
+{"ts": "2025-12-02T15:04:53", "date": "2025-12-02", "mode": "morning", "chat": "Silent SoulConnect", "paste_delay": 8, "send": false, "open_only": false, "dry_run": true}
+{"ts": "2025-12-02T15:05:04", "date": "2025-12-02", "mode": "morning", "chat": "Silent SoulConnect", "paste_delay": 8, "send": false, "open_only": true, "dry_run": false}
+{"ts": "2025-12-03T23:19:32", "date": "2025-12-04", "mode": "morning", "chat": "Silent SoulConnect", "paste_delay": 8, "send": false, "open_only": false, "dry_run": false}
+{"ts": "2025-12-08T15:58:05", "date": "2026-01-03", "mode": "morning", "chat": "Silent SoulConnect", "paste_delay": 8, "send": false, "open_only": false, "dry_run": false}
+{"ts": "2025-12-08T16:00:12", "date": "2026-01-06", "mode": "both", "chat": "Silent SoulConnect", "paste_delay": 8, "send": false, "open_only": false, "dry_run": false}
+{"ts": "2025-12-08T16:03:11", "date": "2026-01-04", "mode": "morning", "chat": "Silent SoulConnect", "paste_delay": 8, "send": false, "open_only": false, "dry_run": false}
+{"ts": "2025-12-08T16:23:27", "date": "2026-01-02", "mode": "morning", "chat": "Sandy", "paste_delay": 8, "send": false, "open_only": false, "dry_run": false}
+{"ts": "2025-12-08T17:03:35", "date": "2026-01-02", "mode": "morning", "chat": "Sandy", "paste_delay": 8, "send": false, "open_only": false, "dry_run": false}
+{"ts": "2025-12-08T17:23:25", "date": "2026-01-02", "mode": "both", "chat": "Silent SoulConnect", "paste_delay": 8, "send": false, "open_only": false, "dry_run": true}
+{"ts": "2025-12-08T17:23:44", "date": "2026-01-02", "mode": "morning", "chat": "Sandy", "paste_delay": 8, "send": false, "open_only": false, "dry_run": true}
+{"ts": "2025-12-08T17:24:02", "date": "2026-01-02", "mode": "morning", "chat": "Sandy", "paste_delay": 8, "send": false, "open_only": false, "dry_run": false}
+{"ts": "2025-12-08T17:26:47", "date": "2025-12-26", "mode": "both", "chat": "Silent SoulConnect", "paste_delay": 8, "send": false, "open_only": true, "dry_run": false}
+{"ts": "2025-12-08T17:27:35", "date": "2025-12-26", "mode": "both", "chat": "Silent SoulConnect", "paste_delay": 8, "send": false, "open_only": true, "dry_run": false}
+{"ts": "2025-12-08T17:29:39", "date": "2026-01-04", "mode": "morning", "chat": "Silent SoulConnect", "paste_delay": 8, "send": false, "open_only": false, "dry_run": false}
+{"ts": "2025-12-08T21:07:46", "date": "2026-01-02", "mode": "morning", "chat": "Silent SoulConnect", "paste_delay": 8, "send": false, "open_only": false, "dry_run": false}

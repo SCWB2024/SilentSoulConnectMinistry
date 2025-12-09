@@ -58,8 +58,12 @@ LOG_DIR = BASE_DIR / "logs"
 LOG_DIR.mkdir(exist_ok=True)
 
 DEVOTIONS_ROOT = Path(
-    os.environ.get("DEVOTIONS_ROOT", str(BASE_DIR / "devotions"))
+    os.environ.get("DEVOTIONS_ROOT", str(BASE_DIR / "devotions_legacy"))
 )
+
+HERO_DAY_BG = "img/hero_day.jpg"
+HERO_NIGHT_BG = "img/hero_night.jpg"  # change to your real night image name if different
+HERO_NIGHT_BG = HERO_DAY_BG
 
 # ---- Now safe to define files ----
 VERSES_FILE = DATA_DIR / "verses.json"
@@ -140,7 +144,6 @@ app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE="Lax",
 )
-
 
 # -----------------------------------------------------------------------------
 # Security & middleware
@@ -257,12 +260,30 @@ def add_no_cache(resp):
 def health():
     return "ok", 200
 
+from datetime import datetime, date
+# … your other imports …
+
+def normalize_date_str(s: str) -> str | None:
+    """Try to parse many date formats and return ISO YYYY-MM-DD, or None."""
+    s = (s or "").strip()
+    formats = [
+        "%Y-%m-%d", "%d-%m-%Y", "%m-%d-%Y",
+        "%Y/%m/%d", "%m/%d/%Y", "%d/%m/%Y",
+        "%b %d, %Y", "%B %d, %Y",
+        "%d %b %Y", "%d %B %Y",
+    ]
+    for fmt in formats:
+        try:
+            return datetime.strptime(s, fmt).strftime("%Y-%m-%d")
+        except Exception:
+            continue
+    return None
+
 # ---------------------------------------------------------------------------
 # Donation log helpers
 # ---------------------------------------------------------------------------
 
 DONATIONS_FILE = DATA_DIR / "donations.json"
-
 
 def load_json_list(path: Path):
     """Load a JSON list from file; return [] on error/missing."""
@@ -276,7 +297,6 @@ def load_json_list(path: Path):
             return [data]
     except Exception:
         return []
-
 
 def append_json_list(path: Path, record: dict) -> None:
     """Append a record to a JSON list file."""
@@ -292,135 +312,65 @@ def append_json_list(path: Path, record: dict) -> None:
 # =============================================================================
 # Helpers
 # =============================================================================
-def static_exists(rel_path: str) -> bool:
-    rel_path = (rel_path or "").lstrip("/\\")
-    return (STATIC_DIR / rel_path).exists()
+# =============================================================================
+# Devotions + WhatsApp helpers (unified, hardened)
+# Normalized OUTPUT schema for a single devotion:
+#
+# {
+#   "date": "YYYY-MM-DD",
+#   "mode": "morning" | "night",
+#   "theme": "Daily theme",
+#   "verse_ref": "Book 1:1",
+#   "verse_text": "Scripture text",
+#   "verse_meaning": "Silent soul meaning / 'This reminds me...'",
+#   "body": "Main content (I DECLARE / I REFUSE / I WILL or reflection)",
+#   "prayer": "Closing prayer",
+#   "tags": [ ... ]
+# }
+# =============================================================================
 
-def month_folder_for(d: date) -> Path:
-    return DEVOTIONS_ROOT / d.strftime("%B")
+# One fallback definition only
+FALLBACK_DEVOTION = {
+    "theme": "Silent Strength — God is Near",
+    "verse_ref": "Psalm 46:1",
+    "verse_text": "God is our refuge and strength, a very present help in trouble.",
+    "verse_meaning": "When life feels uncertain, He steadies the soul.",
+    "body": "Even without today’s devotion, His Word is enough. Stand firm.",
+    "prayer": "Lord, anchor my heart today.",
+}
 
-def filename_for(d: date, mode: str) -> str:
-    abbr = d.strftime("%b")
-    return f"SoulStart_Sunrise_{abbr}.json" if mode == "morning" else f"SoulStart_Sunset_{abbr}.json"
+# Core fields that must never be empty in the final entry
+REQUIRED_FIELDS = ["theme", "verse_ref", "verse_text", "verse_meaning", "body", "prayer"]
 
-def normalize_date_str(s: str) -> str | None:
-    s = (s or "").strip()
-    fmts = [
-        "%Y-%m-%d", "%d-%m-%Y", "%m-%d-%Y", "%Y/%m/%d", "%m/%d/%Y", "%d/%m/%Y",
-        "%b %d, %Y", "%B %d, %Y", "%d %b %Y", "%d %B %Y",
-    ]
-    for fmt in fmts:
-        try:
-            return datetime.strptime(s, fmt).strftime("%Y-%m-%d")
-        except Exception:
-            pass
-    return None
 
-def load_json(path: Path):
-    try:
-        with open(path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception:
-        return None
-    
-def _ctx(**kw):
-    """Common context sent to templates."""
-    base = dict(
-        theme=SITE_THEME,
-        join_url=JOIN_URL,
-        today=datetime.now(),
-        is_authed=("admin" in request.cookies if request else False),
-    )
-    base.update(kw)
-    return base
+def placeholder_devotion(date_str: str, mode: str = "morning") -> dict:
+    """Safe devotion used when data is missing or broken."""
+    return {
+        "date": date_str,
+        "mode": mode,
+        "theme": FALLBACK_DEVOTION["theme"],
+        "verse_ref": FALLBACK_DEVOTION["verse_ref"],
+        "verse_text": FALLBACK_DEVOTION["verse_text"],
+        "verse_meaning": FALLBACK_DEVOTION["verse_meaning"],
+        "body": FALLBACK_DEVOTION["body"],
+        "prayer": FALLBACK_DEVOTION["prayer"],
+        "tags": ["placeholder"],
+    }
 
-def template_exists(rel_path: str) -> bool:
-    return (TEMPLATES_DIR / rel_path).exists()
-
-def find_entry_for_date(data, iso: str):
-    if isinstance(data, dict):
-        for k, v in data.items():
-            norm = normalize_date_str(k)
-            if norm is None and isinstance(v, dict):
-                norm = normalize_date_str(str(v.get("date", "") or ""))
-            if norm == iso:
-                return v if isinstance(v, dict) else {"value": v}
-        return None
-    if isinstance(data, list):
-        for item in data:
-            if not isinstance(item, dict):
-                continue
-            if "date" in item and normalize_date_str(str(item.get("date", ""))) == iso:
-                return item
-            for key in ("day", "Day", "DATE", "Date"):
-                if key in item and normalize_date_str(str(item.get(key, ""))) == iso:
-                    return item
-    return None
-
-def normalize_entry(entry: dict, default_mode: str) -> dict:
-    if not entry:
-        return {}
-    out: dict = {}
-    out["title"] = entry.get("title") or entry.get("Theme") or entry.get("theme")
-    out["verse_ref"] = entry.get("verse_ref") or entry.get("verseRef") or entry.get("VerseRef") or entry.get("scripture")
-    out["verse_text"] = entry.get("verse_text") or entry.get("verseText") or entry.get("VerseText")
-    out["points"] = [p for p in [entry.get("point1"), entry.get("point2"), entry.get("point3")] if p]
-    out["closing"] = entry.get("closing") or entry.get("reflection") or entry.get("note") or entry.get("thought")
-    out["prayer"] = (
-        entry.get("prayer")
-        or entry.get("morning_prayer")
-        or entry.get("morningPrayer")
-        or entry.get("night_prayer")
-        or entry.get("nightPrayer")
-    )
-    out["bg_image"] = entry.get("bg_image")
-    t = (entry.get("type") or "").lower()
-    out["type"] = "morning" if t in ("sunrise", "morning") else ("night" if t in ("sunset", "night") else default_mode)
-    out["join_text"] = entry.get("join_text")
-    out["join_url"] = entry.get("join_url")
-    return out
-
-def _find_verse_image_url(fname: str) -> str | None:
-    if not fname:
-        return None
-    bases = [STATIC_DIR / "img" / "verses", STATIC_DIR / "images", STATIC_DIR / "img"]
-    for base in bases:
-        if not base.exists():
-            continue
-        p = base / fname
-        if p.exists():
-            rel = p.relative_to(STATIC_DIR)
-            return url_for("static", filename=str(rel).replace("\\", "/"))
-        # case-insensitive match
-        for entry in base.iterdir():
-            if entry.is_file() and entry.name.lower() == fname.lower():
-                rel = entry.relative_to(STATIC_DIR)
-                return url_for("static", filename=str(rel).replace("\\", "/"))
-    return None
-
-# ---------- Devotions loader (year-based JSON: list OR dict) ----------
 
 def _devotions_file_for_year(year: int) -> Path:
     """Return path like data/devotions/devotions_2026.json."""
     return DEVOTIONS_DIR / f"devotions_{year}.json"
 
 
-def load_devotions_for_year(year: int) -> dict:
+def load_devotions_for_year(year: int) -> dict[str, dict]:
     """
-    Load all devotions for a given year and normalize them into:
-      { "YYYY-MM-DD": { ... } }
+    Load all devotions for a given year and normalize to:
+        { "YYYY-MM-DD": day_block }
 
     Supports:
-    - New 2026 format:
-        [
-          { "date": "2026-01-01", "theme": "...", "morning": {...}, "night": {...} },
-          ...
-        ]
-    - Future dict format:
-        {
-          "2026-01-01": { "theme": "...", "morning": {...}, "night": {...} },
-          ...
-        }
+    - 2025 migrated dict format  (already keyed by date)
+    - 2026+ list-of-entries-with-date format
     """
     path = _devotions_file_for_year(year)
     if not path.exists():
@@ -430,98 +380,197 @@ def load_devotions_for_year(year: int) -> dict:
         with path.open("r", encoding="utf-8") as f:
             data = json.load(f)
     except Exception:
+        # Corrupted JSON → treat as empty, caller will use placeholder
         return {}
 
     # Case 1: already dict keyed by date
     if isinstance(data, dict):
         return data
 
-    # Case 2: list of entries with "date"
+    # Case 2: list of entries, each with a "date"
     if isinstance(data, list):
-        result: dict[str, dict] = {}
+        out: dict[str, dict] = {}
         for entry in data:
             if not isinstance(entry, dict):
                 continue
-            raw_date = entry.get("date", "")
+            raw_date = entry.get("date") or entry.get("DATE")
             if not raw_date:
                 continue
             norm = normalize_date_str(str(raw_date)) or str(raw_date)
-            result[norm] = entry
-        return result
+            out[norm] = entry
+        return out
 
     return {}
 
 
-def load_devotion_for(target_date: date, slot: str = "morning") -> dict | None:
+def load_devotion_for(target_date: date, slot: str = "morning") -> dict:
     """
-    Get devotion record for a given date and slot ('morning' or 'night').
+    Return a single devotion for the given date/slot in the unified schema.
 
     Handles:
-    - New form:
-        { "date":"...", "theme":"...", "morning":{...}, "night":{...} }
-    - Legacy form where the day-block itself is the devotion content.
+    - 2025-style blocks (one devotion per date with points/closing)
+    - 2026+ day blocks with { theme, morning{...}, night{...} }
 
-    Returns a dict with normalized keys for the template:
-      title, theme, verse_ref, body, verse_text,
-      heart_picture, silent_soul_meaning, prayer, tags
+    This function **never** returns None – always a safe devotion dict.
     """
-    all_for_year = load_devotions_for_year(target_date.year)
+    slot = (slot or "morning").lower()
+    if slot not in ("morning", "night"):
+        slot = "morning"
+
     day_key = target_date.isoformat()
+    all_for_year = load_devotions_for_year(target_date.year)
+
+    # Year file missing or unreadable → placeholder
+    if not all_for_year:
+        return placeholder_devotion(day_key, slot)
+
     day_block = all_for_year.get(day_key)
 
+    # Date missing or malformed → placeholder
     if not isinstance(day_block, dict):
-        return None
+        return placeholder_devotion(day_key, slot)
 
-    # Detect if we have the new "morning"/"night" slots structure
+    # Does this day have separate morning/night dicts? (2026+)
     has_slots = isinstance(day_block.get("morning"), dict) or isinstance(day_block.get("night"), dict)
-
     if has_slots:
-        # New 2026-style structure
-        theme = day_block.get("theme", "")
+        theme = day_block.get("theme") or ""
         slot_block = day_block.get(slot) or {}
     else:
-        # Legacy: the whole entry is one devotion (no separate morning/night keys)
-        theme = day_block.get("theme") or day_block.get("Theme") or ""
+        # 2025 style – whole block is the devotion
+        theme = (
+            day_block.get("theme")
+            or day_block.get("Theme")
+            or day_block.get("title")
+            or ""
+        )
         slot_block = day_block
 
+    # Mode block missing or not a dict → placeholder
     if not isinstance(slot_block, dict):
-        return None
+        return placeholder_devotion(day_key, slot)
 
-    # Choose a good "body" text: quiet soul meaning > closing > verse_text > body
-    body_text = (
-        slot_block.get("silent_soul_meaning")
-        or slot_block.get("closing")
-        or slot_block.get("verse_text")
-        or slot_block.get("body")
+    # ---- verse_ref / verse_text / verse_meaning ----
+    verse_ref = (
+        slot_block.get("verse_ref")
+        or day_block.get("verse_ref")
+        or slot_block.get("scripture")
+        or day_block.get("scripture")
         or ""
     )
 
-    return {
-        "title": (
-            slot_block.get("title")
-            or slot_block.get("Theme")
-            or slot_block.get("theme")
-            or ""
-        ),
+    verse_text = (
+        slot_block.get("verse_text")
+        or day_block.get("verse_text")
+        or ""
+    )
+
+    verse_meaning = (
+        slot_block.get("verse_meaning")
+        or slot_block.get("silent_soul_meaning")
+        or slot_block.get("heart_picture")
+        or slot_block.get("encouragement_intro")
+        or day_block.get("verse_meaning")
+        or day_block.get("silent_soul_meaning")
+        or day_block.get("heart_picture")
+        or day_block.get("encouragement_intro")
+        or ""
+    )
+
+    # ---- body (points + closing OR body text) ----
+    body_lines: list[str] = []
+
+    raw_body = slot_block.get("body") or day_block.get("body")
+    if raw_body:
+        body_lines.append(str(raw_body))
+
+    for key in ("point1", "point2", "point3"):
+        val = slot_block.get(key) or day_block.get(key)
+        if val:
+            body_lines.append(str(val))
+
+    closing = slot_block.get("closing") or day_block.get("closing")
+    if closing:
+        body_lines.append(str(closing))
+
+    body_text = ("\n".join([l for l in body_lines if l]).strip()) or verse_text or ""
+
+    # ---- prayer ----
+    prayer = (
+        slot_block.get("prayer")
+        or slot_block.get("morning_prayer")
+        or slot_block.get("night_prayer")
+        or day_block.get("prayer")
+        or ""
+    )
+
+    tags = slot_block.get("tags") or day_block.get("tags") or []
+
+    entry = {
+        "date": day_key,
+        "mode": slot,
         "theme": theme,
-        "verse_ref": (
-            slot_block.get("verse_ref")
-            or slot_block.get("scripture")
-            or ""
-        ),
+        "verse_ref": verse_ref,
+        "verse_text": verse_text,
+        "verse_meaning": verse_meaning,
         "body": body_text,
-        "verse_text": slot_block.get("verse_text", ""),
-        "heart_picture": slot_block.get("heart_picture", ""),
-        "silent_soul_meaning": slot_block.get("silent_soul_meaning", ""),
-        "prayer": (
-            slot_block.get("prayer")
-            or slot_block.get("morning_prayer")
-            or slot_block.get("night_prayer")
-            or ""
-        ),
-        "tags": slot_block.get("tags") or [],
+        "prayer": prayer,
+        "tags": tags,
     }
 
+    # Ensure required fields are never empty strings
+    for field in REQUIRED_FIELDS:
+        if not entry.get(field):
+            entry[field] = FALLBACK_DEVOTION.get(field, "")
+
+    return entry
+
+
+def build_whatsapp_text(entry: dict | None, mode: str, today: date) -> str:
+    """
+    Build WhatsApp share text for a devotion entry.
+    Safe even if some fields are missing (thanks to load_devotion_for).
+    """
+    if not entry:
+        return ""
+
+    mode = (mode or "morning").lower()
+    date_str = today.strftime("%A, %B %d, %Y")
+
+    heading = (
+        f"🌅 SoulStart Sunrise – {date_str}"
+        if mode == "morning"
+        else f"🌙 SoulStart Sunset – {date_str}"
+    )
+
+    lines: list[str] = [heading, ""]
+
+    theme = (entry.get("theme") or "").strip()
+    verse_ref = (entry.get("verse_ref") or "").strip()
+    verse_text = (entry.get("verse_text") or "").strip()
+
+    if theme:
+        lines.append(f"Theme: {theme}")
+    if verse_ref:
+        line = f"📖 Scripture: {verse_ref}"
+        if verse_text:
+            line += f' — "{verse_text}"'
+        lines.append(line)
+
+    verse_meaning = (entry.get("verse_meaning") or "").strip()
+    if verse_meaning:
+        lines.extend(["", verse_meaning])
+
+    body = (entry.get("body") or "").strip()
+    if body:
+        lines.extend(["", body])
+
+    prayer = (entry.get("prayer") or "").strip()
+    if prayer:
+        lines.extend(["", f"🙏 Prayer: {prayer}"])
+
+    lines.extend(["", f"🔗 Share Us: {WHATSAPP_GROUP_LINK}"])
+
+    return "\n".join([l for l in lines if l])
 
 # =============================================================================
 # Routes
@@ -540,125 +589,41 @@ def home():
         hero_title="",
     )
 
-from datetime import datetime, date
-from pathlib import Path
-import json, os
 
 # ---------- Today ----------
-# ---------- Today (Sunrise / Sunset devotions) ----------
-
 @app.route("/today", endpoint="today")
 def today_view():
-    today = datetime.now().date()
+    """Show today's morning or night devotion using the unified loader."""
+    mode = (request.args.get("mode") or "morning").lower()
+    if mode not in ("morning", "night"):
+        mode = "morning"
 
-    # Default placeholders if a devotion is missing
-    morning = {
-        "title": "Morning Mercies",
-        "verse_ref": "Lamentations 3:22–23",
-        "body": "His mercies are new every morning; great is Your faithfulness.",
-    }
-    night = {
-        "title": "Quiet Rest",
-        "verse_ref": "Psalm 4:8",
-        "body": "In peace I will both lie down and sleep; for You alone, O Lord, make me dwell in safety.",
-    }
+    today = date.today()
+    entry = load_devotion_for(today, mode)
 
-    m = load_devotion_for(today, "morning")
-    if m:
-        morning = m
+    if not entry:
+        entry = {}
+        flash("Devotion is not available for this date yet.", "warn")
 
-    n = load_devotion_for(today, "night")
-    if n:
-        night = n
+    whatsapp_share_text = build_whatsapp_text(entry, mode, today)
+
+    hero_class = "hero-night" if mode == "night" else "hero-day"
+    hero_bg = "img/hero_night.jpg" if mode == "night" else "img/hero_day.jpg"
 
     return render_template(
-        "today.html",
+        "devotion.html",
+        entry=entry,
+        mode=mode,
         today=today,
-        morning=morning,
-        night=night,
+        hero_class=hero_class,
+        hero_bg=hero_bg,
+        whatsapp_share_text=whatsapp_share_text,
+        whatsapp_group_link=WHATSAPP_GROUP_LINK,
         theme=SITE_THEME,
         join_url=JOIN_URL,
         active="today",
     )
 
-    # ---------- LOAD FROM devotions/<Month>/SoulStart_Sunrise_XXX.json ----------
-    root = Path(app.root_path)
-    devo_dir = root / "devotions" / month_full
-
-    sunrise_file = devo_dir / f"SoulStart_Sunrise_{month_abbr}.json"
-    sunset_file = devo_dir / f"SoulStart_Sunset_{month_abbr}.json"
-
-    def load_for_today(path: Path):
-        """Return the entry for today's date from a JSON file, or None."""
-        if not path.exists():
-            return None
-        try:
-            with path.open("r", encoding="utf-8") as f:
-                data = json.load(f)
-        except Exception as e:
-            app.logger.exception("Error reading %s: %s", path, e)
-            return None
-
-        # file can be list or single dict
-        if isinstance(data, list):
-            for item in data:
-                if isinstance(item, dict) and item.get("date") == today_iso:
-                    return item
-        elif isinstance(data, dict):
-            # either one devotion per file, or grouped by date
-            if data.get("date") == today_iso:
-                return data
-            if today_iso in data and isinstance(data[today_iso], dict):
-                return data[today_iso]
-        return None
-
-    sunrise = load_for_today(sunrise_file)
-    sunset = load_for_today(sunset_file)
-
-    if sunrise:
-        tmp = morning.copy()
-        tmp.update(sunrise)
-        morning = tmp
-
-    if sunset:
-        tmp = night.copy()
-        tmp.update(sunset)
-        night = tmp
-
-    # ---------- Build WhatsApp share text from MORNING ----------
-    date_str = today.strftime("%A, %B %d, %Y")
-    whatsapp_share_text = ""
-    if morning:
-        lines = [
-            f"🌅 SoulStart Sunrise – {date_str}",
-            "",
-            f"Theme {morning.get('title', '')}",
-            f"📖 Scripture: {morning.get('verse_ref', '')}-- "
-            f"\"{(morning.get('verse_text') or '').strip()}\"",
-            "",
-            (morning.get("encouragement_intro") or "").strip(),
-            "",
-            (morning.get("point1") or "").strip(),
-            (morning.get("point2") or "").strip(),
-            (morning.get("point3") or "").strip(),
-            (morning.get("closing") or "").strip(),
-            "",
-            f"🙏 Prayer:  {(morning.get('prayer') or '').strip()}",
-            "",
-            f"🔗 Share Us:  {WHATSAPP_GROUP_LINK}",
-        ]
-        whatsapp_share_text = "\n".join([l for l in lines if l])
-
-    return render_template(
-        "today.html",
-        today=today,
-        morning=morning,
-        night=night,
-        whatsapp_share_text=whatsapp_share_text,
-        whatsapp_group_link=WHATSAPP_GROUP_LINK,
-        theme=SITE_THEME,
-        active="today",
-    )
 
 # ---------- Verses (Promise Cards) ----------
 def _safe_static(filename: str) -> str | None:
@@ -679,44 +644,44 @@ def load_verses() -> list[dict]:
             "image": "Firelight.jpg",
             "ref": "Isaiah 60:1 (NLV)",
             "title": "Firelight",
-            "note": "God is calling you to rise and shine, even when life feels dark."
+            "note": "God is calling you to rise and shine, even when life feels dark.",
         },
         {
             "image": "Stillness.jpg",
             "ref": "Psalm 46:10 (NLV)",
             "title": "Stillness",
-            "note": "A reminder to pause, breathe, and know that God is in control."
+            "note": "A reminder to pause, breathe, and know that God is in control.",
         },
         {
             "image": "Restoration.jpg",
             "ref": "Joel 2:25 (NLV)",
             "title": "Restoration",
-            "note": "God can restore the years and moments that feel wasted or broken."
+            "note": "God can restore the years and moments that feel wasted or broken.",
         },
         {
             "image": "Delight.jpg",
             "ref": "Isaiah 58:13–14",
             "title": "Delight",
-            "note": "There is joy and freedom when we delight ourselves in the Lord."
+            "note": "There is joy and freedom when we delight ourselves in the Lord.",
         },
         {
             "image": "Presence.jpg",
             "ref": "Exodus 33:14",
             "title": "Presence",
-            "note": "His presence brings rest to a tired mind and a heavy heart."
+            "note": "His presence brings rest to a tired mind and a heavy heart.",
         },
         {
             "image": "Refuge.jpg",
             "ref": "Psalm 62:8",
             "title": "Refuge",
-            "note": "You can pour out your heart; God is a safe place, not a harsh judge."
+            "note": "You can pour out your heart; God is a safe place, not a harsh judge.",
         },
         {
             "image": "Overflow.jpg",
             "ref": "Psalm 23:5",
             "title": "Overflow",
-            "note": "Even in hard seasons, God can cause your cup to overflow with grace."
-        }
+            "note": "Even in hard seasons, God can cause your cup to overflow with grace.",
+        },
     ]
 
     if not VERSES_FILE.exists():
@@ -743,14 +708,16 @@ def verses():
         image = v.get("image", "")
         src = _safe_static(f"img/verses/{image}") if image else None
 
-        cards.append({
-            "id": idx,
-            "src": src,
-            "ref": v.get("ref", "Untitled"),
-            "caption": v.get("title", ""),
-            "note": v.get("note", ""),
-            "alt": f"Theme verse — {v.get('ref', '')}"
-        })
+        cards.append(
+            {
+                "id": idx,
+                "src": src,
+                "ref": v.get("ref", "Untitled"),
+                "caption": v.get("title", ""),
+                "note": v.get("note", ""),
+                "alt": f"Theme verse — {v.get('ref', '')}",
+            }
+        )
 
     return render_template(
         "verses.html",
@@ -759,7 +726,7 @@ def verses():
         join_url=JOIN_URL,
         cards=cards,
         page_bg_class="",
-        active="verses"
+        active="verses",
     )
 
 
@@ -781,7 +748,7 @@ def verse_detail(card_id: int):
         "ref": v.get("ref", "Untitled"),
         "title": v.get("title", ""),
         "note": v.get("note", ""),
-        "alt": f"Theme verse — {v.get('ref', '')}"
+        "alt": f"Theme verse — {v.get('ref', '')}",
     }
 
     return render_template(
@@ -789,7 +756,7 @@ def verse_detail(card_id: int):
         card=card,
         theme=SITE_THEME,
         join_url=JOIN_URL,
-        active="verses"
+        active="verses",
     )
 
 
@@ -801,10 +768,12 @@ def prayer():
         return redirect(url_for("prayer"))
     return render_template("prayer.html", theme=SITE_THEME, join_url=JOIN_URL, active="prayer")
 
+
 # ---------- About ----------
 @app.route("/about")
 def about():
     return render_template("about.html", theme=SITE_THEME, join_url=JOIN_URL, active="about")
+
 
 # ---------- Volunteer ----------
 @app.route("/volunteer", methods=["GET", "POST"])
@@ -814,7 +783,8 @@ def volunteer():
         return redirect(url_for("volunteer"))
     return render_template("volunteer.html", theme=SITE_THEME, join_url=JOIN_URL, active="volunteer")
 
-# ---------- Donation ----------
+
+# ---------- Donations (admin + public) ----------
 @app.route("/admin/donations", methods=["GET", "POST"])
 @require_auth
 def admin_donations():
@@ -829,7 +799,6 @@ def admin_donations():
         date_str = (request.form.get("date") or "").strip()
 
         if not date_str:
-            # default to today if not provided
             date_str = datetime.now().date().isoformat()
 
         try:
@@ -851,10 +820,8 @@ def admin_donations():
             append_json_list(DONATIONS_FILE, record)
             success = "Donation recorded successfully."
 
-    # Always load current list
     items = load_json_list(DONATIONS_FILE)
 
-    # Sort newest first by date/created_at
     try:
         items.sort(
             key=lambda r: (r.get("date") or "", r.get("created_at") or ""),
@@ -864,7 +831,9 @@ def admin_donations():
         pass
 
     total_amount = sum(
-        (r.get("amount") or 0) for r in items if isinstance(r.get("amount"), (int, float))
+        (r.get("amount") or 0)
+        for r in items
+        if isinstance(r.get("amount"), (int, float))
     )
 
     return render_template(
@@ -877,12 +846,10 @@ def admin_donations():
         success=success,
     )
 
+
 @app.route("/donation")
 def donation():
-    """
-    Public donation page used by the floating 💚 button.
-    Shows a PayPal button if PAYPAL_LINK is configured.
-    """
+    """Public donation page used by the floating 💚 button."""
     return render_template(
         "donation.html",
         theme=SITE_THEME,
@@ -890,7 +857,6 @@ def donation():
         active="donation",
         paypal_link=PAYPAL_LINK,
     )
-
 
 
 # ---------- Feedback ----------
@@ -904,7 +870,6 @@ def feedback_view():
 # ---------- Study (Hub + series pages) ----------
 
 STUDIES_META_FILE = DATA_DIR / "studies.json"
-
 
 def load_study_meta() -> dict:
     """
@@ -928,7 +893,6 @@ def load_study_meta() -> dict:
         return data if isinstance(data, dict) else {}
     except Exception:
         return {}
-
 
 @app.route("/study", endpoint="study")
 @app.route("/studies", endpoint="study_index")
@@ -959,7 +923,6 @@ def study_index():
         active="study",
     )
 
-
 @app.route("/study/<series_name>", endpoint="study_detail")
 def study_detail(series_name: str):
     """
@@ -986,7 +949,6 @@ def study_detail(series_name: str):
         active="study",
     )
 
-
 # ---------- Auth (simple) ----------
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -1012,7 +974,6 @@ def login():
 
     return render_template("login.html", error=error, active="login")
 
-
 @app.route("/logout")
 def logout():
     session.pop("authed", None)
@@ -1031,8 +992,6 @@ def admin():
     )
 
 # ---------- Admin: Manage Theme Verses ----------
-# ---------- Admin: Manage Theme Verses ----------
-
 @app.route("/admin/verses", methods=["GET", "POST"])
 @require_auth
 def admin_verses():
@@ -1156,8 +1115,6 @@ def admin_verses():
         image_files=image_files,
     )
 
-
-
 @app.route("/admin/requests")
 def admin_requests():
     """Admin view: prayer requests"""
@@ -1175,7 +1132,6 @@ def admin_requests():
         theme=SITE_THEME,
         active="admin",
     )
-
 
 @app.route("/admin/feedback")
 def admin_feedback():
@@ -1195,7 +1151,6 @@ def admin_feedback():
         active="admin",
     )
 
-
 @app.route("/admin/volunteers")
 def admin_volunteers():
     """Admin view: volunteer submissions"""
@@ -1213,7 +1168,6 @@ def admin_volunteers():
         theme=SITE_THEME,
         active="admin",
     )
-
 
 @app.route("/admin/whatsapp/send", methods=["POST"])
 @require_auth
@@ -1327,7 +1281,6 @@ def admin_whatsapp_send():
     }
     return jsonify(resp)
 
-
 # =============================================================================
 # Run (HTTP dev) + auto-open browser
 # =============================================================================
@@ -1342,4 +1295,3 @@ if __name__ == "__main__":
     if AUTO_OPEN:
         Timer(1.0, _open_browser).start()
     app.run(host=HOST, port=PORT, debug=True)
-

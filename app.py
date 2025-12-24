@@ -8,6 +8,12 @@ import logging
 import subprocess
 import sys
 import webbrowser
+
+import logging
+logger = logging.getLogger(__name__)
+logger.info("message")
+logger.exception("error")  # inside except blocks
+
 from threading import Timer
 from datetime import datetime, date
 from pathlib import Path
@@ -438,7 +444,7 @@ def load_devotions_for_year(year: int) -> dict[str, dict]:
         with path.open("r", encoding="utf-8") as f:
             data = json.load(f)
     except Exception as e:
-        print(f"[DEVOTIONS] Failed to read {path}: {e}")
+        logger.exception(f"[DEVOTIONS] Failed to read {path}: {e}")
         return {}
 
     # Case 1: already dict keyed by date
@@ -1220,7 +1226,7 @@ def _open_browser():
         pass
 
 if __name__ == "__main__":
-    print("💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)…", APP_VERSION)
+    logger.info("💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)…", APP_VERSION)
     if AUTO_OPEN:
         Timer(1.0, _open_browser).start()
     app.run(host=HOST, port=PORT, debug=True)

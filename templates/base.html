@@ -21,7 +21,7 @@
 </head>
 
 <body class="{{ page_bg_class or '' }}"
-      style="{% if page_bg_url %}--page-bg:url('{{ page_bg_url }}'){% endif %}">
+      style="{{ '--page-bg:url(' ~ page_bg_url ~ ')' if page_bg_url else '' }}">
   {% if page_bg_class == 'bg-video' and page_bg_video %}
   <video class="bg-video" autoplay muted loop playsinline preload="metadata" poster="{{ page_bg_poster or '' }}">
     <source src="{{ page_bg_video }}" type="video/mp4">
@@ -30,7 +30,7 @@
 
   <header class="header brand" role="banner">
     <div class="brand">
-      <img src="{{ url_for('static', filename='img/sscm_logo.png') }}" alt="Silent SoulConnect Ministry" class="logo">
+      <img src="{{ url_for('static', filename='img/sscm_logo.jpg') }}" alt="Silent SoulConnect Ministry" class="logo">
       <div>
         <div class="title">Silent SoulConnect Ministry</div>
         <div class="sub">{{ theme or "Faith to Rise, Grace to Rest" }}</div>
@@ -40,7 +40,7 @@
     <nav class="topnav" role="navigation" aria-label="Main">
       <a href="{{ url_for('home') }}"              class="{{ 'active' if active=='home' else '' }}"      {% if active=='home' %}aria-current="page"{% endif %}>Home</a>
       <a href="{{ url_for('today') }}"             class="{{ 'active' if active=='today' else '' }}"     {% if active=='today' %}aria-current="page"{% endif %}>Today</a>
-      <a href="{{ url_for('study') }}"             class="{{ 'active' if active=='study' else '' }}"     {% if active=='study' %}aria-current="page"{% endif %}>Study</a>
+      <a href="{{ url_for('study_index') }}"       class="{{ 'active' if active=='study' else '' }}"     {% if active=='study' %}aria-current="page"{% endif %}>Study</a>
       <a href="{{ url_for('verses') }}"            class="{{ 'active' if active=='verses' else '' }}"    {% if active=='verses' %}aria-current="page"{% endif %}>Verses</a>
       <a href="{{ url_for('prayer') }}"            class="{{ 'active' if active=='prayer' else '' }}"    {% if active=='prayer' %}aria-current="page"{% endif %}>Prayer</a>
       <a href="{{ url_for('about') }}"             class="{{ 'active' if active=='about' else '' }}"     {% if active=='about' %}aria-current="page"{% endif %}>About</a>

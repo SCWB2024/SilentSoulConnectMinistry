@@ -1,9 +1,30 @@
-/* =============================
+/* =========================================
    SOULSTART DEVOTION THEME
    Updated: Oct 31, 2025
-   ============================= */
 
-/* --- Brand Colors --- */
+   TABLE OF CONTENTS
+   01) Variables (Brand Colors)
+   02) Reset & Typography
+   03) Header + Branding
+   04) Navigation
+   05) Layout (Main / Footer)
+   06) Buttons + Links
+   07) Cards + Grids
+   08) Hero (Image-based)
+   09) Home Helpers (Hero Actions, Chips)
+   10) Video Background Mode (body.bg-video) + Glass
+   11) Page Helpers (Page Hero, Verse Grid)
+   12) Modals
+   13) Prayer Page
+   14) Admin Styles (converted from inline <style> block)
+   15) About Page (SSCM)
+   16) Responsive
+   ========================================= */
+
+
+/* =============================
+   01) VARIABLES / BRAND COLORS
+   ============================= */
 :root {
   --brand: #0aa36e;
   --brand-dark: #087a52;
@@ -20,9 +41,13 @@
   --ring: 0 0 0 3px rgba(10,163,110,.25);
 }
 
-/* --- Reset & Typography --- */
+
+/* =============================
+   02) RESET & TYPOGRAPHY
+   ============================= */
 * { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; padding: 0; }
+
 body {
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--fg);
@@ -30,37 +55,48 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
 }
+
 h1, h2, h3 { color: var(--fg); margin: 0 0 .6rem; }
 p { margin: .4rem 0; }
 .muted { color: var(--muted); }
 
-/* --- Header --- */
+
+/* =============================
+   03) HEADER + BRANDING
+   ============================= */
 .header {
   padding: 16px 20px;
   border-bottom: 1px solid var(--border);
 }
+
 .header.brand {
   background: var(--brand);
   color: #fff;
   border-bottom: none;
   box-shadow: var(--shadow);
 }
+
 .brand {
   display: flex;
   align-items: center;
   gap: 12px;
 }
+
 .logo { width: 56px; height: auto; margin-right: 12px; }
 .title { font-size: 1.4rem; font-weight: 800; color: #fff; }
 .sub { font-size: 1rem; color: #fff; opacity: .9; margin-top: 2px; }
 
-/* --- Navigation --- */
+
+/* =============================
+   04) NAVIGATION
+   ============================= */
 .topnav {
   display: flex;
   gap: 12px;
   margin-top: 10px;
   flex-wrap: wrap;
 }
+
 .topnav a {
   text-decoration: none;
   color: #fff;
@@ -68,26 +104,33 @@ p { margin: .4rem 0; }
   border-radius: 8px;
   transition: background .2s ease, transform .12s ease;
 }
+
 .topnav a:hover {
   background: rgba(255,255,255,.15);
 }
+
 .topnav a.active {
   background: #fff;
   color: var(--brand-dark);
   font-weight: 700;
 }
+
 .topnav a:focus-visible {
   outline: 2px solid #fff;
   outline-offset: 2px;
 }
 
-/* --- Layout --- */
+
+/* =============================
+   05) LAYOUT
+   ============================= */
 .main {
   max-width: 980px;
   margin: 0 auto;
   padding: 20px;
   min-height: 80vh;
 }
+
 .footer {
   border-top: 1px solid var(--border);
   padding: 16px 20px;
@@ -100,7 +143,10 @@ p { margin: .4rem 0; }
   color: var(--muted);
 }
 
-/* --- Buttons --- */
+
+/* =============================
+   06) BUTTONS + LINKS
+   ============================= */
 .btn {
   display: inline-block;
   padding: 10px 14px;
@@ -112,24 +158,28 @@ p { margin: .4rem 0; }
   border: 1px solid transparent;
   transition: filter .15s, transform .12s, box-shadow .12s;
 }
+
 .btn.small { padding: 8px 12px; font-weight: 600; }
+
 .btn.soft {
   background: #fff;
   color: var(--brand);
   border: 1px solid var(--border);
 }
+
 .btn:hover { filter: brightness(.95); }
 .btn:active { transform: translateY(1px); }
 .btn:focus-visible { box-shadow: var(--ring); }
+
 .btn.disabled, .btn.soft.disabled {
   opacity: .6; pointer-events: none; cursor: default;
 }
 
 /* Floating donate button – stronger contrast */
 .fab-donate{
-  background: var(--blue);      /* from your palette: #1b4fcc */
+  background: var(--blue);
   color:#0f3d24;
-  border:2px solid #fff;        /* crisp edge on green header */
+  border:2px solid #fff;
   box-shadow:0 10px 24px rgba(0,0,0,.28);
 }
 
@@ -138,213 +188,6 @@ p { margin: .4rem 0; }
   background: var(--gold);
   color:#1a1a1a;
   border:1px solid rgba(0,0,0,.08);
-}
-
-/* --- Cards --- */
-.card {
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 16px;
-  margin: 10px 0;
-  background: #fff;
-  box-shadow: 0 4px 14px rgba(0,0,0,.04);
-}
-.card.night-tone {
-  background: #0d1020;
-  color: #f3f6ff;
-  border-color: #1c2347;
-}
-.card h3::after {
-  content: "";
-  display: block;
-  width: 56px;
-  height: 3px;
-  background: var(--gold);
-  margin-top: 6px;
-  border-radius: 2px;
-}
-.cards {
-  display: grid;
-  gap: 14px;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-}
-
-/* --- Hero --- */
-.hero {
-  position: relative;
-  background-size: cover;
-  background-position: center;
-  border-radius: 18px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,.1);
-}
-.hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, var(--overlay), var(--overlay));
-}
-.hero .hero-inner {
-  position: relative;
-  z-index: 1;
-  padding: 24px;
-}
-.hero .hero-inner h1, .hero .hero-inner p, .hero .hero-inner .tag {
-  color: #fff;
-  text-shadow: 0 1px 2px rgba(0,0,0,.45);
-}
-.tag {
-  display: inline-block;
-  padding: .25rem .6rem;
-  border-radius: 999px;
-  background: rgba(212,160,23,.18);
-  color: #fff;
-  border: 1px solid rgba(212,160,23,.35);
-}
-
-/* --- SoulStart Home Page Hero Adjustments --- */
-.hero.night-tone {
-  background-color: #020617;
-  background-blend-mode: multiply;
-}
-
-.hero-container {
-  padding: 1.5rem 0;
-  text-align: center;
-}
-
-.hero-image {
-  max-height: 55vh; /* match Study page height */
-  width: auto;
-  object-fit: cover;
-  border-radius: 16px;
-  display: block;
-  margin: 0 auto;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.welcome-text {
-  max-width: 900px;
-  margin: 1rem auto;
-  line-height: 1.6;
-  text-align: center;
-}
-
-/* Full-page video background */
-body.bg-video .bg-video{
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1;           /* sits behind everything */
-  pointer-events: none;   /* clicks go through */
-  filter: brightness(.75);
-}
-
-/* Make content float nicely over video */
-body.bg-video .main{
-  background: transparent;
-}
-
-/* Optional: make header/footer readable over video pages */
-body.bg-video .header,
-body.bg-video .footer{
-  background: rgba(20,30,40,.60);
-  color: #fff;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-}
-body.bg-video .topnav a{ color:#fff; }
-body.bg-video .topnav a.active{
-  background:#fff; color:var(--brand-dark);
-}
-/* Optional “glass” effect for readability */
-.glass {
-  background: rgba(20, 30, 40, 0.55);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border-radius: 18px;
-  box-shadow: 0 10px 28px rgba(0,0,0,.18);
-}
-
-.page-hero{
-  margin: 0 0 1rem 0; padding:1.25rem 1.5rem;
-  background:#e8f5e9;border-radius:20px;
-  box-shadow:0 8px 24px rgba(0,0,0,.08)
-}
-.page-hero h1{margin:0 0 .25rem 0;font-size:2rem}
-.page-hero .subtitle{margin:0;opacity:.8}
-
-/* --- Verse Grid --- */
-.verses-grid{display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
-.verse-card{display:block;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.12);text-decoration:none}
-.verse-card img{width:100%;height:340px;object-fit:cover;display:block}
-.verse-card .cap{padding:.75rem 1rem;color:#263238}
-
-
-/* --- Modals --- */
-.verse-modal {
-  border: none;
-  border-radius: 16px;
-  max-width: 600px;
-  width: 90%;
-  box-shadow: 0 10px 30px rgba(0,0,0,.25);
-}
-.verse-modal img { width: 100%; border-radius: 10px; }
-
-/* --- Prayer Section --- */
-.prayer-hero {
-  position: relative;
-  min-height: 90vh;
-  background-size: cover;
-  background-position: center;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,.15);
-}
-.prayer-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,.25), rgba(0,0,0,.45));
-}
-.prayer-overlay {
-  position: absolute;
-  left: 50%; top: 58%;
-  transform: translate(-50%, -50%);
-  width: min(520px, 92vw);
-  padding: 22px;
-  background: rgba(255,255,255,0.94);
-  backdrop-filter: blur(5px);
-  border-radius: 14px;
-  box-shadow: 0 6px 22px rgba(0,0,0,.18);
-  z-index: 2;
-}
-.prayer-form label {
-  display: block;
-  font-weight: 600;
-  margin: 10px 0 6px;
-}
-.prayer-form input, .prayer-form textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: #fff;
-  outline: none;
-}
-.prayer-form input:focus-visible, .prayer-form textarea:focus-visible {
-  box-shadow: var(--ring);
-}
-.prayer-form .btn { margin-top: 12px; width: 100%; }
-
-/* --- Responsive --- */
-@media (max-width: 600px) {
-  .topnav a { padding: 6px 10px; }
-  .main { padding: 16px; }
-  .card h3::after { width: 40px; }
-  .footer { flex-direction: column; align-items: flex-start; }
 }
 
 /* XML button style */
@@ -364,77 +207,469 @@ body.bg-video .topnav a.active{
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
-<style nonce="{{ csp_nonce() }}">
-  .admin-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 8px;
-  }
-  .admin-verse-row {
-    display: flex;
-    gap: 12px;
-    padding: 8px;
-    border-radius: 8px;
-    background: rgba(15, 23, 42, 0.35);
-  }
-  .admin-verse-row .thumb {
-    width: 72px;
-    height: 72px;
-    flex: 0 0 auto;
-    border-radius: 8px;
-    overflow: hidden;
-    background: #020617;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .admin-verse-row .thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .thumb-missing {
-    font-size: 0.7rem;
-    color: #9ca3af;
-    text-align: center;
-    padding: 4px;
-  }
-  .admin-verse-row .info {
-    flex: 1 1 auto;
-    font-size: 0.9rem;
-  }
-  .small {
-    font-size: 0.8rem;
-  }
-  .field {
-    margin-bottom: 0.5rem;
-  }
-  .field input,
-  .field textarea,
-  .field select {
-    width: 100%;
-  }
-  .admin-actions {
-    margin-top: 6px;
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-  .inline-form {
-    display: inline-block;
-  }
-  .small-field label {
-    font-size: 0.8rem;
-  }
-  .danger {
-    background: #b91c1c;
-    border-color: #7f1d1d;
-  }
-  .edit-form {
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: 1px solid rgba(148, 163, 184, 0.4);
-  }
-  </style>
+.link-inline {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--brand-dark);
+}
 
+.link-inline:hover {
+  text-decoration: underline;
+}
+
+
+/* =============================
+   07) CARDS + GRIDS
+   ============================= */
+.card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  margin: 10px 0;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0,0,0,.04);
+}
+
+.card.night-tone {
+  background: #0d1020;
+  color: #f3f6ff;
+  border-color: #1c2347;
+}
+
+.card h3::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 3px;
+  background: var(--gold);
+  margin-top: 6px;
+  border-radius: 2px;
+}
+
+.cards {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+
+/* =============================
+   08) HERO (IMAGE-BASED)
+   ============================= */
+.hero {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,.1);
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--overlay), var(--overlay));
+}
+
+.hero .hero-inner {
+  position: relative;
+  z-index: 1;
+  padding: 24px;
+}
+
+.hero .hero-inner h1,
+.hero .hero-inner p,
+.hero .hero-inner .tag {
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,.45);
+}
+
+.tag {
+  display: inline-block;
+  padding: .25rem .6rem;
+  border-radius: 999px;
+  background: rgba(212,160,23,.18);
+  color: #fff;
+  border: 1px solid rgba(212,160,23,.35);
+}
+
+/* SoulStart Home Page Hero Adjustments */
+.hero.night-tone {
+  background-color: #020617;
+  background-blend-mode: multiply;
+}
+
+.hero-container {
+  padding: 1.5rem 0;
+  text-align: center;
+}
+
+.hero-image {
+  max-height: 55vh;
+  width: auto;
+  object-fit: cover;
+  border-radius: 16px;
+  display: block;
+  margin: 0 auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.welcome-text {
+  max-width: 900px;
+  margin: 1rem auto;
+  line-height: 1.6;
+  text-align: center;
+}
+
+
+/* =============================
+   09) HOME HELPERS
+   ============================= */
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0.75rem 0 0.25rem;
+}
+
+.small-note {
+  font-size: 0.85rem;
+}
+
+/* Quick chips on home page */
+.quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.chip-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  background: #ecfdf5;
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+  text-decoration: none;
+  color: var(--brand-dark);
+}
+
+.chip-link:hover {
+  background: #d1fae5;
+}
+
+
+/* =============================
+   10) VIDEO BACKGROUND MODE + GLASS
+   ============================= */
+/* Full-page video background */
+body.bg-video .bg-video{
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  pointer-events: none;
+  filter: brightness(.75);
+}
+
+/* Make content float nicely over video */
+body.bg-video .main{
+  background: transparent;
+}
+
+/* Header/footer readability over video pages */
+body.bg-video .header,
+body.bg-video .footer{
+  background: rgba(20,30,40,.60);
+  color: #fff;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+body.bg-video .topnav a{ color:#fff; }
+
+body.bg-video .topnav a.active{
+  background:#fff;
+  color:var(--brand-dark);
+}
+
+/* Optional “glass” effect for readability */
+.glass {
+  background: rgba(20, 30, 40, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 18px;
+  box-shadow: 0 10px 28px rgba(0,0,0,.18);
+}
+
+
+/* =============================
+   11) PAGE HELPERS (Page Hero, Verse Grid)
+   ============================= */
+.page-hero{
+  margin: 0 0 1rem 0;
+  padding:1.25rem 1.5rem;
+  background:#e8f5e9;
+  border-radius:20px;
+  box-shadow:0 8px 24px rgba(0,0,0,.08);
+}
+
+.page-hero h1{margin:0 0 .25rem 0;font-size:2rem}
+.page-hero .subtitle{margin:0;opacity:.8}
+
+/* Verse Grid */
+.verses-grid{
+  display:grid;
+  gap:1.25rem;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+}
+
+.verse-card{
+  display:block;
+  background:#fff;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);
+  text-decoration:none;
+}
+
+.verse-card img{
+  width:100%;
+  height:340px;
+  object-fit:cover;
+  display:block;
+}
+
+.verse-card .cap{
+  padding:.75rem 1rem;
+  color:#263238;
+}
+
+
+/* =============================
+   12) MODALS
+   ============================= */
+.verse-modal {
+  border: none;
+  border-radius: 16px;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+}
+
+.verse-modal img { width: 100%; border-radius: 10px; }
+
+
+/* =============================
+   13) PRAYER PAGE
+   ============================= */
+.prayer-hero {
+  position: relative;
+  min-height: 90vh;
+  background-size: cover;
+  background-position: center;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,.15);
+}
+
+.prayer-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,.25), rgba(0,0,0,.45));
+}
+
+.prayer-overlay {
+  position: absolute;
+  left: 50%; top: 58%;
+  transform: translate(-50%, -50%);
+  width: min(520px, 92vw);
+  padding: 22px;
+  background: rgba(255,255,255,0.94);
+  backdrop-filter: blur(5px);
+  border-radius: 14px;
+  box-shadow: 0 6px 22px rgba(0,0,0,.18);
+  z-index: 2;
+}
+
+.prayer-form label {
+  display: block;
+  font-weight: 600;
+  margin: 10px 0 6px;
+}
+
+.prayer-form input, .prayer-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  outline: none;
+}
+
+.prayer-form input:focus-visible,
+.prayer-form textarea:focus-visible {
+  box-shadow: var(--ring);
+}
+
+.prayer-form .btn { margin-top: 12px; width: 100%; }
+
+
+/* =============================
+   14) ADMIN STYLES
+   NOTE:
+   These rules came from an inline:
+   <style nonce="{{ csp_nonce() }}"> ... </style>
+   block. Keep them here OR move to admin.css
+   and include on admin pages only.
+   ============================= */
+.admin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.admin-verse-row {
+  display: flex;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.35);
+}
+
+.admin-verse-row .thumb {
+  width: 72px;
+  height: 72px;
+  flex: 0 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #020617;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-verse-row .thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumb-missing {
+  font-size: 0.7rem;
+  color: #9ca3af;
+  text-align: center;
+  padding: 4px;
+}
+
+.admin-verse-row .info {
+  flex: 1 1 auto;
+  font-size: 0.9rem;
+}
+
+.small { font-size: 0.8rem; }
+
+.field { margin-bottom: 0.5rem; }
+
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+}
+
+.admin-actions {
+  margin-top: 6px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.inline-form { display: inline-block; }
+
+.small-field label { font-size: 0.8rem; }
+
+.danger {
+  background: #b91c1c;
+  border-color: #7f1d1d;
+}
+
+.edit-form {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+
+/* =============================
+   15) ABOUT PAGE (SSCM)
+   For about.html hero video: static/videos/seaside1.mp4
+   ============================= */
+.about-hero{
+  position: relative;
+  height: 35vh;
+  overflow: hidden; 
+}
+
+.about-hero .bg-video{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about-hero .overlay{
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  text-shadow: 0 2px 10px rgba(0,0,0,.55);
+}
+
+.about-hero .hero-content{
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: #fff;
+  transform: translateY(-4%);
+}
+
+.about-hero .tagline{
+  max-width: 520px;
+  margin: .5rem auto 0;
+  font-size: .95rem;
+}
+
+.about-content{
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem;
+}
+
+.about-content blockquote{
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+  border-left: 3px solid var(--border);
+  color: var(--muted);
+  font-style: italic;
+}
+
+
+/* =============================
+   16) RESPONSIVE
+   ============================= */
+@media (max-width: 600px) {
+  .topnav a { padding: 6px 10px; }
+  .main { padding: 16px; }
+  .card h3::after { width: 40px; }
+  .footer { flex-direction: column; align-items: flex-start; }
+}

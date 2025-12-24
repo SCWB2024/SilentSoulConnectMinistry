@@ -1,36 +1,66 @@
 {% extends "base.html" %}
-{% block title %}Volunteer — SoulStart{% endblock %}
+{% block title %}Volunteer — Silent SoulConnect Ministry{% endblock %}
 {% block content %}
 
 <section class="hero hero-day" style="background:url('{{ url_for('static', filename='img/serve_bg.jpg') }}') center/cover;">
   <div class="hero-inner" style="padding:48px 20px;">
-    <h1>Offer Your Skills</h1>
-    <p class="muted">“Small as a mustard seed — growing by grace.”</p>
+    <h1>Volunteer</h1>
+    <p class="muted">Serve quietly — helping others understand Scripture with clarity and care.</p>
   </div>
 </section>
 
 <div class="card">
-  <h3>Serve with Your Hands &amp; Heart</h3>
-  <p>We welcome gifts in ASL/ISL, teaching, media, editing, tech, design, admin, prayer, or outreach.</p>
+  <h3>Why Volunteer?</h3>
+  <p>
+    Silent SoulConnect Ministry serves the Deaf and Hard of Hearing community through accessible devotionals,
+    prayer support, and Bible study. Volunteers help keep this ministry clear, welcoming, and consistent —
+    so no one feels left out, rushed, or misunderstood.
+  </p>
 
-  {% if ok %}<p class="ok">✅ Thank you! We’ve received your offer to serve.</p>{% elif err %}<p class="err">{{ err }}</p>{% endif %}
+  <h3 style="margin-top:14px;">Ways You Can Serve (Choose what fits you)</h3>
+  <ul>
+    <li><strong>Accessibility Helper:</strong> help simplify wording and improve clarity (Deaf-friendly reading).</li>
+    <li><strong>Prayer Support:</strong> help prepare short, caring prayers (templates provided).</li>
+    <li><strong>Study Support:</strong> help prepare simple notes and figurative-language explanations.</li>
+    <li><strong>Media & Captions:</strong> help with captions, posting, and basic content formatting.</li>
+    <li><strong>Tech Helper (optional):</strong> help test pages and report issues clearly.</li>
+  </ul>
 
-  <form method="post" class="prayer-form">
+  <p class="muted small-note">
+    Even 15–30 minutes a week makes a difference.
+  </p>
+
+   <form method="post" class="prayer-form">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
     <label for="name">Your Name*</label>
     <input id="name" name="name" required>
+
     <label for="contact">Contact</label>
     <input id="contact" name="contact" placeholder="you@example.com or +1 242…">
-    <label for="skills">Skills you can offer</label>
-    <input id="skills" name="skills" placeholder="ASL/ISL, teaching, web, media, design, admin, prayer…">
-    <label for="availability">Availability</label>
-    <input id="availability" name="availability" placeholder="e.g., Saturdays or evenings">
-    <label for="notes">Notes (optional)</label>
-    <textarea id="notes" name="notes" rows="4"></textarea>
 
-    <button class="btn" type="submit">Submit</button>
-    <a class="btn soft" href="{{ url_for('donation') }}">💚 Give</a>
-    <a class="btn soft" href="{{ url_for('home') }}">🏠 Home</a>
+    <label for="skills">How would you like to serve?</label>
+    <input id="skills" name="skills" placeholder="Accessibility, Prayer, Study, Captions, Tech…">
+
+    <label for="availability">Availability</label>
+    <input id="availability" name="availability" placeholder="e.g., 15 mins/week, Saturdays, evenings">
+
+    <label for="notes">Notes (optional)</label>
+    <textarea id="notes" name="notes" rows="4"
+      placeholder="Tell us anything helpful (optional)."></textarea>
+
+    <div class="hero-actions">
+      <button class="btn" type="submit">Submit</button>
+      <p class="muted small-note" style="margin-top:.5rem">
+      
+ <p class="ok">
+  ✅ Your information is kept private.
+  ✅ We will contact you directly with simple next steps.
+</p>
+<a class="btn soft" href="{{ url_for('donation') }}">💚 Support the Ministry</a>
+      <a class="btn soft" href="{{ url_for('home') }}">🏠 Home</a>
+    </div>
   </form>
 </div>
+
 {% endblock %}

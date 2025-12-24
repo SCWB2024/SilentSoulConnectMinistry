@@ -1,84 +1,71 @@
 {% extends "base.html" %}
-{% block title %}Home — SoulStart{% endblock %}
+{% block title %}SoulStart Devotion — Home{% endblock %}
+
 {% block content %}
 
-<!-- Page-scoped CSS (CSP nonce) -->
-<style nonce="{{ csp_nonce() }}">
-  .hero.dynamic { background-size: cover; background-position: center; background-repeat: no-repeat; }
-  .share-row { display:flex; gap:.5rem; flex-wrap:wrap; }
-  .hero-image { display:block; max-width:100%; height:auto; border-radius:12px; }
-</style>
-
-<section class="hero {% if hero_bg %}dynamic{% endif %} {{ hero_class }}">
-  {% if hero_bg %}
-    <!-- Use a data attribute; no inline style attributes -->
-    <div id="heroBgCarrier" data-bg="{{ url_for('static', filename=hero_bg) }}"></div>
-  {% endif %}
-
+{# HERO WITH IMAGE (USES EXISTING .hero STYLES) #}
+<section class="hero"
+         style="background-image: url('{{ url_for('static', filename='img/hero_day.jpg') }}'); margin-bottom: 1.5rem;">
   <div class="hero-inner">
-    <h1>Come, all who are thirsty</h1>
-    <p class="muted">SoulStart — daily devotion to stir faith and bring rest.</p>
-    {% if hero_title %}<p class="tag">Today: {{ hero_title }}</p>{% endif %}
+      <h1>*WELCOME TO SOULSTART* - Come, all who are thirsty.</h1>
+    
 
-    <p class="cta">
-      <a class="btn" href="{{ url_for('today') }}">📅 Open Today</a>
-      <a class="btn" href="{{ url_for('verses') }}">📖 Verses</a>
-      <a class="btn" href="{{ url_for('study_index') }}">📘 Explore Studies</a>
-      <a class="btn" href="{{ join_url }}" target="_blank" rel="noopener">💬 Join WhatsApp</a>
+      <p>
+      SoulStart is a quiet space to rise in faith every morning and rest in grace every night.
+    </p>
+    <p class="muted small-note">
+      Simple. Visual. Accessible — sunrise & sunset devotion, prayer, and study in one place.
     </p>
   </div>
-
-  {% if not hero_bg %}
-  <div class="hero-container">
-    <img src="{{ url_for('static', filename='images/morning.jpg') }}"
-         alt="Good Morning"
-         class="hero-image">
-  </div>
-  {% endif %}
 </section>
 
-<div class="card">
-  <h3>Quick Links</h3>
-  <p>
-    <a class="btn small" href="{{ url_for('today') }}">📅 Today</a>
-    <a class="btn small" href="{{ url_for('study_index') }}">📘 Study Hub</a>
-    <a class="btn small" href="{{ url_for('verses') }}">📖 Verses</a>
-    <a class="btn small" href="{{ url_for('prayer') }}">🙏 Prayer</a>
-    <a class="btn small" href="{{ url_for('about') }}">✝️ About</a>
+{# 3 MAIN AREAS: DEVOTION / STUDY / PRAYER #}
+<section class="page-hero" style="margin-bottom: 1.5rem;">
+  <h1>Daily rhythm with SoulStart</h1>
+  <p class="subtitle">
+    One small step in the morning, one quiet surrender at night. The rest of the day belongs to Him.
   </p>
-</div>
+</section>
 
-<div class="share-row">
-  <a class="btn soft small" href="https://api.whatsapp.com/send?text={{ request.url_root|trim|urlencode }}">
-    💬 Share on WhatsApp
-  </a>
-  <button class="btn soft small" id="copyLinkBtn">🔗 Copy Link</button>
-</div>
+<section>
+  <div class="cards">
+    <article class="card">
+      <h3>Daily Devotion</h3>
+      <p>
+        Sunrise and sunset pages with a clear verse, simple meaning, and short prayers you can share.
+      </p>
+      <a href="{{ url_for('today') }}" class="link-inline">Open today’s devotion →</a>
+    </article>
 
-<!-- Page-scoped JS (CSP nonce) -->
-<script nonce="{{ csp_nonce() }}">
-  (function () {
-    // set hero background from data attr (no inline style attrs)
-    const carrier = document.getElementById('heroBgCarrier');
-    if (carrier) {
-      const url = carrier.getAttribute('data-bg');
-      const hero = carrier.closest('.hero');
-      if (url && hero) hero.style.backgroundImage = "url('" + url + "')";
-    }
+    <article class="card">
+      <h3>Study Hub</h3>
+      <p>
+        Weekly series designed for Deaf and visual learners, using slides and plain language.
+      </p>
+      <a href="{{ url_for('study_index') }}" class="link-inline">Explore Bible studies</a>
+    </article>
 
-    // copy link button
-    const btn = document.getElementById('copyLinkBtn');
-    if (btn) {
-      btn.addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(window.location.origin + '/');
-          alert('Link copied!');
-        } catch {
-          alert('Unable to copy, please copy manually.');
-        }
-      });
-    }
-  })();
-</script>
+    <article class="card">
+      <h3>Prayer & Care</h3>
+      <p>
+        Share your burden, ask for prayer, and keep a gentle record of what God has done.
+      </p>
+      <a href="{{ url_for('prayer') }}" class="link-inline">Send a prayer request →</a>
+    </article>
+  </div>
+</section>
+
+{# QUICK LINKS, BUT LIGHT #}
+<section style="margin-top: 2rem;">
+  <h2>Quick links</h2>
+  <div class="quick-actions">
+    <a href="{{ url_for('today') }}" class="chip-link">🌅 Today</a>
+    <a href="{{ url_for('study_index') }}" class="chip-link">📚 Study Hub</a>
+    <a href="{{ url_for('verses') }}" class="chip-link">📖 Verses</a>
+    <a href="{{ url_for('prayer') }}" class="chip-link">🙏 Prayer</a>
+    <a href="{{ url_for('about') }}" class="chip-link">ℹ️ About SSCM</a>
+    <a href="{{ url_for('volunteer') }}" class="chip-link">🤝 Volunteer</a>
+  </div>
+</section>
 
 {% endblock %}

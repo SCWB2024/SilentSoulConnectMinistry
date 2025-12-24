@@ -15,6 +15,18 @@
   </div>
 </section>
 
+<div class="chip-row" style="margin:12px 0 18px;">
+  <a class="chip {{ 'active' if mode=='morning' else '' }}"
+     href="{{ url_for('today', mode='morning') }}">
+     🌅 Morning
+  </a>
+
+  <a class="chip {{ 'active' if mode=='night' else '' }}"
+     href="{{ url_for('today', mode='night') }}">
+     🌙 Night
+  </a>
+</div>
+
 {% set has_content = entry and (entry.theme or entry.verse_ref or entry.verse_text or entry.body) %}
 
 {% if has_content %}

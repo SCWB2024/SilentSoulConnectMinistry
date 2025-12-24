@@ -1,4 +1,5 @@
-# January 2026 Devotions#
+#### January Devotions for 2026####
+
 [
   {
     "date": "2026-01-01",
@@ -20,6 +21,25 @@
     "tags": ["2026"]
   },
 
+  {
+    "date": "2026-01-02",
+    "theme": "Silent Strength — Renewed Power",
+    "morning": {
+      "verse_ref": "Isaiah 40:29",
+      "verse_text": "He gives strength to the weary and increases the power of the weak.",
+      "verse_meaning": "God pours fresh strength into tired places.",
+      "body": "💖 I DECLARE new strength is rising in me.\n💖 I REFUSE to give my energy to fear.\n💖 I WILL walk in God’s renewing power today.",
+      "prayer": "Lord, renew my body, mind, and spirit with Your strength."
+    },
+    "night": {
+      "verse_ref": "Isaiah 40:29",
+      "verse_text": "He gives strength to the weary and increases the power of the weak.",
+      "verse_meaning": "As you rest, God continues to refill what life emptied.",
+      "body": "💖 I DECLARE strength is returning to me tonight.\n💖 I REFUSE to sleep with exhaustion in my soul.\n💖 I WILL allow God to restore me as I rest.",
+      "prayer": "Lord, breathe Your strength into me while I sleep."
+    },
+    "tags": ["2026"]
+  },
 
   {
     "date": "2026-01-03",
@@ -41,7 +61,7 @@
     "tags": ["2026"]
   },
 
-    {
+  {
     "date": "2026-01-04",
     "theme": "Silent Strength — Courage for the Journey",
     "morning": {
@@ -60,7 +80,8 @@
     },
     "tags": ["2026"]
   },
-    {
+
+  {
     "date": "2026-01-05",
     "theme": "Silent Strength — The Lord My Shepherd",
     "morning": {

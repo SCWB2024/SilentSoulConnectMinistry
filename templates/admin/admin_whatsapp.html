@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Admin — WhatsApp Sender{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <h1>Send WhatsApp</h1>
+  <p class="subtitle">
+    Generate the message for any date and mode. Copy and paste into WhatsApp Web.
+  </p>
+</section>
+
+<div class="card" role="region" aria-labelledby="wa-form-title">
+  <h2 id="wa-form-title">Send WhatsApp</h2>
+
+  <form method="post" action="{{ url_for('admin_whatsapp') }}">
+    <label for="date">Date</label>
+    <input type="date" id="date" name="date"
+           value="{{ selected_date or today.isoformat() }}">
+
+    <label for="mode">Mode</label>
+    <select id="mode" name="mode">
+      <option value="morning" {% if selected_mode == 'morning' %}selected{% endif %}>Morning</option>
+      <option value="night"   {% if selected_mode == 'night' %}selected{% endif %}>Night</option>
+      <option value="both"    {% if selected_mode == 'both' %}selected{% endif %}>Both</option>
+    </select>
+
+    <button type="submit" class="btn">Generate</button>
+  </form>
+</div>
+
+<div class="card" aria-label="WhatsApp text preview">
+  <h3>Preview</h3>
+
+  {% if result.text %}
+    <p class="muted">Single message:</p>
+    <pre>{{ result.text }}</pre>
+
+    <a class="btn green" href="{{ result.wa_link }}" target="_blank" rel="noopener">
+      Open WhatsApp Web
+    </a>
+
+  {% elif result.text_morning or result.text_night %}
+
+    {% if result.text_morning %}
+      <p class="muted">Morning message:</p>
+      <pre>{{ result.text_morning }}</pre>
+
+      <a class="btn green" href="{{ result.wa_link_morning }}" target="_blank" rel="noopener">
+        Open Morning WhatsApp
+      </a>
+    {% endif %}
+
+    {% if result.text_night %}
+      <p class="muted">Night message:</p>
+      <pre>{{ result.text_night }}</pre>
+
+      <a class="btn green" href="{{ result.wa_link_night }}" target="_blank" rel="noopener">
+        Open Night WhatsApp
+      </a>
+    {% endif %}
+
+  {% else %}
+    <p class="muted">No message yet. Choose a date and mode, then click Generate.</p>
+  {% endif %}
+</div>

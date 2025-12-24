@@ -1,35 +1,96 @@
 {% extends "base.html" %}
-{% block title %}About — SoulStart{% endblock %}
 
-<section class="hero" style="background-image:url('{{ url_for('static', filename='img/hero_day.jpg') }}')">
-  <div class="hero-inner">
-    <h1>About Silent SoulConnect Ministry</h1>
-    <p class="sub">More of Him, less of us — Jesus at the center.</p>
+{% block content %}
+
+<!-- Hero Section -->
+<section class="about-hero">
+  <video class="bg-video" autoplay muted loop playsinline>
+    <source src="{{ url_for('static', filename='img/videos/seaside 1.mp4') }}" type="video/mp4">
+  </video>
+
+  <div class="overlay"></div>
+
+  <div class="hero-content">
+    <div>
+      <h1>Silent SoulConnect Ministry</h1>
+      <p class="tagline">More of Him, less of us — Jesus at the center.</p>
+    </div>
   </div>
 </section>
 
-{% block content %}
-  <h1>About Silent SoulConnect Ministry</h1>
-  <p class="subtle">More of Him, less of us — Jesus at the center.</p>
+<!-- About Content -->
+<section class="about-content container">
+
+  <h2>Our Heart</h2>
+  <p>
+    Many Deaf and Hard of Hearing individuals are present in faith spaces,
+    yet not truly included. Misunderstanding, unclear communication, and
+    past experiences of embarrassment or control have caused some to quietly
+    withdraw — especially from church life.
+  </p>
+
+  <p>
+    Silent SoulConnect Ministry exists to change that.
+  </p>
+
+  <p>
+    We serve the Deaf and Hard of Hearing community through
+    <strong>accessible devotionals, prayer, and Bible study</strong>,
+    bringing Scripture to life in ways that respect how Deaf individuals
+    understand, process, and live out God’s Word.
+    SoulStart invites you to rise in faith and rest in grace —
+    every day, morning and night.
+  </p>
+
+  <ul class="muted">
+  <li>Short devotionals (morning + night)</li>
+  <li>Prayer support and encouragement</li>
+  <li>Study content designed for clarity and accessibility</li>
+</ul>
+
+  <blockquote>
+    “For the message of the cross is the power of God.”
+    <br><span>— 1 Corinthians 1:18</span>
+  </blockquote>
+
+  <h2>Who We Are</h2>
+  <p>
+    Led by an evangelist and counselor with lived Deaf experience,
+    we point to the hope of Christ through
+    <strong>clear Scripture, prayer, and practical love</strong>.
+  </p>
+
+  <p>
+    This is a space for reflection, restoration, and action —
+    where faith is not merely observed,
+    but <strong>understood, embraced, and lived</strong>.
+  </p>
+
+  <p class="muted small-note">
+  “Go therefore and make disciples of all nations.” — Matthew 28:19
+</p>
 
   <div class="card">
-    <h3>Our Heart</h3>
-    <p>
-      We serve the Deaf and Hard of Hearing community through accessible devotionals, prayer, and study.
-      SoulStart invites you to rise in faith and rest in grace — every day, morning and night.
-    </p>
-    <p>
-      “For the message of the cross is the power of God.” (1 Corinthians 1:18)
-    </p>
+  <h3>New Here?</h3>
+  <p>
+    Start with a short, gentle study designed for clarity and encouragement.
+    No pressure. No rush. Just Scripture, explained simply. Return daily for morning and night devotion.
+  </p>
+
+  <div class="hero-actions">
+    <a class="btn" href="{{ url_for('study_index') }}">Begin Your First Study</a>
+    <a class="btn soft" href="{{ url_for('volunteer') }}">Volunteer</a>
   </div>
 
-  <div class="card">
-    <h3>Who We Are</h3>
-    <p>
-      Led by an evangelist and counselor, we point to the hope of Christ —
-      through Scripture, prayer, and practical love. This space is for reflection, restoration, and action.
-    </p>
-  </div>
+  <p class="small-note muted" style="margin-top:.75rem">
+    Volunteers support accessibility, prayer, encouragement, and simple study preparation —
+    serving quietly so others may grow in faith.
+  </p>
+</div>
 
-  <p><a class="btn soft" href="{{ url_for('home') }}">🏠 Back Home</a></p>
+</section>
+
 {% endblock %}
+
+
+

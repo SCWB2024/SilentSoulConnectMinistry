@@ -2,8 +2,10 @@
 {% block title %}Study — SoulStart{% endblock %}
 
 {% block content %}
-<section class="hero hero-day" style="background-image:url('{{ url_for('static', filename='img/hero_day.jpg') }}')">
-  <div class="hero-inner" style="padding:24px 22px;">
+<section class="hero {{ hero_class }}"
+        {% if hero_bg %}style="background-image:url('{{ url_for('static', filename=hero_bg) }}')" {% endif %}>
+  <div class="hero-inner" style="padding:28px 22px;">
+    
     <h1>Study Series</h1>
     <p class="muted">Bible lessons in simple language, ready for sign language and visual teaching.</p>
   </div>

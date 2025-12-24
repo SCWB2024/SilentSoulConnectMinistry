@@ -12,7 +12,7 @@
 <div class="card admin-card">
   <h3>Send WhatsApp</h3>
 
-  <form id="waForm" method="post">
+ <form id="waForm" method="post" action="{{ url_for('admin_whatsapp_send') }}">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
     <div class="row">
@@ -80,39 +80,68 @@
 
   function show(data){
     status.classList.remove('hidden');
-    try { status.textContent = JSON.stringify(data, null, 2); }
-    catch { status.textContent = String(data); }
+    status.textContent = (typeof data === "string") ? data : JSON.stringify(data, null, 2);
   }
 
-  function summarize(api){
-    if (!api || typeof api !== 'object') return api;
-    if (Array.isArray(api.results)){
-      const brief = api.results.map(r => ({
-        mode: r.mode, ok: r.ok, code: r.returncode,
-        hint: (r.stderr && r.stderr.slice(-160)) || undefined
-      }));
-      return { ok: api.ok, results: brief };
-    }
-    return api;
-  }
-
-  form.addEventListener('submit', async e => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+
     status.classList.add('hidden');
     submit.disabled = true;
     submit.textContent = 'Sending…';
 
     const fd = new FormData(form);
+    const isDryRun = fd.get('dry_run') === 'on';
+
+    // ✅ Open immediately (must be inside click)
+    let popup = null;
+    if (!isDryRun) {
+      popup = window.open('', '_blank'); // <-- no noopener here
+    }
+
     try {
       const res = await fetch('{{ url_for("admin_whatsapp_send") }}', {
         method: 'POST',
         body: fd,
         credentials: 'same-origin'
       });
-      let data = await res.json().catch(()=>({ok:false,error:'Bad response'}));
-      show(summarize(data));
-    } catch(err){
-      show({ok:false,error:String(err)});
+
+      const ct = res.headers.get('content-type') || '';
+      const data = ct.includes('application/json') ? await res.json() : { ok:true, body: await res.text() };
+
+      show(data);
+
+      if (!isDryRun) {
+        // ✅ pick correct URL key
+        const mode = (fd.get('mode') || '').toString().toLowerCase();
+        let url = null;
+
+        if (mode === 'both') {
+          url = data.share_web_morning || data.share_wa_morning || data.share_api_morning;
+        } else {
+          url = data.share_web || data.share_wa || data.share_api;
+        }
+
+        // ✅ If popup blocked or url missing, show it clearly
+        if (!url) {
+          if (popup) popup.close();
+          show({ ok:false, error:"No WhatsApp URL returned", mode, keys: Object.keys(data || {}) });
+          return;
+        }
+
+        // ✅ Navigate popup
+        if (popup) {
+          popup.location.href = url;
+          popup.focus();
+        } else {
+          // popup blocked => fallback: open in same tab
+          window.location.href = url;
+        }
+      }
+
+    } catch (err) {
+      if (popup) popup.close();
+      show({ ok:false, error:String(err) });
     } finally {
       submit.disabled = false;
       submit.textContent = 'Send';

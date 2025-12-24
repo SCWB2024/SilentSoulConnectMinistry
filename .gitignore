@@ -23,10 +23,23 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-*.jpg
-*.png
+# Allow SoulStart static assets (must unignore folders first)
+!soulstart/static/
+!soulstart/static/**
+
+!soulstart/static/img/
+!soulstart/static/img/**
+
+!soulstart/static/img/verses/
+!soulstart/static/img/verses/**
+
+!soulstart/static/img/videos/
+!soulstart/static/img/videos/**
 
 
 # --- Old / Dev / Backup Scripts ---
 check_env.py
 video_sunset_sign.py
+
+# --- Private ---
+private/

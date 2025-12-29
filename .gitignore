@@ -36,7 +36,6 @@ Thumbs.db
 !soulstart/static/img/videos/
 !soulstart/static/img/videos/**
 
-
 # --- Old / Dev / Backup Scripts ---
 check_env.py
 video_sunset_sign.py

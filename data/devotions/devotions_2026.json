@@ -1,5 +1,3 @@
-#### January Devotions for 2026####
-
 [
   {
     "date": "2026-01-01",
@@ -619,11 +617,8 @@
       "prayer": "Lord, keep my hope alive as I enter February."
     },
     "tags": ["2026"]
-  }
-]
+  },
 
-#February Devotions 2026 #
-[
   {
     "date": "2026-02-01",
     "theme": "Silent Strength — Trust Without Fear",
@@ -1202,11 +1197,8 @@
       "prayer": "Lord, let Your hope fill my night hours."
     },
     "tags": ["2026"]
-  }
-]
+  },
 
-#March Devotions 2026 #
-[
   {
     "date": "2026-03-01",
     "theme": "Silent Strength — Peace Beyond Understanding",
@@ -1825,21 +1817,140 @@
       "prayer": "Lord, I place this day back in Your hands; thank You for every bit of grace within it."
     },
     "tags": ["2026"]
-  }
-]
-[
+  },
+
   {
-    "date": "2026-03-01",
-    "theme": "Silent Strength — Wise Rest",
+    "date": "2026-04-01",
+    "theme": "Grace for Today — New Every Morning",
     "morning": {
-      "verse_ref": "Psalm 127:2",
-      "verse_text": "In vain you rise early and stay up late, toiling for food to eat—He grants sleep to those He loves.",
-      "verse_meaning": "Rest is a gift from God for those who trust Him.",
-      "body": "💖 I DECLARE I will rest wisely today.\n💖 I REFUSE overworking myself.\n💖 I WILL trust God’s provision.",
-      "prayer": "Lord, help me find wise rest in You today."
+      "verse_ref": "Lamentations 3:22–23",
+      "verse_text": "His mercies are new every morning; great is Your faithfulness.",
+      "verse_meaning": "Each day begins with fresh mercy, not yesterday’s failure.",
+      "body": "💖 I RECEIVE new mercy today.\n💖 I RELEASE yesterday’s weight.\n💖 I WALK forward in God’s faithfulness.",
+      "prayer": "Lord, thank You for new mercy today. I step forward trusting Your faithfulness."
     },
     "night": {
-      "verse_ref": "Psalm 127:2",
-      "verse_text": "In vain you rise early and stay up late, toiling for food to eat—He grants sleep to those He loves.",
-      "verse_meaning": "Sleep is a blessing from God for those who rely on Him.",
-      "body": "💖 I DECLARE I will sleep wisely tonight.\n💖 I REFUSE restless striving.\n💖 I WILL trust God’s care.",
+      "verse_ref": "Lamentations 3:22–23",
+      "verse_text": "His mercies are new every morning; great is Your faithfulness.",
+      "verse_meaning": "God’s faithfulness carried you through the entire day.",
+      "body": "💖 I ACKNOWLEDGE God’s care today.\n💖 I RELEASE what I could not finish.\n💖 I REST in His faithfulness.",
+      "prayer": "Lord, thank You for sustaining me today. I rest in Your faithful care."
+    },
+    "tags": ["2026","Q2"]
+  },
+  {
+    "date": "2026-04-02",
+    "theme": "Grace for Today — Enough for Me",
+    "morning": {
+      "verse_ref": "2 Corinthians 12:9",
+      "verse_text": "My grace is sufficient for you.",
+      "verse_meaning": "God’s grace meets today’s weakness without delay.",
+      "body": "💖 I ACCEPT God’s grace today.\n💖 I DO NOT fear my weakness.\n💖 I TRUST His strength in me.",
+      "prayer": "Lord, Your grace is enough for me today. Strengthen me where I am weak."
+    },
+    "night": {
+      "verse_ref": "2 Corinthians 12:9",
+      "verse_text": "My grace is sufficient for you.",
+      "verse_meaning": "Grace remained sufficient through every moment today.",
+      "body": "💖 I RELEASE today’s struggles.\n💖 I TRUST God met every need.\n💖 I REST knowing grace was enough.",
+      "prayer": "Lord, thank You that Your grace carried me through this day."
+    },
+    "tags": ["2026","Q2"]
+  },
+  {
+    "date": "2026-04-03",
+    "theme": "Grace for Today — A Gift Received",
+    "morning": {
+      "verse_ref": "Ephesians 2:8",
+      "verse_text": "By grace you have been saved.",
+      "verse_meaning": "Grace is given freely, not earned by effort.",
+      "body": "💖 I RECEIVE God’s gift of grace.\n💖 I STOP striving for approval.\n💖 I WALK freely today.",
+      "prayer": "Lord, thank You for the gift of grace. Help me live freely today."
+    },
+    "night": {
+      "verse_ref": "Ephesians 2:8",
+      "verse_text": "By grace you have been saved.",
+      "verse_meaning": "Grace still stands when effort feels small.",
+      "body": "💖 I RELEASE self-judgment.\n💖 I REMEMBER grace holds me.\n💖 I REST without fear.",
+      "prayer": "Lord, I rest tonight knowing Your grace remains steady."
+    },
+    "tags": ["2026","Q2"]
+  },
+  {
+    "date": "2026-04-04",
+    "theme": "Grace for Today — Come Boldly",
+    "morning": {
+      "verse_ref": "Hebrews 4:16",
+      "verse_text": "Let us come boldly to the throne of grace.",
+      "verse_meaning": "Grace invites confident access to God today.",
+      "body": "💖 I APPROACH God with confidence.\n💖 I DO NOT hide in fear.\n💖 I RECEIVE help from grace.",
+      "prayer": "Lord, I come boldly today because of Your grace."
+    },
+    "night": {
+      "verse_ref": "Hebrews 4:16",
+      "verse_text": "Let us come boldly to the throne of grace.",
+      "verse_meaning": "God remained accessible throughout the day.",
+      "body": "💖 I THANK God for open access.\n💖 I RELEASE today’s worries.\n💖 I REST near His presence.",
+      "prayer": "Lord, thank You for welcoming me all day. I rest in Your presence."
+    },
+    "tags": ["2026","Q2"]
+  },
+  {
+    "date": "2026-04-05",
+    "theme": "Grace for Today — Peace with God",
+    "morning": {
+      "verse_ref": "Romans 5:1",
+      "verse_text": "We have peace with God through our Lord Jesus Christ.",
+      "verse_meaning": "Grace brings peace that steadies the heart.",
+      "body": "💖 I RECEIVE peace today.\n💖 I RELEASE inner tension.\n💖 I WALK calmly with God.",
+      "prayer": "Lord, let Your peace guide my heart and steps today."
+    },
+    "night": {
+      "verse_ref": "Romans 5:1",
+      "verse_text": "We have peace with God through our Lord Jesus Christ.",
+      "verse_meaning": "Peace remains even after a full day.",
+      "body": "💖 I SETTLE my heart.\n💖 I TRUST God’s peace.\n💖 I REST quietly tonight.",
+      "prayer": "Lord, I rest in the peace You have given me."
+    },
+    "tags": ["2026","Q2"]
+  },
+  {
+    "date": "2026-04-06",
+    "theme": "Grace for Today — Grace Upon Grace",
+    "morning": {
+      "verse_ref": "John 1:16",
+      "verse_text": "From His fullness we have all received, grace upon grace.",
+      "verse_meaning": "Grace flows continuously from God’s fullness.",
+      "body": "💖 I RECEIVE fresh grace today.\n💖 I DO NOT fear lack.\n💖 I TRUST God’s fullness.",
+      "prayer": "Lord, thank You for grace upon grace as I begin this day."
+    },
+    "night": {
+      "verse_ref": "John 1:16",
+      "verse_text": "From His fullness we have all received, grace upon grace.",
+      "verse_meaning": "Grace continued to flow through the entire day.",
+      "body": "💖 I ACKNOWLEDGE God’s provision.\n💖 I RELEASE fatigue.\n💖 I REST in His fullness.",
+      "prayer": "Lord, thank You for sustaining me with grace today."
+    },
+    "tags": ["2026","Q2"]
+  },
+  {
+    "date": "2026-04-07",
+    "theme": "Grace for Today — Grace for All",
+    "morning": {
+      "verse_ref": "Titus 2:11",
+      "verse_text": "The grace of God has appeared, bringing salvation for all people.",
+      "verse_meaning": "Grace reaches everyone without exclusion.",
+      "body": "💖 I ACCEPT God’s grace today.\n💖 I DO NOT feel forgotten.\n💖 I WALK knowing grace includes me.",
+      "prayer": "Lord, thank You that Your grace reaches me today."
+    },
+    "night": {
+      "verse_ref": "Titus 2:11",
+      "verse_text": "The grace of God has appeared, bringing salvation for all people.",
+      "verse_meaning": "Grace remained available in every moment today.",
+      "body": "💖 I RELEASE the day.\n💖 I TRUST God’s reach.\n💖 I REST knowing grace covers all.",
+      "prayer": "Lord, I rest tonight knowing Your grace surrounds me."
+    },
+    "tags": ["2026","Q2"]
+  }
+]
+   

@@ -24,8 +24,9 @@ __pycache__/
 Thumbs.db
 
 # Allow SoulStart static assets (must unignore folders first)
-!soulstart/static/
-!soulstart/static/**
+# --- SoulStart static assets (tracked) ---
+!soulstart/static/css/
+!soulstart/static/css/**
 
 !soulstart/static/img/
 !soulstart/static/img/**
@@ -36,9 +37,19 @@ Thumbs.db
 !soulstart/static/img/videos/
 !soulstart/static/img/videos/**
 
+# Ignore runtime / user-generated files
+soulstart/static/uploads/
+soulstart/static/tmp/
+
 # --- Old / Dev / Backup Scripts ---
 check_env.py
 video_sunset_sign.py
 
 # --- Private ---
 private/
+
+logs/*.log
+
+stash_changes.txt*
+
+*old.html

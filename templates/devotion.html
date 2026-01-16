@@ -8,11 +8,16 @@
     <h1>
       {% if mode == "night" %}🌙 Night Devotion{% else %}🌅 Morning Devotion{% endif %}
     </h1>
-    <p class="muted">
-      {{ today.strftime("%A, %B %d, %Y") }}
-      {% if entry.theme %} • {{ entry.theme }}{% endif %}
-    </p>
-  </div>
+
+<p class="muted">
+  {{ today.strftime("%A, %B %d, %Y") }}
+</p>
+
+{% if entry.theme %}
+  <div class="badge-theme">🏷 {{ entry.theme }}</div>
+{% endif %}
+
+    </div>
 </section>
 
 <div class="chip-row" style="margin:12px 0 18px;">
@@ -27,48 +32,139 @@
   </a>
 </div>
 
-{% set has_content = entry and (entry.theme or entry.verse_ref or entry.verse_text or entry.body) %}
+{% if yday_url is defined and yday_url %}
+  <div class="yday-link">
+    <a href="{{ yday_url }}">← Yesterday</a>
+    <span class="sep">|</span>
+    <a href="{{ url_for('today', mode=mode) }}">Today</a>
+  </div>
+{% endif %}
+
+{% set has_content = entry and (entry.theme or entry.verse_ref or entry.verse_text or entry.body or entry.verse_meaning or entry.prayer) %}
 
 {% if has_content %}
   <article class="card{% if mode=='night' %} night-tone{% endif %}">
+
+
+    {# THEME #}
+    {% if entry.theme %}
+      <div class="badge-theme">🏷 Theme: {{ entry.theme }}</div>
+    {% endif %}
+
+    {# VERSE #}
     {% if entry.verse_ref or entry.verse_text %}
-      <p>
-        <strong>📖 {{ entry.verse_ref or "" }}</strong>
-        {% if entry.verse_text %} — {{ entry.verse_text }}{% endif %}
-      </p>
+      <div class="verse-box">
+        <p class="verse-line">
+          <strong>📖 {{ entry.verse_ref or "" }}</strong>
+          {% if entry.verse_text %} — {{ entry.verse_text }}{% endif %}
+        </p>
+      </div>
     {% endif %}
 
+    {# MEANING (separate, looks like teaching) #}
     {% if entry.verse_meaning %}
-      <p class="muted">
-        {{ entry.verse_meaning }}
-      </p>
+      <div class="meaning-box">
+        <h3 class="section-title">💡 Meaning</h3>
+        <p class="meaning-text">{{ entry.verse_meaning }}</p>
+      </div>
     {% endif %}
 
+    {# DECLARATIONS / BODY (separate from prayer) #}
     {% if entry.body %}
-      <p>
+      <div class="declaration-box">
         {{ entry.body | replace('\n', '<br>') | safe }}
-      </p>
+      </div>
     {% endif %}
 
-    {% if entry.prayer %}
-      <p>🙏 {{ entry.prayer }}</p>
-    {% else %}
-      {% if mode == "night" %}
-        <p>🙏 Lord, quiet my mind and keep me in Your care. Amen.</p>
+    {# PRAYER (always last, looks like closing) #}
+    <div class="prayer-box">
+      <h3 class="section-title">🙏 Prayer</h3>
+
+      {% if entry.prayer %}
+        <p>{{ entry.prayer }}</p>
       {% else %}
-        <p>🙏 Lord, order my steps today. Amen.</p>
+        {% if mode == "night" %}
+          <p>Lord, quiet my mind and keep me in Your care. Amen.</p>
+        {% else %}
+          <p>Lord, order my steps today. Amen.</p>
+        {% endif %}
       {% endif %}
-    {% endif %}
+    </div>
 
     <p style="margin-top:12px">
       <a class="btn" href="{{ join_url }}" target="_blank" rel="noopener">💬 Join WhatsApp</a>
       <a class="btn soft" href="{{ url_for('home') }}">🏠 Back Home</a>
     </p>
   </article>
+
 {% else %}
   <div class="card{% if mode=='night' %} night-tone{% endif %}">
     <p class="muted">No devotion entry found for this date.</p>
     <p><a class="btn soft" href="{{ url_for('home') }}">🏠 Back Home</a></p>
   </div>
 {% endif %}
+
+<style>
+/* Theme badge */
+.badge-theme{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(0,0,0,0.10);
+  margin-top:10px;
+  font-size:0.95rem;
+}
+
+/* Yesterday link */
+.yday-link{ margin: 6px 0 14px; }
+.yday-link a{ text-decoration:none; opacity:0.9; }
+.yday-link a:hover{ opacity:1; text-decoration:underline; }
+
+/* Section titles */
+.section-title{
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+/* Verse */
+.verse-box{
+  margin-bottom: 10px;
+}
+.verse-line{
+  margin:0;
+}
+
+/* Meaning box (teaching look) */
+.meaning-box{
+  background:#f6fbf8;
+  border-left:4px solid #0ea36e;
+  padding:14px 16px;
+  border-radius:12px;
+  margin:14px 0;
+}
+.meaning-text{
+  margin:0;
+  font-size:1.05rem;
+}
+
+/* Declarations/body (bold, distinct from prayer) */
+.declaration-box{
+  margin:14px 0;
+  padding:12px 14px;
+  border-radius:12px;
+  background:rgba(0,0,0,0.04);
+  font-weight:600;
+  line-height:1.55;
+}
+
+/* Prayer closing */
+.prayer-box{
+  margin-top:18px;
+  padding-top:12px;
+  border-top:1px dashed rgba(0,0,0,0.18);
+}
+.prayer-box p{ margin:0; }
+</style>
+
 {% endblock %}

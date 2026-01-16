@@ -11,6 +11,13 @@
   </div>
 </section>
 
+{# Devotion / Study switch — clear choice #}
+<div class="chip-row" style="margin: 16px 0 22px;">
+  <a class="chip" href="{{ url_for('today', mode='morning') }}">🌅 Today’s Devotion</a>
+  <a class="chip" href="{{ url_for('today', mode='night') }}">🌙 Night Devotion</a>
+  <span class="chip active" style="pointer-events:none;">📚 Study Hub</span>
+</div>
+
 <div class="card">
   {% if lessons %}
     <ul>

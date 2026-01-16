@@ -7,15 +7,15 @@ import secrets
 import logging
 import subprocess
 import sys
+from turtle import mode
 import webbrowser
 
 import logging
 logger = logging.getLogger(__name__)
 logger.info("message")
-logger.exception("error")  # inside except blocks
 
 from threading import Timer
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from pathlib import Path
 
 from urllib.parse import quote
@@ -94,9 +94,9 @@ DEVOTIONS_ROOT = Path(
     os.environ.get("DEVOTIONS_ROOT", str(BASE_DIR / "devotions_legacy"))
 )
 
+# ---------- Hero backgrounds ----------
 HERO_DAY_BG = "img/hero_day.jpg"
-HERO_NIGHT_BG = "img/hero_night.jpg"  # change to your real night image name if different
-HERO_NIGHT_BG = HERO_DAY_BG
+HERO_NIGHT_BG = "img/hero_night.jpg"
 
 # ---- Now safe to define files ----
 VERSES_FILE = DATA_DIR / "verses.json"
@@ -681,13 +681,19 @@ def load_verses() -> list[dict]:
         return data if isinstance(data, list) else fallback
     except Exception:
         return fallback
-
-
+    
 # ---------- Home ----------
 @app.route("/", endpoint="home")
 def home():
     ctx = common_page_ctx(active="home")
     return render_template("home.html", **ctx)
+
+
+# ---------- Devotion / Study Hub ----------
+@app.route("/devotion-study", endpoint="devotion_study")
+def devotion_study():
+    ctx = common_page_ctx(active="devotion_study")
+    return render_template("devotion_study.html", **ctx)
 
 
 # ---------- Today ----------
@@ -716,7 +722,7 @@ def today_view():
     entry = load_devotion_for(target_date, mode)
     preview_text = build_whatsapp_text(entry, mode, target_date)
 
-    hero_bg = "img/hero_night.jpg" if mode == "night" else "img/hero_day.jpg"
+    hero_bg = HERO_NIGHT_BG if mode == "night" else HERO_DAY_BG
     hero_class = "hero night-tone" if mode == "night" else "hero"
 
     ctx = common_page_ctx(active="today")
@@ -729,8 +735,13 @@ def today_view():
         "whatsapp_preview": preview_text,
     })
 
-    return render_template("devotion.html", **ctx)
+    # Yesterday link
+    yday_date = target_date - timedelta(days=1)
+    yday_str = yday_date.strftime("%Y-%m-%d")
+    ctx["yday_url"] = url_for("today", date=yday_str, mode=mode)
+    ctx["yday_label"] = "← Yesterday’s devotion"
 
+    return render_template("devotion.html", **ctx)
 
 # ---------- Verses ----------
 @app.route("/verses", endpoint="verses")

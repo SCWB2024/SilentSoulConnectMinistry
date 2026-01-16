@@ -221,36 +221,34 @@ p { margin: .4rem 0; }
 /* =============================
    07) CARDS + GRIDS
    ============================= */
-.card {
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 16px;
-  margin: 10px 0;
-  background: #fff;
-  box-shadow: 0 4px 14px rgba(0,0,0,.04);
+/* --- Study Series Grid & Cards (UI Polish #2) --- */
+.series-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap:14px;
 }
 
-.card.night-tone {
-  background: #0d1020;
-  color: #f3f6ff;
-  border-color: #1c2347;
+.series-card{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px;
 }
 
-.card h3::after {
-  content: "";
-  display: block;
-  width: 56px;
-  height: 3px;
-  background: var(--gold);
-  margin-top: 6px;
-  border-radius: 2px;
+.series-icon{
+  font-size:1.7rem;
+  line-height:1;
+  flex:0 0 auto;
 }
 
-.cards {
-  display: grid;
-  gap: 14px;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+.series-meta{ min-width:0; }
+
+.series-title{
+  margin:0 0 4px;
+  font-weight:800;
 }
+
+.series-sub{ margin:0; }
 
 
 /* =============================
@@ -295,9 +293,9 @@ p { margin: .4rem 0; }
 }
 
 /* SoulStart Home Page Hero Adjustments */
-.hero.night-tone {
-  background-color: #020617;
-  background-blend-mode: multiply;
+.hero.night-tone{
+  background-color: transparent;
+  background-blend-mode: normal;
 }
 
 .hero-container {
@@ -411,6 +409,48 @@ body.bg-video .topnav a.active{
 /* =============================
    11) PAGE HELPERS (Page Hero, Verse Grid)
    ============================= */
+/* --- Devotion helpers: Theme badge + Yesterday link + Meaning block --- */
+.badge-theme{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(0,0,0,0.10);
+  margin-top:10px;
+  font-size:0.95rem;
+}
+
+.yday-link{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin: 6px 0 14px;
+}
+
+.yday-link a{
+  text-decoration:none;
+  opacity:0.9;
+}
+
+.yday-link a:hover{
+  opacity:1;
+  text-decoration:underline;
+}
+
+.yday-link .sep{
+  opacity:0.5;
+}
+
+.section-title{
+  margin:18px 0 6px;
+  font-size:1.05rem;
+  font-weight:700;
+}
+
+.meaning-text{ margin-top:0; }
+
+.verse-block{ margin-bottom:6px; }
+.verse-line{ margin:0; }
+
 .page-hero{
   margin: 0 0 1rem 0;
   padding:1.25rem 1.5rem;
@@ -423,6 +463,32 @@ body.bg-video .topnav a.active{
 .page-hero .subtitle{margin:0;opacity:.8}
 
 /* Verse Grid */
+/* --- Verse Hero Overlay (for Study series pages) --- */
+.verse-hero{
+  border-radius:16px;
+  min-height:200px;
+  background-size:cover;
+  background-position:center;
+  position:relative;
+  overflow:hidden;
+  margin:12px 0 16px;
+}
+
+.verse-overlay{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.75));
+  color:#fff;
+  padding:18px 16px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+}
+
+.verse-title{ margin:0; font-weight:800; }
+
+.verse-text{ margin:6px 0 0; opacity:.95; }
+
 .verses-grid{
   display:grid;
   gap:1.25rem;

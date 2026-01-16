@@ -3,59 +3,69 @@
 
 {% block content %}
 
-{# HERO WITH IMAGE (USES EXISTING .hero STYLES) #}
+{# HERO WITH IMAGE #}
 <section class="hero"
          style="background-image: url('{{ url_for('static', filename='img/hero_day.jpg') }}'); margin-bottom: 1.5rem;">
   <div class="hero-inner">
-      <h1>*WELCOME TO SOULSTART* - Come, all who are thirsty.</h1>
-    
+    <h1>*WELCOME TO SOULSTART* — Come, all who are thirsty.</h1>
 
-      <p>
-      SoulStart is a quiet space to rise in faith every morning and rest in grace every night.
-    </p>
+    <p>SoulStart is a quiet space to rise in faith every morning and rest in grace every night.</p>
     <p class="muted small-note">
-      Simple. Visual. Accessible — sunrise & sunset devotion, prayer, and study in one place.
+
+{# DEAF-FIRST CUES (quick scan) #}
+  <div class="chip-row" style="margin: 0 0 18px;">
+  <span class="chip" style="pointer-events:none;"><p>🤟 Deaf-friendly</p></span>
+  <span class="chip" style="pointer-events:none;"><p>🧠 Simple English</p></span>
+  <span class="chip" style="pointer-events:none;"><p>📱 Share to WhatsApp</p  ></span>
+</div>    
     </p>
   </div>
 </section>
 
-{# 3 MAIN AREAS: DEVOTION / STUDY / PRAYER #}
-<section class="page-hero" style="margin-bottom: 1.5rem;">
-  <h1>Daily rhythm with SoulStart</h1>
+{# CORE USER PATH (3 blocks) #}
+<section class="page-hero" style="margin-bottom: 1.2rem;">
+  <h1>~~Daily Rhythm with SoulStart~~</h1>
   <p class="subtitle">
     One small step in the morning, one quiet surrender at night. The rest of the day belongs to Him.
   </p>
 </section>
 
 <section>
-  <div class="cards">
-    <article class="card">
-      <h3>Daily Devotion</h3>
-      <p>
-        Sunrise and sunset pages with a clear verse, simple meaning, and short prayers you can share.
-      </p>
-      <a href="{{ url_for('today') }}" class="link-inline">Open today’s devotion →</a>
+  <div class="core-grid">
+
+    <article class="core-card">
+      <div class="core-ico" aria-hidden="true">🌅</div>
+      <h3 class="core-title">Devotion / Study</h3>
+      <p class="core-sub">Daily devotion • Simple meaning • Study series</p>
+      <div class="core-actions">
+        <a class="btn" href="{{ url_for('today') }}">Open Today</a>
+        <a class="btn soft" href="{{ url_for('study_index') }}">Study Hub</a>
+      </div>
     </article>
 
-    <article class="card">
-      <h3>Study Hub</h3>
-      <p>
-        Weekly series designed for Deaf and visual learners, using slides and plain language.
-      </p>
-      <a href="{{ url_for('study_index') }}" class="link-inline">Explore Bible studies</a>
+    <article class="core-card">
+      <div class="core-ico" aria-hidden="true">🙏</div>
+      <h3 class="core-title">Prayer</h3>
+      <p class="core-sub">Submit a request • Receive comfort</p>
+      <div class="core-actions">
+        <a class="btn" href="{{ url_for('prayer') }}">Request Prayer</a>
+        <a class="btn soft" href="{{ url_for('about') }}">How it works</a>
+      </div>
     </article>
 
-    <article class="card">
-      <h3>Prayer & Care</h3>
-      <p>
-        Share your burden, ask for prayer, and keep a gentle record of what God has done.
-      </p>
-      <a href="{{ url_for('prayer') }}" class="link-inline">Send a prayer request →</a>
+    <article class="core-card">
+      <div class="core-ico" aria-hidden="true">📖</div>
+      <h3 class="core-title">Verses</h3>
+      <p class="core-sub">Quick verse pages • Easy reading</p>
+      <div class="core-actions">
+        <a class="btn" href="{{ url_for('verses') }}">Open Verses</a>
+        </div>
     </article>
+
   </div>
 </section>
 
-{# QUICK LINKS, BUT LIGHT #}
+{# OPTIONAL: QUICK LINKS (can keep for now) #}
 <section style="margin-top: 2rem;">
   <h2>Quick links</h2>
   <div class="quick-actions">
@@ -67,5 +77,32 @@
     <a href="{{ url_for('volunteer') }}" class="chip-link">🤝 Volunteer</a>
   </div>
 </section>
+
+<style>
+.core-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap:16px;
+  margin-top:12px;
+}
+.core-card{
+  background:#fff;
+  border-radius:18px;
+  padding:18px;
+  border:1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.06);
+}
+.core-ico{
+  width:56px; height:56px;
+  border-radius:14px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,0.06);
+  font-size:1.8rem;
+  margin-bottom:10px;
+}
+.core-title{ margin:0 0 6px; font-weight:900; font-size:1.2rem; }
+.core-sub{ margin:0 0 14px; opacity:0.9; }
+.core-actions{ display:flex; gap:10px; flex-wrap:wrap; }
+</style>
 
 {% endblock %}

@@ -6,7 +6,7 @@
   <title>{% block title %}SoulStart Devotion{% endblock %}</title>
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
-  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+ <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
 
   <!-- Social cards -->
   <meta property="og:type" content="website">
@@ -37,30 +37,35 @@
       </div>
     </div>
 
-    <nav class="topnav" role="navigation" aria-label="Main">
-      <a href="{{ url_for('home') }}"              class="{{ 'active' if active=='home' else '' }}"      {% if active=='home' %}aria-current="page"{% endif %}>Home</a>
-      <a href="{{ url_for('today') }}"             class="{{ 'active' if active=='today' else '' }}"     {% if active=='today' %}aria-current="page"{% endif %}>Today</a>
-      <a href="{{ url_for('study_index') }}"       class="{{ 'active' if active=='study' else '' }}"     {% if active=='study' %}aria-current="page"{% endif %}>Study</a>
-      <a href="{{ url_for('verses') }}"            class="{{ 'active' if active=='verses' else '' }}"    {% if active=='verses' %}aria-current="page"{% endif %}>Verses</a>
-      <a href="{{ url_for('prayer') }}"            class="{{ 'active' if active=='prayer' else '' }}"    {% if active=='prayer' %}aria-current="page"{% endif %}>Prayer</a>
-      <a href="{{ url_for('about') }}"             class="{{ 'active' if active=='about' else '' }}"     {% if active=='about' %}aria-current="page"{% endif %}>About</a>
-      <a href="{{ url_for('volunteer') }}"         class="{{ 'active' if active=='volunteer' else '' }}" {% if active=='volunteer' %}aria-current="page"{% endif %}>Volunteer</a>
-      <a href="{{ url_for('feedback_view') }}"     class="{{ 'active' if active=='feedback' else '' }}"  {% if active=='feedback' %}aria-current="page"{% endif %}>Feedback</a>
-      
-      {# Admin / Login #}
-      {% if is_authed %}
-        <a href="{{ url_for('admin') }}" class="{{ 'active' if active=='admin' else '' }}">
-          Admin
-        </a>
-        <a href="{{ url_for('logout') }}" class="muted">Logout</a>
-      {% else %}
-        <a href="{{ url_for('login') }}" class="{{ 'active' if active=='login' else '' }}">
-          Admin
-        </a>
-      {% endif %}
+<nav class="topnav">
 
+  <!-- Public -->
+  <a href="{{ url_for('home') }}" class="{{ 'active' if active=='home' else '' }}">Home</a>
 
-    </nav>
+  <!-- Devotion / Study = link to Today (acts as hub) -->
+  <a href="{{ url_for('devotion_study') }}"
+   class="{{ 'active' if active=='devotion_study' else '' }}">
+  Devotion / Study
+</a>
+
+  <a href="{{ url_for('prayer') }}" class="{{ 'active' if active=='prayer' else '' }}">Prayer</a>
+
+  <!-- Donate endpoint in your app is donation -->
+  <a href="{{ url_for('donation') }}" class="{{ 'active' if active=='donation' else '' }}">Donate</a>
+
+  <!-- Get Involved: if you don't have this page yet, temporarily point to volunteer -->
+  <a href="{{ url_for('volunteer') }}" class="{{ 'active' if active=='volunteer' else '' }}">Get Involved</a>
+
+  <!-- Hidden / Restricted -->
+  {% if is_authed %}
+    <a href="{{ url_for('admin') }}" class="{{ 'active' if active=='admin' else '' }}">Admin</a>
+    <a href="{{ url_for('logout') }}" class="muted">Logout</a>
+  {% else %}
+    <a href="{{ url_for('login') }}" class="{{ 'active' if active=='login' else '' }}">Admin</a>
+  {% endif %}
+
+</nav>
+
 
     <a href="{{ url_for('donation') }}" class="fab fab-donate" aria-label="Give">💚</a>
   </header>

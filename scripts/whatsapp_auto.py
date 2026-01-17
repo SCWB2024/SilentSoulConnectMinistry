@@ -275,6 +275,9 @@ def get_message_from_json(mode: str, dt: datetime) -> str:
     return fallback_message("morning", dt)
 
 def ensure_autogui():
+    if platform.system().lower() not in ("windows", "darwin"):
+        print("[Error] Desktop automation is only supported on Windows/macOS.")
+        sys.exit(2)
     try:
         import pyautogui  # type: ignore
         import pyperclip  # type: ignore
@@ -283,6 +286,7 @@ def ensure_autogui():
         print("[Error] Missing deps (install): pip install pyautogui pyperclip")
         print(f"        Details: {e}")
         sys.exit(2)
+
 
 def quick_search_chat(pyautogui, chat: str) -> None:
     """

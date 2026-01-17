@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Devotion / Study — SoulStart{% endblock %}
+
+{% block content %}
+<section class="hero glass">
+  <div class="hero-inner">
+    <h1>Devotion / Study</h1>
+    <p class="muted">Choose what you want to open.</p>
+  </div>
+</section>
+
+<div class="core-grid" style="margin-top:16px;">
+  <article class="core-card">
+    <div class="core-ico" aria-hidden="true">🌅</div>
+    <h3 class="core-title">Today’s Devotion</h3>
+    <p class="core-sub">Morning or Night devotion for today</p>
+    <div class="core-actions">
+      <a class="btn" href="{{ url_for('today', mode='morning') }}">Morning</a>
+      <a class="btn soft" href="{{ url_for('today', mode='night') }}">Night</a>
+    </div>
+  </article>
+
+  <article class="core-card">
+    <div class="core-ico" aria-hidden="true">📚</div>
+    <h3 class="core-title">Study Hub</h3>
+    <p class="core-sub">Series list for Deaf & visual learners</p>
+    <div class="core-actions">
+      <a class="btn" href="{{ url_for('study_index') }}">Open Study Hub</a>
+    </div>
+  </article>
+</div>
+{% endblock %}

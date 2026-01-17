@@ -7,7 +7,6 @@ import secrets
 import logging
 import subprocess
 import sys
-from turtle import mode
 import webbrowser
 
 import logging
@@ -683,6 +682,7 @@ def load_verses() -> list[dict]:
         return fallback
     
 # ---------- Home ----------
+
 @app.route("/", endpoint="home")
 def home():
     ctx = common_page_ctx(active="home")
@@ -697,6 +697,11 @@ def devotion_study():
 
 
 # ---------- Today ----------
+# remove the turtle import completely
+# mode is just a variable from request.args
+# define your own default
+DEFAULT_MODE = "morning"
+
 @app.route("/today", endpoint="today")
 @limiter.limit("20/minute")
 def today_view():

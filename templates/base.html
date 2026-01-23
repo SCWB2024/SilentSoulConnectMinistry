@@ -6,7 +6,7 @@
   <title>{% block title %}SoulStart Devotion{% endblock %}</title>
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
- <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
 
   <!-- Social cards -->
   <meta property="og:type" content="website">
@@ -74,16 +74,7 @@
     {% block content %}{% endblock %}
   </main>
 
-  <footer class="footer" role="contentinfo">
-    <div class="muted">© {{ (today or none) and today.year or "" }} SSCM • {{ theme or "" }}</div>
-    <div class="footer-actions">
-      <a class="btn green" href="{{ join_url }}" target="_blank" rel="noopener">💬 WhatsApp Group</a>
-      <a class="btn soft" href="{{ url_for('home') }}">🏠 Home</a>
-      <button class="btn soft" id="shareSite">🔗 Share site</button>
-    </div>
-  </footer>
-
-  <!-- TTS button -->
+   <!-- TTS button -->
   <button id="ttsToggle" class="btn tts-btn" aria-label="Read page">🔊 Read Page</button>
 
   <!-- Minimal JS (no modal, no extra garbage) -->
@@ -138,6 +129,19 @@
     });
   })();
   </script>
+
+  <div class="footer-social" aria-label="Social links">
+  <a class="icon-link" href="{{ SOCIAL_LINKS.whatsapp }}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+    💬
+  </a>
+  <a class="icon-link" href="{{ SOCIAL_LINKS.facebook }}" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+    📘
+  </a>
+  <a class="icon-link" href="{{ SOCIAL_LINKS.linkedin }}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+    💼
+  </a>
+  <button class="btn soft" id="shareSite">🔗 Share site</button>
+</div>
 
   {% block page_scripts %}{% endblock %}
 </body>

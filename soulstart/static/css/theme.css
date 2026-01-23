@@ -217,6 +217,52 @@ p { margin: .4rem 0; }
   text-decoration: underline;
 }
 
+/* Phase 3: Social / Connection blocks */
+.connect-panel {
+  margin-top: 24px;
+  padding: 18px 18px;
+  border-radius: 18px;
+  background: rgba(2, 6, 23, 0.03);
+  border: 1px solid rgba(2, 6, 23, 0.08);
+}
+
+.connect-panel h2 {
+  margin: 0 0 6px 0;
+}
+
+.connect-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.connect-actions.small .btn {
+  padding: 10px 12px;
+  font-size: 0.95rem;
+}
+
+.footer-social {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.icon-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.10);
+  text-decoration: none;
+}
+
+.icon-link:hover {
+  transform: translateY(-1px);
+}
 
 /* =============================
    07) CARDS + GRIDS
@@ -359,6 +405,35 @@ p { margin: .4rem 0; }
   background: #d1fae5;
 }
 
+.home-grid{
+  display:grid;
+  grid-template-columns: 280px 1fr;
+  gap: 18px;
+  align-items:start;
+  margin-top: 18px;
+}
+
+.home-side .side-box{
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.social-buttons{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:10px;
+}
+
+.btn-share{ margin-top: 10px; width: 100%; }
+
+@media (max-width: 900px){
+  .home-grid{ grid-template-columns: 1fr; }
+}
 
 /* =============================
    10) VIDEO BACKGROUND MODE + GLASS

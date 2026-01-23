@@ -16,7 +16,7 @@
   <div class="chip-row" style="margin: 0 0 18px;">
   <span class="chip" style="pointer-events:none;"><p>🤟 Deaf-friendly</p></span>
   <span class="chip" style="pointer-events:none;"><p>🧠 Simple English</p></span>
-  <span class="chip" style="pointer-events:none;"><p>📱 Share to WhatsApp</p  ></span>
+ 
 </div>    
     </p>
   </div>
@@ -65,7 +65,7 @@
   </div>
 </section>
 
-{# OPTIONAL: QUICK LINKS (can keep for now) #}
+{# QUICK LINKS #}
 <section style="margin-top: 2rem;">
   <h2>Quick links</h2>
   <div class="quick-actions">
@@ -104,5 +104,31 @@
 .core-sub{ margin:0 0 14px; opacity:0.9; }
 .core-actions{ display:flex; gap:10px; flex-wrap:wrap; }
 </style>
+
+<section class="panel connect-panel" aria-label="Stay Connected">
+  <h2>Stay Connected</h2>
+  <p class="muted">Receive daily encouragement and updates where you already are.</p>
+
+  <div class="connect-actions">
+    <a class="btn btn-primary"
+       href="{{ SOCIAL_LINKS.whatsapp }}"
+       target="_blank" rel="noopener noreferrer">
+      💬 WhatsApp — Daily Devotions
+    </a>
+
+    <a class="btn btn-outline"
+       href="{{ SOCIAL_LINKS.facebook }}"
+       target="_blank" rel="noopener noreferrer">
+      📘 Facebook — Follow SSCM
+    </a>
+
+    <a class="btn btn-outline"
+       href="{{ SOCIAL_LINKS.linkedin }}"
+       target="_blank" rel="noopener noreferrer">
+      💼 LinkedIn — Connect
+    </a>
+ 
+  </div>
+  </section>
 
 {% endblock %}

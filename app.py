@@ -1,216 +1,123 @@
-# app.py — SoulStart Devotion (HTTP dev, upgraded study routes) — v13 Full
+# app.py — SoulStart Devotion — v13 (Clean Single-App Core)
 from __future__ import annotations
 
 import os
 import json
 import secrets
-import subprocess
-import sys
-import webbrowser
-
 import logging
-logger = logging.getLogger(__name__)
-logger.info("message")
-
-from threading import Timer
 from datetime import datetime, date, timedelta
 from pathlib import Path
-
+from functools import wraps
 from urllib.parse import quote
+from logging.handlers import RotatingFileHandler
+
 from dotenv import load_dotenv  # pyright: ignore[reportMissingImports]
-load_dotenv()
 
-SITE_JOIN_URL = os.getenv("SITE_JOIN_URL", "https://chat.whatsapp.com/CdkN2V0h8vCDg2AP4saYfG")
-SITE_THEME = os.getenv("SITE_THEME", "Faith to Rise, Grace to Rest")
+# =========================
+# 0) ENV LOAD (safe)
+# =========================
+BASE_DIR = Path(__file__).resolve().parent
+load_dotenv(BASE_DIR / ".env")   # local dev
+load_dotenv()                    # fallback
 
-def base_ctx(**extra):
-    """Shared template context for all public pages."""
-    today_ = date.today()
-    ctx = {
-        "join_url": SITE_JOIN_URL,     # single source of truth
-        "theme": SITE_THEME,
-        "today": today_,
-        "page_bg_class": "",
-        "page_bg_url": "",
-        "active": "",
-        "is_authed": is_authed(),
-    }
-    ctx.update(extra)
-    return ctx
+ENV = os.getenv("APP_ENV", os.getenv("FLASK_ENV", "development")).lower()
+IS_PROD = ENV == "production"
+IS_HTTPS = os.getenv("FORCE_HTTPS", "0").lower() in ("1", "true", "yes")
 
+# =========================
+# 1) LOGGING (safe, no duplicates)
+# =========================
+LOG_DIR = BASE_DIR / "logs"
+LOG_DIR.mkdir(exist_ok=True)
+
+logger = logging.getLogger("soulstart")
+logger.setLevel(logging.INFO)
+
+if not logger.handlers:
+    fh = RotatingFileHandler(LOG_DIR / "app.log", maxBytes=1_000_000, backupCount=5, encoding="utf-8")
+    fmt = logging.Formatter("%(asctime)s %(levelname)s %(name)s: %(message)s")
+    fh.setFormatter(fmt)
+    logger.addHandler(fh)
+
+logger.info("SoulStart starting…")
+
+# =========================
+# 2) FLASK IMPORTS
+# =========================
 from flask import (  # pyright: ignore[reportMissingImports]
-    Flask, current_app, request, session, render_template, redirect,
+    Flask, request, session, render_template, redirect,
     url_for, jsonify, send_from_directory, g, flash, abort,
 )
-from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 
-from functools import wraps
+from flask_login import (  # pyright: ignore[reportMissingImports]
+    LoginManager, UserMixin, login_required, login_user,
+    logout_user, current_user,
+)
+
 from flask_wtf import CSRFProtect  # pyright: ignore[reportMissingImports]
 from flask_limiter import Limiter  # pyright: ignore[reportMissingImports]
 from flask_limiter.util import get_remote_address  # pyright: ignore[reportMissingImports]
+
 try:
     from flask_talisman import Talisman  # pyright: ignore[reportMissingImports]
 except Exception:
     Talisman = None  # type: ignore
 
-from logging.handlers import RotatingFileHandler
-
-def is_authed() -> bool:
-    return bool(session.get("authed"))
-
-def require_auth(f):
-    """Redirect to login if session is not authed."""
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        if not is_authed():
-            return redirect(url_for("login"))
-        return f(*args, **kwargs)
-    return wrapper
-
+# =========================
+# 3) CORE SETTINGS
+# =========================
 APP_VERSION = "v13"
 
+SITE_THEME = os.getenv("SITE_THEME", "Faith to Rise, Grace to Rest")
 
-class AdminUser(UserMixin):
-    def __init__(self, user_id="admin"):
-        self.id = user_id
+JOIN_URL = os.getenv("JOIN_URL", "https://chat.whatsapp.com/CdkN2V0h8vCDg2AP4saYfG")
+WHATSAPP_GROUP_LINK = os.getenv("WHATSAPP_GROUP_LINK", JOIN_URL)
+SITE_JOIN_URL = WHATSAPP_GROUP_LINK
 
-# =============================================================================
-# Env & paths
-# =============================================================================
+PAYPAL_LINK = os.getenv(
+    "PAYPAL_LINK",
+    "https://www.paypal.com/donate/?hosted_button_id=21H73722ER303860GND5CN2Y",
+)
 
-BASE_DIR = Path(__file__).resolve().parent
+SITE_URL = os.getenv("SITE_URL", "http://127.0.0.1:5000")
+PORT = int(os.getenv("PORT", "5000"))
+HOST = os.getenv("HOST", "127.0.0.1")
+AUTO_OPEN = os.getenv("AUTO_OPEN", "0").lower() in ("1", "true", "yes")
+
+# =========================
+# 4) PATHS / STORAGE
+# =========================
 TEMPLATES_DIR = BASE_DIR / "templates"
 STATIC_DIR = BASE_DIR / "soulstart" / "static"
 
 DATA_DIR = BASE_DIR / "data"
 DATA_DIR.mkdir(exist_ok=True)
 
-LOG_DIR = BASE_DIR / "logs"
-LOG_DIR.mkdir(exist_ok=True)
+DEVOTIONS_ROOT = Path(os.getenv("DEVOTIONS_ROOT", str(BASE_DIR / "devotions_legacy")))
 
-DEVOTIONS_ROOT = Path(
-    os.environ.get("DEVOTIONS_ROOT", str(BASE_DIR / "devotions_legacy"))
-)
-
-# ---------- Hero backgrounds ----------
 HERO_DAY_BG = "img/hero_day.jpg"
 HERO_NIGHT_BG = "img/hero_night.jpg"
 
-# ---- Now safe to define files ----
 VERSES_FILE = DATA_DIR / "verses.json"
 DONATIONS_FILE = DATA_DIR / "donations.json"
 REQUESTS_FILE = DATA_DIR / "requests.json"
 VOLUNTEERS_FILE = DATA_DIR / "volunteers.json"
 FEEDBACK_FILE = DATA_DIR / "feedback.json"
 
-# Devotions: year-based JSON files under data/devotions/
 DEVOTIONS_DIR = DATA_DIR / "devotions"
 DEVOTIONS_DIR.mkdir(exist_ok=True)
 
-# Load .env locally; on Render, env vars come from the dashboard
-load_dotenv(BASE_DIR / ".env")
-
-ENV = os.getenv("APP_ENV", os.getenv("FLASK_ENV", "development")).lower()
-IS_PROD = ENV == "production"
-IS_HTTPS = os.environ.get("FORCE_HTTPS", "0").lower() in ("1", "true", "yes")
-
-
-SITE_THEME = os.environ.get("SITE_THEME", "Faith to Rise, Grace to Rest")
-JOIN_URL = os.environ.get(
-    "JOIN_URL",
-    "https://chat.whatsapp.com/CdkN2V0h8vCDg2AP4saYfG",  # your default group link
-)
-
-SITE_THEME = os.environ.get(
-    "SITE_THEME",
-    "Faith to Rise, Grace to Rest",
-)
-
-SITE_JOIN_URL = JOIN_URL   # this must exist before routes
-
-WHATSAPP_GROUP_LINK = os.environ.get(
-    "WHATSAPP_GROUP_LINK",
-    "https://chat.whatsapp.com/CdkN2V0h8vCDg2AP4saYfG"
-)
-
-SITE_JOIN_URL = WHATSAPP_GROUP_LINK
-
-def common_page_ctx(active: str):
-    """Context shared by all public pages so the shell looks consistent."""
-    return dict(
-        today=date.today(),
-        theme=SITE_THEME,
-        join_url=SITE_JOIN_URL,
-        active=active,
-        page_bg_class="bg-image",  # or "bg-day", whatever your CSS uses
-        page_bg_url=url_for("static", filename="img/hero_day.jpg"),
-    )
-    
-PAYPAL_LINK = os.environ.get("PAYPAL_LINK", "https://www.paypal.com/donate/?hosted_button_id=21H73722ER303860GND5CN2Y")
-
-# ---------------- Admin credentials ----------------
-# These MUST be set in .env locally and in Render's Environment tab.
-ADMIN_EMAIL = (os.environ.get("ADMIN_EMAIL", "sscministry@outlook.com") or "").strip().lower()
-ADMIN_PASSWORD = (os.environ.get("ADMIN_PASSWORD", "YourStrongPass") or "").strip()
-ADMIN_BOOTSTRAP_TOKEN = os.environ.get(
-    "ADMIN_BOOTSTRAP_TOKEN",
-    "soulstart-2025-bootstrap",
-)
-
-# Backwards-compat for any old code still using ADMIN_PASS
-ADMIN_PASS = ADMIN_PASSWORD
-
-SITE_URL = os.environ.get("SITE_URL", "http://127.0.0.1:5000")
-PORT = int(os.environ.get("PORT", "5000"))
-AUTO_OPEN = os.environ.get("AUTO_OPEN", "1").lower() in ("1", "true", "yes")
-HOST = os.environ.get("HOST", "127.0.0.1")
-
-
-def verify_admin_credentials(email: str, password: str) -> bool:
-    """
-    Compare submitted credentials with the configured admin account.
-    Uses plain env values for now (no hashing) to keep behaviour simple.
-    """
-    if not ADMIN_PASSWORD:
-        # No password configured on the server
-        return False
-
-    return (
-        email.strip().lower() == ADMIN_EMAIL
-        and password.strip() == ADMIN_PASSWORD
-    )
-
-# ---------------- Core site identity & links ----------------
-SITE_THEME = os.environ.get("SITE_THEME", "Faith to Rise, Grace to Rest")
-
-JOIN_URL = os.environ.get(
-    "JOIN_URL",
-    "https://chat.whatsapp.com/CdkN2V0h8vCDg2AP4saYfG",
-)
-
-WHATSAPP_GROUP_LINK = os.environ.get("WHATSAPP_GROUP_LINK", JOIN_URL)
-
-SITE_JOIN_URL = WHATSAPP_GROUP_LINK
-
-PAYPAL_LINK = os.environ.get(
-    "PAYPAL_LINK",
-    "https://www.paypal.com/donate/?hosted_button_id=21H73722ER303860GND5CN2Y"
-)
-
-# Legacy placeholders so old code never crashes even if it still uses them
-STUDY_SERIES: list[dict] = []
-VERSE_CARDS: list[dict] = []
-
-# =============================================================================
-# App init (single Flask app)
-# =============================================================================
+# =========================
+# 5) FLASK APP (ONE TIME ONLY)
+# =========================
 app = Flask(
     __name__,
-    static_folder=str(STATIC_DIR),      # points to soulstart/static
-    static_url_path="/static",          # URL base for static files
+    static_folder=str(STATIC_DIR),
+    static_url_path="/static",
     template_folder=str(TEMPLATES_DIR),
 )
-app.secret_key = os.environ.get("SECRET_KEY", "dev-insecure")
+
+app.secret_key = os.getenv("SECRET_KEY", secrets.token_hex(16))
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config.update(
     SESSION_COOKIE_SECURE=IS_PROD or IS_HTTPS,
@@ -218,127 +125,53 @@ app.config.update(
     SESSION_COOKIE_SAMESITE="Lax",
 )
 
-# --- Login / auth setup ---
-login_manager = LoginManager()
-login_manager.login_view = "login"          # name of your login endpoint
-login_manager.login_message_category = "info"
-login_manager.init_app(app)                 # 🔑 attach to app
+# =========================
+# 6) EXTENSIONS (ONE TIME ONLY)
+# =========================
+csrf = CSRFProtect(app)
 
-# ============================
-# Flask-Login user setup
-# ============================
+limiter = Limiter(
+    key_func=get_remote_address,
+    app=app,
+    default_limits=["200 per day", "60 per hour"],
+)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
 class AdminUser(UserMixin):
     def __init__(self, user_id: str = "admin"):
         self.id = user_id
 
 @login_manager.user_loader
 def load_user(user_id: str):
-    return AdminUser("admin") if user_id == "admin" else None
+    return AdminUser() if user_id == "admin" else None
 
-# -----------------------------------------------------------------------------
-# Security & middleware
-# -----------------------------------------------------------------------------
-if Talisman:
-    csp = {
-        "default-src": ["'self'"],
-        "style-src":   ["'self'", "'unsafe-inline'"],
-        "script-src":  ["'self'", "'unsafe-inline'"],
-        "img-src":     ["'self'", "data:"],
-        "connect-src": ["'self'"],
-    }
-    Talisman(
-        app,
-        content_security_policy=csp,
-        content_security_policy_nonce_in=["script", "style"],
-        force_https=IS_PROD or IS_HTTPS,
-    )
-
-csrf = CSRFProtect(app)
-limiter = Limiter(key_func=get_remote_address, app=app, default_limits=["200/day", "50/hour"])
-
-# -----------------------------------------------------------------------------
-# Logging
-# -----------------------------------------------------------------------------
-logs_dir = BASE_DIR / "logs"
-logs_dir.mkdir(parents=True, exist_ok=True)
-handler = RotatingFileHandler(logs_dir / "app.log", maxBytes=1_000_000, backupCount=5)
-handler.setLevel(logging.INFO)
-handler.setFormatter(
-    logging.Formatter("%(asctime)s %(levelname)s: %(message)s [%(pathname)s:%(lineno)d]")
-)
-app.logger.addHandler(handler)
-app.logger.info("App startup — %s", APP_VERSION)
-
-# =============================================================================
-# CSP (nonce) + HTTPS policy
-# =============================================================================
-def _gen_nonce(length: int = 16) -> str:
-    return secrets.token_urlsafe(length)
-
-@app.before_request
-def _set_nonce():
-    g.csp_nonce = _gen_nonce() if IS_PROD else ""
-
-@app.context_processor
-def _inject_nonce():
-    return {"csp_nonce": lambda: g.get("csp_nonce", ""), "app_version": APP_VERSION}
-
-if IS_PROD:
+# =========================
+# 7) CSP / TALISMAN (ONE STRATEGY)
+# =========================
+if Talisman is not None:
     csp = {
         "default-src": ["'self'"],
         "img-src": ["'self'", "data:", "https:"],
-        "style-src":   ["'self'", "'unsafe-inline'"],
-        "script-src":  ["'self'", "'unsafe-inline'"],
-        "media-src": ["'self'", "data:", "blob:"],
-        "font-src": ["'self'", "data:"],
+        "style-src": ["'self'", "'unsafe-inline'"],
+        "script-src": ["'self'", "'unsafe-inline'"],
         "connect-src": ["'self'"],
+        "font-src": ["'self'", "data:"],
+        "media-src": ["'self'", "data:", "blob:"],
         "frame-ancestors": ["'self'"],
         "base-uri": ["'self'"],
         "form-action": ["'self'"],
     }
-    talisman = Talisman(
+    Talisman(
         app,
         content_security_policy=csp,
-        force_https=True,
-        strict_transport_security=True,
-        strict_transport_security_max_age=31536000,
+        force_https=IS_PROD or IS_HTTPS,
         frame_options="SAMEORIGIN",
         referrer_policy="strict-origin-when-cross-origin",
     )
 
-    @app.after_request
-    def _apply_nonce(resp):
-        # inject nonce into CSP header
-        nonce = g.get("csp_nonce", "")
-        if nonce:
-            csp_header = resp.headers.get("Content-Security-Policy", "")
-            csp_header = csp_header.replace("script-src 'self'", f"script-src 'self' 'nonce-{nonce}'")
-            csp_header = csp_header.replace("style-src 'self'", f"style-src 'self' 'nonce-{nonce}'")
-            resp.headers["Content-Security-Policy"] = csp_header
-        resp.headers["X-Content-Type-Options"] = "nosniff"
-        resp.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-        return resp
-else:
-    csp = {
-        "default-src": ["'self'"],
-        "img-src": ["'self'", "data:", "blob:", "https:"],
-        "style-src": ["'self'", "'unsafe-inline'"],  # dev convenience
-        "script-src": ["'self'", "'unsafe-inline'"],  # dev convenience
-        "media-src": ["'self'", "data:", "blob:"],
-        "font-src": ["'self'", "data:"],
-        "connect-src": ["'self'"],
-        "frame-ancestors": ["'self'"],
-    }
-    talisman = Talisman(
-        app,
-        content_security_policy=csp,
-        force_https=False,
-        strict_transport_security=False,
-        frame_options="SAMEORIGIN",
-        referrer_policy="no-referrer-when-downgrade",
-    )
-
-# Dev: prevent stale template caching while iterating
 @app.after_request
 def add_no_cache(resp):
     if not IS_PROD:
@@ -350,11 +183,71 @@ def add_no_cache(resp):
 def health():
     return "ok", 200
 
-from datetime import datetime, date
-# … your other imports …
+# =========================
+# 8) ADMIN CREDENTIALS
+# =========================
+ADMIN_EMAIL = (os.getenv("ADMIN_EMAIL", "sscministry@outlook.com") or "").strip().lower()
+ADMIN_PASSWORD = (os.getenv("ADMIN_PASSWORD", "") or "").strip()
+ADMIN_PASS = ADMIN_PASSWORD  # backwards compat
 
+def verify_admin_credentials(email: str, password: str) -> bool:
+    if not ADMIN_PASSWORD:
+        return False
+    return email.strip().lower() == ADMIN_EMAIL and password.strip() == ADMIN_PASSWORD
+
+# =========================
+# 9) HELPERS
+# =========================
+def is_authed() -> bool:
+    return bool(session.get("authed"))
+
+def require_auth(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if not is_authed():
+            return redirect(url_for("login"))
+        return f(*args, **kwargs)
+    return wrapper
+
+def common_page_ctx(active: str):
+    return dict(
+        today=date.today(),
+        theme=SITE_THEME,
+        join_url=SITE_JOIN_URL,
+        active=active,
+        page_bg_class="bg-image",
+        page_bg_url=url_for("static", filename=HERO_DAY_BG),
+    )
+
+STUDY_SERIES: list[dict] = []
+VERSE_CARDS: list[dict] = []
+
+# =========================
+# 10) SOCIAL LINKS (Phase 3)
+# =========================
+FACEBOOK_URL = os.getenv("FACEBOOK_URL", "https://www.facebook.com/profile.php?id=61585837505269")
+LINKEDIN_URL = os.getenv("LINKEDIN_URL", "https://www.linkedin.com/company/silentsoulconnect")
+
+SOCIAL_LINKS = {
+    "whatsapp": SITE_JOIN_URL,
+    "facebook": FACEBOOK_URL,
+    "linkedin": LINKEDIN_URL,
+}
+
+@app.context_processor
+def inject_globals():
+    return {
+        "SOCIAL_LINKS": SOCIAL_LINKS,
+        "SITE_JOIN_URL": SITE_JOIN_URL,
+        "SITE_THEME": SITE_THEME,
+        "APP_VERSION": APP_VERSION,
+        "PAYPAL_LINK": PAYPAL_LINK,
+    }
+
+# =========================
+# 11) DATE PARSE UTIL
+# =========================
 def normalize_date_str(s: str) -> str | None:
-    """Try to parse many date formats and return ISO YYYY-MM-DD, or None."""
     s = (s or "").strip()
     formats = [
         "%Y-%m-%d", "%d-%m-%Y", "%m-%d-%Y",
@@ -368,43 +261,39 @@ def normalize_date_str(s: str) -> str | None:
         except Exception:
             continue
     return None
-
 # ---------------------------------------------------------------------------
 # Donation log helpers
 # ---------------------------------------------------------------------------
 
-DONATIONS_FILE = DATA_DIR / "donations.json"
-
-def load_json_list(path: Path):
-    """Load a JSON list from file; return [] on error/missing."""
+def load_json_list(path: Path) -> list:
+    """Load a JSON list from file; return [] on missing/invalid."""
     if not path.exists():
         return []
     try:
         with path.open("r", encoding="utf-8") as f:
             data = json.load(f)
-            if isinstance(data, list):
-                return data
-            return [data]
-    except Exception:
+        if isinstance(data, list):
+            return data
+        # If someone accidentally stored a dict, wrap it
+        return [data]
+    except Exception as e:
+        logger.warning("Failed to load JSON list %s (%s)", path, e)
         return []
 
 def append_json_list(path: Path, record: dict) -> None:
-    """Append a record to a JSON list file."""
+    """Append a record to a JSON list file (never raises)."""
     items = load_json_list(path)
     items.append(record)
     try:
         with path.open("w", encoding="utf-8") as f:
             json.dump(items, f, ensure_ascii=False, indent=2)
-    except Exception:
-        # In worst case, do nothing rather than crash admin
-        pass
+    except Exception as e:
+        logger.warning("Failed to append JSON list %s (%s)", path, e)
+
 
 # =============================================================================
-# Helpers
-# =============================================================================
-# =============================================================================
-# Devotions helpers (year-based JSON, unified blueprint)
-# Normalized OUTPUT schema for a single devotion:
+# Devotions helpers (year-based JSON, unified schema)
+# Normalized OUTPUT for a single devotion:
 #
 # {
 #   "date": "YYYY-MM-DD",
@@ -412,7 +301,7 @@ def append_json_list(path: Path, record: dict) -> None:
 #   "theme": "Daily theme",
 #   "verse_ref": "Book 1:1",
 #   "verse_text": "Scripture text",
-#   "verse_meaning": "Silent soul meaning / 'This reminds me...'",
+#   "verse_meaning": "This reminds me…",
 #   "body": "Main content (I DECLARE / I REFUSE / I WILL or reflection)",
 #   "prayer": "Closing prayer",
 #   "tags": [ ... ]
@@ -420,9 +309,8 @@ def append_json_list(path: Path, record: dict) -> None:
 # =============================================================================
 
 def _devotions_file_for_year(year: int) -> Path:
-    """Return path like data/devotions/devotions_2025.json."""
+    """Return path like data/devotions/devotions_2026.json."""
     return DEVOTIONS_DIR / f"devotions_{year}.json"
-
 
 def load_devotions_for_year(year: int) -> dict[str, dict]:
     """
@@ -430,26 +318,23 @@ def load_devotions_for_year(year: int) -> dict[str, dict]:
       { "YYYY-MM-DD": day_block }
 
     Supports:
-    - 2025 migrated dict format
-    - 2026+ list-of-entries-with-date format
+    - dict keyed by date: { "2026-01-01": {...} }
+    - list entries with "date": [ {"date":"2026-01-01", ...}, ... ]
     """
     path = _devotions_file_for_year(year)
     if not path.exists():
-        # No file for that year yet
         return {}
 
     try:
         with path.open("r", encoding="utf-8") as f:
             data = json.load(f)
     except Exception as e:
-        logger.exception(f"[DEVOTIONS] Failed to read {path}: {e}")
+        logger.exception("[DEVOTIONS] Failed to read %s (%s)", path, e)
         return {}
 
-    # Case 1: already dict keyed by date
     if isinstance(data, dict):
         return data
 
-    # Case 2: list with "date"
     if isinstance(data, list):
         out: dict[str, dict] = {}
         for entry in data:
@@ -458,7 +343,7 @@ def load_devotions_for_year(year: int) -> dict[str, dict]:
             raw_date = entry.get("date") or entry.get("DATE")
             if not raw_date:
                 continue
-            norm = normalize_date_str(str(raw_date)) or str(raw_date)
+            norm = normalize_date_str(str(raw_date)) or str(raw_date).strip()
             out[norm] = entry
         return out
 
@@ -479,12 +364,18 @@ def placeholder_devotion(date_str: str = "", mode: str = "morning") -> dict:
 
 def load_devotion_for(target_date: date, slot: str = "morning") -> dict:
     """
-    Return a single devotion for the given date/slot in the unified schema.
-    Always returns *something* (real devotion or placeholder).
+    Return ONE devotion in unified schema.
+    Always returns something (real devotion or placeholder).
 
     Handles:
-    - 2025-style blocks (one devotion per date with points/closing)
-    - 2026+ day blocks with {theme, morning{...}, night{...}}
+    - 2026+ day blocks:
+        {
+          "theme":"...",
+          "morning": {...},
+          "night": {...}
+        }
+    - 2025 style (single block per day):
+        { "theme": "...", "point1":..., "closing":... }
     """
     slot = (slot or "morning").lower()
     if slot not in ("morning", "night"):
@@ -492,51 +383,46 @@ def load_devotion_for(target_date: date, slot: str = "morning") -> dict:
 
     day_key = target_date.isoformat()
     all_for_year = load_devotions_for_year(target_date.year)
-
-    # No file / bad JSON / empty data
     if not all_for_year:
         return placeholder_devotion(day_key, slot)
 
     day_block = all_for_year.get(day_key)
     if not isinstance(day_block, dict):
-        # Missing that specific date (gap in JSON)
         return placeholder_devotion(day_key, slot)
 
-    # Does this day have separate morning/night dicts? (2026+)
+    # 2026+ slot mode?
     has_slots = isinstance(day_block.get("morning"), dict) or isinstance(day_block.get("night"), dict)
     if has_slots:
-        theme = day_block.get("theme") or ""
+        theme = str(day_block.get("theme") or "").strip()
         slot_block = day_block.get(slot) or {}
     else:
-        # 2025 style – whole block is the devotion
-        theme = (
+        theme = str(
             day_block.get("theme")
             or day_block.get("Theme")
             or day_block.get("title")
             or ""
-        )
+        ).strip()
         slot_block = day_block
 
     if not isinstance(slot_block, dict) or not slot_block:
-        # Mode missing for that day
         return placeholder_devotion(day_key, slot)
 
     # ---- verse_ref / verse_text / verse_meaning ----
-    verse_ref = (
+    verse_ref = str(
         slot_block.get("verse_ref")
         or day_block.get("verse_ref")
         or slot_block.get("scripture")
         or day_block.get("scripture")
         or ""
-    )
+    ).strip()
 
-    verse_text = (
+    verse_text = str(
         slot_block.get("verse_text")
         or day_block.get("verse_text")
         or ""
-    )
+    ).strip()
 
-    verse_meaning = (
+    verse_meaning = str(
         slot_block.get("verse_meaning")
         or slot_block.get("silent_soul_meaning")
         or slot_block.get("heart_picture")
@@ -546,36 +432,40 @@ def load_devotion_for(target_date: date, slot: str = "morning") -> dict:
         or day_block.get("heart_picture")
         or day_block.get("encouragement_intro")
         or ""
-    )
+    ).strip()
 
-    # ---- body (points + closing OR body text) ----
+    # ---- body ----
     lines: list[str] = []
 
     raw_body = slot_block.get("body") or day_block.get("body")
     if raw_body:
-        lines.append(str(raw_body))
+        lines.append(str(raw_body).strip())
 
     for key in ("point1", "point2", "point3"):
         val = slot_block.get(key) or day_block.get(key)
         if val:
-            lines.append(str(val))
+            lines.append(str(val).strip())
 
     closing = slot_block.get("closing") or day_block.get("closing")
     if closing:
-        lines.append(str(closing))
+        lines.append(str(closing).strip())
 
-    body_text = ("\n".join([l for l in lines if l]).strip()) or verse_text or ""
+    body_text = "\n".join([l for l in lines if l]).strip()
+    if not body_text:
+        body_text = verse_text or ""
 
     # ---- prayer ----
-    prayer = (
+    prayer = str(
         slot_block.get("prayer")
         or slot_block.get("morning_prayer")
         or slot_block.get("night_prayer")
         or day_block.get("prayer")
         or ""
-    )
+    ).strip()
 
     tags = slot_block.get("tags") or day_block.get("tags") or []
+    if not isinstance(tags, list):
+        tags = []
 
     return {
         "date": day_key,
@@ -589,9 +479,8 @@ def load_devotion_for(target_date: date, slot: str = "morning") -> dict:
         "tags": tags,
     }
 
-
 def build_whatsapp_text(entry: dict | None, mode: str, today: date) -> str:
-    """Return WhatsApp share text for a devotion entry (or empty string)."""
+    """WhatsApp share text for a devotion entry (or empty string)."""
     if not entry:
         return ""
 
@@ -630,11 +519,10 @@ def build_whatsapp_text(entry: dict | None, mode: str, today: date) -> str:
     if prayer:
         lines.extend(["", f"🙏 Prayer: {prayer}"])
 
-    # Footer link (WhatsApp / site)
-    lines.extend(["", f"🔗 Share Us: {WHATSAPP_GROUP_LINK}"])
+    # Footer link (use your single source of truth)
+    lines.extend(["", f"🔗 Join us: {SITE_JOIN_URL}"])
 
-    return "\n".join([l for l in lines if l])
-
+    return "\n".join([l for l in lines if l]).strip()
 
 # =============================================================================
 # Routes
@@ -677,11 +565,12 @@ def load_verses() -> list[dict]:
         with VERSES_FILE.open("r", encoding="utf-8") as f:
             data = json.load(f)
         return data if isinstance(data, list) else fallback
-    except Exception:
+    except Exception as e:
+        logger.warning("Failed to load verses (%s)", e)
         return fallback
-    
-# ---------- Home ----------
 
+
+# ---------- Home ----------
 @app.route("/", endpoint="home")
 def home():
     ctx = common_page_ctx(active="home")
@@ -696,19 +585,15 @@ def devotion_study():
 
 
 # ---------- Today ----------
-# remove the turtle import completely
-# mode is just a variable from request.args
-# define your own default
 DEFAULT_MODE = "morning"
 
 @app.route("/today", endpoint="today")
 @limiter.limit("20/minute")
 def today_view():
-    """Show devotion for today (or a requested date) + WhatsApp share preview."""
-
-    mode = (request.args.get("mode") or "").lower().strip()
+    """Show devotion for today (or requested date) + WhatsApp share preview."""
+    mode = (request.args.get("mode") or DEFAULT_MODE).lower().strip()
     if mode not in ("morning", "night"):
-        mode = "morning"
+        mode = DEFAULT_MODE
 
     raw_date = (request.args.get("date") or "").strip()
     if raw_date:
@@ -741,11 +626,11 @@ def today_view():
 
     # Yesterday link
     yday_date = target_date - timedelta(days=1)
-    yday_str = yday_date.strftime("%Y-%m-%d")
-    ctx["yday_url"] = url_for("today", date=yday_str, mode=mode)
+    ctx["yday_url"] = url_for("today", date=yday_date.isoformat(), mode=mode)
     ctx["yday_label"] = "← Yesterday’s devotion"
 
     return render_template("devotion.html", **ctx)
+
 
 # ---------- Verses ----------
 @app.route("/verses", endpoint="verses")
@@ -769,7 +654,6 @@ def verses():
     return render_template("verses.html", cards=cards, **ctx)
 
 
-# ---------- Verse detail ----------
 @app.route("/verses/<int:card_id>", endpoint="verse_detail")
 def verse_detail(card_id: int):
     verses_data = load_verses()
@@ -794,9 +678,21 @@ def verse_detail(card_id: int):
 
 
 # ---------- Prayer ----------
+PRAYER_REQUESTS_FILE = DATA_DIR / "prayer_requests.json"
+
 @app.route("/prayer", methods=["GET", "POST"], endpoint="prayer")
 def prayer():
     if request.method == "POST":
+        name = (request.form.get("name") or "").strip()
+        request_text = (request.form.get("request") or "").strip()
+        if request_text:
+            record = {
+                "created_at": datetime.now().isoformat(timespec="seconds"),
+                "name": name,
+                "request": request_text,
+            }
+            append_json_list(PRAYER_REQUESTS_FILE, record)
+
         flash("🙏 Your prayer request was received.", "success")
         return redirect(url_for("prayer"))
 
@@ -824,7 +720,6 @@ def load_study_meta() -> dict:
     except Exception:
         return {}
 
-
 @app.route("/studies", endpoint="study_index")
 def study_index():
     templates_root = Path(app.template_folder or "templates")
@@ -845,9 +740,8 @@ def study_index():
 
     ctx = common_page_ctx(active="study")
     ctx["hero_class"] = "hero"
-    ctx["hero_bg"] = "img/hero_day.jpg"
+    ctx["hero_bg"] = HERO_DAY_BG
     return render_template("study/index.html", series=items, **ctx)
-
 
 @app.route("/studies/<series_name>", endpoint="study_detail")
 def study_detail(series_name: str):
@@ -866,49 +760,63 @@ def study_detail(series_name: str):
     ctx = common_page_ctx(active="study")
     return render_template(str(rel).replace("\\", "/"), title=page_title, **ctx)
 
-# ---------- Verses (Promise Cards) ----------
-@app.route("/donation")
+
+# ---------- Donation ----------
+@app.route("/donation", endpoint="donation")
 def donation():
-    """Public donation page used by the floating 💚 button."""
-    return render_template(
-        "donation.html",
-        theme=SITE_THEME,
-        join_url=SITE_JOIN_URL,
-        active="donation",
-        paypal_link=PAYPAL_LINK,
-    )
+    ctx = common_page_ctx(active="donation")
+    ctx["paypal_link"] = PAYPAL_LINK
+    return render_template("donation.html", **ctx)
+
 
 # ---------- Volunteer ----------
-@app.route("/volunteer", methods=["GET", "POST"])
+@app.route("/volunteer", methods=["GET", "POST"], endpoint="volunteer")
 def volunteer():
-    ctx = common_page_ctx(active="volunteer")
-    return render_template(
-        "volunteer.html",
-        **ctx,
-    )
-
     if request.method == "POST":
+        name = (request.form.get("name") or "").strip()
+        skills = (request.form.get("skills") or "").strip()
+        contact = (request.form.get("contact") or "").strip()
+        if name or skills or contact:
+            record = {
+                "created_at": datetime.now().isoformat(timespec="seconds"),
+                "name": name,
+                "skills": skills,
+                "contact": contact,
+            }
+            append_json_list(VOLUNTEERS_FILE, record)
         flash("💚 Thank you for offering your skills!", "success")
         return redirect(url_for("volunteer"))
-    return render_template("volunteer.html", theme=SITE_THEME, join_url=SITE_JOIN_URL, active="volunteer")
+
+    ctx = common_page_ctx(active="volunteer")
+    return render_template("volunteer.html", **ctx)
+
 
 # ---------- Feedback ----------
-@app.route("/feedback", methods=["GET", "POST"])
+@app.route("/feedback", methods=["GET", "POST"], endpoint="feedback_view")
 def feedback_view():
     if request.method == "POST":
+        message = (request.form.get("message") or "").strip()
+        if message:
+            record = {
+                "created_at": datetime.now().isoformat(timespec="seconds"),
+                "message": message,
+            }
+            append_json_list(FEEDBACK_FILE, record)
+
         flash("📝 Feedback submitted. Thank you!", "success")
         return redirect(url_for("feedback_view"))
-    return render_template("feedback.html", theme=SITE_THEME, join_url=SITE_JOIN_URL, active="feedback")
+
+    ctx = common_page_ctx(active="feedback")
+    return render_template("feedback.html", **ctx)
 
 
-# ---------- Auth (simple) ----------
-@app.route("/login", methods=["GET", "POST"])
+# ---------- Auth ----------
+@app.route("/login", methods=["GET", "POST"], endpoint="login")
 def login():
     if is_authed():
         return redirect(url_for("admin"))
 
     error = None
-
     if request.method == "POST":
         email = (request.form.get("email") or "").strip().lower()
         password = (request.form.get("password") or "").strip()
@@ -917,46 +825,27 @@ def login():
             error = "Admin login is not configured on the server."
         elif verify_admin_credentials(email, password):
             session["authed"] = True
-            login_user(AdminUser("admin"))   # ✅ important
+            login_user(AdminUser("admin"))
             flash("Welcome back, Admin.", "success")
             return redirect(url_for("admin"))
         else:
             error = "Incorrect email or password."
 
-    return render_template("login.html", error=error, active="login")
+    ctx = common_page_ctx(active="login")
+    return render_template("login.html", error=error, **ctx)
 
-# ---------- logout   ----------
-@app.route("/logout")
+@app.route("/logout", endpoint="logout")
 def logout():
     session.clear()
     logout_user()
     flash("You have been logged out.", "info")
     return redirect(url_for("home"))
 
+
 # =============================================================================
-# Admin Routes (CLEAN)
+# Admin Routes
 # =============================================================================
 
-# --- Helpers for admin JSON files ---
-def load_json_list(path: Path) -> list:
-    if not path.exists():
-        return []
-    try:
-        with path.open("r", encoding="utf-8") as f:
-            data = json.load(f)
-        return data if isinstance(data, list) else []
-    except Exception:
-        return []
-
-def append_json_list(path: Path, record: dict) -> None:
-    items = load_json_list(path)
-    items.append(record)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8") as f:
-        json.dump(items, f, ensure_ascii=False, indent=2)
-
-
-# ---------- Admin Dashboard ----------
 @app.route("/admin", endpoint="admin")
 @require_auth
 def admin_dashboard():
@@ -965,7 +854,6 @@ def admin_dashboard():
     return render_template("admin/admin.html", **ctx)
 
 
-# ---------- Admin: Manage Theme Verses ----------
 @app.route("/admin/verses", methods=["GET", "POST"], endpoint="admin_verses")
 @require_auth
 def admin_verses_view():
@@ -1060,38 +948,27 @@ def admin_verses_view():
     )
 
 
-# ---------- Admin: Prayer Requests ----------
 @app.route("/admin/requests", endpoint="admin_requests")
 @require_auth
 def admin_requests_view():
-    file = DATA_DIR / "prayer_requests.json"
-    items = load_json_list(file)
+    items = load_json_list(PRAYER_REQUESTS_FILE)
     ctx = common_page_ctx(active="admin")
     return render_template("admin/admin_requests.html", items=items, **ctx)
 
-
-# ---------- Admin: Feedback Messages ----------
 @app.route("/admin/feedback", endpoint="admin_feedback")
 @require_auth
 def admin_feedback_view():
-    file = DATA_DIR / "feedback.json"
-    items = load_json_list(file)
+    items = load_json_list(FEEDBACK_FILE)
     ctx = common_page_ctx(active="admin")
     return render_template("admin/admin_feedback.html", items=items, **ctx)
 
-
-# ---------- Admin: Volunteer Submissions ----------
 @app.route("/admin/volunteers", endpoint="admin_volunteers")
 @require_auth
 def admin_volunteers_view():
-    file = DATA_DIR / "volunteers.json"
-    rows = load_json_list(file)
+    rows = load_json_list(VOLUNTEERS_FILE)
     ctx = common_page_ctx(active="admin")
     return render_template("admin/admin_volunteers.html", rows=rows, **ctx)
 
-
-# ---------- Admin: Donations ----------
-DONATIONS_FILE = DATA_DIR / "donations.json"
 
 @app.route("/admin/donations", methods=["GET", "POST"], endpoint="admin_donations")
 @require_auth
@@ -1148,7 +1025,6 @@ def admin_donations_view():
     )
 
 
-# ---------- Admin: WhatsApp Page (UI) ----------
 @app.route("/admin/whatsapp", methods=["GET"], endpoint="admin_whatsapp")
 @require_auth
 def admin_whatsapp_page():
@@ -1157,12 +1033,11 @@ def admin_whatsapp_page():
         "today": date.today(),
         "selected_date": date.today().isoformat(),
         "selected_mode": "morning",
-        "result": {},  # template expects result
+        "result": {},
     })
     return render_template("admin/admin_whatsapp.html", **ctx)
 
 
-# ---------- Admin: WhatsApp Share API (POST ONLY) ----------
 @app.route("/admin/whatsapp/send", methods=["POST"], endpoint="admin_whatsapp_send")
 @require_auth
 def admin_whatsapp_send():
@@ -1241,7 +1116,7 @@ def _open_browser():
         pass
 
 if __name__ == "__main__":
-    logger.info("💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)…", APP_VERSION)
+    logger.info(f"💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… {APP_VERSION}")
     if AUTO_OPEN:
         Timer(1.0, _open_browser).start()
     app.run(host=HOST, port=PORT, debug=True)

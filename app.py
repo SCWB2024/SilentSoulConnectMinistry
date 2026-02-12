@@ -452,7 +452,7 @@ def placeholder_devotion(date_str: str = "", mode: str = "morning") -> dict:
         "icon": "🌅" if mode == "morning" else "🌙",
         "verse_ref": "",
         "verse_text": "",
-        "verse_meaning": "",
+        "verse_meaning": "💡",
         "body": "Devotion is being prepared. Please check back soon.",
         "prayer": "🙏 In Jesus’ name, Amen.",
         "tags": ["placeholder"],
@@ -618,9 +618,6 @@ def build_whatsapp_text(entry: dict | None, mode: str, today: date) -> str:
     lines.extend(["", f"🔗 Join us: {SITE_JOIN_URL}"])
 
     return "\n".join([l for l in lines if l]).strip()
-
-import re
-from calendar import month_name
 
 # ---------------------------------------------------------------------------
 # BLOG CONFIG (templates/blog/*.html are the posts)
@@ -1578,7 +1575,7 @@ def _coerce_int(v, default=None):
 #   "month": 2,
 #   "year": 2026,
 #   "excerpt": "...",
-#   "image": "img/soulspeaks/Feb Blog1.png" (static-relative)
+#   "image": "img/blog/soulspeaks/gods-love-beyond-sound.jpg" (static-relative)
 # }
 
 def _filter_posts(posts: list[dict], year: int | None, month: int | None) -> list[dict]:

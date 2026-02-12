@@ -50,6 +50,11 @@ soulstart/static/tmp/
 check_env.py
 video_sunset_sign.py
 
+!soulstart/static/img/blog/soulspeaks/**
+!soulstart/static/img/icons/**
+
+!soulstart/static/img/studies/**
+
 # --- Private ---
 private/
 
@@ -63,3 +68,16 @@ stash_changes.txt*
 logs/
 *.log
 
+*.jpg
+
+*.png
+
+*.mp4
+
+static/
+
+img/
+
+icons/
+
+blog/

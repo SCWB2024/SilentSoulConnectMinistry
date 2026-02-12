@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}SoulStart Devotion — Home{% endblock %}
+
+{% block content %}
+
+<section class="hero" style="background-image: url('{{ url_for('static', filename='img/welcome.jpg') }}'); margin-bottom: 2rem;">
+  <div class="hero-inner">
+    <h1 style="text-transform: uppercase; letter-spacing: 1px;">Find Your Rhythm</h1>
+    <p>"Before sunrise I call to you for help; I place my hope in your promise." <br>— Psalms 119:147 —</p>
+
+    <div class="chip-row hero-chips" style="margin-top: 15px;">
+      <span class="chip">🤟 Deaf-friendly</span>
+      <span class="chip">🧠 Simple English</span>
+      <span class="chip">🤍 God's Uniqueness</span>
+    </div>
+  </div>
+</section>
+
+<section class="container" style="padding: 0 15px;">
+  <div class="core-grid">
+
+    <article class="core-card">
+      <div class="core-ico" style="background: #ecfdf5; color: #059669;">🌅</div>
+      <h3 class="core-title">Devotion Hub</h3>
+      <p class="core-sub">Your daily declaration & deep learning.</p>
+      
+      <div class="core-actions" style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
+        <a class="btn" href="{{ url_for('today') }}" style="width: 100%; text-align: center;">📢 Daily Devotion</a>
+        <a class="btn soft" href="{{ url_for('study_index') }}" style="width: 100%; text-align: center;">📚 Bible Study</a>
+        <a class="btn soft" href="{{ url_for('verses') }}" style="width: 100%; text-align: center;">✉️ Power Verses</a>
+      </div>
+    </article>
+
+    <article class="core-card">
+      <div class="core-ico" style="background: #eff6ff; color: #2563eb;">🙏</div>
+      <h3 class="core-title">Prayer Wall</h3>
+      <p class="core-sub">Claiming God's Word in your life.</p>
+      
+      <div class="core-actions" style="margin-top: auto;">
+        <a class="btn" href="{{ url_for('prayer') }}" style="width: 100%; text-align: center;">Request Prayer</a>
+      </div>
+    </article>
+
+    <article class="core-card">
+      <div class="core-ico" style="background: #faf5ff; color: #7c3aed;">🕊️</div>
+      <h3 class="core-title">Soul Speaks</h3>
+      <p class="core-sub">Breaking myths. Seeing God's love.</p>
+      
+      <div class="core-actions" style="margin-top: auto;">
+        <a class="btn" href="{{ url_for('blog_index') }}" style="width: 100%; text-align: center;">Read Reflections</a>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section class="container" style="margin-top: 3rem; text-align: center; border-top: 1px solid #eee; padding-top: 2rem;">
+  <div class="quick-actions" style="justify-content: center;">
+    <a href="{{ url_for('about') }}" class="chip-link">ℹ️ About SSCM</a>
+    <a href="{{ url_for('volunteer') }}" class="chip-link">🤝 Volunteer</a>
+  </div>
+</section>
+
+<style>
+  /* STOP ADDING TO YOUR CSS FILE - USE THESE CORE STYLES */
+  .core-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .core-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 24px;
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+  }
+  .core-card:hover {
+    transform: translateY(-5px);
+  }
+  .core-ico {
+    width: 60px; height: 60px;
+    border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    margin-bottom: 15px;
+  }
+  .core-title { margin: 0 0 8px; font-weight: 900; font-size: 1.4rem; color: #1e293b; }
+  .core-sub { margin: 0 0 20px; color: #64748b; font-size: 1rem; line-height: 1.4; }
+  
+  .btn.soft {
+    background: #f1f5f9;
+    color: #475569;
+  }
+  .btn.soft:hover {
+    background: #e2e8f0;
+  }
+</style>
+
+{% endblock %}

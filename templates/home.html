@@ -1,79 +1,77 @@
+{# templates/home.html #}
 {% extends "base.html" %}
 {% block title %}SoulStart Devotion — Home{% endblock %}
 
 {% block content %}
 
-{# HERO WITH IMAGE #}
+<!-- HERO -->
 <section class="hero"
-         style="background-image: url('{{ url_for('static', filename='img/hero_day.jpg') }}'); margin-bottom: 1.5rem;">
+         style="background-image: url('{{ url_for('static', filename='img/welcome.jpg') }}'); margin-bottom: 1.5rem;">
   <div class="hero-inner">
-    <h1>*WELCOME TO SOULSTART* — Come, all who are thirsty.</h1>
+    <h1> FIND YOUR RHYTHM — Come, all who are thirsty.</h1>
+    <p> Before sunrise I call to you for help; I place my hope in your promise. ~Psalms 119:147 GNT~</p>
 
-    <p>SoulStart is a quiet space to rise in faith every morning and rest in grace every night.</p>
-    <p class="muted small-note">
+  <!-- Deaf-first quick scan -->
+<div class="chip-row hero-chips" style="margin: 12px 0 0;">
+  <span class="chip" style="pointer-events:none;">🤟 Deaf-friendly</span>
+  <span class="chip" style="pointer-events:none;">🧠 Simple English</span>
+  <span class="chip" style="pointer-events:none;">🤍 Inclusive Community</span>
+</div>
 
-{# DEAF-FIRST CUES (quick scan) #}
-  <div class="chip-row" style="margin: 0 0 18px;">
-  <span class="chip" style="pointer-events:none;"><p>🤟 Deaf-friendly</p></span>
-  <span class="chip" style="pointer-events:none;"><p>🧠 Simple English</p></span>
- 
-</div>    
-    </p>
-  </div>
 </section>
 
-{# CORE USER PATH (3 blocks) #}
+<!-- DAILY RHYTHM -->
 <section class="page-hero" style="margin-bottom: 1.2rem;">
-  <h1>~~Daily Rhythm with SoulStart~~</h1>
+  <h1>~~ WELCOME TO SILENT SOULCONNECT MINISTRY ~~</h1>
   <p class="subtitle">
     One small step in the morning, one quiet surrender at night. The rest of the day belongs to Him.
   </p>
 </section>
 
+<!-- CORE USER PATH (3 blocks) -->
 <section>
   <div class="core-grid">
 
+    <!-- 1) Devotion -->
     <article class="core-card">
       <div class="core-ico" aria-hidden="true">🌅</div>
-      <h3 class="core-title">Devotion / Study</h3>
-      <p class="core-sub">Daily devotion • Simple meaning • Study series</p>
+      <h3 class="core-title">Devotion</h3>
+      <p class="core-sub">Daily devotion • Simple meaning </p>
       <div class="core-actions">
-        <a class="btn" href="{{ url_for('today') }}">Open Today</a>
-        <a class="btn soft" href="{{ url_for('study_index') }}">Study Hub</a>
+        <a class="btn" href="{{ url_for('today') }}">Start Today</a>
       </div>
     </article>
 
+    <!-- 2) Prayer -->
     <article class="core-card">
       <div class="core-ico" aria-hidden="true">🙏</div>
       <h3 class="core-title">Prayer</h3>
-      <p class="core-sub">Submit a request • Receive comfort</p>
+      <p class="core-sub">Submit a request •  • Receive comfort</p>
       <div class="core-actions">
         <a class="btn" href="{{ url_for('prayer') }}">Request Prayer</a>
-        <a class="btn soft" href="{{ url_for('about') }}">How it works</a>
       </div>
     </article>
 
+    <!-- 3) Soul Speaks (replaces Verses) -->
     <article class="core-card">
-      <div class="core-ico" aria-hidden="true">📖</div>
-      <h3 class="core-title">Verses</h3>
-      <p class="core-sub">Quick verse pages • Easy reading</p>
+      <div class="core-ico" aria-hidden="true">🕊️</div>
+      <h3 class="core-title">Soul Speaks</h3>
+      <p class="core-sub">Quiet reflections •  •  • Faith & dignity</p>
       <div class="core-actions">
-        <a class="btn" href="{{ url_for('verses') }}">Open Verses</a>
-        </div>
+        <a class="btn" href="{{ url_for('blog_index') }}">Read Soul Speaks</a>
+      </div>
     </article>
 
   </div>
 </section>
 
-{# QUICK LINKS #}
+<!-- QUICK LINKS -->
 <section style="margin-top: 2rem;">
   <h2>Quick links</h2>
   <div class="quick-actions">
-    <a href="{{ url_for('today') }}" class="chip-link">🌅 Today</a>
-    <a href="{{ url_for('study_index') }}" class="chip-link">📚 Study Hub</a>
-    <a href="{{ url_for('verses') }}" class="chip-link">📖 Verses</a>
-    <a href="{{ url_for('prayer') }}" class="chip-link">🙏 Prayer</a>
     <a href="{{ url_for('about') }}" class="chip-link">ℹ️ About SSCM</a>
+    <a href="{{ url_for('study_index') }}" class="chip-link">📚 Study Hub</a>
+    <a href="{{ url_for('verses') }}" class="chip-link">✉️ Verses</a>
     <a href="{{ url_for('volunteer') }}" class="chip-link">🤝 Volunteer</a>
   </div>
 </section>
@@ -104,31 +102,5 @@
 .core-sub{ margin:0 0 14px; opacity:0.9; }
 .core-actions{ display:flex; gap:10px; flex-wrap:wrap; }
 </style>
-
-<section class="panel connect-panel" aria-label="Stay Connected">
-  <h2>Stay Connected</h2>
-  <p class="muted">Receive daily encouragement and updates where you already are.</p>
-
-  <div class="connect-actions">
-    <a class="btn btn-primary"
-       href="{{ SOCIAL_LINKS.whatsapp }}"
-       target="_blank" rel="noopener noreferrer">
-      💬 WhatsApp — Daily Devotions
-    </a>
-
-    <a class="btn btn-outline"
-       href="{{ SOCIAL_LINKS.facebook }}"
-       target="_blank" rel="noopener noreferrer">
-      📘 Facebook — Follow SSCM
-    </a>
-
-    <a class="btn btn-outline"
-       href="{{ SOCIAL_LINKS.linkedin }}"
-       target="_blank" rel="noopener noreferrer">
-      💼 LinkedIn — Connect
-    </a>
- 
-  </div>
-  </section>
 
 {% endblock %}

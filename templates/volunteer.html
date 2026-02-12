@@ -1,66 +1,101 @@
 {% extends "base.html" %}
-{% block title %}Volunteer — Silent SoulConnect Ministry{% endblock %}
+{% block title %}Volunteer — Silent SoulConnect{% endblock %}
 {% block content %}
 
-<section class="hero hero-day" style="background:url('{{ url_for('static', filename='img/serve_bg.jpg') }}') center/cover;">
-  <div class="hero-inner" style="padding:48px 20px;">
-    <h1>Volunteer</h1>
-    <p class="muted">Serve quietly — helping others understand Scripture with clarity and care.</p>
+<section class="hero hero-day" style="background: linear-gradient(rgba(195, 194, 194, 0.6), rgba(180, 179, 179, 0.6)), url('{{ url_for('static', filename='img/serve_bg.jpg') }}') center/cover;">
+  <div class="hero-inner" style="padding:40px 20px;">
+    <h1>Serve the Community</h1>
+    <p>"Faith to Rise, Grace to Rest"</p>
   </div>
 </section>
 
-<div class="card">
-  <h3>Why Volunteer?</h3>
-  <p>
-    Silent SoulConnect Ministry serves the Deaf and Hard of Hearing community through accessible devotionals,
-    prayer support, and Bible study. Volunteers help keep this ministry clear, welcoming, and consistent —
-    so no one feels left out, rushed, or misunderstood.
-  </p>
+<div style="height: 40px;"></div>
 
-  <h3 style="margin-top:14px;">Ways You Can Serve (Choose what fits you)</h3>
-  <ul>
-    <li><strong>Accessibility Helper:</strong> help simplify wording and improve clarity (Deaf-friendly reading).</li>
-    <li><strong>Prayer Support:</strong> help prepare short, caring prayers (templates provided).</li>
-    <li><strong>Study Support:</strong> help prepare simple notes and figurative-language explanations.</li>
-    <li><strong>Media & Captions:</strong> help with captions, posting, and basic content formatting.</li>
-    <li><strong>Tech Helper (optional):</strong> help test pages and report issues clearly.</li>
-  </ul>
+<div class="container" style="max-width: 850px; margin: -30px auto 50px; padding: 0 15px;">
+  
+  <div class="card" style="border-radius:20px; margin-bottom: 25px; border-top: 5px solid var(--gold);">
+    <h2 style="color:var(--primary); text-align:center;">Our Purpose</h2>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+      <div style="background: #fdfcf0; padding: 20px; border-radius: 12px; border: 1px solid #f3ebd1;">
+        <h4 style="margin-top:0;">🔇 The Silent Focus</h4>
+        <p class="small">We serve those who communicate through sign, sight, and stillness. We remove the barriers of sound to reveal the beauty of the Word.</p>
+        <p style="font-style: italic; font-size: 0.85rem; color: #856404;">
+          "Then the eyes of the blind shall be opened, and the ears of the deaf unstopped." — Isaiah 35:5
+        </p>
+      </div>
 
-  <p class="muted small-note">
-    Even 15–30 minutes a week makes a difference.
-  </p>
-
-   <form method="post" class="prayer-form">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-    <label for="name">Your Name*</label>
-    <input id="name" name="name" required>
-
-    <label for="contact">Contact</label>
-    <input id="contact" name="contact" placeholder="you@example.com or +1 242…">
-
-    <label for="skills">How would you like to serve?</label>
-    <input id="skills" name="skills" placeholder="Accessibility, Prayer, Study, Captions, Tech…">
-
-    <label for="availability">Availability</label>
-    <input id="availability" name="availability" placeholder="e.g., 15 mins/week, Saturdays, evenings">
-
-    <label for="notes">Notes (optional)</label>
-    <textarea id="notes" name="notes" rows="4"
-      placeholder="Tell us anything helpful (optional)."></textarea>
-
-    <div class="hero-actions">
-      <button class="btn" type="submit">Submit</button>
-      <p class="muted small-note" style="margin-top:.5rem">
-      
- <p class="ok">
-  ✅ Your information is kept private.
-  ✅ We will contact you directly with simple next steps.
-</p>
-<a class="btn soft" href="{{ url_for('donation') }}">💚 Support the Ministry</a>
-      <a class="btn soft" href="{{ url_for('home') }}">🏠 Home</a>
+      <div style="background: #f0fdf4; padding: 20px; border-radius: 12px; border: 1px solid #dcfce7;">
+        <h4 style="margin-top:0;">🤝 The SoulConnect Focus</h4>
+        <p class="small">Ministry isn't just about information; it’s about connection. We connect isolated hearts back to the Body of Christ.</p>
+        <p style="font-style: italic; font-size: 0.85rem; color: #166534;">
+          "That their hearts may be encouraged, being knit together in love..." — Colossians 2:2
+        </p>
+      </div>
     </div>
-  </form>
-</div>
 
+    <div style="text-align: center; margin-top: 30px; padding: 15px; border-top: 1px solid #eee;">
+       <p><strong>Our Mission:</strong> To provide accessible, plain-language Gospel truth so that the Deaf and Hard-of-Hearing can grow in faith without confusion.</p>
+    </div>
+  </div>
+
+  <div class="card" style="border-radius:20px; margin-bottom: 25px;">
+    <h3 style="text-align:center;">Where do you fit?</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+      <div style="text-align:center; padding: 10px; border: 1px solid #f1f5f9; border-radius: 10px;">
+        <span style="font-size: 2rem;">🤟</span>
+        <p><strong>Language</strong><br><span class="muted small">Plain English & ASL, Interpreter</span></p>
+      </div>
+      <div style="text-align:center; padding: 10px; border: 1px solid #f1f5f9; border-radius: 10px;">
+        <span style="font-size: 2rem;">🧎</span>
+        <p><strong>Intercession</strong><br><span class="muted small">Prayer Warriors</span></p>
+      </div>
+      <div style="text-align:center; padding: 10px; border: 1px solid #f1f5f9; border-radius: 10px;">
+        <span style="font-size: 2rem;">💻</span>
+        <p><strong>Digital</strong><br><span class="muted small">Media & Captions</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="border-radius:20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+    <h3 style="text-align:center;">Join the Mission</h3>
+    <form method="post" class="prayer-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <label for="name">Your Name*</label>
+      <input id="name" name="name" required style="width:100%; margin-bottom: 15px;">
+
+      <label for="contact">Contact (WhatsApp/Email)*</label>
+      <input id="contact" name="contact" required style="width:100%; margin-bottom: 15px;">
+
+      <label for="skills">Area of Service</label>
+      <select id="skills" name="skills" style="width:100%; margin-bottom: 15px; background:white;">
+        <option value="Accessibility">📖 Plain English Accessibility</option>
+        <option value="Prayer">🙏 Prayer Support</option>
+        <option value="Study">✍️ Bible Study Prep</option>
+        <option value="Media">🎞️ Media & Captions</option>
+        <option value="Translator">🌐 Translation & Interpretation</option>
+      </select>
+
+      <div style="margin-bottom: 20px; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0;">
+        <label style="font-weight: bold; display: block; margin-bottom: 8px;">🤟 Communication Preference</label>
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+          <label><input type="checkbox" name="asl"> Sign Language</label>
+          <label><input type="checkbox" name="text"> Text/WhatsApp</label>
+          <label><input type="checkbox" name="plain"> Plain English</label>
+        </div>
+      </div>
+
+      <label for="availability">Availability</label>
+      <input id="availability" name="availability" placeholder="e.g. 1 hour on weekends" style="width:100%; margin-bottom: 15px;">
+
+      <label for="notes">Your Heart for this Ministry</label>
+      <textarea id="notes" name="notes" rows="4" placeholder="Briefly share why you want to serve the Deaf community." style="width:100%; margin-bottom: 15px;"></textarea>
+
+      <button class="btn" type="submit" style="width:100%; background:var(--primary); color:white; padding:15px; font-weight:bold; border:none; border-radius:8px; cursor:pointer;">
+        Apply to Volunteer 🕊️
+      </button>
+    </form>
+  </div>
+</div>
 {% endblock %}

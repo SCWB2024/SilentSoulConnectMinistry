@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Admin: New Reflection{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 700px; margin: 50px auto; padding: 0 20px;">
+    <div class="card" style="padding: 40px; border-radius: 20px; border-top: 6px solid #10b981;">
+        <h2 style="color: var(--primary); margin-bottom: 30px;">✍️ Create New Reflection</h2>
+        
+        <form method="POST" style="display: grid; gap: 20px;">
+            <div>
+                <label style="display:block; font-weight:bold; margin-bottom:5px;">Post Title</label>
+                <input type="text" name="title" placeholder="e.g., Strength in the Silence" style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc;" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div>
+                    <label style="display:block; font-weight:bold; margin-bottom:5px;">Date</label>
+                    <input type="text" name="date" placeholder="February 2026" style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc;">
+                </div>
+                <div>
+                    <label style="display:block; font-weight:bold; margin-bottom:5px;">Month Label</label>
+                    <input type="text" name="month_label" placeholder="Feb" style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc;">
+                </div>
+            </div>
+
+            <div>
+                <label style="display:block; font-weight:bold; margin-bottom:5px;">Excerpt (The "Hook")</label>
+                <textarea name="excerpt" rows="2" style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc;"></textarea>
+            </div>
+
+            <hr style="opacity: 0.1;">
+
+            <h4 style="margin:0; color: #10b981;">Main Content Section</h4>
+            <div>
+                <input type="text" name="s1_title" placeholder="Section Heading" style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc; margin-bottom:10px;">
+                <textarea name="s1_text" placeholder="The heart of your message..." rows="6" style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc;"></textarea>
+            </div>
+
+            <h4 style="margin:0; color: #10b981;">Scripture Anchor</h4>
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px;">
+                <input type="text" name="scripture_ref" placeholder="Ref (John 3:16)" style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc;">
+                <input type="text" name="scripture_quote" placeholder="The Verse Text" style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc;">
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="padding:15px; font-weight:bold; font-size:1.1rem; margin-top:20px;">Publish to Soul Speaks</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Found in the Stillness: Part 2 — Silent SoulConnect{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; margin: 40px auto; padding: 0 20px;">
+  
+  <div style="width: 100%; background: #e2e8f0; height: 8px; border-radius: 10px; margin-bottom: 30px;">
+    <div style="width: 66%; background: var(--primary); height: 8px; border-radius: 10px;"></div>
+  </div>
+
+  <h1 style="color: var(--primary); text-align: center;">Part 2: The Sweeping Search</h1>
+  <p style="text-align: center; font-style: italic; color: #64748b;">A Journey into Luke 15:8 — "Light the lamp and sweep the house."</p>
+
+  <div class="card" style="border-radius: 20px; padding: 40px; line-height: 1.8; margin-bottom: 30px; border-top: 5px solid var(--gold); background: #ffffff;">
+    <p style="font-size: 1.2rem; color: #1e293b;">
+        The Owner does not leave the coin in the dark. She doesn't say, "It's just one coin, let it go." 
+        No—she takes <strong>Action</strong>.
+    </p>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0;">
+        <div style="background: #fffcf0; padding: 20px; border-radius: 15px; border: 1px solid #fef3c7; text-align: center;">
+            <span style="font-size: 2.5rem;">💡</span>
+            <h4 style="margin: 10px 0; color: #856404;">The Light</h4>
+            <p class="small">She lights a lamp. The golden flame <strong>pierces</strong> the shadows. The dark has nowhere to hide.</p>
+        </div>
+        <div style="background: #f0fdf4; padding: 20px; border-radius: 15px; border: 1px solid #dcfce7; text-align: center;">
+            <span style="font-size: 2.5rem;">🧹</span>
+            <h4 style="margin: 10px 0; color: #166534;">The Movement</h4>
+            <p class="small">She sweeps the floor. Every bit of dust is moved. She is <strong>looking</strong> with her eyes, searching for a spark of silver.</p>
+        </div>
+    </div>
+
+    <p style="font-size: 1.1rem; color: #334155;">
+        God is that Owner. He doesn't wait for you to find your way to Him. He brings the <strong>Light of the Gospel</strong> to your corner. He "sweeps" away the confusion and the noise of the world so He can see your face.
+    </p>
+  </div>
+
+  
+
+  <div style="background: #1e293b; color: white; padding: 40px; border-radius: 24px; margin-bottom: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+    <h3 style="color: var(--gold); margin-top: 0; display: flex; align-items: center; gap: 10px;">
+        <span>🤲</span> Visual Prayer
+    </h3>
+    <p style="opacity: 0.9; line-height: 1.7;">
+        In the silence, God is moving. He is working to find you, even when you cannot see Him yet.
+    </p>
+    
+    <div style="background: rgba(255,255,255,0.05); border-left: 4px solid var(--gold); padding: 20px; border-radius: 0 10px 10px 0; margin-top: 20px;">
+        <p style="margin: 0; font-style: italic; font-size: 1.1rem;">
+            "Lord, thank You for not leaving me in the dark. Thank You for searching for me when I felt lost. Sweep away my fears and let Your Light shine on my heart today. Amen."
+        </p>
+    </div>
+  </div>
+
+  <div class="card" style="border-radius: 20px; padding: 30px; border: 1px solid #e2e8f0;">
+    <h4 style="margin-top: 0;">Reflect with your Eyes:</h4>
+    <p class="muted">Which "dust" is God sweeping away in your life right now? (Select all that apply)</p>
+    
+    <label style="display: block; background: #f8fafc; padding: 15px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; border: 1px solid transparent;" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='transparent'">
+        <input type="checkbox" style="margin-right: 10px;"> The dust of <strong>Loneliness</strong>
+    </label>
+    <label style="display: block; background: #f8fafc; padding: 15px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; border: 1px solid transparent;" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='transparent'">
+        <input type="checkbox" style="margin-right: 10px;"> The dust of <strong>Not Being Understood</strong>
+    </label>
+    <label style="display: block; background: #f8fafc; padding: 15px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; border: 1px solid transparent;" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='transparent'">
+        <input type="checkbox" style="margin-right: 10px;"> The dust of <strong>Past Church Hurt</strong>
+    </label>
+  </div>
+
+  <div style="margin-top: 40px; display: flex; justify-content: space-between; align-items: center;">
+   <a href="{{ url_for('study_index') }}">← Back to Study Hub</a>
+  <a href="{{ url_for('study_detail', slug='coin-3') }}" class="btn">Coin Part 3 →</a>
+
+  </div>
+
+</div>
+
+{% endblock %}

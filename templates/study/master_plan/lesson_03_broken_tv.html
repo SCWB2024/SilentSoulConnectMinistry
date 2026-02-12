@@ -1,0 +1,114 @@
+{# /templates/study/master_plan/broken_tv.html #}
+{% extends "base.html" %}
+
+{% block title %}Lesson 03: The Broken TV Screen — Master Plan{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 850px; margin: 40px auto; padding: 0 20px;">
+
+  {# Top navigation (optional but helpful) #}
+  <div style="margin-bottom: 18px;">
+    <a href="{{ url_for('study_index') }}" style="text-decoration:none; font-weight:700;">
+      ← Back to Study Hub
+    </a>
+  </div>
+
+  <div style="background: #e11d48; color: white; padding: 30px; border-radius: 20px; text-align: center; margin-bottom: 40px; box-shadow: 0 10px 20px rgba(225,29,72,0.2);">
+    <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; opacity: 0.9;">🔑 Memory Verse</span>
+    <h2 style="margin: 10px 0; font-size: 1.8rem; line-height: 1.4;">"But your sins have separated you from your God..."</h2>
+    <p style="margin: 0; font-weight: 700; color: #fecdd3;">Isaiah 59:2</p>
+  </div>
+
+  <section style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: center; margin-bottom: 50px;">
+    <div>
+      <h3 style="color: #be123c; display: flex; align-items: center; gap: 10px;">
+        <span>📡</span> The Real Fact: The Receiver
+      </h3>
+      <p style="font-size: 1.1rem; line-height: 1.7; color: #334155;">
+        In history, when the first Radio and TV were invented, people were amazed. Invisible waves were in the air, but you needed a <strong>Receiver</strong> to see the picture.
+      </p>
+      <p style="font-size: 1.1rem; line-height: 1.7; color: #334155;">
+        If a TV falls and the wires inside break, the invisible waves are still there! The station is still sending the message. But the TV only shows <strong>static</strong>. It is broken inside.
+      </p>
+    </div>
+
+    <div style="text-align: center;">
+      {# ✅ Put a real image path here. Example: /static/img/study/broken_tv.jpg #}
+      <img
+        src="{{ url_for('static', filename='img/studies/broken_tv.png') }}"
+        alt="Broken Television Static"
+        style="width: 100%; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);"
+      >
+      <p style="margin-top:10px; color:#64748b; font-size:0.95rem;">
+        Even when the screen is broken, the signal is still there.
+      </p>
+    </div>
+  </section>
+
+  <div class="card" style="padding: 40px; border-radius: 24px; background: #fff1f2; border: 1px solid #fecdd3; margin-bottom: 50px;">
+    <h3 style="color: #be123c; margin-top: 0; display: flex; align-items: center; gap: 10px;">
+      <span>📉</span> The Fall: The Damaged Spirit
+    </h3>
+    <p style="font-size: 1.2rem; line-height: 1.8;">
+      God made your spirit to be a "Receiver" for His life. But when Adam sinned (Genesis 3), it was like the human "TV" fell off the table.
+    </p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+      <div style="background: white; padding: 20px; border-radius: 15px; border: 1px solid #fda4af;">
+        <h4 style="margin: 0; color: #be123c;">The Static</h4>
+        <p style="font-size: 0.95rem; margin-top: 10px; color: #475569;">
+          Sin creates "noise" in our heart. We feel guilt, fear, and loneliness. We can't see God clearly anymore.
+        </p>
+      </div>
+
+      <div style="background: white; padding: 20px; border-radius: 15px; border: 1px solid #fda4af;">
+        <h4 style="margin: 0; color: #be123c;">Dead Battery</h4>
+        <p style="font-size: 0.95rem; margin-top: 10px; color: #475569;">
+          Our spirit lost its power. We are alive in our body, but "dead" to the spiritual world.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div style="background: #1e293b; color: white; padding: 30px; border-radius: 20px; border-left: 5px solid #e11d48; margin-bottom: 50px;">
+    <p style="font-size: 1.2rem; margin: 0; line-height: 1.6;">
+      "A broken TV cannot fix its own wires. A flashlight cannot give itself new batteries. A human cannot wash away their own sin-static.
+      We need the <strong>Maker</strong> to repair us."
+    </p>
+  </div>
+
+  <div style="margin-bottom: 50px;">
+    <h3 style="text-align: center; color: #be123c;">🤔 Deep Question</h3>
+    <div style="background: white; border: 1px solid #e2e8f0; padding: 25px; border-radius: 12px; margin-top: 20px; text-align: center;">
+      <p style="font-size: 1.3rem; font-weight: 600; color: #1e293b;">
+        "Have you noticed that no matter how much 'good' you do, the fuzzy feeling of being lost inside never goes away?"
+      </p>
+      <p style="color: #64748b; margin-top: 10px;">
+        This is because your 'Receiver' needs a Savior, not just a new decoration.
+      </p>
+    </div>
+  </div>
+
+  <div style="background: #1e293b; color: white; padding: 40px; border-radius: 24px; text-align: center;">
+    <h4 style="margin-top: 0; color: #fecdd3;">🙏 Closing Prayer</h4>
+    <p style="font-style: italic; font-size: 1.1rem; line-height: 1.6; max-width: 650px; margin: 0 auto 30px;">
+      "Lord Jesus, I see that I am broken inside. I confess that my sin has caused static between You and me. I cannot fix myself.
+      I ask You to come and repair my spirit. Wash away the sin and turn the light back on in my heart. In Jesus' name, Amen."
+    </p>
+
+    {# ✅ FIXED: use slug param, not relpath #}
+    <a href="{{ url_for('study_detail', slug='war-two-natures') }}"
+ class="btn"
+ style="background: #e11d48; color: white; padding: 15px 40px; font-weight: 800; border-radius: 12px; text-decoration: none; display: inline-block;">
+  Continue to Lesson 04 →
+</a>
+
+    <div style="margin-top:16px;">
+      <a href="{{ url_for('study_index') }}" style="color:#fecdd3; text-decoration:none; font-weight:700;">
+        Back to Hub
+      </a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

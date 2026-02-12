@@ -1,11 +1,14 @@
 # app.py — SoulStart Devotion — v13 (Clean Single-App Core)
 from __future__ import annotations
 
+from email.mime import message
 import os
 import json
 import secrets
 import logging
+import re
 from datetime import datetime, date, timedelta
+from calendar import month_name
 from pathlib import Path
 from functools import wraps
 from urllib.parse import quote
@@ -45,8 +48,18 @@ logger.info("SoulStart starting…")
 # 2) FLASK IMPORTS
 # =========================
 from flask import (  # pyright: ignore[reportMissingImports]
-    Flask, request, session, render_template, redirect,
-    url_for, jsonify, send_from_directory, g, flash, abort,
+    Flask,
+    request,
+    session,
+    render_template,
+    redirect,
+    current_app,
+    url_for,
+    jsonify,
+    send_from_directory,
+    g,
+    flash,
+    abort,
 )
 
 from flask_login import (  # pyright: ignore[reportMissingImports]
@@ -101,11 +114,30 @@ HERO_NIGHT_BG = "img/hero_night.jpg"
 VERSES_FILE = DATA_DIR / "verses.json"
 DONATIONS_FILE = DATA_DIR / "donations.json"
 REQUESTS_FILE = DATA_DIR / "requests.json"
+
+PRAYER_REQUESTS_FILE = DATA_DIR / "prayer_requests.json"
+
+def load_json_list(path: Path) -> list[dict]:
+    if not path.exists():
+        return []
+    try:
+        with path.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data if isinstance(data, list) else []
+    except Exception:
+        return []
+
 VOLUNTEERS_FILE = DATA_DIR / "volunteers.json"
 FEEDBACK_FILE = DATA_DIR / "feedback.json"
-
+PRAYER_REQUESTS_FILE = DATA_DIR / "prayer_requests.json"
+BLOG_POSTS = DATA_DIR / "blog_posts.json"
 DEVOTIONS_DIR = DATA_DIR / "devotions"
 DEVOTIONS_DIR.mkdir(exist_ok=True)
+
+# Path to your blog data
+BLOG_DATA_PATH = 'data/blog_posts.json'
+
+print("SAVING TO:", (DATA_DIR / "prayer_requests.json").resolve())
 
 # =========================
 # 5) FLASK APP (ONE TIME ONLY)
@@ -219,8 +251,50 @@ def common_page_ctx(active: str):
         page_bg_url=url_for("static", filename=HERO_DAY_BG),
     )
 
+def read_json_list(path: Path) -> list[dict]:
+    if not path.exists():
+        return []
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        return data if isinstance(data, list) else []
+    except Exception:
+        return []
+
+def append_json_list(path: Path, item: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    data = read_json_list(path)
+    data.append(item)
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+
 STUDY_SERIES: list[dict] = []
 VERSE_CARDS: list[dict] = []
+
+import random
+
+def load_json_list(path: Path) -> list[dict]:
+    if not path.exists():
+        return []
+    try:
+        with path.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data if isinstance(data, list) else []
+    except Exception:
+        return []
+
+def pick_random_request(topic: str | None = None) -> dict | None:
+    file = DATA_DIR / "prayer_requests.json"
+    items = load_json_list(file)
+    if not items:
+        return None
+
+    topic = (topic or "").strip()
+    if topic:
+        filtered = [r for r in items if (r.get("topic") or "").strip() == topic]
+        if filtered:
+            return random.choice(filtered)
+
+    # fallback: any topic
+    return random.choice(items)
 
 # =========================
 # 10) SOCIAL LINKS (Phase 3)
@@ -236,12 +310,19 @@ SOCIAL_LINKS = {
 
 @app.context_processor
 def inject_globals():
+    """Injects variables into every single template automatically."""
+    from datetime import datetime
     return {
         "SOCIAL_LINKS": SOCIAL_LINKS,
         "SITE_JOIN_URL": SITE_JOIN_URL,
         "SITE_THEME": SITE_THEME,
         "APP_VERSION": APP_VERSION,
-        "PAYPAL_LINK": PAYPAL_LINK,
+        "PAYPAL_LINK": PAYPAL_LINK, # Ensure this matches the button logic
+        "FACEBOOK_URL": FACEBOOK_URL,
+        "LINKEDIN_URL": LINKEDIN_URL,
+        "JOIN_URL": JOIN_URL,
+        "SITE_URL": request.url_root.rstrip("/"),
+        "now": datetime.now(),  # <--- THIS FIXES THE 'now' ERROR
     }
 
 # =========================
@@ -280,15 +361,18 @@ def load_json_list(path: Path) -> list:
         logger.warning("Failed to load JSON list %s (%s)", path, e)
         return []
 
-def append_json_list(path: Path, record: dict) -> None:
-    """Append a record to a JSON list file (never raises)."""
-    items = load_json_list(path)
-    items.append(record)
-    try:
-        with path.open("w", encoding="utf-8") as f:
-            json.dump(items, f, ensure_ascii=False, indent=2)
-    except Exception as e:
-        logger.warning("Failed to append JSON list %s (%s)", path, e)
+def append_json_list(path, item):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    data = []
+    if path.exists():
+        try:
+            data = json.loads(path.read_text(encoding="utf-8") or "[]")
+            if not isinstance(data, list):
+                data = []
+        except Exception:
+            data = []
+    data.append(item)
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 # =============================================================================
@@ -303,10 +387,21 @@ def append_json_list(path: Path, record: dict) -> None:
 #   "verse_text": "Scripture text",
 #   "verse_meaning": "This reminds me…",
 #   "body": "Main content (I DECLARE / I REFUSE / I WILL or reflection)",
-#   "prayer": "Closing prayer",
+#   "prayer": "Closing prayer", "In Jesus’ name, Amen."
 #   "tags": [ ... ]
 # }
 # =============================================================================
+AMEN_LINE = "In Jesus’ name, Amen."
+
+def ensure_amen(text: str) -> str:
+    t = (text or "").rstrip()
+    if not t:
+        return t
+    # avoid double-adding if already present
+    low = t.lower()
+    if "in jesus" in low and "amen" in low:
+        return t
+    return t + "\n\n" + AMEN_LINE
 
 def _devotions_file_for_year(year: int) -> Path:
     """Return path like data/devotions/devotions_2026.json."""
@@ -354,14 +449,14 @@ def placeholder_devotion(date_str: str = "", mode: str = "morning") -> dict:
         "date": date_str,
         "mode": mode,
         "theme": "Coming Soon",
+        "icon": "🌅" if mode == "morning" else "🌙",
         "verse_ref": "",
         "verse_text": "",
         "verse_meaning": "",
         "body": "Devotion is being prepared. Please check back soon.",
-        "prayer": "",
-        "tags": [],
+        "prayer": "🙏 In Jesus’ name, Amen.",
+        "tags": ["placeholder"],
     }
-
 def load_devotion_for(target_date: date, slot: str = "morning") -> dict:
     """
     Return ONE devotion in unified schema.
@@ -524,6 +619,174 @@ def build_whatsapp_text(entry: dict | None, mode: str, today: date) -> str:
 
     return "\n".join([l for l in lines if l]).strip()
 
+import re
+from calendar import month_name
+
+# ---------------------------------------------------------------------------
+# BLOG CONFIG (templates/blog/*.html are the posts)
+# ---------------------------------------------------------------------------
+BLOG_DIR = Path(app.template_folder or "templates") / "blog"
+
+_slug_re = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")  # gods-love-beyond-sound
+
+# Your static blog images folder (recommended)
+BLOG_IMG_DIR = Path(app.static_folder) / "img" / "soulspeaks"
+
+# Optional: month themes banner
+MONTH_THEMES = {
+    (2026, 2): {"title": "God’s Love in Silence", "subtitle": "God’s Love Beyond Sound • Silence Is Not Absence"},
+    (2026, 3): {"title": "Seeing Beyond Noise", "subtitle": "Focus vs distraction • Faith without noise"},
+    (2026, 4): {"title": "Healing Without Spectacle", "subtitle": "God’s quiet restoration"},
+}
+
+# Map blog slug -> image filename (keep it simple + explicit)
+BLOG_IMAGES = {
+    "gods-love-beyond-sound": "Feb Blog1.png",
+    "silence-is-not-absence": "Feb Blog2.png",
+    "peter-walks-on-water-faith-without-noise": "mar blog1.png",
+    "when-the-wind-is-loud-but-god-is-near": "mar blog2.png",
+    "healing-is-not-always-loud": "april blog1.png",
+    "when-jesus-touches-before-he-speaks": "april blog2.png",
+}
+
+STUDY_PAGES = {
+    # Introduction / Coin series
+    "coin-1": {
+        "order": 1,
+        "title": "Coin Study — Part 1",
+        "template": "study/introduction/study_coin_1.html",
+        "group": "Introduction",
+    },
+    "coin-2": {
+        "order": 2,
+        "title": "Coin Study — Part 2",
+        "template": "study/introduction/study_coin_2.html",
+        "group": "Introduction",
+    },
+    "coin-3": {
+        "order": 3,
+        "title": "Coin Study — Part 3",
+        "template": "study/introduction/study_coin_3.html",
+        "group": "Introduction",
+    },
+
+    # Master Plan (your confirmed order)
+    "secret-inside-glove": {
+        "order": 1,
+        "title": "Lesson 01: The Secret Inside the Glove",
+        "template": "study/master_plan/lesson_01_secret_inside_glove.html",
+        "group": "Master Plan",
+    },
+    "three-room-house": {
+        "order": 2,
+        "title": "Lesson 02: The Three-Room House",
+        "template": "study/master_plan/lesson_02_three_room_house.html",
+        "group": "Master Plan",
+    },
+    "broken-tv": {
+        "order": 3,
+        "title": "Lesson 03: The Broken TV Screen",
+        "template": "study/master_plan/lesson_03_broken_tv.html",
+        "group": "Master Plan",
+    },
+    "war-two-natures": {
+        "order": 4,
+        "title": "Lesson 04: The War of Two Natures",
+        "template": "study/master_plan/lesson_04_war_two_natures.html",
+        "group": "Master Plan",
+    },
+}
+
+def _month_label(m: int) -> str:
+    try:
+        return month_name[m]
+    except Exception:
+        return str(m)
+
+def _pretty_title_from_slug(slug: str) -> str:
+    """Fallback title if the post doesn’t define one."""
+    return slug.replace("-", " ").title()
+
+def _find_blog_image(slug: str) -> str | None:
+    """
+    Return a static-relative path like:
+      img/soulspeaks/Feb Blog1.png
+    """
+    filename = BLOG_IMAGES.get(slug)
+    if not filename:
+        return None
+    # file exists check (optional but helpful)
+    if (BLOG_IMG_DIR / filename).exists():
+        return f"img/soulspeaks/{filename}"
+    return f"img/soulspeaks/{filename}"  # still return even if missing (won’t crash)
+
+def _first_paragraph_from_template(slug: str) -> str:
+    """
+    Tiny excerpt helper (no heavy parsing):
+    Reads the blog html file and grabs first <p>...</p> content.
+    If not found, returns empty string.
+    """
+    path = BLOG_DIR / f"{slug}.html"
+    if not path.exists():
+        return ""
+    try:
+        html = path.read_text(encoding="utf-8", errors="ignore")
+        m = re.search(r"<p[^>]*>(.*?)</p>", html, flags=re.I | re.S)
+        if not m:
+            return ""
+        # strip tags inside that <p>
+        text = re.sub(r"<[^>]+>", "", m.group(1)).strip()
+        return text[:220]  # keep short
+    except Exception:
+        return ""
+
+def _infer_year_month(slug: str) -> tuple[int, int]:
+    """
+    Simple rule: infer from your known slugs (Feb/Mar/Apr 2026).
+    You can expand later.
+    """
+    feb = {"gods-love-beyond-sound", "silence-is-not-absence"}
+    mar = {"peter-walks-on-water-faith-without-noise", "when-the-wind-is-loud-but-god-is-near"}
+    apr = {"healing-is-not-always-loud", "when-jesus-touches-before-he-speaks"}
+
+    if slug in feb: return (2026, 2)
+    if slug in mar: return (2026, 3)
+    if slug in apr: return (2026, 4)
+    return (date.today().year, date.today().month)
+
+def list_blog_posts() -> list[dict]:
+    """
+    Build posts list from templates/blog/*.html (excluding index.html).
+    """
+    posts: list[dict] = []
+    if not BLOG_DIR.exists():
+        return posts
+
+    for p in sorted(BLOG_DIR.glob("*.html")):
+        if p.name.lower() == "index.html":
+            continue
+        slug = p.stem.strip().lower()
+        if not _slug_re.match(slug):
+            continue
+
+        y, m = _infer_year_month(slug)
+        image = _find_blog_image(slug)
+        excerpt = _first_paragraph_from_template(slug)
+
+        posts.append({
+            "slug": slug,
+            "title": _pretty_title_from_slug(slug),
+            "year": y,
+            "month": m,
+            "date": f"{y}-{m:02d}-01",
+            "image": image,      # static-relative
+            "excerpt": excerpt,  # short
+        })
+
+    # newest first
+    posts.sort(key=lambda x: (x.get("year", 0), x.get("month", 0), x.get("slug", "")), reverse=True)
+    return posts
+
 # =============================================================================
 # Routes
 # =============================================================================
@@ -680,23 +943,46 @@ def verse_detail(card_id: int):
 # ---------- Prayer ----------
 PRAYER_REQUESTS_FILE = DATA_DIR / "prayer_requests.json"
 
+PRAYER_TOPICS = [
+  {"value":"peace", "label":"🕊️ Peace / Anxiety"},
+  {"value":"relationships", "label":"💞 Relationships / Family"},
+  {"value":"grief", "label":"💔 Grief / Loss"},
+  {"value":"healing", "label":"🩺 Sickness / Healing"},
+  {"value":"work", "label":"💼 Work / Finances"},
+  {"value":"direction", "label":"🧭 Direction / Decisions"},
+  {"value":"faith", "label":"🙏 Faith / Spiritual Strength"},
+  {"value":"community", "label":"🧑‍🤝‍🧑 Community / Others"},
+  {"value":"other", "label":"✍️ Other"},
+]
+
 @app.route("/prayer", methods=["GET", "POST"], endpoint="prayer")
 def prayer():
     if request.method == "POST":
         name = (request.form.get("name") or "").strip()
-        request_text = (request.form.get("request") or "").strip()
-        if request_text:
-            record = {
-                "created_at": datetime.now().isoformat(timespec="seconds"),
-                "name": name,
-                "request": request_text,
-            }
-            append_json_list(PRAYER_REQUESTS_FILE, record)
+        contact = (request.form.get("contact") or "").strip()
+        topic = (request.form.get("topic") or "").strip() or "other"
+        req_text = (request.form.get("request") or "").strip()
+
+        if not req_text:
+            flash("❌ Please write your prayer request.", "error")
+            return redirect(url_for("prayer"))
+
+        record = {
+            "ts": datetime.now().isoformat(timespec="seconds"),
+            "name": name,
+            "contact": contact,
+            "topic": topic,
+            "request": req_text,
+        }
+
+        file = DATA_DIR / "prayer_requests.json"
+        append_json_list(file, record)
 
         flash("🙏 Your prayer request was received.", "success")
-        return redirect(url_for("prayer"))
+        return redirect(url_for("prayer", ok=1))
 
     ctx = common_page_ctx(active="prayer")
+    ctx["prayer_topics"] = PRAYER_TOPICS
     return render_template("prayer.html", **ctx)
 
 
@@ -705,8 +991,6 @@ def prayer():
 def about():
     ctx = common_page_ctx(active="about")
     return render_template("about.html", **ctx)
-
-
 # ---------- Study ----------
 STUDIES_META_FILE = DATA_DIR / "studies.json"
 
@@ -720,62 +1004,144 @@ def load_study_meta() -> dict:
     except Exception:
         return {}
 
-@app.route("/studies", endpoint="study_index")
-def study_index():
-    templates_root = Path(app.template_folder or "templates")
-    study_dir = templates_root / "study"
-    meta = load_study_meta()
+# Single source of truth: slug -> template + title + group + order
+STUDY_PAGES = {
+    # Introduction / Coin series
+    "coin-1": {
+        "order": 1,
+        "title": "Coin Study — Part 1",
+        "template": "study/introduction/study_coin_1.html",
+        "group": "Introduction",
+    },
+    "coin-2": {
+        "order": 2,
+        "title": "Coin Study — Part 2",
+        "template": "study/introduction/study_coin_2.html",
+        "group": "Introduction",
+    },
+    "coin-3": {
+        "order": 3,
+        "title": "Coin Study — Part 3",
+        "template": "study/introduction/study_coin_3.html",
+        "group": "Introduction",
+    },
 
-    items: list[dict] = []
-    if study_dir.exists():
-        for p in sorted(study_dir.glob("series*.html")):
-            key = p.stem
-            default_title = key.replace("series", "Series ").title()
-            m = meta.get(key, {})
-            items.append({
-                "key": key,
-                "title": m.get("title", default_title),
-                "tagline": m.get("tagline", ""),
-            })
+    # Master Plan
+    "secret-inside-glove": {
+        "order": 1,
+        "title": "Lesson 01: The Secret Inside the Glove",
+        "template": "study/master_plan/lesson_01_secret_inside_glove.html",
+        "group": "Master Plan",
+    },
+    "three-room-house": {
+        "order": 2,
+        "title": "Lesson 02: The Three-Room House",
+        "template": "study/master_plan/lesson_02_three_room_house.html",
+        "group": "Master Plan",
+    },
+    "broken-tv": {
+        "order": 3,
+        "title": "Lesson 03: The Broken TV Screen",
+        "template": "study/master_plan/lesson_03_broken_tv.html",
+        "group": "Master Plan",
+    },
+    "war-two-natures": {
+        "order": 4,
+        "title": "Lesson 04: The War of Two Natures",
+        "template": "study/master_plan/lesson_04_war_two_natures.html",
+        "group": "Master Plan",
+    },
+}
 
+
+SLUG_RE = re.compile(r"^[a-z0-9_-]+$")
+
+def build_study_ctx(page_title: str):
     ctx = common_page_ctx(active="study")
+    ctx["title"] = page_title
     ctx["hero_class"] = "hero"
     ctx["hero_bg"] = HERO_DAY_BG
-    return render_template("study/index.html", series=items, **ctx)
+    return ctx
 
-@app.route("/studies/<series_name>", endpoint="study_detail")
-def study_detail(series_name: str):
-    if not series_name.startswith("series"):
+@app.route("/study")
+def study_redirect():
+    # legacy: /study -> /studies
+    return redirect(url_for("study_index"))
+
+@app.route("/studies", endpoint="study_index")
+def study_index():
+    pages = []
+    for slug, meta in STUDY_PAGES.items():
+        pages.append({
+            "slug": slug,
+            "title": meta["title"],
+            "group": meta.get("group", "Study"),
+            "order": meta.get("order", 999),
+        })
+
+    # Intro first, then Master Plan; within group use order then title
+    group_order = {"Introduction": 1, "Master Plan": 2}
+    pages.sort(key=lambda p: (group_order.get(p["group"], 99), p["order"], p["title"]))
+
+    ctx = build_study_ctx("Study Hub")
+    return render_template("study/index.html", pages=pages, **ctx)
+
+@app.route("/studies/<slug>", endpoint="study_detail")
+def study_detail(slug: str):
+    if not SLUG_RE.fullmatch(slug):
         abort(404)
 
-    rel = Path("study") / f"{series_name}.html"
-    abs_path = Path(app.template_folder or "templates") / rel
-    if not abs_path.exists():
+    meta = STUDY_PAGES.get(slug)
+    if not meta:
         abort(404)
 
-    meta = load_study_meta()
-    default_title = series_name.replace("series", "Series ").title()
-    page_title = meta.get(series_name, {}).get("title", default_title)
+    ctx = build_study_ctx(meta["title"])
+    return render_template(meta["template"], **ctx)
 
-    ctx = common_page_ctx(active="study")
-    return render_template(str(rel).replace("\\", "/"), title=page_title, **ctx)
+# ---- Optional legacy redirects (keep for old links) ----
+@app.route("/studies/coin/1")
+def legacy_coin_1():
+    return redirect(url_for("study_detail", slug="coin-1"))
 
+@app.route("/studies/coin/2")
+def legacy_coin_2():
+    return redirect(url_for("study_detail", slug="coin-2"))
 
-# ---------- Donation ----------
+@app.route("/studies/coin/3")
+def legacy_coin_3():
+    return redirect(url_for("study_detail", slug="coin-3"))
+
+@app.route("/studies/master/secret-inside-glove")
+def legacy_secret_glove():
+    return redirect(url_for("study_detail", slug="secret-inside-glove"))
+
+@app.route("/studies/master/three-room-house")
+def legacy_three_room_house():
+    return redirect(url_for("study_detail", slug="three-room-house"))
+
+@app.route("/studies/master/broken-tv")
+def legacy_broken_tv():
+    return redirect(url_for("study_detail", slug="broken-tv"))
+
+@app.route("/studies/master/war-two-natures")
+def legacy_war_two_natures():
+    return redirect(url_for("study_detail", slug="war-two-natures"))
+
+# ---------- Donation (PUBLIC) ----------
 @app.route("/donation", endpoint="donation")
 def donation():
     ctx = common_page_ctx(active="donation")
-    ctx["paypal_link"] = PAYPAL_LINK
+    ctx["paypal_link"] = None  # Coming soon for now
     return render_template("donation.html", **ctx)
 
-
-# ---------- Volunteer ----------
+# ---------- Volunteer (PUBLIC) ----------
 @app.route("/volunteer", methods=["GET", "POST"], endpoint="volunteer")
 def volunteer():
     if request.method == "POST":
         name = (request.form.get("name") or "").strip()
         skills = (request.form.get("skills") or "").strip()
         contact = (request.form.get("contact") or "").strip()
+
         if name or skills or contact:
             record = {
                 "created_at": datetime.now().isoformat(timespec="seconds"),
@@ -784,31 +1150,12 @@ def volunteer():
                 "contact": contact,
             }
             append_json_list(VOLUNTEERS_FILE, record)
+
         flash("💚 Thank you for offering your skills!", "success")
         return redirect(url_for("volunteer"))
 
     ctx = common_page_ctx(active="volunteer")
     return render_template("volunteer.html", **ctx)
-
-
-# ---------- Feedback ----------
-@app.route("/feedback", methods=["GET", "POST"], endpoint="feedback_view")
-def feedback_view():
-    if request.method == "POST":
-        message = (request.form.get("message") or "").strip()
-        if message:
-            record = {
-                "created_at": datetime.now().isoformat(timespec="seconds"),
-                "message": message,
-            }
-            append_json_list(FEEDBACK_FILE, record)
-
-        flash("📝 Feedback submitted. Thank you!", "success")
-        return redirect(url_for("feedback_view"))
-
-    ctx = common_page_ctx(active="feedback")
-    return render_template("feedback.html", **ctx)
-
 
 # ---------- Auth ----------
 @app.route("/login", methods=["GET", "POST"], endpoint="login")
@@ -947,13 +1294,76 @@ def admin_verses_view():
         **ctx,
     )
 
-
 @app.route("/admin/requests", endpoint="admin_requests")
 @require_auth
-def admin_requests_view():
+def admin_requests():
     items = load_json_list(PRAYER_REQUESTS_FILE)
+    items.reverse()  # newest first
+
+    print("READING FROM:", PRAYER_REQUESTS_FILE.resolve())
+    print("ITEM COUNT:", len(items))
+
     ctx = common_page_ctx(active="admin")
     return render_template("admin/admin_requests.html", items=items, **ctx)
+
+
+@app.route("/admin/requests/delete/<int:index>", methods=["POST"], endpoint="admin_request_delete")
+@require_auth
+def admin_request_delete(index: int):
+    """Archives a prayer request by removing it from the JSON list."""
+    items = load_json_list(PRAYER_REQUESTS_FILE)
+    
+    # Since the view is reversed, the index from the loop needs to be 
+    # handled carefully or we just pop from the list and re-save.
+    # The simplest way is to reverse the list back, pop, and save.
+    items.reverse() 
+    
+    if 0 <= index < len(items):
+        removed = items.pop(index)
+        # Save back to file
+        with open(PRAYER_REQUESTS_FILE, "w", encoding="utf-8") as f:
+            json.dump(items, f, indent=2)
+        flash(f"Prayer from {removed.get('name', 'Anonymous')} archived.", "success")
+    else:
+        flash("Request not found.", "error")
+        
+    return redirect(url_for("admin_requests"))
+
+def load_posts():
+    if not os.path.exists(BLOG_DATA_PATH):
+        return []
+    with open(BLOG_DATA_PATH, 'r') as f:
+        return json.load(f)
+
+def save_posts(posts):
+    with open(BLOG_DATA_PATH, 'w') as f:
+        json.dump(posts, f, indent=4)
+
+@app.route('/admin/blog', methods=['GET', 'POST'])
+def admin_blog():
+    if request.method == 'POST':
+        # Capture form data
+        new_post = {
+            "title": request.form.get('title'),
+            "slug": request.form.get('title').lower().replace(" ", "-"),
+            "date_display": request.form.get('date'),
+            "month_label": request.form.get('month_label'),
+            "excerpt": request.form.get('excerpt'),
+            "section1_title": request.form.get('s1_title'),
+            "section1_text": request.form.get('s1_text'),
+            "scripture_ref": request.form.get('scripture_ref'),
+            "scripture_quote": request.form.get('scripture_quote'),
+            "image": request.form.get('image') or "default.jpg"
+        }
+        
+        posts = load_posts()
+        posts.insert(0, new_post) # Add to top
+        save_posts(posts)
+        flash("Post Published to Soul Speaks!")
+        return redirect(url_for('blog_index'))
+        
+    return render_template('admin/blog_form.html')
+
 
 @app.route("/admin/feedback", endpoint="admin_feedback")
 @require_auth
@@ -1025,18 +1435,57 @@ def admin_donations_view():
     )
 
 
-@app.route("/admin/whatsapp", methods=["GET"], endpoint="admin_whatsapp")
-@require_auth
-def admin_whatsapp_page():
+@app.route("/admin/whatsapp", methods=["GET", "POST"], endpoint="admin_whatsapp")
+def admin_whatsapp():
     ctx = common_page_ctx(active="admin")
+    ctx["prayer_topics"] = PRAYER_TOPICS
+
+    result = {}
+    selected_topic = ""
+
+    if request.method == "POST":
+        date_str = request.form.get("date") or date.today().isoformat()
+        mode = request.form.get("mode") or "morning"
+        selected_topic = request.form.get("topic") or ""
+
+        # your existing devotion builder...
+        devotion_payload = build_share_payload(date_str=date_str, mode=mode)  # example
+
+        picked = pick_random_request(selected_topic)
+
+        add_on = ""
+        if picked:
+            who = picked.get("name") or "Someone"
+            topic = picked.get("topic") or "Prayer"
+            req = (picked.get("request") or "").strip()
+            if len(req) > 240:
+                req = req[:240].rstrip() + "…"
+
+            add_on = (
+                "\n\n🙏 **Prayer Focus (from community)**\n"
+                f"👤 {who}\n"
+                f"🏷️ {topic}\n"
+                f"📝 {req}\n"
+                "\nIn Jesus’ name, Amen."
+            )
+        else:
+            add_on = "\n\nIn Jesus’ name, Amen."
+
+        # attach to each message variant
+        if devotion_payload.get("text"):
+            devotion_payload["text"] += add_on
+        if devotion_payload.get("text_morning"):
+            devotion_payload["text_morning"] += add_on
+        if devotion_payload.get("text_night"):
+            devotion_payload["text_night"] += add_on
+
+        result = devotion_payload
+
     ctx.update({
-        "today": date.today(),
-        "selected_date": date.today().isoformat(),
-        "selected_mode": "morning",
-        "result": {},
+        "result": result,
+        "selected_topic": selected_topic,
     })
     return render_template("admin/admin_whatsapp.html", **ctx)
-
 
 @app.route("/admin/whatsapp/send", methods=["POST"], endpoint="admin_whatsapp_send")
 @require_auth
@@ -1105,6 +1554,149 @@ def admin_whatsapp_send():
         "join_url": SITE_JOIN_URL,
     })
 
+# ----------------------------
+# Blog helpers (small + safe)
+# ----------------------------
+def _month_label(m: int) -> str:
+    try:
+        return month_name[m]
+    except Exception:
+        return str(m)
+
+def _coerce_int(v, default=None):
+    try:
+        return int(v)
+    except Exception:
+        return default
+
+# If your list_blog_posts() already exists, keep yours.
+# Expected output for each post:
+# {
+#   "slug": "gods-love-beyond-sound",
+#   "title": "God’s Love Beyond Sound",
+#   "date": "2026-02-01"  (ISO string preferred),
+#   "month": 2,
+#   "year": 2026,
+#   "excerpt": "...",
+#   "image": "img/soulspeaks/Feb Blog1.png" (static-relative)
+# }
+
+def _filter_posts(posts: list[dict], year: int | None, month: int | None) -> list[dict]:
+    out = []
+    for p in posts:
+        y = p.get("year")
+        m = p.get("month")
+        if year and y != year:
+            continue
+        if month and m != month:
+            continue
+        out.append(p)
+    return out
+
+def _decorate_posts(posts: list[dict]) -> list[dict]:
+    """Add labels for template."""
+    for p in posts:
+        y = p.get("year")
+        m = p.get("month")
+        d = p.get("date")
+        p["month_label"] = _month_label(m) if isinstance(m, int) else ""
+        # nice date display
+        try:
+            if isinstance(d, str) and d:
+                dt = datetime.strptime(d, "%Y-%m-%d").date()
+                p["date_display"] = dt.strftime("%b %d, %Y")
+            else:
+                p["date_display"] = ""
+        except Exception:
+            p["date_display"] = d or ""
+    return posts
+
+# Optional: month theme banner (simple)
+MONTH_THEMES = {
+    (2026, 2): {"title": "God’s Love in Silence", "subtitle": "God’s Love Beyond Sound • Silence Is Not Absence"},
+    (2026, 3): {"title": "Seeing Beyond Noise", "subtitle": "Focus vs distraction • Faith without noise"},
+    (2026, 4): {"title": "Healing Without Spectacle", "subtitle": "God’s quiet restoration"},
+}
+
+def _get_month_theme(year: int | None, month: int | None):
+    if not year or not month:
+        return None
+    return MONTH_THEMES.get((year, month))
+
+
+# ----------------------------
+# Blog routes (clean)
+# ----------------------------
+@app.route("/blog", endpoint="blog_index")
+def blog_index():
+    # read filters
+    year = _coerce_int(request.args.get("year"), None)
+    month = _coerce_int(request.args.get("month"), None)
+
+    posts_all = list_blog_posts()  # use yours
+    # ensure predictable sort (newest first)
+    posts_all = sorted(
+        posts_all,
+        key=lambda p: (p.get("year") or 0, p.get("month") or 0, p.get("date") or ""),
+        reverse=True
+    )
+
+    # years + months for dropdown
+    years = sorted({p.get("year") for p in posts_all if isinstance(p.get("year"), int)}, reverse=True)
+    if not years:
+        years = [date.today().year]
+
+    months = [{"value": i, "label": _month_label(i)} for i in range(1, 13)]
+
+    # defaults (if no query params)
+    selected_year = year if year else years[0]
+    selected_month = month if month in range(1, 13) else ""
+
+    posts = _filter_posts(posts_all, selected_year, month if month in range(1, 13) else None)
+    posts = list_blog_posts()
+
+    ctx = common_page_ctx(active="blog")
+    ctx["posts"] = list_blog_posts()
+    ctx.update({
+        "posts": posts,
+        "years": years,
+        "months": months,
+        "selected_year": selected_year,
+        "selected_month": selected_month,
+        "month_theme": _get_month_theme(selected_year, month if month in range(1, 13) else None),
+        "SITE_URL": SITE_URL,  # used in template for Copy Link
+    })
+    return render_template("blog/index.html", **ctx)
+
+
+@app.route("/blog/<slug>", endpoint="blog_post")
+def blog_post(slug: str):
+    slug = (slug or "").strip().lower()
+    if not _slug_re.match(slug):
+        abort(404)
+
+    # template file must be templates/blog/<slug>.html
+    rel_tpl = f"blog/{slug}.html"   # ✅ define it here (always)
+    abs_path = BLOG_DIR / f"{slug}.html"
+    if not abs_path.exists():
+        abort(404)
+
+    # Find metadata from registry, else fallback
+    posts = list_blog_posts()
+    posts = [p for p in posts if p["slug"] != "silence-is-not-absence"]
+    meta = next((p for p in posts if (p.get("slug") == slug)), None)
+
+    title = (meta.get("title") if meta else None) or _pretty_title_from_slug(slug)
+    image = (meta.get("image") if meta else None) or _find_blog_image(slug)
+
+    ctx = common_page_ctx(active="blog")
+    ctx["post"] = {
+        "slug": slug,
+        "title": _pretty_title_from_slug(slug),
+        "image": _find_blog_image(slug),
+    }
+
+    return render_template(rel_tpl, **ctx)
 
 # =============================================================================
 # Run (HTTP dev) + auto-open browser

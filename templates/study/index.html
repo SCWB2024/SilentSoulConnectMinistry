@@ -1,25 +1,41 @@
 {% extends "base.html" %}
-{% block title %}Study Series — SoulStart{% endblock %}
+{% block title %}Study Hub — SoulStart{% endblock %}
+
 {% block content %}
 <section class="hero glass">
   <div class="hero-inner">
-    <h1>Study Hub</h1>
-    <p class="muted">Choose a series to begin.</p>
+    <h1>📚 Study Hub</h1>
+    <p class="muted">Choose a study. Simple, visual, and Deaf-friendly.</p>
   </div>
 </section>
 
-<div class="grid cards">
-  {% for s in series %}
-    <a class="card clickable" href="{{ url_for('study_detail', series_name=s.key) }}">
-      <h3>{{ s.title }}</h3>
-      <p class="muted">Open {{ s.title }}</p>
-    </a>
-  {% else %}
-    <div class="card"><p class="muted">Place files like <code>templates/study/series1.html</code>.</p></div>
-  {% endfor %}
+<div class="card" style="margin-top:16px;">
+  <h2 style="margin:0 0 10px;">✨ Introduction</h2>
+  <div class="study-grid">
+    {% for p in pages if p.group == "Introduction" %}
+      <a class="study-card" href="{{ url_for('study_detail', slug=p.slug) }}">
+        <div class="study-ico">🪙</div>
+        <div>
+          <div class="study-title">{{ p.title }}</div>
+          <div class="study-sub muted">Tap to open</div>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
 </div>
 
-<div class="center mt-4">
-  <a class="btn soft" href="{{ url_for('home') }}">🏠 Home</a>
+<div class="card" style="margin-top:16px;">
+  <h2 style="margin:0 0 10px;">🧭 Master Plan</h2>
+  <div class="study-grid">
+    {% for p in pages if p.group == "Master Plan" %}
+      <a class="study-card" href="{{ url_for('study_detail', slug=p.slug) }}">
+        <div class="study-ico">🧩</div>
+        <div>
+          <div class="study-title">{{ p.title }}</div>
+          <div class="study-sub muted">Tap to open</div>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}

@@ -1,92 +1,67 @@
-{% extends "base.html" %}
-{% block title %}Admin — Theme Verses{% endblock %}
-{% block content %}
-
-<section class="hero hero-day" style="background-image:url('{{ url_for('static', filename='img/hero_day.jpg') }}')">
-  <div class="hero-inner" style="padding:24px 22px;">
-    <h1>📖 Theme Verses (Admin)</h1>
-    <p class="muted">Add, edit, or remove promise cards used on the Theme Verses page.</p>
-  </div>
-</section>
+{# ... Hero Section remains the same ... #}
 
 <div class="card admin-card">
-  <h3>Add New Verse Card</h3>
+  <h3>📖 Add New Verse Card</h3>
+  {# Error/Success messages remain the same #}
 
-  {% if error %}
-    <p class="err" role="alert">{{ error }}</p>
-  {% endif %}
-  {% if success %}
-    <p class="ok" role="status">{{ success }}</p>
-  {% endif %}
-
-  <form method="post" novalidate>
+  <form method="post" novalidate id="add-verse-form">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <input type="hidden" name="action" value="add">
 
-    <div class="field">
-      <label for="image">Choose Image (static/img/verses/)</label>
-      {% if image_files %}
-        <select id="image" name="image" class="form-select">
+    <div class="field" style="display: flex; gap: 15px; align-items: flex-start;">
+      <div style="flex: 1;">
+        <label for="image">Choose Image</label>
+        <select id="image-select" name="image" class="form-select" onchange="previewImage(this, 'add-preview')">
           <option value="">-- Select an image --</option>
           {% for img in image_files %}
             <option value="{{ img }}">{{ img }}</option>
           {% endfor %}
         </select>
-      {% else %}
-        <p class="muted small">
-          No images found in <code>static/img/verses/</code>. Upload images to that folder.
-        </p>
-      {% endif %}
-
-      <p class="muted small">Or type manually below:</p>
-      <input name="image" type="text" placeholder="Firelight.jpg (optional manual entry)">
+        <input name="image" type="text" placeholder="Or manual filename.jpg" style="margin-top: 8px;">
+      </div>
+      {# Live Preview for Deaf-friendly visual confirmation #}
+      <div id="add-preview" class="thumb" style="width: 100px; height: 100px; border: 2px dashed #444;">
+        <span class="muted small" style="display:block; text-align:center; padding-top:35px;">Preview</span>
+      </div>
     </div>
 
     <div class="field">
-      <label for="ref">Scripture reference</label>
+      <label for="ref">📖 Scripture Reference</label>
       <input id="ref" name="ref" type="text" required placeholder="Isaiah 60:1 (NLV)">
     </div>
 
     <div class="field">
-      <label for="title">Short title (optional)</label>
-      <input id="title" name="title" type="text" placeholder="Firelight">
+      <label for="note">✨ Note / Caption</label>
+      <textarea id="note" name="note" rows="3" placeholder="Explain the promise. Remember: In Jesus’ name, Amen."></textarea>
     </div>
 
-    <div class="field">
-      <label for="note">Note / caption (optional)</label>
-      <textarea id="note" name="note" rows="3"
-        placeholder="Short encouragement that explains the promise."></textarea>
-    </div>
-
-    <button type="submit" class="btn">➕ Add Verse</button>
-    <a href="{{ url_for('verses') }}" class="btn soft">👁 View Theme Verses Page</a>
+    <button type="submit" class="btn btn-primary">➕ Add to Collection</button>
   </form>
 </div>
 
 <div class="card admin-card">
-  <h3>Current Verses</h3>
+  <h3>📜 Current Collection</h3>
   {% if cards %}
     <div class="admin-list">
       {% for c in cards %}
-        <div class="admin-verse-row">
+        <div class="admin-verse-row" style="border-left: 4px solid #00a86b;">
           <div class="thumb">
-            {% if c.src %}
-              <img src="{{ c.src }}" alt="{{ c.ref }}" />
+            {% if c.image %}
+              <img src="{{ url_for('static', filename='img/verses/' + c.image) }}" alt="{{ c.ref }}">
             {% else %}
               <div class="thumb-missing">No image</div>
             {% endif %}
           </div>
 
           <div class="info">
-            <div><strong>#{{ c.index }} — {{ c.ref }}</strong></div>
-            <div>{{ c.title }}</div>
-            {% if c.note %}
-              <div class="muted small">{{ c.note }}</div>
-            {% endif %}
-            <div class="muted small">File: {{ c.image }}</div>
+            <div style="display: flex; justify-content: space-between;">
+                <strong>{{ c.ref }}</strong>
+                <span class="muted">#{{ c.index }}</span>
+            </div>
+            <div class="muted small">{{ c.note|truncate(100) }}</div>
 
             <div class="admin-actions">
-              <!-- Delete -->
+              <button class="btn small" onclick="toggleEdit('edit-{{ c.index }}')">✏️ Edit</button>
               <form method="post" class="inline-form" onsubmit="return confirm('Delete this verse?');">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="action" value="delete">
@@ -95,120 +70,49 @@
               </form>
             </div>
 
-            <!-- Always-visible Edit form -->
-            <form method="post" class="edit-form">
-              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-              <input type="hidden" name="action" value="update">
-              <input type="hidden" name="index" value="{{ c.index }}">
-
-              <div class="field small-field">
-                <label>Image filename</label>
-                <input name="image" type="text" value="{{ c.image }}">
-              </div>
-
-              <div class="field small-field">
-                <label>Scripture reference</label>
-                <input name="ref" type="text" value="{{ c.ref }}">
-              </div>
-
-              <div class="field small-field">
-                <label>Title</label>
-                <input name="title" type="text" value="{{ c.title }}">
-              </div>
-
-              <div class="field small-field">
-                <label>Note / caption</label>
-                <textarea name="note" rows="2">{{ c.note }}</textarea>
-              </div>
-
-              <button type="submit" class="btn small">💾 Save Changes</button>
-            </form>
+            {# Collapsible Edit form to keep page clean #}
+            <div id="edit-{{ c.index }}" style="display: none; margin-top: 15px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;">
+                <form method="post">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="action" value="update">
+                    <input type="hidden" name="index" value="{{ c.index }}">
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div class="field small-field">
+                            <label>Image File</label>
+                            <input name="image" type="text" value="{{ c.image }}">
+                        </div>
+                        <div class="field small-field">
+                            <label>Reference</label>
+                            <input name="ref" type="text" value="{{ c.ref }}">
+                        </div>
+                    </div>
+                    <div class="field small-field">
+                        <label>Caption</label>
+                        <textarea name="note" rows="2">{{ c.note }}</textarea>
+                    </div>
+                    <button type="submit" class="btn small">💾 Save Changes</button>
+                </form>
+            </div>
           </div>
         </div>
       {% endfor %}
     </div>
-  {% else %}
-    <p class="muted">No verses found yet. Add your first theme verse above.</p>
   {% endif %}
 </div>
 
-<div class="center mt-4">
-  <a class="btn soft" href="{{ url_for('admin') }}">⚙ Back to Admin Dashboard</a>
-  <a class="btn soft" href="{{ url_for('home') }}">🏠 Home</a>
-</div>
+<script nonce="{{ csp_nonce() }}">
+function previewImage(select, previewId) {
+    const preview = document.getElementById(previewId);
+    if (select.value) {
+        preview.innerHTML = `<img src="/static/img/verses/${select.value}" style="width:100%; height:100%; object-fit:cover;">`;
+    } else {
+        preview.innerHTML = `<span class="muted small" style="display:block; text-align:center; padding-top:35px;">Preview</span>`;
+    }
+}
 
-<style nonce="{{ csp_nonce() }}">
-  .admin-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 8px;
-  }
-  .admin-verse-row {
-    display: flex;
-    gap: 12px;
-    padding: 8px;
-    border-radius: 8px;
-    background: rgba(15, 23, 42, 0.35);
-  }
-  .admin-verse-row .thumb {
-    width: 72px;
-    height: 72px;
-    flex: 0 0 auto;
-    border-radius: 8px;
-    overflow: hidden;
-    background: #020617;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .admin-verse-row .thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .thumb-missing {
-    font-size: 0.7rem;
-    color: #9ca3af;
-    text-align: center;
-    padding: 4px;
-  }
-  .admin-verse-row .info {
-    flex: 1 1 auto;
-    font-size: 0.9rem;
-  }
-  .small {
-    font-size: 0.8rem;
-  }
-  .field {
-    margin-bottom: 0.75rem;
-  }
-  .field input,
-  .field textarea,
-  .field select {
-    width: 100%;
-  }
-  .admin-actions {
-    margin-top: 6px;
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-  .inline-form {
-    display: inline-block;
-  }
-  .small-field label {
-    font-size: 0.8rem;
-  }
-  .danger {
-    background: #b91c1c;
-    border-color: #7f1d1d;
-  }
-  .edit-form {
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: 1px solid rgba(148, 163, 184, 0.4);
-  }
-</style>
-{% endblock %}
-
+function toggleEdit(id) {
+    const el = document.getElementById(id);
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+</script>

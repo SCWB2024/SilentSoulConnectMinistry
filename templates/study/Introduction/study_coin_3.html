@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Found in the Stillness: Part 3 — Silent SoulConnect{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; margin: 40px auto; padding: 0 20px;">
+  
+  <div style="width: 100%; background: #e2e8f0; height: 10px; border-radius: 10px; margin-bottom: 40px; overflow: hidden;">
+    <div style="width: 100%; background: #10b981; height: 100%;"></div>
+  </div>
+
+  <div style="text-align: center; margin-bottom: 40px;">
+    <h1 style="color: var(--primary); font-size: 2.5rem; margin-bottom: 10px;">Part 3: The Visual Victory</h1>
+    <p style="color: #64748b; font-size: 1.1rem; font-style: italic;">"Rejoice with me, for I have found the coin which I lost!" — Luke 15:9</p>
+  </div>
+
+  <div class="card" style="border-radius: 24px; padding: 40px; background: white; border: 1px solid #e2e8f0; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 6px solid #10b981;">
+    <h3 style="color: #059669; margin-top: 0;">A Flash of Silver</h3>
+    <p style="font-size: 1.25rem; line-height: 1.8; color: #1e293b;">
+        The broom moves one last time. Suddenly, a tiny <strong>spark</strong> catches the light of the lamp. The Owner reaches down into the dust. Her fingers close around the silver. 
+    </p>
+    <p style="font-size: 1.25rem; line-height: 1.8; color: #1e293b;">
+        She doesn't just put it back in her pocket and move on. She is overwhelmed with <strong>Joy</strong>. She wipes away the dirt until the coin shines like new. She holds it up for all to see.
+    </p>
+  </div>
+
+  
+
+  <div style="margin-top: 40px; background: #f0fdf4; padding: 40px; border-radius: 24px; border: 1px solid #dcfce7; text-align: center;">
+    <h3 style="color: #166534; margin-top: 0;">The Heaven Celebration</h3>
+    <p style="color: #334155; font-size: 1.1rem; line-height: 1.7; max-width: 600px; margin: 0 auto 30px;">
+        Jesus tells us that when one person is "found" by God, the angels in Heaven rejoice. In the Deaf community, we know that <strong>Visual Joy</strong> is the most powerful. Imagine the angels signing "Hallelujah" with their whole beings!
+    </p>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+      <div style="background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+        <span style="font-size: 2rem;">🤝</span>
+        <h4 style="margin: 10px 0; color: var(--primary);">Belonging</h4>
+        <p class="small muted">You are no longer alone in the corner. You are back in the Owner's hand.</p>
+      </div>
+      <div style="background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+        <span style="font-size: 2rem;">🕊️</span>
+        <h4 style="margin: 10px 0; color: var(--primary);">Restoration</h4>
+        <p class="small muted">The dirt of the world is washed away. Your true identity is restored.</p>
+      </div>
+      <div style="background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+        <span style="font-size: 2rem;">✨</span>
+        <h4 style="margin: 10px 0; color: var(--primary);">Purpose</h4>
+        <p class="small muted">You were found for a reason. You have a place in God's Kingdom.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top: 40px; border-radius: 24px; padding: 40px; background: #1e293b; color: white; text-align: center;">
+    <h2 style="color: var(--gold); margin-top: 0;">You Are Found.</h2>
+    <p style="opacity: 0.9; font-size: 1.1rem; line-height: 1.7;">
+        This concludes our first study series. But your journey with Jesus is just beginning. 
+        Will you continue to walk in His light today?
+    </p>
+    
+    <div style="margin-top: 30px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+        <a href="{{ url_for('home') }}" class="btn" style="background: var(--gold); color: #1e293b; padding: 15px 35px; font-weight: bold; border-radius: 10px; text-decoration: none;">Return to Home</a>
+        <a href="{{ url_for('study_index') }}" class="btn soft" style="background: rgba(255,255,255,0.1); color: white; padding: 15px 35px; border: 1px solid rgba(255,255,255,0.3); border-radius: 10px; text-decoration: none;">
+  Back to Study Hub
+
+    </div>
+  </div>
+
+  <div style="text-align: center; margin-top: 40px; padding: 20px;">
+    <p style="color: #94a3b8; font-style: italic;">"I have called you by name; you are mine." — Isaiah 43:1</p>
+  </div>
+
+</div>
+
+<footer style="text-align: center; margin: 60px 0; color: #94a3b8; font-size: 0.85rem;">
+    <p>© {{ now.year if now else '2026' }} Silent SoulConnect Ministry </p>
+</footer>
+{% endblock %}

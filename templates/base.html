@@ -3,146 +3,110 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>{% block title %}SoulStart Devotion{% endblock %}</title>
+  <title>{% block title %}SoulStart — Faith to Rise{% endblock %}</title>
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
   <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
 
-  <!-- Social cards -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="SoulStart — Faith to Rise, Grace to Rest">
-  <meta property="og:description" content="Daily devotion for Sunrise & Sunset, prayer requests, and study resources.">
-  <meta property="og:image" content="{{ url_for('static', filename='img/hero_day.jpg', _external=True) }}">
-  <meta property="og:url" content="{{ request.url_root }}">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="SoulStart — Faith to Rise, Grace to Rest">
-  <meta name="twitter:description" content="Daily devotion for Sunrise & Sunset, prayer requests, and study resources.">
-  <meta name="twitter:image" content="{{ url_for('static', filename='img/hero_day.jpg', _external=True) }}">
+  <style>
+    :root { --primary: #00a86b; --gold: #d4af37; --bg: #f8fafc; }
+    
+    /* Global Flash Alerts */
+    .flash-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; width: 90%; max-width: 400px; }
+    .flash { padding: 15px; border-radius: 10px; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-left: 5px solid; }
+    .flash-success { background: #ecfdf5; color: #065f46; border-color: #10b981; }
+    .flash-error { background: #fef2f2; color: #991b1b; border-color: #ef4444; }
+
+    /* Modern Navigation */
+    .topnav { 
+      display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; 
+      padding: 12px; background: white; border-bottom: 1px solid #eee;
+    }
+    .topnav a { 
+      text-decoration: none; color: #444; font-weight: 600; padding: 10px 14px;
+      border-radius: 8px; transition: 0.2s; font-size: 0.95rem;
+    }
+    .topnav a.active { background: var(--primary); color: white; }
+    
+    /* Footer & Stay Connected */
+    .unified-connect-panel { background: white; border-top: 1px solid #e2e8f0; padding: 40px 20px; text-align: center; margin-top: 40px; border-radius: 30px 30px 0 0; }
+    .social-wrapper { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
+    .social-icon-link img { width: 44px; height: 44px; transition: 0.2s; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+    .share-btn-style { background: var(--gold); color: white; border: none; padding: 12px 24px; border-radius: 30px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 10px rgba(212,175,55,0.3); }
+
+    /* Mobile "Double-Stack" - No links hidden! */
+    @media (max-width: 600px) {
+      .topnav { display: grid; grid-template-columns: 1fr 1fr; padding: 10px; }
+      .topnav a { text-align: center; font-size: 0.85rem; border: 1px solid #f1f5f9; }
+      .brand { flex-direction: column; text-align: center; }
+    }
+  </style>
 </head>
+<body class="{{ page_bg_class or '' }}">
 
-<body class="{{ page_bg_class or '' }}"
-      style="{{ '--page-bg:url(' ~ page_bg_url ~ ')' if page_bg_url else '' }}">
-  {% if page_bg_class == 'bg-video' and page_bg_video %}
-  <video class="bg-video" autoplay muted loop playsinline preload="metadata" poster="{{ page_bg_poster or '' }}">
-    <source src="{{ page_bg_video }}" type="video/mp4">
-  </video>
-  {% endif %}
+  <div class="flash-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}{% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+      {% endfor %}{% endif %}
+    {% endwith %}
+  </div>
 
-  <header class="header brand" role="banner">
-    <div class="brand">
-      <img src="{{ url_for('static', filename='img/sscm_logo.jpg') }}" alt="Silent SoulConnect Ministry" class="logo">
-      <div>
-        <div class="title">Silent SoulConnect Ministry</div>
-        <div class="sub">{{ theme or "Faith to Rise, Grace to Rest" }}</div>
+  <header class="header brand">
+    <div class="brand" style="display:flex; align-items:center; gap:12px; padding:15px; justify-content:center;">
+      <img src="{{ url_for('static', filename='img/sscm_logo.jpg') }}" alt="Logo" style="height:50px; border-radius:8px;">
+      <div style="text-align:left;">
+        <div class="title" style="font-weight:bold; font-size:1.1rem;">Silent SoulConnect</div>
+        <div class="sub" style="font-size:0.75rem; color:var(--primary); font-weight:600;">{{ SITE_THEME }}</div>
       </div>
     </div>
-
-<nav class="topnav">
-
-  <!-- Public -->
-  <a href="{{ url_for('home') }}" class="{{ 'active' if active=='home' else '' }}">Home</a>
-
-  <!-- Devotion / Study = link to Today (acts as hub) -->
-  <a href="{{ url_for('devotion_study') }}"
-   class="{{ 'active' if active=='devotion_study' else '' }}">
-  Devotion / Study
-</a>
-
-  <a href="{{ url_for('prayer') }}" class="{{ 'active' if active=='prayer' else '' }}">Prayer</a>
-
-  <!-- Donate endpoint in your app is donation -->
-  <a href="{{ url_for('donation') }}" class="{{ 'active' if active=='donation' else '' }}">Donate</a>
-
-  <!-- Get Involved: if you don't have this page yet, temporarily point to volunteer -->
-  <a href="{{ url_for('volunteer') }}" class="{{ 'active' if active=='volunteer' else '' }}">Get Involved</a>
-
-  <!-- Hidden / Restricted -->
-  {% if is_authed %}
-    <a href="{{ url_for('admin') }}" class="{{ 'active' if active=='admin' else '' }}">Admin</a>
-    <a href="{{ url_for('logout') }}" class="muted">Logout</a>
-  {% else %}
-    <a href="{{ url_for('login') }}" class="{{ 'active' if active=='login' else '' }}">Admin</a>
-  {% endif %}
-
-</nav>
-
-
-    <a href="{{ url_for('donation') }}" class="fab fab-donate" aria-label="Give">💚</a>
+    
+    <nav class="topnav">
+      <a href="{{ url_for('home') }}" class="{{ 'active' if active=='home' }}">🏠 Home</a>
+      <a href="{{ url_for('devotion_study') }}" class="{{ 'active' if active=='devotion_study' }}">✨ VOICE</a>
+      <a href="{{ url_for('prayer') }}" class="{{ 'active' if active=='prayer' }}">🙏 Prayer</a>
+      <a href="{{ url_for('donation') }}" class="{{ 'active' if active=='donation' }}">💖 Donate</a>
+      <a href="{{ url_for('volunteer') }}" class="{{ 'active' if active=='volunteer' }}">🤝 Join</a>
+      {% if session.get('authed') %}
+        <a href="{{ url_for('admin') }}" class="{{ 'active' if active=='admin' }}">⚙️ Admin</a>
+        <a href="{{ url_for('logout') }}" style="color:#ef4444; font-size:0.7rem;">Logout</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">🔐 Login</a>
+      {% endif %}
+    </nav>
   </header>
 
-  <main class="main" role="main">
+  <main class="main">
     {% block content %}{% endblock %}
   </main>
 
-   <!-- TTS button -->
-  <button id="ttsToggle" class="btn tts-btn" aria-label="Read page">🔊 Read Page</button>
+  <section class="unified-connect-panel">
+    <h3 style="margin:0; font-size:1.3rem;">Stay Connected</h3>
+    <p class="muted" style="font-size: 0.85rem; margin-top: 15px;">
+  Nurturing the inner life beyond noise.
+</p>
+    <div class="social-wrapper">
+      <a href="{{ JOIN_URL }}" target="_blank" class="social-icon-link"><img src="{{ url_for('static', filename='img/icons/whatsapp.png') }}" alt="WhatsApp"></a>
+      <a href="{{ FACEBOOK_URL }}" target="_blank" class="social-icon-link"><img src="{{ url_for('static', filename='img/icons/facebook.png') }}" alt="Facebook"></a>
+      <a href="{{ LINKEDIN_URL }}" target="_blank" class="social-icon-link"><img src="{{ url_for('static', filename='img/icons/linkedin.png') }}" alt="LinkedIn"></a>
+      <button class="share-btn-style" id="shareSite">🔗 Share Link</button>
+    </div>
+  </section>
 
-  <!-- Minimal JS (no modal, no extra garbage) -->
   <script>
-  // Share site
-  (function(){
-    const btn = document.getElementById('shareSite');
-    if(!btn) return;
-    btn.addEventListener('click', async () => {
+    document.getElementById('shareSite')?.addEventListener('click', async () => {
       const url = window.location.origin;
-      const data = { title: 'Silent SoulConnect Ministry', text: 'Faith to Rise, Grace to Rest', url };
-      if (navigator.share) { try { await navigator.share(data);} catch(e){} }
-      else {
-        try { await navigator.clipboard.writeText(url); alert('🔗 Link copied!'); }
-        catch(e){ alert('Couldn’t copy link.'); }
-      }
+      try {
+        if (navigator.share) { await navigator.share({ title: 'SoulStart', url: url }); }
+        else {
+          await navigator.clipboard.writeText(url);
+          const btn = document.getElementById('shareSite');
+          btn.textContent = "✅ Copied!";
+          setTimeout(() => { btn.textContent = "🔗 Share Link"; }, 2500);
+        }
+      } catch(e){}
     });
-  })();
-
-  // Draggable donate FAB
-  (function(){
-    const fab = document.querySelector('.fab-donate');
-    if(!fab) return;
-    let drag=false, ox=0, oy=0;
-    const start=(x,y)=>{ const r=fab.getBoundingClientRect(); drag=true; ox=x-r.left; oy=y-r.top; fab.style.transition='none'; };
-    const move=(x,y)=>{ if(!drag) return; const mx=innerWidth-fab.offsetWidth-6, my=innerHeight-fab.offsetHeight-6;
-      const nx=Math.max(6, Math.min(x-ox, mx)); const ny=Math.max(6, Math.min(y-oy, my)); fab.style.left=nx+'px'; fab.style.top=ny+'px'; };
-    const end=()=>{ drag=false; fab.style.transition=''; };
-    fab.addEventListener('mousedown', e=>{ e.preventDefault(); start(e.clientX,e.clientY); });
-    addEventListener('mousemove', e=>move(e.clientX,e.clientY));
-    addEventListener('mouseup', end);
-    fab.addEventListener('touchstart', e=>{ const t=e.touches[0]; start(t.clientX,t.clientY); }, {passive:true});
-    fab.addEventListener('touchmove', e=>{ const t=e.touches[0]; move(t.clientX,t.clientY); }, {passive:true});
-    fab.addEventListener('touchend', end);
-    if(!fab.style.left) fab.style.left='calc(100vw - 72px)';
-    if(!fab.style.top)  fab.style.top ='calc(100vh - 120px)';
-  })();
-
-  // Basic TTS
-  (function(){
-    const btn=document.getElementById('ttsToggle');
-    if(!('speechSynthesis' in window)){ btn.style.display='none'; return; }
-    let speaking=false;
-    btn.addEventListener('click', ()=>{
-      const synth=window.speechSynthesis;
-      if(speaking){ synth.cancel(); speaking=false; btn.textContent='🔊 Read Page'; return; }
-      const el=document.querySelector('main')||document.body;
-      const u=new SpeechSynthesisUtterance(el.innerText.replace(/\s+\n/g,'\n').trim());
-      u.rate=1.0; u.pitch=1.0;
-      synth.speak(u); speaking=true; btn.textContent='⏹ Stop';
-      u.onend=()=>{ speaking=false; btn.textContent='🔊 Read Page'; };
-    });
-  })();
+    setTimeout(() => { document.querySelectorAll('.flash').forEach(f => f.remove()); }, 4000);
   </script>
-
-  <div class="footer-social" aria-label="Social links">
-  <a class="icon-link" href="{{ SOCIAL_LINKS.whatsapp }}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-    💬
-  </a>
-  <a class="icon-link" href="{{ SOCIAL_LINKS.facebook }}" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-    📘
-  </a>
-  <a class="icon-link" href="{{ SOCIAL_LINKS.linkedin }}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-    💼
-  </a>
-  <button class="btn soft" id="shareSite">🔗 Share site</button>
-</div>
-
-  {% block page_scripts %}{% endblock %}
 </body>
 </html>

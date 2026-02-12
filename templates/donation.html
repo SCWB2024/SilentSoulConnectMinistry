@@ -1,41 +1,100 @@
 {% extends "base.html" %}
-{% block title %}Give & Serve — SoulStart{% endblock %}
+{% block title %}Stewardship & Resources — Silent SoulConnect{% endblock %}
 
 {% block content %}
-<section class="hero hero-day" style="background-image:url('{{ url_for('static', filename='img/hero_day.jpg') }}')">
-  <div class="hero-inner" style="padding:24px 22px;">
-    <h1>Give &amp; Serve</h1>
-    <p class="muted">Acts of Faith • Gifts of the Heart</p>
+<section class="hero hero-day" style="background: url('{{ url_for('static', filename='img/hero_day.jpg') }}') center/cover; padding: 80px 20px; text-align: center; border-bottom: 4px solid var(--gold);">
+  <div class="hero-inner" style="background: rgba(255, 255, 255, 0.98); padding: 40px; border-radius: 24px; max-width: 800px; margin: 0 auto; box-shadow: 0 10px 40px rgba(0,0,0,0.1); border: 1px solid #f1f5f9;">
+    <h1 style="color: var(--primary); margin: 0; font-size: 2.2rem; letter-spacing: -0.5px;">Stewardship of the Heart</h1>
+    <p style="color: #64748b; font-weight: 500; font-style: italic; margin-top: 10px;">"Honoring God through our gifts, our learning, and our legacy."</p>
+    <div style="margin-top: 20px; font-weight: 700; color: var(--gold); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px;">A Branch of SCWB Global Impact</div>
   </div>
 </section>
 
-<div class="card">
-  {% if paypal_link %}
-    <p class="muted">
-      Your gift helps Silent SoulConnect Ministry reach Deaf and Hard-of-Hearing souls
-      with daily devotion, prayer, and Bible study.
-    </p>
+<div class="container" style="max-width: 950px; margin: 40px auto; padding: 0 20px;">
 
-    <p>
-      <a href="{{ paypal_link }}" target="_blank" rel="noopener"
-         class="btn">
-        💚 Give via PayPal
-      </a>
-    </p>
+  <div class="card" style="border-radius:28px; background: #ffffff; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; align-items: center; padding: 50px; margin-bottom: 50px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+    <div style="text-align: center; position: relative;">
+      <img src="{{ url_for('static', filename='img/icons/Sabrina1.jpg') }}" alt="Sabrina’s Bajan Fruit Adventure" style="max-width: 260px; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); border: 1px solid #eee;">
+      <div style="margin-top: 15px; font-size: 0.85rem; color: #94a3b8; font-weight: 600;">By SCWB Global Impact</div>
+    </div>
+    
+    <div>
+      <span style="color: var(--gold); font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px;">Ministry Endorsed Resource</span>
+      <h2 style="color: var(--primary); margin-top: 10px; font-size: 2rem; line-height: 1.2;">Sabrina’s Bajan Fruit Adventure</h2>
+      <p style="font-weight: 600; color: #475569; margin-bottom: 15px;">ABC Coloring & Early Hand Signs (Deaf Roots of Barbados)</p>
+      
+      <p style="color: #334155; line-height: 1.7; font-size: 1.05rem;">
+        This educational children’s series explores culture, history, and early communication through gentle stories and interactive activities.
+      </p>
+      <p style="color: #475569; line-height: 1.7; font-size: 0.95rem;">
+        Each book introduces young readers to island life and shared traditions. By highlighting the power of hands, expressions, and community, children (ages 3–6) learn to appreciate identity and belonging from an early age—all while discovering the vibrant fruits of Barbados from A to Z alongside the **ASL Alphabet**.
+      </p>
 
-    <p class="muted" style="font-size:0.9rem;">
-      You will be redirected to our secure PayPal donation page in a new tab.
-    </p>
-  {% else %}
-    <p class="muted">PayPal link coming soon.</p>
-  {% endif %}
+      <div style="display: flex; gap: 12px; margin-top: 30px;">
+        <a href="https://a.co/d/6I55zOd" target="_blank" class="btn" style="background: #1e293b; color: white; flex: 2; text-align: center; padding: 15px; border-radius: 10px; text-decoration: none; font-weight: bold;">🛒 View on Amazon</a>
+        <a href="https://read.amazon.com/sample/B0G8HXNJ3H?clientId=share" target="_blank" class="btn soft" style="background: #f8fafc; color: #1e293b; flex: 1; text-align: center; padding: 15px; border-radius: 10px; text-decoration: none; border: 1px solid #e2e8f0; font-weight: bold;">📖 Look Inside</a>
+      </div>
+    </div>
+  </div>
 
-  <p class="mt-2">
-    <a href="{{ url_for('home') }}" class="btn soft">🏠 Back Home</a>
-  </p>
+  <div class="card" style="border-radius:24px; padding: 50px; background: white; border: 1px solid #e2e8f0; text-align: center;">
+    <h3 style="color: var(--primary); font-size: 1.8rem; margin-top: 0;">Support the Ministry</h3>
+    <p style="max-width: 600px; margin: 0 auto 40px; color: #64748b; line-height: 1.6;">
+        Your contributions allow Silent SoulConnect Ministry to remain a beacon of holiness and accessibility. We appreciate your partnership in reaching the Deaf and Hard-of-Hearing with the Gospel.
+    </p>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
+      
+      <div style="background: #fffcf0; padding: 30px; border-radius: 20px; border: 1px solid #fef3c7; transition: 0.3s;">
+        <img src="{{ url_for('static', filename='img/icons/cibc.png') }}" alt="CIBC Icon" style="width: 55px; margin-bottom: 15px;">
+        <h4 style="margin:0; color: #856404; font-size: 1.2rem;">CIBC 1stPay</h4>
+        <p class="small-note muted" style="margin: 15px 0;">Direct local support via the CIBC Caribbean digital network.</p>
+        <button onclick="document.getElementById('qrModal').style.display='flex'" class="btn" style="background: #856404; color: white; border: none; width: 100%; border-radius: 8px; padding: 12px; font-weight: bold; cursor: pointer;">📱 View 1stPay Card</button>
+      </div>
+
+      <div style="background: #f0f7ff; padding: 30px; border-radius: 20px; border: 1px solid #bae1ff; transition: 0.3s;">
+        <img src="{{ url_for('static', filename='img/icons/card.png') }}" alt="Card Icon" style="width: 55px; margin-bottom: 15px;">
+        <h4 style="margin:0; color: #003087; font-size: 1.2rem;">PayPal & Credit Cards</h4>
+        <p class="small-note muted" style="margin: 15px 0;">Global support for our ministry's outreach and resources.</p>
+
+        {% if paypal_link %}
+  <a href="{{ paypal_link }}" target="_blank" rel="noopener"
+     class="btn"
+     style="background:#003087; color:white; border:none; width:100%; border-radius:8px; padding:12px; font-weight:bold; text-decoration:none; display:inline-block;">
+    💝 Donate Now
+  </a>
+{% else %}
+  <div style="padding:16px; border-radius:12px; background:#f8fafc; border:1px dashed #cbd5e1;">
+    <div style="font-weight:800; margin-bottom:8px;">💝 Donations Coming Soon</div>
+    <div class="muted" style="font-size:0.95rem; line-height:1.5;">
+      We’re preparing a secure way for you to support this ministry.
+      Thank you for your patience and prayers.
+    </div>
+    <div style="margin-top:12px;">
+      <span style="display:inline-block; padding:6px 10px; border-radius:999px; background:#e2e8f0; color:#334155; font-weight:700; font-size:0.8rem;">
+        Coming Soon
+      </span>
+    </div>
+  </div>
+{% endif %}
+
+    </div>
+  </div>
+
+  <div style="text-align: center; margin-top: 60px; color: #94a3b8;">
+      <p style="font-style: italic; font-size: 1.1rem; color: #64748b;">"But who am I, and who are my people, that we should be able to give as generously as this? Everything comes from you, and we have given you only what comes from your hand."</p>
+      <span style="font-weight: 800; color: var(--gold); text-transform: uppercase; font-size: 0.85rem;">— 1 Chronicles 29:14</span>
+  </div>
 </div>
 
-<style nonce="{{ csp_nonce() }}">
-  .card p { margin-bottom: 0.75rem; }
-</style>
+<div id="qrModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:10000; align-items:center; justify-content:center; padding:20px;" onclick="this.style.display='none'">
+  <div class="card" style="max-width: 480px; text-align: center; background: white; padding: 35px; border-radius: 24px;" onclick="event.stopPropagation()">
+    <h3 style="margin-top:0; color: #991b1b;">Worship Through Giving</h3>
+    <p class="muted small" style="margin-bottom: 25px;">Scan the 1stPay QR code below using your CIBC Mobile App.</p>
+    
+    <img src="{{ url_for('static', filename='img/icons/CIBC_QR.jpg') }}" alt="CIBC 1stPay Card" style="width: 100%; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+    
+    <button onclick="document.getElementById('qrModal').style.display='none'" class="btn soft" style="width: 100%; margin-top: 25px; background: #f1f5f9; color: #475569; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer;">Close</button>
+  </div>
+</div>
 {% endblock %}

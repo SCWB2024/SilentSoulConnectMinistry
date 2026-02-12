@@ -12,7 +12,7 @@
 <div class="card" role="region" aria-labelledby="wa-form-title">
   <h2 id="wa-form-title">Send WhatsApp</h2>
 
-  <form method="post" action="{{ url_for('admin_whatsapp') }}">
+  <form method="post" action="{{ url_for('admin_whatsapp_send') }}">
     <label for="date">Date</label>
     <input type="date" id="date" name="date"
            value="{{ selected_date or today.isoformat() }}">
@@ -22,6 +22,14 @@
       <option value="morning" {% if selected_mode == 'morning' %}selected{% endif %}>Morning</option>
       <option value="night"   {% if selected_mode == 'night' %}selected{% endif %}>Night</option>
       <option value="both"    {% if selected_mode == 'both' %}selected{% endif %}>Both</option>
+    </select>
+
+    <label for="topic">Prayer Focus (optional)</label>
+    <select id="topic" name="topic">
+     <option value="">Any topic</option>
+  {% for t in prayer_topics %}
+    <option value="{{ t }}" {% if selected_topic == t %}selected{% endif %}>{{ t }}</option>
+  {% endfor %}
     </select>
 
     <button type="submit" class="btn">Generate</button>
@@ -35,29 +43,41 @@
     <p class="muted">Single message:</p>
     <pre>{{ result.text }}</pre>
 
-    <a class="btn green" href="{{ result.wa_link }}" target="_blank" rel="noopener">
-      Open WhatsApp Web
-    </a>
+    <a class="btn green" href="{{ result.share_wa }}" target="_blank" rel="noopener">
+  Open WhatsApp Web
+</a>
+
+<a class="btn soft" href="{{ result.share_web }}" target="_blank" rel="noopener">
+  Open Web Page
+</a>
+
+<a class="btn soft" href="{{ result.share_api }}" target="_blank" rel="noopener">
+  Open Share API
+</a>
 
   {% elif result.text_morning or result.text_night %}
 
     {% if result.text_morning %}
-      <p class="muted">Morning message:</p>
-      <pre>{{ result.text_morning }}</pre>
+  <pre>{{ result.text_morning }}</pre>
 
-      <a class="btn green" href="{{ result.wa_link_morning }}" target="_blank" rel="noopener">
-        Open Morning WhatsApp
-      </a>
-    {% endif %}
+  <a class="btn green" href="{{ result.share_wa_morning }}" target="_blank" rel="noopener">
+    Open Morning WhatsApp
+  </a>
+  <a class="btn soft" href="{{ result.share_web_morning }}" target="_blank" rel="noopener">
+    Open Morning Web Page
+  </a>
+{% endif %}
 
-    {% if result.text_night %}
-      <p class="muted">Night message:</p>
-      <pre>{{ result.text_night }}</pre>
+{% if result.text_night %}
+  <pre>{{ result.text_night }}</pre>
 
-      <a class="btn green" href="{{ result.wa_link_night }}" target="_blank" rel="noopener">
-        Open Night WhatsApp
-      </a>
-    {% endif %}
+  <a class="btn green" href="{{ result.share_wa_night }}" target="_blank" rel="noopener">
+    Open Night WhatsApp
+  </a>
+  <a class="btn soft" href="{{ result.share_web_night }}" target="_blank" rel="noopener">
+    Open Night Web Page
+  </a>
+{% endif %}
 
   {% else %}
     <p class="muted">No message yet. Choose a date and mode, then click Generate.</p>

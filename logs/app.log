@@ -6,3 +6,763 @@
 2025-12-17 21:53:24,404 INFO: App startup � v13 [C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\app.py:258]
 2025-12-17 21:54:15,189 INFO: App startup � v13 [C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\app.py:258]
 2025-12-17 21:54:15,560 INFO: App startup � v13 [C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\app.py:258]
+2026-01-23 15:32:33,194 INFO soulstart: SoulStart starting…
+2026-01-23 15:32:35,214 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-23 15:32:35,473 INFO soulstart: SoulStart starting…
+2026-01-23 15:32:35,722 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-28 11:16:36,456 INFO soulstart: SoulStart starting…
+2026-01-28 11:16:38,225 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-28 11:16:38,479 INFO soulstart: SoulStart starting…
+2026-01-28 11:16:38,725 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-28 17:40:20,148 INFO soulstart: SoulStart starting…
+2026-01-28 17:40:22,659 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-28 17:40:58,668 INFO soulstart: SoulStart starting…
+2026-01-28 17:41:52,134 INFO soulstart: SoulStart starting…
+2026-01-28 17:41:52,385 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-28 17:41:52,548 INFO soulstart: SoulStart starting…
+2026-01-28 17:41:52,807 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-28 22:00:55,938 INFO soulstart: SoulStart starting…
+2026-01-28 22:00:56,045 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-28 22:01:52,467 INFO soulstart: SoulStart starting…
+2026-01-28 22:01:52,589 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-28 22:01:54,158 INFO soulstart: SoulStart starting…
+2026-01-28 22:01:54,256 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-28 22:01:55,677 INFO soulstart: SoulStart starting…
+2026-01-28 22:01:55,781 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-28 22:02:04,328 INFO soulstart: SoulStart starting…
+2026-01-28 22:02:04,426 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-28 22:14:39,159 INFO soulstart: SoulStart starting…
+2026-01-28 22:14:39,258 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-28 22:14:39,571 INFO soulstart: SoulStart starting…
+2026-01-28 22:14:39,665 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-28 22:28:11,046 INFO soulstart: SoulStart starting…
+2026-01-28 22:28:11,152 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-28 22:30:20,193 INFO soulstart: SoulStart starting…
+2026-01-28 22:30:20,286 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-28 22:30:20,581 INFO soulstart: SoulStart starting…
+2026-01-28 22:30:20,673 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-29 16:25:46,216 INFO soulstart: SoulStart starting…
+2026-01-29 16:25:46,946 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-29 16:25:47,403 INFO soulstart: SoulStart starting…
+2026-01-29 16:25:47,505 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-29 16:48:39,384 INFO soulstart: SoulStart starting…
+2026-01-29 16:48:39,507 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-29 16:48:42,974 INFO soulstart: SoulStart starting…
+2026-01-29 16:48:43,073 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-29 18:09:25,038 INFO soulstart: SoulStart starting…
+2026-01-29 18:09:25,188 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-29 18:09:25,756 INFO soulstart: SoulStart starting…
+2026-01-29 18:09:25,875 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-29 18:43:11,730 INFO soulstart: SoulStart starting…
+2026-01-29 18:43:11,933 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-29 18:43:46,035 INFO soulstart: SoulStart starting…
+2026-01-29 18:43:46,168 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-29 18:44:13,101 INFO soulstart: SoulStart starting…
+2026-01-29 18:44:13,198 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-29 18:44:15,652 INFO soulstart: SoulStart starting…
+2026-01-29 18:44:15,779 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-29 18:45:03,682 INFO soulstart: SoulStart starting…
+2026-01-29 18:45:03,798 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-29 18:45:04,096 INFO soulstart: SoulStart starting…
+2026-01-29 18:45:04,196 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-29 18:56:18,215 INFO soulstart: SoulStart starting…
+2026-01-29 18:56:18,314 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-29 18:56:19,735 INFO soulstart: SoulStart starting…
+2026-01-29 18:56:19,833 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-29 18:56:39,542 INFO soulstart: SoulStart starting…
+2026-01-29 18:56:39,651 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-30 11:28:10,812 INFO soulstart: SoulStart starting…
+2026-01-30 11:28:11,684 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-30 11:28:12,067 INFO soulstart: SoulStart starting…
+2026-01-30 11:28:12,158 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-30 17:37:43,810 INFO soulstart: SoulStart starting…
+2026-01-30 17:37:44,531 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-30 17:37:44,957 INFO soulstart: SoulStart starting…
+2026-01-30 17:37:45,060 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-30 21:55:22,735 INFO soulstart: SoulStart starting…
+2026-01-30 21:55:23,397 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-30 21:55:23,797 INFO soulstart: SoulStart starting…
+2026-01-30 21:55:23,890 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-31 18:28:05,120 INFO soulstart: SoulStart starting…
+2026-01-31 18:28:05,778 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-01-31 18:28:06,308 INFO soulstart: SoulStart starting…
+2026-01-31 18:28:06,412 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 07:44:11,163 INFO soulstart: SoulStart starting…
+2026-02-02 07:44:12,018 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 07:44:12,416 INFO soulstart: SoulStart starting…
+2026-02-02 07:44:12,514 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 12:23:25,766 INFO soulstart: SoulStart starting…
+2026-02-02 12:23:25,873 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 12:23:26,189 INFO soulstart: SoulStart starting…
+2026-02-02 12:23:26,286 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 13:02:04,816 INFO soulstart: SoulStart starting…
+2026-02-02 13:02:04,931 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 13:02:05,299 INFO soulstart: SoulStart starting…
+2026-02-02 13:02:05,438 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 19:30:02,740 INFO soulstart: SoulStart starting…
+2026-02-02 19:30:03,595 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 22:55:52,944 INFO soulstart: SoulStart starting…
+2026-02-02 22:55:53,058 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 22:55:56,540 INFO soulstart: SoulStart starting…
+2026-02-02 22:55:56,645 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 22:59:18,382 INFO soulstart: SoulStart starting…
+2026-02-02 22:59:18,481 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 22:59:23,002 INFO soulstart: SoulStart starting…
+2026-02-02 22:59:23,116 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 23:01:15,441 INFO soulstart: SoulStart starting…
+2026-02-02 23:01:15,548 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 23:01:15,890 INFO soulstart: SoulStart starting…
+2026-02-02 23:01:15,994 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 23:20:59,230 INFO soulstart: SoulStart starting…
+2026-02-02 23:20:59,343 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 23:27:32,913 INFO soulstart: SoulStart starting…
+2026-02-02 23:27:33,016 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 23:27:33,326 INFO soulstart: SoulStart starting…
+2026-02-02 23:27:33,429 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 23:46:20,271 INFO soulstart: SoulStart starting…
+2026-02-02 23:46:20,387 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 23:47:01,631 INFO soulstart: SoulStart starting…
+2026-02-02 23:47:01,736 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 23:47:04,173 INFO soulstart: SoulStart starting…
+2026-02-02 23:47:04,272 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 23:47:07,816 INFO soulstart: SoulStart starting…
+2026-02-02 23:47:07,920 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 23:47:30,847 INFO soulstart: SoulStart starting…
+2026-02-02 23:47:30,951 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 23:47:51,902 INFO soulstart: SoulStart starting…
+2026-02-02 23:47:52,051 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 23:48:37,390 INFO soulstart: SoulStart starting…
+2026-02-02 23:48:37,514 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 23:58:47,814 INFO soulstart: SoulStart starting…
+2026-02-02 23:58:47,914 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-02 23:58:48,242 INFO soulstart: SoulStart starting…
+2026-02-02 23:58:48,340 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-03 07:04:15,277 INFO soulstart: SoulStart starting…
+2026-02-03 07:04:15,426 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-03 07:04:15,795 INFO soulstart: SoulStart starting…
+2026-02-03 07:04:15,897 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-03 10:26:25,674 INFO soulstart: SoulStart starting…
+2026-02-03 10:26:26,322 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-03 10:26:26,732 INFO soulstart: SoulStart starting…
+2026-02-03 10:26:26,823 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-03 15:25:34,945 INFO soulstart: SoulStart starting…
+2026-02-03 15:25:35,629 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-03 15:25:36,046 INFO soulstart: SoulStart starting…
+2026-02-03 15:25:36,140 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-03 15:42:51,902 INFO soulstart: SoulStart starting…
+2026-02-03 15:42:52,005 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-03 15:43:13,833 INFO soulstart: SoulStart starting…
+2026-02-03 15:43:13,947 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-03 15:43:17,427 INFO soulstart: SoulStart starting…
+2026-02-03 15:43:17,527 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-03 16:26:37,653 INFO soulstart: SoulStart starting…
+2026-02-03 16:26:37,756 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-03 16:26:38,063 INFO soulstart: SoulStart starting…
+2026-02-03 16:26:38,158 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-03 16:49:48,687 INFO soulstart: SoulStart starting…
+2026-02-03 16:49:48,786 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-03 16:49:49,095 INFO soulstart: SoulStart starting…
+2026-02-03 16:49:49,187 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-03 22:48:08,557 INFO soulstart: SoulStart starting…
+2026-02-03 22:48:08,710 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-03 22:48:09,259 INFO soulstart: SoulStart starting…
+2026-02-03 22:48:09,394 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-03 23:45:13,218 INFO soulstart: SoulStart starting…
+2026-02-03 23:45:13,321 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-04 00:25:23,675 INFO soulstart: SoulStart starting…
+2026-02-04 00:25:23,775 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-04 00:48:23,501 INFO soulstart: SoulStart starting…
+2026-02-04 00:48:23,608 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-04 11:08:04,834 INFO soulstart: SoulStart starting…
+2026-02-04 11:08:05,463 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-04 11:08:05,841 INFO soulstart: SoulStart starting…
+2026-02-04 11:08:05,935 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-04 14:34:26,473 INFO soulstart: SoulStart starting…
+2026-02-04 14:34:27,374 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-04 14:36:34,050 INFO soulstart: SoulStart starting…
+2026-02-04 14:36:34,183 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-04 14:36:36,670 INFO soulstart: SoulStart starting…
+2026-02-04 14:36:36,784 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-04 14:36:38,204 INFO soulstart: SoulStart starting…
+2026-02-04 14:36:38,307 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-04 14:38:49,945 INFO soulstart: SoulStart starting…
+2026-02-04 14:38:50,044 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-04 14:39:12,790 INFO soulstart: SoulStart starting…
+2026-02-04 14:39:12,885 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-04 14:39:38,681 INFO soulstart: SoulStart starting…
+2026-02-04 14:39:38,777 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-04 14:39:41,240 INFO soulstart: SoulStart starting…
+2026-02-04 14:39:41,366 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-04 14:39:42,860 INFO soulstart: SoulStart starting…
+2026-02-04 14:39:42,957 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-04 23:37:35,876 ERROR soulstart: [DEVOTIONS] Failed to read C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\data\devotions\devotions_2026.json (Expecting value: line 8 column 24 (char 242))
+Traceback (most recent call last):
+  File "C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\app.py", line 382, in load_devotions_for_year
+    data = json.load(f)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 293, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 8 column 24 (char 242)
+2026-02-04 23:37:49,673 ERROR soulstart: [DEVOTIONS] Failed to read C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\data\devotions\devotions_2026.json (Expecting value: line 8 column 24 (char 242))
+Traceback (most recent call last):
+  File "C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\app.py", line 382, in load_devotions_for_year
+    data = json.load(f)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 293, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 8 column 24 (char 242)
+2026-02-04 23:37:59,021 ERROR soulstart: [DEVOTIONS] Failed to read C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\data\devotions\devotions_2026.json (Expecting value: line 8 column 24 (char 242))
+Traceback (most recent call last):
+  File "C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\app.py", line 382, in load_devotions_for_year
+    data = json.load(f)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 293, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 8 column 24 (char 242)
+2026-02-04 23:37:59,915 ERROR soulstart: [DEVOTIONS] Failed to read C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\data\devotions\devotions_2026.json (Expecting value: line 8 column 24 (char 242))
+Traceback (most recent call last):
+  File "C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\app.py", line 382, in load_devotions_for_year
+    data = json.load(f)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 293, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 8 column 24 (char 242)
+2026-02-04 23:38:00,619 ERROR soulstart: [DEVOTIONS] Failed to read C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\data\devotions\devotions_2026.json (Expecting value: line 8 column 24 (char 242))
+Traceback (most recent call last):
+  File "C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\app.py", line 382, in load_devotions_for_year
+    data = json.load(f)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 293, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 8 column 24 (char 242)
+2026-02-04 23:38:01,238 ERROR soulstart: [DEVOTIONS] Failed to read C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\data\devotions\devotions_2026.json (Expecting value: line 8 column 24 (char 242))
+Traceback (most recent call last):
+  File "C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\app.py", line 382, in load_devotions_for_year
+    data = json.load(f)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 293, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 8 column 24 (char 242)
+2026-02-04 23:38:01,889 ERROR soulstart: [DEVOTIONS] Failed to read C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\data\devotions\devotions_2026.json (Expecting value: line 8 column 24 (char 242))
+Traceback (most recent call last):
+  File "C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\app.py", line 382, in load_devotions_for_year
+    data = json.load(f)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 293, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 8 column 24 (char 242)
+2026-02-04 23:38:02,684 ERROR soulstart: [DEVOTIONS] Failed to read C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\data\devotions\devotions_2026.json (Expecting value: line 8 column 24 (char 242))
+Traceback (most recent call last):
+  File "C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\app.py", line 382, in load_devotions_for_year
+    data = json.load(f)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 293, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 8 column 24 (char 242)
+2026-02-04 23:38:03,335 ERROR soulstart: [DEVOTIONS] Failed to read C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\data\devotions\devotions_2026.json (Expecting value: line 8 column 24 (char 242))
+Traceback (most recent call last):
+  File "C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\app.py", line 382, in load_devotions_for_year
+    data = json.load(f)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 293, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 8 column 24 (char 242)
+2026-02-04 23:38:04,020 ERROR soulstart: [DEVOTIONS] Failed to read C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\data\devotions\devotions_2026.json (Expecting value: line 8 column 24 (char 242))
+Traceback (most recent call last):
+  File "C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\app.py", line 382, in load_devotions_for_year
+    data = json.load(f)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 293, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 8 column 24 (char 242)
+2026-02-04 23:38:04,723 ERROR soulstart: [DEVOTIONS] Failed to read C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\data\devotions\devotions_2026.json (Expecting value: line 8 column 24 (char 242))
+Traceback (most recent call last):
+  File "C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\app.py", line 382, in load_devotions_for_year
+    data = json.load(f)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 293, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 8 column 24 (char 242)
+2026-02-04 23:38:05,419 ERROR soulstart: [DEVOTIONS] Failed to read C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\data\devotions\devotions_2026.json (Expecting value: line 8 column 24 (char 242))
+Traceback (most recent call last):
+  File "C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\app.py", line 382, in load_devotions_for_year
+    data = json.load(f)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 293, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 8 column 24 (char 242)
+2026-02-04 23:38:06,043 ERROR soulstart: [DEVOTIONS] Failed to read C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\data\devotions\devotions_2026.json (Expecting value: line 8 column 24 (char 242))
+Traceback (most recent call last):
+  File "C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\app.py", line 382, in load_devotions_for_year
+    data = json.load(f)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 293, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 8 column 24 (char 242)
+2026-02-04 23:38:06,632 ERROR soulstart: [DEVOTIONS] Failed to read C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\data\devotions\devotions_2026.json (Expecting value: line 8 column 24 (char 242))
+Traceback (most recent call last):
+  File "C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\app.py", line 382, in load_devotions_for_year
+    data = json.load(f)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 293, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 8 column 24 (char 242)
+2026-02-04 23:38:07,253 ERROR soulstart: [DEVOTIONS] Failed to read C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\data\devotions\devotions_2026.json (Expecting value: line 8 column 24 (char 242))
+Traceback (most recent call last):
+  File "C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\app.py", line 382, in load_devotions_for_year
+    data = json.load(f)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 293, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 8 column 24 (char 242)
+2026-02-04 23:39:29,498 INFO soulstart: SoulStart starting…
+2026-02-04 23:39:29,626 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-04 23:39:30,018 INFO soulstart: SoulStart starting…
+2026-02-04 23:39:30,134 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-04 23:39:36,848 ERROR soulstart: [DEVOTIONS] Failed to read C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\data\devotions\devotions_2026.json (Expecting value: line 708 column 25 (char 33203))
+Traceback (most recent call last):
+  File "C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\app.py", line 382, in load_devotions_for_year
+    data = json.load(f)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 293, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 708 column 25 (char 33203)
+2026-02-04 23:40:02,157 ERROR soulstart: [DEVOTIONS] Failed to read C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\data\devotions\devotions_2026.json (Expecting value: line 708 column 25 (char 33203))
+Traceback (most recent call last):
+  File "C:\Users\scwb_\OneDrive\Documents\Sandra's Ministry\SoulStart Devotion\app.py", line 382, in load_devotions_for_year
+    data = json.load(f)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 293, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\scwb_\AppData\Local\Programs\Python\Python313\Lib\json\decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 708 column 25 (char 33203)
+2026-02-04 23:49:01,397 INFO soulstart: SoulStart starting…
+2026-02-04 23:49:01,505 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 00:13:50,228 INFO soulstart: SoulStart starting…
+2026-02-05 00:13:50,330 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 00:13:50,652 INFO soulstart: SoulStart starting…
+2026-02-05 00:13:50,750 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 00:51:01,344 INFO soulstart: SoulStart starting…
+2026-02-05 00:51:01,446 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 00:51:01,826 INFO soulstart: SoulStart starting…
+2026-02-05 00:51:01,940 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 01:02:50,894 INFO soulstart: SoulStart starting…
+2026-02-05 01:02:51,017 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 01:03:05,772 INFO soulstart: SoulStart starting…
+2026-02-05 01:03:05,889 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 01:03:10,504 INFO soulstart: SoulStart starting…
+2026-02-05 01:03:10,615 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 01:03:15,161 INFO soulstart: SoulStart starting…
+2026-02-05 01:03:15,267 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 01:24:17,679 INFO soulstart: SoulStart starting…
+2026-02-05 01:24:17,953 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 01:24:18,126 INFO soulstart: SoulStart starting…
+2026-02-05 01:24:18,361 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 10:20:18,399 INFO soulstart: SoulStart starting…
+2026-02-05 10:20:20,357 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 10:20:20,691 INFO soulstart: SoulStart starting…
+2026-02-05 10:20:20,997 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 10:51:26,409 INFO soulstart: SoulStart starting…
+2026-02-05 10:51:26,702 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 10:51:28,100 INFO soulstart: SoulStart starting…
+2026-02-05 10:51:28,439 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 10:59:26,152 INFO soulstart: SoulStart starting…
+2026-02-05 10:59:26,454 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 10:59:27,751 INFO soulstart: SoulStart starting…
+2026-02-05 10:59:28,015 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 11:24:27,354 INFO soulstart: SoulStart starting…
+2026-02-05 11:24:27,630 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 11:24:27,808 INFO soulstart: SoulStart starting…
+2026-02-05 11:24:28,051 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 11:45:56,504 INFO soulstart: SoulStart starting…
+2026-02-05 11:45:56,737 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 11:46:09,205 INFO soulstart: SoulStart starting…
+2026-02-05 11:46:09,450 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 11:46:13,775 INFO soulstart: SoulStart starting…
+2026-02-05 11:46:14,046 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 11:47:35,769 INFO soulstart: SoulStart starting…
+2026-02-05 11:47:36,030 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 16:14:37,379 INFO soulstart: SoulStart starting…
+2026-02-05 16:14:39,628 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 16:15:00,378 INFO soulstart: SoulStart starting…
+2026-02-05 16:15:00,663 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 16:15:35,636 INFO soulstart: SoulStart starting…
+2026-02-05 16:15:35,877 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 16:15:38,228 INFO soulstart: SoulStart starting…
+2026-02-05 16:15:38,502 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 16:15:55,082 INFO soulstart: SoulStart starting…
+2026-02-05 16:15:55,320 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 16:15:56,623 INFO soulstart: SoulStart starting…
+2026-02-05 16:15:56,897 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 16:16:17,500 INFO soulstart: SoulStart starting…
+2026-02-05 16:16:17,737 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 16:16:33,254 INFO soulstart: SoulStart starting…
+2026-02-05 16:16:33,498 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 16:17:43,000 INFO soulstart: SoulStart starting…
+2026-02-05 16:17:43,238 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 16:17:54,835 INFO soulstart: SoulStart starting…
+2026-02-05 16:17:55,152 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 21:09:44,341 INFO soulstart: SoulStart starting…
+2026-02-05 21:09:44,709 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 21:09:47,041 INFO soulstart: SoulStart starting…
+2026-02-05 21:09:47,334 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 21:10:29,139 INFO soulstart: SoulStart starting…
+2026-02-05 21:10:29,411 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 21:10:29,609 INFO soulstart: SoulStart starting…
+2026-02-05 21:10:29,869 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 21:19:47,033 INFO soulstart: SoulStart starting…
+2026-02-05 21:19:47,326 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 21:19:47,526 INFO soulstart: SoulStart starting…
+2026-02-05 21:19:47,777 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 22:18:52,600 INFO soulstart: SoulStart starting…
+2026-02-05 22:18:52,953 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 22:26:29,431 INFO soulstart: SoulStart starting…
+2026-02-05 22:26:29,731 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 22:34:13,985 INFO soulstart: SoulStart starting…
+2026-02-05 22:34:14,221 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 22:34:14,395 INFO soulstart: SoulStart starting…
+2026-02-05 22:34:14,627 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 22:42:27,622 INFO soulstart: SoulStart starting…
+2026-02-05 22:42:27,882 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 23:17:00,157 INFO soulstart: SoulStart starting…
+2026-02-05 23:17:00,734 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 23:17:02,079 INFO soulstart: SoulStart starting…
+2026-02-05 23:17:02,333 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 23:17:06,690 INFO soulstart: SoulStart starting…
+2026-02-05 23:17:06,959 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 23:17:22,505 INFO soulstart: SoulStart starting…
+2026-02-05 23:17:22,749 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 23:17:35,265 INFO soulstart: SoulStart starting…
+2026-02-05 23:17:35,577 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 23:17:37,994 INFO soulstart: SoulStart starting…
+2026-02-05 23:17:38,311 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 23:17:46,751 INFO soulstart: SoulStart starting…
+2026-02-05 23:17:46,998 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 23:17:48,414 INFO soulstart: SoulStart starting…
+2026-02-05 23:17:48,518 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 23:17:56,094 INFO soulstart: SoulStart starting…
+2026-02-05 23:17:56,197 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 23:18:08,683 INFO soulstart: SoulStart starting…
+2026-02-05 23:18:08,945 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 23:18:12,303 INFO soulstart: SoulStart starting…
+2026-02-05 23:18:12,587 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 23:18:19,999 INFO soulstart: SoulStart starting…
+2026-02-05 23:18:20,247 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-05 23:18:31,729 INFO soulstart: SoulStart starting…
+2026-02-05 23:18:32,006 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 00:01:25,611 INFO soulstart: SoulStart starting…
+2026-02-06 00:01:25,894 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 00:01:26,070 INFO soulstart: SoulStart starting…
+2026-02-06 00:01:26,314 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 00:13:30,356 INFO soulstart: SoulStart starting…
+2026-02-06 00:13:30,660 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 00:29:31,558 INFO soulstart: SoulStart starting…
+2026-02-06 00:29:31,823 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 00:29:42,282 INFO soulstart: SoulStart starting…
+2026-02-06 00:29:42,551 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 00:29:44,914 INFO soulstart: SoulStart starting…
+2026-02-06 00:29:45,217 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 00:29:49,658 INFO soulstart: SoulStart starting…
+2026-02-06 00:29:49,991 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 00:29:51,348 INFO soulstart: SoulStart starting…
+2026-02-06 00:29:51,646 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 00:30:03,188 INFO soulstart: SoulStart starting…
+2026-02-06 00:30:03,488 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 00:30:06,840 INFO soulstart: SoulStart starting…
+2026-02-06 00:30:07,115 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 00:30:12,524 INFO soulstart: SoulStart starting…
+2026-02-06 00:30:12,818 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 00:30:18,224 INFO soulstart: SoulStart starting…
+2026-02-06 00:30:18,517 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 00:40:59,474 INFO soulstart: SoulStart starting…
+2026-02-06 00:40:59,774 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 00:41:00,004 INFO soulstart: SoulStart starting…
+2026-02-06 00:41:00,285 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 07:31:34,548 INFO soulstart: SoulStart starting…
+2026-02-06 07:31:36,569 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 07:31:36,875 INFO soulstart: SoulStart starting…
+2026-02-06 07:31:37,115 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:21:13,044 INFO soulstart: SoulStart starting…
+2026-02-06 08:24:51,234 INFO soulstart: SoulStart starting…
+2026-02-06 08:24:51,505 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:24:51,780 INFO soulstart: SoulStart starting…
+2026-02-06 08:24:52,019 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:29:40,254 INFO soulstart: SoulStart starting…
+2026-02-06 08:29:40,539 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:29:43,907 INFO soulstart: SoulStart starting…
+2026-02-06 08:29:44,223 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:29:46,540 INFO soulstart: SoulStart starting…
+2026-02-06 08:29:46,806 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:29:51,155 INFO soulstart: SoulStart starting…
+2026-02-06 08:29:51,430 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:29:53,771 INFO soulstart: SoulStart starting…
+2026-02-06 08:29:54,049 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:29:56,360 INFO soulstart: SoulStart starting…
+2026-02-06 08:29:56,634 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:30:03,077 INFO soulstart: SoulStart starting…
+2026-02-06 08:30:03,412 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:30:06,769 INFO soulstart: SoulStart starting…
+2026-02-06 08:30:07,034 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:30:09,353 INFO soulstart: SoulStart starting…
+2026-02-06 08:30:09,621 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:30:12,992 INFO soulstart: SoulStart starting…
+2026-02-06 08:30:13,355 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:30:16,709 INFO soulstart: SoulStart starting…
+2026-02-06 08:30:16,970 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:30:21,361 INFO soulstart: SoulStart starting…
+2026-02-06 08:30:21,670 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:30:25,002 INFO soulstart: SoulStart starting…
+2026-02-06 08:30:25,275 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:30:35,709 INFO soulstart: SoulStart starting…
+2026-02-06 08:30:35,995 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:31:03,825 INFO soulstart: SoulStart starting…
+2026-02-06 08:31:04,108 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:31:11,519 INFO soulstart: SoulStart starting…
+2026-02-06 08:31:11,810 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:31:33,408 INFO soulstart: SoulStart starting…
+2026-02-06 08:31:33,678 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:31:36,013 INFO soulstart: SoulStart starting…
+2026-02-06 08:31:36,283 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:31:55,931 INFO soulstart: SoulStart starting…
+2026-02-06 08:31:56,193 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 08:31:58,534 INFO soulstart: SoulStart starting…
+2026-02-06 08:31:58,838 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 11:35:40,183 INFO soulstart: SoulStart starting…
+2026-02-06 11:35:41,764 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 11:35:42,039 INFO soulstart: SoulStart starting…
+2026-02-06 11:35:42,278 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 14:14:19,366 INFO soulstart: SoulStart starting…
+2026-02-06 14:14:21,936 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 14:31:45,216 INFO soulstart: SoulStart starting…
+2026-02-06 14:31:45,458 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 14:31:45,653 INFO soulstart: SoulStart starting…
+2026-02-06 14:31:45,898 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 14:37:35,649 INFO soulstart: SoulStart starting…
+2026-02-06 14:37:35,895 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 14:37:36,078 INFO soulstart: SoulStart starting…
+2026-02-06 14:37:36,319 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 14:42:43,418 INFO soulstart: SoulStart starting…
+2026-02-06 14:42:43,720 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 14:42:45,044 INFO soulstart: SoulStart starting…
+2026-02-06 14:42:45,293 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 14:42:47,619 INFO soulstart: SoulStart starting…
+2026-02-06 14:42:48,017 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 14:42:49,325 INFO soulstart: SoulStart starting…
+2026-02-06 14:42:49,604 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 14:47:48,649 INFO soulstart: SoulStart starting…
+2026-02-06 14:47:49,089 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 14:47:53,466 INFO soulstart: SoulStart starting…
+2026-02-06 14:47:53,757 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 14:48:24,907 INFO soulstart: SoulStart starting…
+2026-02-06 14:48:25,150 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 14:48:25,330 INFO soulstart: SoulStart starting…
+2026-02-06 14:48:25,561 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 14:50:42,338 INFO soulstart: SoulStart starting…
+2026-02-06 14:50:42,584 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 14:56:42,567 INFO soulstart: SoulStart starting…
+2026-02-06 14:56:42,825 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-06 14:56:42,999 INFO soulstart: SoulStart starting…
+2026-02-06 14:56:43,239 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-09 15:36:58,020 INFO soulstart: SoulStart starting…
+2026-02-09 15:37:00,423 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-09 15:37:00,773 INFO soulstart: SoulStart starting…
+2026-02-09 15:37:01,091 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-09 15:50:11,190 INFO soulstart: SoulStart starting…
+2026-02-09 15:50:11,511 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-09 16:16:05,027 INFO soulstart: SoulStart starting…
+2026-02-09 16:16:05,322 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-09 16:16:05,504 INFO soulstart: SoulStart starting…
+2026-02-09 16:16:05,751 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-09 16:30:16,509 INFO soulstart: SoulStart starting…
+2026-02-09 16:30:16,758 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-09 16:30:16,954 INFO soulstart: SoulStart starting…
+2026-02-09 16:30:17,186 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-09 16:31:36,440 INFO soulstart: SoulStart starting…
+2026-02-09 16:31:36,716 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-09 16:31:36,910 INFO soulstart: SoulStart starting…
+2026-02-09 16:31:37,150 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-09 16:33:58,076 INFO soulstart: SoulStart starting…
+2026-02-09 16:33:58,402 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-09 16:34:04,825 INFO soulstart: SoulStart starting…
+2026-02-09 16:34:05,143 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-10 07:55:41,107 INFO soulstart: SoulStart starting…
+2026-02-10 07:55:42,578 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-10 07:55:42,824 INFO soulstart: SoulStart starting…
+2026-02-10 07:55:43,051 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-12 14:49:44,500 INFO soulstart: SoulStart starting…
+2026-02-12 14:49:46,861 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-12 14:49:47,213 INFO soulstart: SoulStart starting…
+2026-02-12 14:49:47,478 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-12 16:19:10,956 INFO soulstart: SoulStart starting…
+2026-02-12 16:19:11,213 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13
+2026-02-12 16:19:11,387 INFO soulstart: SoulStart starting…
+2026-02-12 16:19:11,624 INFO soulstart: 💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… v13

@@ -1,32 +1,86 @@
 {% extends "base.html" %}
-{% block title %}Devotion / Study — SoulStart{% endblock %}
+{% block title %}VOICE — SoulStart{% endblock %}
 
 {% block content %}
-<section class="hero glass">
+<section class="hero voice-hero"
+  style="
+    background-image:
+      linear-gradient(rgba(56, 55, 55, 0.45), rgba(116, 115, 115, 0.45)),
+      url('{{ url_for('static', filename='img/voice_people.jpg') }}');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+  ">
   <div class="hero-inner">
-    <h1>Devotion / Study</h1>
-    <p class="muted">Choose what you want to open.</p>
+    <div class="hero-badge">VOICE</div>
+    <h1>Devotion • Study • Soul Speaks</h1>
+    <p class="muted">One hub. Choose what you want to open today.</p>
+
+    <!-- Deaf-first quick scan -->
+    <div class="chip-row" style="margin: 12px 0 0;">
+      <span class="chip" style="pointer-events:none;">🤟 Deaf-friendly</span>
+      <span class="chip" style="pointer-events:none;">🧠 Simple English</span>
+      <span class="chip" style="pointer-events:none;">🤍 Inclusive Community</span>
+    </div>
   </div>
 </section>
 
 <div class="core-grid" style="margin-top:16px;">
+
+  <!-- DEVOTION -->
   <article class="core-card">
     <div class="core-ico" aria-hidden="true">🌅</div>
     <h3 class="core-title">Today’s Devotion</h3>
     <p class="core-sub">Morning or Night devotion for today</p>
     <div class="core-actions">
-      <a class="btn" href="{{ url_for('today', mode='morning') }}">Morning</a>
-      <a class="btn soft" href="{{ url_for('today', mode='night') }}">Night</a>
+      <a class="btn btn-green" href="{{ url_for('today', mode='morning') }}">Start Morning</a>
+      <a class="btn btn-green-soft" href="{{ url_for('today', mode='night') }}">Start Night</a>
     </div>
   </article>
 
+  <!-- STUDY -->
   <article class="core-card">
     <div class="core-ico" aria-hidden="true">📚</div>
     <h3 class="core-title">Study Hub</h3>
-    <p class="core-sub">Series list for Deaf & visual learners</p>
+    <p class="core-sub">Series for Deaf & visual learners</p>
     <div class="core-actions">
-      <a class="btn" href="{{ url_for('study_index') }}">Open Study Hub</a>
+      <a class="btn btn-blue" href="{{ url_for('study_index') }}">Open Study Hub</a>
     </div>
   </article>
+
+  <!-- SOUL SPEAKS -->
+  <article class="core-card">
+    <div class="core-ico" aria-hidden="true">💬</div>
+    <h3 class="core-title">Soul Speaks</h3>
+    <p class="core-sub">Quiet reflections for noisy times</p>
+    <div class="core-actions">
+      <a class="btn btn-dark" href="{{ url_for('blog_index') }}">Read Soul Speaks</a>
+    </div>
+  </article>
+
 </div>
+
+<style>
+/* Local-only styles (won’t affect other pages) */
+.voice-hero .hero-badge{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  background: rgba(0,0,0,.10);
+  font-weight:800;
+  letter-spacing:.4px;
+  margin-bottom:10px;
+}
+
+/* Button variations */
+.btn.btn-green{ background:#10b981; color:#fff; border:1px solid transparent; }
+.btn.btn-green-soft{ background:#ecfdf5; color:#065f46; border:1px solid rgba(16,185,129,.25); }
+
+.btn.btn-blue{ background:#2563eb; color:#fff; border:1px solid transparent; }
+
+.btn.btn-dark{ background:#111827; color:#fff; border:1px solid transparent; }
+
+/* keep your layout consistent */
+.core-actions{ display:flex; gap:10px; flex-wrap:wrap; }
+</style>
 {% endblock %}

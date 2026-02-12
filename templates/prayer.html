@@ -4,30 +4,66 @@
 
 <section class="hero" style="background-image:url('{{ url_for('static', filename='img/prayer.jpg') }}')">
   <div class="hero-inner" style="padding:48px 20px;">
-    <h1>Prayer Request</h1>
+    <h1>🙏 Prayer Request</h1>
     <p class="muted">Share your burden. We will lift it together.</p>
 
-    {% if ok is defined %}
-      {% if ok %}
-        <p class="ok fade">✅ Thank you. Your request was received.</p>
-      {% else %}
-        <p class="err fade">❌ Sorry, something went wrong. Please try again.</p>
-      {% endif %}
+    {# Success Message #}
+    {% if request.args.get("ok") == "1" %}
+      <div class="card soft" style="margin-top:14px; border-left: 5px solid #00a86b;">
+        <p class="ok" style="margin:0 0 8px;">✅ Thank you. Your request was received.</p>
+        <p class="muted" style="margin:0 0 6px;">📖 <strong>Encouragement:</strong> “The LORD is near to the brokenhearted.” <span class="muted">(Psalm 34:18)</span></p>
+        <p style="margin:0;">🙏 We are praying with you. <strong>In Jesus’ name, Amen.</strong></p>
+      </div>
     {% endif %}
 
-    <form method="post" class="prayer-form">
+    <form method="post" class="prayer-form" style="margin-top:16px;">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
       <label for="name">Name (optional)</label>
       <input id="name" name="name" type="text" placeholder="Your name">
 
-      <label for="contact">Contact (optional)</label>
-      <input id="contact" name="contact" type="text" placeholder="Email or phone">
+      <label for="contact">How should we reach you? (optional)</label>
+<div style="display: flex; gap: 10px; margin-bottom: 10px;">
+    <input id="contact" name="contact" type="text" placeholder="Email, phone, or WhatsApp">
+    <select name="pref_method" style="width: 150px;">
+        <option value="text">Text/SMS</option>
+        <option value="email">Email</option>
+        <option value="video">Video Call</option>
+    </select>
+</div>
 
-      <label for="request">Your prayer request</label>
-      <textarea id="request" name="request" rows="5" required placeholder="Write your request here..."></textarea>
+ <label for="topic">Prayer topic</label>
+<select id="topic" name="topic" required>
+  <option value="">— Select one —</option>
+  {% for t in prayer_topics %}
+    <option value="{{ t.value }}">{{ t.label }}</option>
+  {% endfor %}
+</select>
 
-      <button class="btn" type="submit">Send</button>
-      <a class="btn soft" href="{{ url_for('home') }}">🏠 Back Home</a>
+<div id="topicOtherWrap" style="display:none;">
+  <label for="topic_other">If “Other”, tell us what it’s about</label>
+  <input id="topic_other" name="topic_other" type="text" placeholder="Short details (optional)">
+</div>
+
+<script>
+  (function(){
+    const sel = document.getElementById("topic");
+    const wrap = document.getElementById("topicOtherWrap");
+    if(!sel || !wrap) return;
+    function toggle(){ wrap.style.display = (sel.value === "other") ? "block" : "none"; }
+    sel.addEventListener("change", toggle);
+    toggle();
+  })();
+</script>
+
+      <label for="request_body">Your prayer request</label>
+      <textarea id="request_body" name="request" rows="5" required placeholder="Write your request here..."></textarea>
+
+      <button class="btn btn-primary" type="submit" style="width: 100%; margin-top: 10px;">Send</button>
+      
+      <div style="margin-top: 20px; text-align: center;">
+        <a class="btn soft" href="{{ url_for('home') }}" style="text-decoration: none;">🏠 Back Home</a>
+      </div>
     </form>
   </div>
 </section>

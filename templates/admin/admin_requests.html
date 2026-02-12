@@ -1,57 +1,143 @@
 {% extends "base.html" %}
-{% block title %}Admin — Prayer Requests{% endblock %}
+{% block title %}Admin — Prayer Center{% endblock %}
 {% block content %}
 
 <section class="hero hero-day" style="background-image:url('{{ url_for('static', filename='img/prayer.jpg') }}')">
   <div class="hero-inner" style="padding:24px 22px;">
-    <h1>🙏 Prayer Requests</h1>
-    <p class="muted">All submitted requests are listed below for review and follow-up.</p>
+    <h1>🙏 Prayer Command Center</h1>
+    <p class="muted">Review requests and generate intercessions. <strong>In Jesus’ name, Amen.</strong></p>
   </div>
 </section>
 
+{# 1. THE INBOX: Request Table #}
 {% if items and items|length > 0 %}
-<div class="card admin-card" style="overflow:auto;">
-  <table style="width:100%; border-collapse:collapse;">
+<div class="card admin-card" style="overflow:auto; padding: 0; margin-bottom: 30px;">
+  <table style="width:100%; border-collapse:collapse; min-width: 900px;">
     <thead>
       <tr>
-        <th>When</th>
-        <th>Name</th>
-        <th>Contact</th>
-        <th>Request</th>
+        <th>📅 When</th>
+        <th>👤 Name</th>
+        <th>📞 Contact</th>
+        <th>🏷️ Topic</th>
+        <th>📝 Request</th>
+        <th>⚡ Action</th>
       </tr>
     </thead>
+
     <tbody>
       {% for r in items %}
-      <tr>
-        <td>{{ r.ts }}</td>
+      <tr id="row-{{ loop.index }}">
+        <td>{{ r.ts or "—" }}</td>
         <td><strong>{{ r.name or "Anonymous" }}</strong></td>
         <td>{{ r.contact or "—" }}</td>
-        <td>{{ r.request }}</td>
+        <td><span class="badge">{{ r.topic or "General" }}</span></td>
+        <td class="request-text">{{ r.request or "" }}</td>
+        <td>
+          <button class="btn-gen"
+            onclick="prepareGenerator(
+              {{ (r.name or 'Friend')|tojson }},
+              {{ (r.topic or 'General')|tojson }},
+              {{ (r.request or '')|replace('\n',' ')|tojson }},
+              {{ (r.contact or '')|tojson }}
+            )">
+            ✨ Draft Prayer
+          </button>
+        </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
 {% else %}
-<div class="card"><p class="muted">No prayer requests yet.</p></div>
+  <div class="card"><p class="muted">No prayer requests yet.</p></div>
 {% endif %}
 
-<div class="center mt-4">
-  <a class="btn soft" href="{{ url_for('admin') }}">⬅️ Back to Admin</a>
-  <a class="btn soft" href="{{ url_for('home') }}">🏠 Home</a>
+{# 2. THE WORKSTATION: Prayer Generator #}
+<div id="generator-section" class="card" style="max-width: 700px; margin: 0 auto 50px; border-top: 5px solid #00a86b; display:none;">
+    <h3 style="margin-top:0;">✨ Prayer Generator</h3>
+    <p class="muted" style="font-size: 0.85rem;">Drafting for: <span id="target-name" style="font-weight:bold; color:var(--text);"></span></p>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+        <div>
+            <label>🌅 Mode</label>
+            <select id="mode" onchange="updatePreview()">
+                <option value="☀️ Morning">Morning</option>
+                <option value="🌙 Night">Night</option>
+                <option value="🕊️ Daily">General</option>
+            </select>
+        </div>
+        <div>
+            <label>📖 Scripture</label>
+            <select id="scripture" onchange="updatePreview()">
+                <option value="Psalm 34:18 — The Lord is near to the brokenhearted.">Psalm 34:18 (Comfort)</option>
+                <option value="Philippians 4:6-7 — His peace will guard your heart.">Phil 4:6 (Peace)</option>
+                <option value="Isaiah 41:10 — Do not fear, for I am with you.">Isaiah 41:10 (Strength)</option>
+            </select>
+        </div>
+    </div>
+
+    <label>📝 Final Message Preview</label>
+    <textarea id="output" rows="10" style="width:100%; font-family: sans-serif; padding:15px; border-radius:8px; border:1px solid #ccc; line-height:1.5;"></textarea>
+    
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; margin-top:15px;">
+        <button class="btn soft" onclick="copyText()">📋 Copy</button>
+        <button class="btn-wa" onclick="sendWA('web')">💻 WA Web</button>
+        <button class="btn-wa" onclick="sendWA('api')" style="background:#128C7E;">📱 WA App</button>
+    </div>
 </div>
 
 <style nonce="{{ csp_nonce() }}">
-  table th, table td {
-    text-align:left;
-    border-bottom:1px solid var(--border);
-    padding:8px;
-    font-size:.95rem;
-  }
-  thead {
-    background:#f8fafc;
-    font-weight:700;
-  }
+  table th, table td { text-align:left; border-bottom:1px solid #eee; padding:12px; font-size:.9rem; }
+  thead { background:#f8fafc; color: #64748b; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px; }
+  
+  .badge { background: #e2e8f0; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; }
+  
+  .btn-gen { background: #00a86b; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.8rem; }
+  .btn-gen:hover { background: #008f5a; }
+
+  .btn-wa { background: #25D366; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; text-align: center; }
+  
+  #output { font-size: 1rem; border: 2px solid #e2e8f0; }
+  #output:focus { border-color: #00a86b; outline: none; }
 </style>
+
+<script nonce="{{ csp_nonce() }}">
+let currentUser = { name: '', topic: '', request: '', contact: '' };
+
+function prepareGenerator(name, topic, request, contact) {
+    currentUser = { name, topic, request, contact };
+    document.getElementById('target-name').innerText = name + " (" + topic + ")";
+    document.getElementById('generator-section').style.display = 'block';
+    updatePreview();
+    
+    // Smooth scroll to generator
+    document.getElementById('generator-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+function updatePreview() {
+    const mode = document.getElementById('mode').value;
+    const scripture = document.getElementById('scripture').value;
+    
+    const message = `🕊️ *Silent SoulConnect Intercession* 🕊️\n${mode} Prayer\n\nDear ${currentUser.name},\n\nWe are lifting up your heart regarding your request for ${currentUser.topic}:\n"${currentUser.request}"\n\n📖 *Word:* ${scripture}\n\n✨ May His grace rest upon you today. We are standing with you.\n\nIn Jesus’ name, Amen.`;
+    
+    document.getElementById('output').value = message;
+}
+
+function sendWA(platform) {
+    const phone = currentUser.contact.replace(/\D/g,'');
+    const text = encodeURIComponent(document.getElementById('output').value);
+    const url = (platform === 'web') 
+        ? `https://web.whatsapp.com/send?phone=${phone}&text=${text}`
+        : `https://api.whatsapp.com/send?phone=${phone}&text=${text}`;
+    window.open(url, '_blank');
+}
+
+function copyText() {
+    const textArea = document.getElementById("output");
+    textArea.select();
+    navigator.clipboard.writeText(textArea.value);
+    alert("Prayer copied for " + currentUser.name);
+}
+</script>
 
 {% endblock %}

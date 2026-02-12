@@ -5,55 +5,72 @@
 <section class="hero hero-day" style="background-image:url('{{ url_for('static', filename='img/hero_day.jpg') }}')">
   <div class="hero-inner" style="padding:24px 22px;">
     <h1>⚙️ Admin Dashboard</h1>
-    <p class="muted">Manage outreach, requests, and WhatsApp delivery.</p>
+    <p class="muted">Manage outreach, intercession, and WhatsApp delivery.</p>
   </div>
 </section>
 
-<div class="card admin-card">
-  <h3>Send WhatsApp</h3>
+{# PRIMARY TASKS #}
+<div class="card admin-card" style="border-left: 5px solid #00a86b;">
+  <h3 style="margin-top:0;">🙏 Intercessor Center</h3>
+  <p class="muted">New burdens have been shared. Stand in the gap today.</p>
+  <a class="btn btn-primary" href="{{ url_for('admin_requests') }}" style="display:inline-flex; align-items:center; gap:8px; text-decoration:none;">
+    <span>✨ Go to Prayer Requests</span>
+  </a>
+</div>
 
- <form id="waForm" method="post" action="{{ url_for('admin_whatsapp_send') }}">
+{# BULK WHATSAPP SECTION #}
+<div class="card admin-card">
+  <h3>🟢 Bulk WhatsApp Delivery</h3>
+
+  <form id="waForm" method="post" action="{{ url_for('admin_whatsapp_send') }}">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-    <div class="row">
-      <label>Date</label>
-      <input type="date" name="date" value="{{ today_str }}">
-      <label>Mode</label>
-      <select name="mode">
-        <option value="both">Both (Morning &amp; Night)</option>
-        <option value="morning">Morning only</option>
-        <option value="night">Night only</option>
-        <option value="verses">Verses</option>
-      </select>
+    <div class="row" style="display:flex; gap:15px; flex-wrap:wrap;">
+      <div style="flex:1; min-width:200px;">
+        <label>📅 Date</label>
+        <input type="date" name="date" value="{{ today_str }}" style="width:100%;">
+      </div>
+      <div style="flex:1; min-width:200px;">
+        <label>🕊️ Mode</label>
+        <select name="mode" style="width:100%;">
+          <option value="both">Both (Morning & Night)</option>
+          <option value="morning">Morning only</option>
+          <option value="night">Night only</option>
+          <option value="verses">Verses</option>
+        </select>
+      </div>
     </div>
 
-    <div class="row">
-      <label>Chat (optional)</label>
-      <input type="text" name="chat" placeholder="Silent SoulConnect">
-      <label>Paste delay (s)</label>
-      <input type="number" name="paste_delay" value="8" min="0" step="1" style="width:6rem">
+    <div class="row" style="display:flex; gap:15px; margin-top:15px;">
+      <div style="flex:1;">
+        <label>💬 Chat (Target)</label>
+        <input type="text" name="chat" placeholder="Silent SoulConnect" style="width:100%;">
+      </div>
+      <div style="width:120px;">
+        <label>⏱️ Delay (s)</label>
+        <input type="number" name="paste_delay" value="8" min="0" style="width:100%;">
+      </div>
     </div>
 
-    <div class="row">
+    <div class="row" style="display:flex; gap:15px; margin:15px 0; background:#f8fafc; padding:10px; border-radius:8px;">
       <label><input type="checkbox" name="send"> Auto-send</label>
       <label><input type="checkbox" name="open_only"> Open only</label>
-      <label><input type="checkbox" name="dry_run"> Dry run (print only)</label>
+      <label><input type="checkbox" name="dry_run"> 🧪 Dry run</label>
     </div>
 
-    <button class="btn" type="submit" id="waSubmit">Send</button>
+    <button class="btn btn-primary" type="submit" id="waSubmit" style="width:100%;">Launch Delivery</button>
   </form>
 
   <pre id="status" class="status hidden" aria-live="polite"></pre>
 </div>
 
 <div class="card admin-card">
-  <h3>People & Reports</h3>
-  <p>
-    <a class="btn soft" href="{{ url_for('admin_verses') }}">📖 Theme Verses</a>
-    <a class="btn soft" href="{{ url_for('admin_requests') }}">📥 Prayer Requests</a>
+  <h3>📊 Other Management</h3>
+  <p style="display:flex; flex-wrap:wrap; gap:10px;">
+    <a class="btn soft" href="{{ url_for('admin_verses') }}">📖 Verses</a>
     <a class="btn soft" href="{{ url_for('admin_volunteers') }}">👐 Volunteers</a>
     <a class="btn soft" href="{{ url_for('admin_feedback') }}">📝 Feedback</a>
-    <a class="btn soft" href="{{ url_for('admin_donations') }}">💚 Donation Log</a>
+    <a class="btn soft" href="{{ url_for('admin_donations') }}">💚 Donations</a>
   </p>
 </div>
 
@@ -65,11 +82,11 @@
 <style nonce="{{ csp_nonce() }}">
   .hidden { display:none; }
   .status {
-    margin-top:12px; padding:12px; background:#0f1420; color:#e5e7eb;
-    border-radius:8px; max-height:320px; overflow:auto; font-size:0.9rem;
+    margin-top:12px; padding:15px; background:#0f1420; color:#10b981;
+    border-radius:8px; max-height:250px; overflow:auto; font-family: monospace; font-size: 0.85rem;
   }
-  .row { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin:8px 0; }
-  .row label { font-weight:600; }
+  label { font-weight: 700; margin-bottom: 5px; display: block; }
+  .btn-primary { background: #00a86b; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
 </style>
 
 <script nonce="{{ csp_nonce() }}">
@@ -88,15 +105,16 @@
 
     status.classList.add('hidden');
     submit.disabled = true;
-    submit.textContent = 'Sending…';
+    const originalText = submit.textContent;
+    submit.textContent = 'Processing...';
 
     const fd = new FormData(form);
     const isDryRun = fd.get('dry_run') === 'on';
 
-    // ✅ Open immediately (must be inside click)
+    // 1. OPEN BLANK POPUP IMMEDIATELY (Crucial for bypass)
     let popup = null;
     if (!isDryRun) {
-      popup = window.open('', '_blank'); // <-- no noopener here
+      popup = window.open('about:blank', '_blank');
     }
 
     try {
@@ -106,37 +124,31 @@
         credentials: 'same-origin'
       });
 
-      const ct = res.headers.get('content-type') || '';
-      const data = ct.includes('application/json') ? await res.json() : { ok:true, body: await res.text() };
-
+      const data = await res.json();
       show(data);
 
-      if (!isDryRun) {
-        // ✅ pick correct URL key
+      if (!isDryRun && data.ok) {
+        // 2. DETECT CORRECT KEY (Morning, Night, or General)
         const mode = (fd.get('mode') || '').toString().toLowerCase();
-        let url = null;
+        
+        // Find any available WhatsApp URL in order of preference
+        let url = data.share_web || data.share_wa || data.share_api || 
+                  data.share_web_morning || data.share_wa_morning ||
+                  data.share_web_night || data.share_wa_night;
 
-        if (mode === 'both') {
-          url = data.share_web_morning || data.share_wa_morning || data.share_api_morning;
+        if (url) {
+          if (popup) {
+            popup.location.href = url;
+            popup.focus();
+          } else {
+            window.location.href = url;
+          }
         } else {
-          url = data.share_web || data.share_wa || data.share_api;
-        }
-
-        // ✅ If popup blocked or url missing, show it clearly
-        if (!url) {
           if (popup) popup.close();
-          show({ ok:false, error:"No WhatsApp URL returned", mode, keys: Object.keys(data || {}) });
-          return;
+          show("Error: No WhatsApp URL found in response.");
         }
-
-        // ✅ Navigate popup
-        if (popup) {
-          popup.location.href = url;
-          popup.focus();
-        } else {
-          // popup blocked => fallback: open in same tab
-          window.location.href = url;
-        }
+      } else if (!data.ok && popup) {
+          popup.close();
       }
 
     } catch (err) {
@@ -144,7 +156,7 @@
       show({ ok:false, error:String(err) });
     } finally {
       submit.disabled = false;
-      submit.textContent = 'Send';
+      submit.textContent = originalText;
     }
   });
 })();

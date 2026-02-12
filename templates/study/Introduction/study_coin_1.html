@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Found in the Stillness: Part 1 — Silent SoulConnect{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; margin: 40px auto; padding: 0 20px;">
+  
+  <div style="width: 100%; background: #e2e8f0; height: 8px; border-radius: 10px; margin-bottom: 30px;">
+    <div style="width: 33%; background: var(--primary); height: 8px; border-radius: 10px;"></div>
+  </div>
+
+  <h1 style="color: var(--primary); text-align: center;">Part 1: The Silent Shadow</h1>
+  <p style="text-align: center; font-style: italic; color: #64748b;">A Journey into Luke 15:8</p>
+
+  <div class="card" style="border-radius: 20px; padding: 40px; line-height: 1.8; margin-bottom: 30px; border-top: 5px solid var(--gold);">
+    <p style="font-size: 1.2rem; color: #1e293b;">
+        Close your eyes for a moment. Imagine a silver coin—bright, shiny, and full of value. Suddenly, it slips. It doesn't make a sound. It falls into the thick dust under a heavy wooden table. 
+    </p>
+    <p style="font-size: 1.2rem; color: #1e293b;">
+        It is now in the <strong>dark</strong>. It cannot call out for help. It cannot move itself back to the light. It sits in a silent shadow, covered by the dirt of the world. 
+    </p>
+  </div>
+
+  
+
+  <div style="background: #f8fafc; padding: 30px; border-radius: 20px; border: 1px solid #e2e8f0;">
+    <h3 style="color: var(--primary); margin-top: 0;">Heart Reflection</h3>
+    <p>Sometimes, life makes us feel like that coin. Have you ever felt:</p>
+    
+    <ul style="list-style: none; padding: 0;">
+        <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+            <input type="checkbox" style="width: 20px; height: 20px;"> 
+            <span>Hidden away or ignored by others?</span>
+        </li>
+        <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+            <input type="checkbox" style="width: 20px; height: 20px;"> 
+            <span>Like you have no "voice" to tell people you are hurting?</span>
+        </li>
+        <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+            <input type="checkbox" style="width: 20px; height: 20px;"> 
+            <span>Like the "dust" of past mistakes has covered your shine?</span>
+        </li>
+    </ul>
+    
+    <div style="margin-top: 25px; padding: 15px; background: white; border-radius: 10px; border-left: 4px solid var(--primary);">
+        <strong>The Holiness Truth:</strong> Even in the dark, the coin never lost its <em>value</em>. The dirt changed its look, but it did not change its worth to the Owner.
+    </div>
+  </div>
+
+  <div style="margin-top: 40px; display: flex; justify-content: space-between; align-items: center;">
+    <a href="{{ url_for('study_index') }}" style="color:#64748b; text-decoration:none;">← Back to Study Hub</a>
+
+<a href="{{ url_for('study_detail', slug='coin-2') }}">Coin Part 2 →</a>
+
+
+  </div>
+
+</div>
+{% endblock %}<d

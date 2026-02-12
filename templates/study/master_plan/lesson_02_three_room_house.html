@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}Lesson 02: The Three-Room House — Master's Plan{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 850px; margin: 40px auto; padding: 0 20px;">
+
+  <div style="background: var(--primary); color: white; padding: 30px; border-radius: 20px; text-align: center; margin-bottom: 40px; box-shadow: 0 10px 20px rgba(0,168,107,0.2);">
+    <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; opacity: 0.9;">🔑 Memory Verse</span>
+    <h2 style="margin: 10px 0; font-size: 1.8rem; line-height: 1.4;">"May your spirit and soul and body be kept complete..."</h2>
+    <p style="margin: 0; font-weight: 700; color: var(--gold);">1 Thessalonians 5:23</p>
+  </div>
+
+<div class="lesson-image-container" style="text-align: center; margin: 30px 0;">
+    <img src="{{ url_for('static', filename='img/studies/3room_house.png') }}" 
+         alt="The Three-Room House" 
+         style="width: 100%; max-width: 600px; border-radius: 20px; border: 4px solid var(--gold); box-shadow: 0 15px 40px rgba(0,0,0,0.2);">
+    <p style="margin-top: 15px; font-style: italic; color: #64748b;">
+        Left: The glove has the shape. Right: The hand gives the life.
+    </p>
+</div>
+
+  <section style="margin-bottom: 50px;">
+    <h3 style="color: var(--primary); display: flex; align-items: center; gap: 10px;">
+      <span>🏛️</span> The Real Fact: The Tabernacle
+    </h3>
+    <p style="font-size: 1.1rem; line-height: 1.7; color: #334155;">
+      In ancient history, God gave the people a blueprint for a building called the <strong>Tabernacle</strong>. It was a house for God to live among people. It was not just one big room; it was divided into <strong>three distinct parts</strong>.
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 25px;">
+      <div style="background: #f1f5f9; padding: 15px; border-radius: 12px; text-align: center; border-bottom: 4px solid #94a3b8;">
+        <h4 style="margin: 0; color: #475569;">1. Outer Court</h4>
+        <p style="font-size: 0.85rem; margin-top: 5px;">The public area everyone could see.</p>
+      </div>
+      <div style="background: #fefce8; padding: 15px; border-radius: 12px; text-align: center; border-bottom: 4px solid #eab308;">
+        <h4 style="margin: 0; color: #856404;">2. Holy Place</h4>
+        <p style="font-size: 0.85rem; margin-top: 5px;">The inner room for service and light.</p>
+      </div>
+      <div style="background: #f0fdf4; padding: 15px; border-radius: 12px; text-align: center; border-bottom: 4px solid #22c55e;">
+        <h4 style="margin: 0; color: #166534;">3. Holy of Holies</h4>
+        <p style="font-size: 0.85rem; margin-top: 5px;">The <strong>Secret Room</strong> where God lived.</p>
+      </div>
+    </div>
+  </section>
+
+  
+
+  <div class="card" style="padding: 40px; border-radius: 24px; background: white; border: 1px solid #e2e8f0; margin-bottom: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+    <h3 style="color: var(--primary); margin-top: 0; display: flex; align-items: center; gap: 10px;">
+      <span>💡</span> The Secret Meaning: YOU
+    </h3>
+    <p style="font-size: 1.2rem; line-height: 1.8;">
+      The Bible says <strong>you</strong> are God's temple. Just like that building, you have three "rooms" designed for different purposes:
+    </p>
+    
+    <ul style="list-style: none; padding: 0; margin: 25px 0;">
+      <li style="margin-bottom: 20px; display: flex; gap: 15px; align-items: flex-start;">
+        <span style="background: #f1f5f9; padding: 10px; border-radius: 8px;">💪</span>
+        <div>
+          <strong>The Body (Outer Court):</strong> This is your physical skin and bones. It touches the world through seeing, smelling, and feeling.
+        </div>
+      </li>
+      <li style="margin-bottom: 20px; display: flex; gap: 15px; align-items: flex-start;">
+        <span style="background: #fefce8; padding: 10px; border-radius: 8px;">🧠</span>
+        <div>
+          <strong>The Soul (Holy Place):</strong> This is your mind, your emotions, and your choices. This is the "YOU" that thinks and feels.
+        </div>
+      </li>
+      <li style="margin-bottom: 20px; display: flex; gap: 15px; align-items: flex-start;">
+        <span style="background: #f0fdf4; padding: 10px; border-radius: 8px;">✨</span>
+        <div>
+          <strong>The Spirit (Holy of Holies):</strong> This is your <strong>deepest room</strong>. It is the only part of you that can touch God.
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  
+
+  <div style="background: #f8fafc; padding: 30px; border-radius: 20px; border-left: 5px solid var(--primary); margin-bottom: 50px;">
+    <p style="font-size: 1.2rem; margin: 0; color: #1e293b;">
+      "If you are thirsty, you give water to your <strong>Body</strong>. If you are lonely, you give friendship to your <strong>Soul</strong>. But if you feel empty inside, your <strong>Spirit</strong> is hungry for God."
+    </p>
+  </div>
+
+  <div style="margin-bottom: 50px;">
+    <h3 style="text-align: center; color: var(--primary);">🤔 Heart Check</h3>
+    <div style="display: grid; gap: 15px; margin-top: 20px;">
+      <div style="background: #fff; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; display: flex; gap: 15px;">
+        <span>❓</span>
+        <p style="margin: 0;">Have you been trying to fix a <strong>Spirit</strong> problem (emptiness) by only feeding your <strong>Body</strong> (money/food)?</p>
+      </div>
+      <div style="background: #fff; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; display: flex; gap: 15px;">
+        <span>👁️‍🗨️</span>
+        <p style="margin: 0;">Can you see that God wants to live in your "Secret Room," not just your thoughts?</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="background: #1e293b; color: white; padding: 40px; border-radius: 24px; text-align: center;">
+    <h4 style="margin-top: 0; color: var(--gold);">🙏 Closing Prayer</h4>
+    <p style="font-style: italic; font-size: 1.1rem; line-height: 1.6; max-width: 600px; margin: 0 auto 30px;">
+      "Lord Jesus, thank You for showing me how I am made. I open the door to my spirit—my Secret Room. I don't want to just know <em>about</em> You in my mind; I want to know You in my spirit. Come and live in me today. In Jesus' name, Amen."
+    </p>
+
+    <a href="{{ url_for('study_detail', slug='broken-tv') }}"
+ class="btn" style="background: var(--gold); color: #1e293b; padding: 15px 40px; font-weight: 800; border-radius: 12px; text-decoration: none; display: inline-block;">
+  Continue to Lesson 03 →
+
+</div>
+{% endblock %}

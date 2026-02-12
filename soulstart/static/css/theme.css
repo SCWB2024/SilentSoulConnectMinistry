@@ -41,6 +41,22 @@
   --ring: 0 0 0 3px rgba(10,163,110,.25);
 }
 
+.hero{
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+}
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.35));
+}
+.hero-inner{
+  position: relative;
+  z-index: 2;
+  color: #fff;
+}
 
 /* =============================
    02) RESET & TYPOGRAPHY
@@ -242,13 +258,6 @@ p { margin: .4rem 0; }
   font-size: 0.95rem;
 }
 
-.footer-social {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  justify-content: flex-end;
-}
-
 .icon-link {
   display: inline-flex;
   align-items: center;
@@ -295,6 +304,53 @@ p { margin: .4rem 0; }
 }
 
 .series-sub{ margin:0; }
+
+.study-grid{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.study-card{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  padding:14px;
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:#fff;
+  box-shadow: var(--shadow);
+  text-decoration:none;
+  color: var(--text);
+}
+
+.study-card:hover{
+  transform: translateY(-1px);
+}
+
+.study-ico{
+  width:44px;
+  height:44px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#ecfdf5;
+  border:1px solid var(--border);
+  font-size: 1.2rem;
+}
+
+.study-title{
+  font-weight: 800;
+}
+
+.study-sub{
+  font-size: .9rem;
+}
+
+@media (max-width: 900px){
+  .study-grid{ grid-template-columns: 1fr; }
+}
 
 
 /* =============================
@@ -366,6 +422,23 @@ p { margin: .4rem 0; }
   text-align: center;
 }
 
+/* Hero chips – force white for contrast */
+/* Hero chips — force readable on dark hero background */
+.hero .chip-row .chip {
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.35);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+
+/* HERO chips: white text */
+.hero .hero-chips .chip{
+  color: #fff !important;
+  background: rgba(255,255,255,.16);
+  border: 1px solid rgba(255,255,255,.28);
+  font-weight: 700;
+}
+.hero .hero-chips .chip p{ color:#fff !important; margin:0; }
 
 /* =============================
    09) HOME HELPERS
@@ -433,6 +506,333 @@ p { margin: .4rem 0; }
 
 @media (max-width: 900px){
   .home-grid{ grid-template-columns: 1fr; }
+}
+
+.social-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+.footer-social a {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+/* Footer social icons (small + consistent) */
+.footer-social,
+.social-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.social-icon-link img,
+.social-icon {
+  width: 26px;
+  height: 26px;
+  display: block;
+  object-fit: contain;
+}
+
+#output {
+    font-size: 1.1rem; /* Slightly larger than standard */
+    line-height: 1.5;
+    background-color: #fdfdfd;
+    border: 2px dashed #00a86b; /* Makes the "Copy Zone" obvious */
+}
+/* =========================
+   Soul Speaks - Post Page
+   ========================= */
+
+.soulspeaks-post .sp-hero{
+  border-radius: 18px;
+  overflow: hidden;
+  margin: 18px 0 20px;
+  background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.35));
+  color: #fff;
+}
+
+.sp-hero-inner{ padding: 26px; max-width: 1000px; }
+
+.sp-badge{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  background: rgba(255,255,255,.16);
+  border: 1px solid rgba(255,255,255,.18);
+  font-weight: 800;
+  letter-spacing: .3px;
+  margin-bottom: 12px;
+}
+
+.sp-title{
+  margin: 0 0 8px;
+  font-weight: 900;
+  font-size: clamp(26px, 3vw, 40px);
+}
+
+.sp-meta{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  opacity:.92;
+  font-size: 14px;
+}
+.sp-meta .dot{ opacity:.6; }
+
+.sp-chips{
+  margin-top: 12px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.sp-chip{
+  display:inline-flex;
+  align-items:center;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.22);
+  border: 1px solid rgba(255,255,255,.18);
+  color:#fff;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.sp-actions{ margin-top: 14px; display:flex; gap:10px; flex-wrap:wrap; }
+
+/* layout */
+.sp-grid{
+  display:grid;
+  grid-template-columns: 320px 1fr;
+  gap: 18px;
+  align-items:start;
+}
+@media (max-width: 980px){
+  .sp-grid{ grid-template-columns: 1fr; }
+}
+
+/* sidebar */
+.sp-side-card{ padding: 16px; }
+.sp-side-media{ margin-bottom: 12px; }
+.sp-side-img{
+  width:100%;
+  height:auto;
+  display:block;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,.08);
+}
+.sp-side-placeholder{
+  height: 180px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(16,185,129,.08);
+  border: 1px solid rgba(16,185,129,.18);
+  font-weight: 900;
+  color: #065f46;
+}
+.sp-side-title{ margin: 12px 0 6px; font-weight: 900; }
+.sp-side-sub{ margin: 0 0 12px; font-size: 14px; }
+
+.sp-connect{ display:grid; gap: 10px; }
+
+/* heart bullets (replaces green squares) */
+.sp-section{
+  padding: 14px 14px 14px 44px;
+  position: relative;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.08);
+  box-shadow: 0 10px 22px rgba(0,0,0,.04);
+  margin-bottom: 12px;
+}
+.sp-section::before{
+  content: "❤";
+  position:absolute;
+  left: 14px;
+  top: 16px;
+  font-size: 18px;
+  color: #10b981;
+  opacity: .95;
+}
+.sp-h2{ margin: 0 0 6px; font-weight: 900; font-size: 18px; }
+
+.sp-callout{
+  margin: 14px 0;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(16,185,129,.08);
+  border: 1px solid rgba(16,185,129,.18);
+}
+.sp-callout-title{ font-weight: 900; margin-bottom: 4px; }
+.sp-callout-text{ font-weight: 800; }
+
+.sp-scripture{
+  margin-top: 14px;
+  padding: 16px;
+  border-radius: 16px;
+  background: #0b1220;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.12);
+}
+.sp-scripture-label{ font-weight: 900; opacity: .95; margin-bottom: 8px; }
+.sp-scripture-ref{ font-weight: 900; margin-bottom: 10px; opacity: .92; }
+.sp-scripture-quote{
+  margin: 0;
+  padding: 12px 14px;
+  border-left: 4px solid #10b981;
+  background: rgba(255,255,255,.06);
+  border-radius: 14px;
+}
+.sp-scripture-cite{ margin-top: 10px; text-align:right; opacity: .85; font-weight: 800; }
+
+.sp-reflection{ padding: 16px; margin-top: 14px; }
+.sp-h3{ margin: 0 0 8px; font-weight: 900; }
+
+.sp-list{ margin: 10px 0 0; padding-left: 18px; }
+.sp-list li{ margin: 6px 0; }
+
+.sp-tags{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(0,0,0,.08);
+}
+.sp-tag{
+  display:inline-flex;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.10);
+  background: #fff;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.sp-bottom{ margin-top: 14px; }
+
+/* =============================
+    9b) BLOG HELPERS (Upgraded)
+   ============================= */
+
+/* Make the hero image feel immersive rather than just a "box" */
+.blog-hero {
+  width: 100%;
+  max-width: 1000px; /* Slightly wider for modern feel */
+  border-radius: 24px; /* Softer corners */
+  display: block;
+  margin: 0 auto 24px auto;
+  box-shadow: 0 20px 40px rgba(0,0,0,.08); /* Deeper, softer shadow */
+  transition: transform 0.4s ease;
+}
+
+/* The Verse Card: Scripture should feel special/sacred */
+.verse-card {
+  border: 1px solid rgba(16, 185, 129, 0.2); /* Use your signature green */
+  border-radius: 20px;
+  padding: 24px;
+  margin: 32px 0;
+  background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%); /* Subtle glow */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add a visual "accent" to the verse card for Deaf-friendliness */
+.verse-card::before {
+  content: '🤟';
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  font-size: 1.5rem;
+  opacity: 0.2;
+}
+
+.verse-title {
+  font-weight: 800;
+  color: #065f46; /* Darker green for readability */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+.verse-text {
+  font-size: 1.25rem; /* Larger for better visual focus */
+  line-height: 1.6;
+  color: #1f2937;
+  font-family: 'Georgia', serif; /* A classic serif makes Scripture stand out */
+}
+
+/* The Reflection Block: Moving from "Gray bar" to "Soulful Quote" */
+.blog-block {
+  margin: 32px 0;
+  padding: 24px;
+  border-left: 4px solid #10b981; /* Thinner, more vibrant line */
+  background: rgba(16, 185, 129, 0.04); /* Very soft green tint */
+  border-radius: 0 16px 16px 0;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.blog-index .hero-blog {
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.15)),
+    url("/static/img/hero_day.jpg");
+}
+/* Keep this, it’s perfect logic */
+.post-cover {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.post-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: scale 0.5s ease;
+}
+
+.post-card:hover .post-cover img {
+  scale: 1.05; /* Subtle zoom on hover for interactivity */
+}
+
+/* The Glassmorphism Container */
+.glass-card {
+  background: rgba(255, 255, 255, 0.7); /* Translucent white */
+  backdrop-filter: blur(12px);           /* The "frosted" blur effect */
+  -webkit-backdrop-filter: blur(12px);   /* Support for Safari */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-5px); /* Adds a "living" feel when touched/clicked */
+}
+
+/* Specific styling for the ASL Video Toggle */
+.btn-asl-trigger {
+  background: #10b981;
+  color: white;
+  border-radius: 999px;
+  padding: 12px 24px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
 }
 
 /* =============================
@@ -536,6 +936,17 @@ body.bg-video .topnav a.active{
 
 .page-hero h1{margin:0 0 .25rem 0;font-size:2rem}
 .page-hero .subtitle{margin:0;opacity:.8}
+
+.voice-hero h1,
+.voice-hero p,
+.voice-hero .chip {
+  color: #fff;
+}
+
+.voice-hero .chip {
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.25);
+}
 
 /* Verse Grid */
 /* --- Verse Hero Overlay (for Study series pages) --- */

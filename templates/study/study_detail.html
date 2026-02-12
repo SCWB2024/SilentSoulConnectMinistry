@@ -1,29 +1,17 @@
 {% extends "base.html" %}
-{% block title %}{{ title }} — Study{% endblock %}
+{% block title %}{{ page_title }} — Study{% endblock %}
+
 {% block content %}
-<section class="hero hero-day" style="background-image:url('{{ url_for('static', filename='img/hero_day.jpg') }}')">
-  <div class="hero-inner" style="padding:24px 22px;">
-    <h1>{{ title }}</h1>
-    {% if subtitle %}<p class="muted">{{ subtitle }}</p>{% endif %}
-    {% if date_str %}<p class="tag">Updated: {{ date_str }}</p>{% endif %}
+<section class="page-hero">
+  <h1>{{ page_title }}</h1>
+  <div class="center" style="gap:10px; display:flex; flex-wrap:wrap;">
+    <a class="btn soft" href="{{ url_for('study_index') }}">⬅ Back to Study Hub</a>
+    <a class="btn soft" href="{{ url_for('home') }}">🏠 Home</a>
   </div>
 </section>
 
-<div class="center mt-4">
-  <a class="btn soft" href="{{ url_for('study_index') }}">📖 Back to Study Hub</a>
+<div class="card">
+  {# This includes your lesson file exactly as-is #}
+  {% include rel_template %}
 </div>
-
-<article id="studyContent" class="card" role="article">
-  <h2 class="sr-only">{{ title }}</h2>
-  {{ content|safe }}
-</article>
-
-{% if reflection_points %}
-<section class="card" style="margin-top:12px;">
-  <h2>Reflection</h2>
-  <ul class="clean">
-    {% for p in reflection_points %}<li>{{ p }}</li>{% endfor %}
-  </ul>
-</section>
-{% endif %}
 {% endblock %}

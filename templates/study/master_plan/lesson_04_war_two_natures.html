@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Lesson 04: The War of Two Natures — Master's Plan{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 850px; margin: 40px auto; padding: 0 20px;">
+
+  <div class="lesson-image-container" style="text-align: center; margin: 30px 0;">
+    <img src="{{ url_for('static', filename='img/studies/war_two_natures.png') }}" 
+         alt="The War of Two Natures" 
+         style="width: 40%; max-width: 400px; border-radius: 100px; border: 2px solid var(--gold); box-shadow: 0 15px 40px rgba(0,0,0,0.2);">
+    <p style="margin-top: 9px; font-style: italic; color: #64748b;">
+        Left: The glove has the shape. Right: The hand gives the life.
+    </p>
+</div>
+  <div style="background: #6366f1; color: white; padding: 30px; border-radius: 20px; text-align: center; margin-bottom: 40px; box-shadow: 0 10px 20px rgba(99,102,241,0.2);">
+    <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; opacity: 0.9;">🔑 Memory Verse</span>
+    <h2 style="margin: 10px 0; font-size: 1.8rem; line-height: 1.4;">"I want to do good, but evil is right there with me."</h2>
+    <p style="margin: 0; font-weight: 700; color: #c7d2fe;">Romans 7:21</p>
+  </div>
+
+  <section style="margin-bottom: 50px;">
+    <h3 style="color: #4338ca; display: flex; align-items: center; gap: 10px;">
+      <span>⚔️</span> The Real Fact: The Civil War
+    </h3>
+    <p style="font-size: 1.1rem; line-height: 1.7; color: #334155;">
+      History is full of stories about "Civil Wars." This is a war that happens <strong>inside</strong> one country. Two kings want the same throne. Families are divided. It is the most painful kind of war because the enemy is "one of us."
+    </p>
+    <p style="font-size: 1.1rem; line-height: 1.7; color: #334155;">
+      In the same way, every person who wants to follow God discovers a Civil War inside their own heart. You have <strong>Two Natures</strong> fighting for control of your life.
+    </p>
+  </section>
+
+  
+
+  <div class="card" style="padding: 40px; border-radius: 24px; background: #eef2ff; border: 1px solid #c7d2fe; margin-bottom: 50px;">
+    <h3 style="color: #4338ca; margin-top: 0; display: flex; align-items: center; gap: 10px;">
+      <span>🌱</span> The Secret of the Two Seeds
+    </h3>
+    <p style="font-size: 1.2rem; line-height: 1.8;">
+      Why is it so hard to be good? It is because you have two different "seeds" growing in the same garden:
+    </p>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 25px;">
+      <div style="background: white; padding: 25px; border-radius: 15px; border-top: 5px solid #64748b;">
+        <h4 style="margin: 0; color: #1e293b;">The Old Nature (Flesh)</h4>
+        <p style="font-size: 0.9rem; margin-top: 10px; color: #475569;">This comes from Adam. It is selfish, angry, and likes to sin. It is like a heavy weight pulling you down to the dark.</p>
+      </div>
+      <div style="background: white; padding: 25px; border-radius: 15px; border-top: 5px solid #6366f1;">
+        <h4 style="margin: 0; color: #4338ca;">The New Nature (Spirit)</h4>
+        <p style="font-size: 0.9rem; margin-top: 10px; color: #475569;">This comes from God. It loves the light, wants to pray, and desires to be holy. It is like wings lifting you up.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="background: #1e293b; color: white; padding: 30px; border-radius: 20px; border-left: 5px solid #6366f1; margin-bottom: 50px;">
+    <p style="font-size: 1.2rem; margin: 0; line-height: 1.6;">
+      "Think of two dogs fighting. A Black Dog (Evil) and a White Dog (Good). Which dog wins the fight? <strong>The one you feed.</strong>"
+    </p>
+  </div>
+
+  <div style="margin-bottom: 50px;">
+    <h3 style="text-align: center; color: #4338ca;">🤔 Which nature are you feeding?</h3>
+    <p style="text-align: center; color: #64748b; margin-bottom: 25px;">Check the things that strengthen your "New Nature":</p>
+    
+    <div style="display: grid; gap: 12px; max-width: 500px; margin: 0 auto;">
+      <label style="display: flex; align-items: center; gap: 15px; background: white; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0; cursor: pointer;">
+        <input type="checkbox"> <span>Reading/Watching God's Word</span>
+      </label>
+      <label style="display: flex; align-items: center; gap: 15px; background: white; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0; cursor: pointer;">
+        <input type="checkbox"> <span>Talking to God (Prayer)</span>
+      </label>
+      <label style="display: flex; align-items: center; gap: 15px; background: white; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0; cursor: pointer;">
+        <input type="checkbox"> <span>Spending time with other believers</span>
+      </label>
+    </div>
+  </div>
+
+  <div style="background: #1e293b; color: white; padding: 40px; border-radius: 24px; text-align: center;">
+    <h4 style="margin-top: 0; color: #c7d2fe;">🙏 Conclusion: The Final Surrender</h4>
+    <p style="font-style: italic; font-size: 1.1rem; line-height: 1.6; max-width: 600px; margin: 0 auto 30px;">
+      "Lord Jesus, I feel the war inside me. I confess that I often feed my old nature. I am tired of the struggle. I choose today to feed my spirit. I give You the throne of my heart. Be the King who wins the war in me. In Jesus' name, Amen."
+    </p>
+
+    <a href="{{ url_for('study_index') }}"
+ class="btn" style="background: #6366f1; color: white; padding: 15px 40px; font-weight: 800; border-radius: 12px; text-decoration: none; display: inline-block;">
+  Back to Study Hub
+</a>
+
+<div class="muted" style="margin-top:12px; font-size:0.95rem;">
+  Lesson 05 is coming soon.
+</div>
+
+</div>
+{% endblock %}

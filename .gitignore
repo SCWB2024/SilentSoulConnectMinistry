@@ -24,8 +24,6 @@ __pycache__/
 Thumbs.db
 
 # Allow SoulStart static assets (must unignore folders first)
-
-# Allow SoulStart static assets (must unignore folders first)
 !soulstart/static/
 !soulstart/static/**
 
@@ -63,21 +61,10 @@ logs/*.log
 stash_changes.txt*
 
 *old.html
-
-# Logs
-logs/
-*.log
-
 *.jpg
-
 *.png
-
 *.mp4
-
 static/
-
 img/
-
 icons/
-
 blog/

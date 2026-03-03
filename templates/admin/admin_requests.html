@@ -9,37 +9,41 @@
   </div>
 </section>
 
-{# 1. THE INBOX: Request Table #}
 {% if items and items|length > 0 %}
-<div class="card admin-card" style="overflow:auto; padding: 0; margin-bottom: 30px;">
-  <table style="width:100%; border-collapse:collapse; min-width: 900px;">
+<div class="card admin-card" style="overflow:auto; padding:0; margin-bottom:24px;">
+  <table class="req-table">
     <thead>
       <tr>
         <th>📅 When</th>
         <th>👤 Name</th>
-        <th>📞 Contact</th>
         <th>🏷️ Topic</th>
         <th>📝 Request</th>
         <th>⚡ Action</th>
       </tr>
     </thead>
-
     <tbody>
       {% for r in items %}
-      <tr id="row-{{ loop.index }}">
+      <tr>
         <td>{{ r.ts or "—" }}</td>
-        <td><strong>{{ r.name or "Anonymous" }}</strong></td>
-        <td>{{ r.contact or "—" }}</td>
-        <td><span class="badge">{{ r.topic or "General" }}</span></td>
-        <td class="request-text">{{ r.request or "" }}</td>
         <td>
-          <button class="btn-gen"
-            onclick="prepareGenerator(
-              {{ (r.name or 'Friend')|tojson }},
-              {{ (r.topic or 'General')|tojson }},
-              {{ (r.request or '')|replace('\n',' ')|tojson }},
-              {{ (r.contact or '')|tojson }}
-            )">
+          <div class="req-name">
+            <strong>{{ r.name or "Anonymous" }}</strong>
+            <div class="muted req-contact">{{ r.contact or "" }}</div>
+          </div>
+        </td>
+        <td><span class="badge">{{ r.topic or "General" }}</span></td>
+        <td class="req-text">
+          {{ (r.request or "")[:120] }}{% if r.request and r.request|length > 120 %}…{% endif %}
+        </td>
+        <td>
+          <button
+            type="button"
+            class="btn-gen js-draft"
+            data-name="{{ r.name or 'Friend' }}"
+            data-topic="{{ r.topic or 'General' }}"
+            data-request="{{ (r.request or '')|replace('\n',' ') }}"
+            data-contact="{{ r.contact or '' }}"
+          >
             ✨ Draft Prayer
           </button>
         </td>
@@ -52,92 +56,188 @@
   <div class="card"><p class="muted">No prayer requests yet.</p></div>
 {% endif %}
 
-{# 2. THE WORKSTATION: Prayer Generator #}
-<div id="generator-section" class="card" style="max-width: 700px; margin: 0 auto 50px; border-top: 5px solid #00a86b; display:none;">
-    <h3 style="margin-top:0;">✨ Prayer Generator</h3>
-    <p class="muted" style="font-size: 0.85rem;">Drafting for: <span id="target-name" style="font-weight:bold; color:var(--text);"></span></p>
-    
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-        <div>
-            <label>🌅 Mode</label>
-            <select id="mode" onchange="updatePreview()">
-                <option value="☀️ Morning">Morning</option>
-                <option value="🌙 Night">Night</option>
-                <option value="🕊️ Daily">General</option>
-            </select>
-        </div>
-        <div>
-            <label>📖 Scripture</label>
-            <select id="scripture" onchange="updatePreview()">
-                <option value="Psalm 34:18 — The Lord is near to the brokenhearted.">Psalm 34:18 (Comfort)</option>
-                <option value="Philippians 4:6-7 — His peace will guard your heart.">Phil 4:6 (Peace)</option>
-                <option value="Isaiah 41:10 — Do not fear, for I am with you.">Isaiah 41:10 (Strength)</option>
-            </select>
-        </div>
+<!-- Generator -->
+<div id="generator-section" class="card gen-card" style="display:none;">
+  <h3 style="margin-top:0;">✨ Prayer Generator</h3>
+  <p class="muted" style="font-size:.9rem;">
+    Drafting for: <span id="target-name" style="font-weight:700;"></span>
+  </p>
+
+  <div class="gen-grid">
+    <div>
+      <label>👥 Audience</label>
+      <select id="audience">
+        <option value="group" selected>Group (WhatsApp)</option>
+        <option value="private">Private (Direct Message)</option>
+      </select>
     </div>
 
-    <label>📝 Final Message Preview</label>
-    <textarea id="output" rows="10" style="width:100%; font-family: sans-serif; padding:15px; border-radius:8px; border:1px solid #ccc; line-height:1.5;"></textarea>
-    
-    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; margin-top:15px;">
-        <button class="btn soft" onclick="copyText()">📋 Copy</button>
-        <button class="btn-wa" onclick="sendWA('web')">💻 WA Web</button>
-        <button class="btn-wa" onclick="sendWA('api')" style="background:#128C7E;">📱 WA App</button>
+    <div>
+      <label>🌅 Mode</label>
+      <select id="mode">
+        <option value="☀️ Morning">Morning</option>
+        <option value="🌙 Night">Night</option>
+        <option value="🕊️ Daily">General</option>
+      </select>
     </div>
+
+    <div style="grid-column:1 / -1;">
+      <label>📖 Scripture</label>
+      <select id="scripture">
+        <option value="Psalm 34:18 — The Lord is near to the brokenhearted.">Psalm 34:18 (Comfort)</option>
+        <option value="Philippians 4:6-7 — His peace will guard your heart.">Philippians 4:6–7 (Peace)</option>
+        <option value="Isaiah 41:10 — Do not fear, for I am with you.">Isaiah 41:10 (Strength)</option>
+      </select>
+    </div>
+  </div>
+
+  <label style="margin-top:12px;">📝 Final Message</label>
+  <textarea id="output" rows="11" class="gen-out"></textarea>
+
+  <div class="gen-actions">
+    <button type="button" class="btn soft" id="btn-copy">📋 Copy</button>
+    <button type="button" class="btn-wa" id="btn-wa-web">💻 WA Web</button>
+    <button type="button" class="btn-wa" id="btn-wa-app">📱 WA App</button>
+  </div>
 </div>
 
-<style nonce="{{ csp_nonce() }}">
-  table th, table td { text-align:left; border-bottom:1px solid #eee; padding:12px; font-size:.9rem; }
-  thead { background:#f8fafc; color: #64748b; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px; }
-  
-  .badge { background: #e2e8f0; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; }
-  
-  .btn-gen { background: #00a86b; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.8rem; }
-  .btn-gen:hover { background: #008f5a; }
+<style>
+  .req-table { width:100%; border-collapse:collapse; min-width:900px; }
+  .req-table th, .req-table td { text-align:left; border-bottom:1px solid #eee; padding:12px; font-size:.92rem; vertical-align:top; }
+  .req-table thead { background:#f8fafc; color:#64748b; text-transform:uppercase; font-size:.72rem; letter-spacing:1px; }
 
-  .btn-wa { background: #25D366; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; text-align: center; }
-  
-  #output { font-size: 1rem; border: 2px solid #e2e8f0; }
-  #output:focus { border-color: #00a86b; outline: none; }
+  .badge { background:#e2e8f0; padding:2px 8px; border-radius:999px; font-size:.75rem; display:inline-block; }
+  .req-contact { font-size:.8rem; margin-top:3px; }
+
+  .btn-gen { background:#00a86b; color:#fff; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:700; font-size:.85rem; }
+  .btn-gen:hover { filter:brightness(.95); }
+
+  .gen-card { max-width:760px; margin:0 auto 50px; border-top:5px solid #00a86b; }
+  .gen-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+  .gen-out { width:100%; font-family:system-ui, sans-serif; padding:14px; border-radius:10px; border:2px solid #e2e8f0; line-height:1.5; font-size:1rem; }
+  .gen-out:focus { outline:none; border-color:#00a86b; }
+
+  .gen-actions { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-top:12px; }
+  .btn-wa { background:#25D366; color:#fff; border:none; padding:10px; border-radius:10px; font-weight:800; cursor:pointer; text-align:center; }
+  .btn.soft { border:2px solid #e2e8f0; background:#fff; border-radius:10px; padding:10px; font-weight:800; cursor:pointer; }
 </style>
 
-<script nonce="{{ csp_nonce() }}">
-let currentUser = { name: '', topic: '', request: '', contact: '' };
+<script>
+(() => {
+  let currentUser = { name: "Friend", topic: "General", request: "", contact: "" };
+  const $ = (id) => document.getElementById(id);
 
-function prepareGenerator(name, topic, request, contact) {
-    currentUser = { name, topic, request, contact };
-    document.getElementById('target-name').innerText = name + " (" + topic + ")";
-    document.getElementById('generator-section').style.display = 'block';
+  function meaningFromScripture(scriptureText, name, topic) {
+    const s = (scriptureText || "").toLowerCase();
+    if (s.includes("brokenhearted") || s.includes("grief") || s.includes("near")) {
+      return `Be near to ${name}, and bring comfort deeper than words.`;
+    }
+    if (s.includes("peace") || s.includes("guard") || s.includes("anx") || s.includes("worry")) {
+      return `Guard ${name} with Your peace and quiet every anxious thought.`;
+    }
+    if (s.includes("fear") || s.includes("with you") || s.includes("strength") || s.includes("uphold")) {
+      return `Strengthen ${name} and make Your presence feel steady and real today.`;
+    }
+    return `Meet ${name} in this area of ${topic} and provide clarity, strength, and hope.`;
+  }
+
+  function buildMessage() {
+    const mode = $("mode")?.value || "🕊️ Daily";
+    const scripture = $("scripture")?.value || "";
+    const audience = $("audience")?.value || "group";
+
+    const name = currentUser.name || "Friend";
+    const topic = currentUser.topic || "General";
+    const req = (currentUser.request || "").trim();
+    const meaning = meaningFromScripture(scripture, name, topic);
+
+    const opener = `🕊️ *Silent SoulConnect Intercession* 🕊️\n${mode} Prayer\n`;
+
+    if (audience === "private") {
+      return `${opener}
+Dear ${name},
+
+We are lifting you up in prayer for *${topic}*.
+${req ? `“${req}”\n` : ""}
+
+📖 *Word:* ${scripture}
+*Meaning:* ${meaning}
+
+In Jesus’ name, Amen.`;
+    }
+
+    return `${opener}
+Today we lift up *${name}* regarding *${topic}*.
+${req ? `Request: “${req}”\n` : ""}
+
+📖 *Word:* ${scripture}
+*Meaning:* ${meaning}
+
+In Jesus’ name, Amen.`;
+  }
+
+  function updatePreview() {
+    const out = $("output");
+    if (out) out.value = buildMessage();
+  }
+
+  function prepareGenerator(name, topic, request, contact) {
+    currentUser = {
+      name: (name || "Friend").trim(),
+      topic: (topic || "General").trim(),
+      request: (request || "").trim(),
+      contact: (contact || "").trim(),
+    };
+
+    const tn = $("target-name");
+    const gs = $("generator-section");
+    if (!tn || !gs) return;
+
+    tn.textContent = `${currentUser.name} (${currentUser.topic})`;
+    gs.style.display = "block";
     updatePreview();
-    
-    // Smooth scroll to generator
-    document.getElementById('generator-section').scrollIntoView({ behavior: 'smooth' });
-}
+    gs.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
-function updatePreview() {
-    const mode = document.getElementById('mode').value;
-    const scripture = document.getElementById('scripture').value;
-    
-    const message = `🕊️ *Silent SoulConnect Intercession* 🕊️\n${mode} Prayer\n\nDear ${currentUser.name},\n\nWe are lifting up your heart regarding your request for ${currentUser.topic}:\n"${currentUser.request}"\n\n📖 *Word:* ${scripture}\n\n✨ May His grace rest upon you today. We are standing with you.\n\nIn Jesus’ name, Amen.`;
-    
-    document.getElementById('output').value = message;
-}
+  function openWA(platform) {
+    const phone = (currentUser.contact || "").replace(/\D/g, "");
+    const text = encodeURIComponent($("output")?.value || "");
+    const base = (platform === "web") ? "https://web.whatsapp.com/send" : "https://api.whatsapp.com/send";
+    const url = phone ? `${base}?phone=${phone}&text=${text}` : `${base}?text=${text}`;
+    window.open(url, "_blank");
+  }
 
-function sendWA(platform) {
-    const phone = currentUser.contact.replace(/\D/g,'');
-    const text = encodeURIComponent(document.getElementById('output').value);
-    const url = (platform === 'web') 
-        ? `https://web.whatsapp.com/send?phone=${phone}&text=${text}`
-        : `https://api.whatsapp.com/send?phone=${phone}&text=${text}`;
-    window.open(url, '_blank');
-}
+  async function copyText() {
+    const val = $("output")?.value || "";
+    try {
+      await navigator.clipboard.writeText(val);
+      alert("Copied ✅");
+    } catch (e) {
+      alert("Copy failed. Please copy manually.");
+    }
+  }
 
-function copyText() {
-    const textArea = document.getElementById("output");
-    textArea.select();
-    navigator.clipboard.writeText(textArea.value);
-    alert("Prayer copied for " + currentUser.name);
-}
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".js-draft").forEach(btn => {
+      btn.addEventListener("click", () => {
+        prepareGenerator(
+          btn.dataset.name,
+          btn.dataset.topic,
+          btn.dataset.request,
+          btn.dataset.contact
+        );
+      });
+    });
+
+    $("mode")?.addEventListener("change", updatePreview);
+    $("scripture")?.addEventListener("change", updatePreview);
+    $("audience")?.addEventListener("change", updatePreview);
+
+    $("btn-copy")?.addEventListener("click", copyText);
+    $("btn-wa-web")?.addEventListener("click", () => openWA("web"));
+    $("btn-wa-app")?.addEventListener("click", () => openWA("api"));
+  });
+})();
 </script>
 
 {% endblock %}

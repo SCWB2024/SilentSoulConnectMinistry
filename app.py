@@ -1,23 +1,64 @@
 # app.py — SoulStart Devotion — v13 (Clean Single-App Core)
+# =========================
+# FLASK IMPORTS
+# =========================
 from __future__ import annotations
 
-from email.mime import message
-import os
 import json
-import secrets
 import logging
+import os
 import re
-from datetime import datetime, date, timedelta
+import secrets
+import smtplib
+import random
 from calendar import month_name
-from pathlib import Path
+from datetime import date, datetime, timedelta
 from functools import wraps
-from urllib.parse import quote
 from logging.handlers import RotatingFileHandler
+from pathlib import Path
+from urllib.parse import quote
+from email.message import EmailMessage
+from pathlib import Path
 
-from dotenv import load_dotenv  # pyright: ignore[reportMissingImports]
+from dotenv import load_dotenv
+
+from werkzeug.middleware.proxy_fix import ProxyFix
+
+from flask import (
+    Flask,
+    abort,
+    ctx,
+    current_app,
+    flash,
+    g,
+    jsonify,
+    redirect,
+    render_template,
+    request,
+    send_from_directory,
+    session,
+    url_for,
+)
+
+from flask_login import (
+    LoginManager,
+    UserMixin,
+    current_user,
+    login_user,
+    logout_user,
+)
+
+from flask_wtf import CSRFProtect
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
+try:
+    from flask_talisman import Talisman
+except Exception:
+    Talisman = None
 
 # =========================
-# 0) ENV LOAD (safe)
+# 1) ENV LOAD (safe)
 # =========================
 BASE_DIR = Path(__file__).resolve().parent
 load_dotenv(BASE_DIR / ".env")   # local dev
@@ -28,7 +69,7 @@ IS_PROD = ENV == "production"
 IS_HTTPS = os.getenv("FORCE_HTTPS", "0").lower() in ("1", "true", "yes")
 
 # =========================
-# 1) LOGGING (safe, no duplicates)
+# 2) LOGGING (safe, no duplicates)
 # =========================
 LOG_DIR = BASE_DIR / "logs"
 LOG_DIR.mkdir(exist_ok=True)
@@ -44,37 +85,10 @@ if not logger.handlers:
 
 logger.info("SoulStart starting…")
 
-# =========================
-# 2) FLASK IMPORTS
-# =========================
-from flask import (  # pyright: ignore[reportMissingImports]
-    Flask,
-    request,
-    session,
-    render_template,
-    redirect,
-    current_app,
-    url_for,
-    jsonify,
-    send_from_directory,
-    g,
-    flash,
-    abort,
-)
-
-from flask_login import (  # pyright: ignore[reportMissingImports]
-    LoginManager, UserMixin, login_required, login_user,
-    logout_user, current_user,
-)
-
-from flask_wtf import CSRFProtect  # pyright: ignore[reportMissingImports]
-from flask_limiter import Limiter  # pyright: ignore[reportMissingImports]
-from flask_limiter.util import get_remote_address  # pyright: ignore[reportMissingImports]
-
-try:
-    from flask_talisman import Talisman  # pyright: ignore[reportMissingImports]
-except Exception:
-    Talisman = None  # type: ignore
+if not IS_PROD:
+    sh = logging.StreamHandler()
+    sh.setFormatter(fmt)
+    logger.addHandler(sh)
 
 # =========================
 # 3) CORE SETTINGS
@@ -87,15 +101,12 @@ JOIN_URL = os.getenv("JOIN_URL", "https://chat.whatsapp.com/CdkN2V0h8vCDg2AP4saY
 WHATSAPP_GROUP_LINK = os.getenv("WHATSAPP_GROUP_LINK", JOIN_URL)
 SITE_JOIN_URL = WHATSAPP_GROUP_LINK
 
-PAYPAL_LINK = os.getenv(
-    "PAYPAL_LINK",
-    "https://www.paypal.com/donate/?hosted_button_id=21H73722ER303860GND5CN2Y",
-)
+PAYPAL_LINK = os.getenv("PAYPAL_LINK", "")
 
 SITE_URL = os.getenv("SITE_URL", "http://127.0.0.1:5000")
 PORT = int(os.getenv("PORT", "5000"))
-HOST = os.getenv("HOST", "127.0.0.1")
-AUTO_OPEN = os.getenv("AUTO_OPEN", "0").lower() in ("1", "true", "yes")
+HOST = os.getenv("HOST", "0.0.0.0" if IS_PROD else "127.0.0.1")
+AUTO_OPEN = (not IS_PROD) and os.getenv("AUTO_OPEN", "0").lower() in ("1","true","yes")
 
 # =========================
 # 4) PATHS / STORAGE
@@ -113,31 +124,20 @@ HERO_NIGHT_BG = "img/hero_night.jpg"
 
 VERSES_FILE = DATA_DIR / "verses.json"
 DONATIONS_FILE = DATA_DIR / "donations.json"
-REQUESTS_FILE = DATA_DIR / "requests.json"
-
 PRAYER_REQUESTS_FILE = DATA_DIR / "prayer_requests.json"
-
-def load_json_list(path: Path) -> list[dict]:
-    if not path.exists():
-        return []
-    try:
-        with path.open("r", encoding="utf-8") as f:
-            data = json.load(f)
-        return data if isinstance(data, list) else []
-    except Exception:
-        return []
-
 VOLUNTEERS_FILE = DATA_DIR / "volunteers.json"
 FEEDBACK_FILE = DATA_DIR / "feedback.json"
-PRAYER_REQUESTS_FILE = DATA_DIR / "prayer_requests.json"
-BLOG_POSTS = DATA_DIR / "blog_posts.json"
 DEVOTIONS_DIR = DATA_DIR / "devotions"
 DEVOTIONS_DIR.mkdir(exist_ok=True)
+BLOG_DATA_PATH = DATA_DIR / "blog_posts.json"
 
-# Path to your blog data
-BLOG_DATA_PATH = 'data/blog_posts.json'
+logger.info("Prayer requests file: %s", PRAYER_REQUESTS_FILE.resolve())
 
-print("SAVING TO:", (DATA_DIR / "prayer_requests.json").resolve())
+if not IS_PROD:
+    if not TEMPLATES_DIR.exists():
+        logger.warning("Templates folder not found: %s", TEMPLATES_DIR)
+    if not STATIC_DIR.exists():
+        logger.warning("Static folder not found: %s", STATIC_DIR)
 
 # =========================
 # 5) FLASK APP (ONE TIME ONLY)
@@ -149,13 +149,18 @@ app = Flask(
     template_folder=str(TEMPLATES_DIR),
 )
 
-app.secret_key = os.getenv("SECRET_KEY", secrets.token_hex(16))
+app.secret_key = os.getenv("SECRET_KEY") or "dev-only-change-me"
+if IS_PROD and app.secret_key == "dev-only-change-me":
+    raise RuntimeError("SECRET_KEY must be set in production.")
+
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config.update(
     SESSION_COOKIE_SECURE=IS_PROD or IS_HTTPS,
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE="Lax",
 )
+
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 # =========================
 # 6) EXTENSIONS (ONE TIME ONLY)
@@ -165,7 +170,7 @@ csrf = CSRFProtect(app)
 limiter = Limiter(
     key_func=get_remote_address,
     app=app,
-    default_limits=["200 per day", "60 per hour"],
+    default_limits=["5000 per day", "500 per hour"],
 )
 
 login_manager = LoginManager()
@@ -199,21 +204,10 @@ if Talisman is not None:
     Talisman(
         app,
         content_security_policy=csp,
-        force_https=IS_PROD or IS_HTTPS,
+        force_https=IS_PROD,
         frame_options="SAMEORIGIN",
         referrer_policy="strict-origin-when-cross-origin",
     )
-
-@app.after_request
-def add_no_cache(resp):
-    if not IS_PROD:
-        resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
-        resp.headers["Pragma"] = "no-cache"
-    return resp
-
-@app.get("/health")
-def health():
-    return "ok", 200
 
 # =========================
 # 8) ADMIN CREDENTIALS
@@ -225,7 +219,10 @@ ADMIN_PASS = ADMIN_PASSWORD  # backwards compat
 def verify_admin_credentials(email: str, password: str) -> bool:
     if not ADMIN_PASSWORD:
         return False
-    return email.strip().lower() == ADMIN_EMAIL and password.strip() == ADMIN_PASSWORD
+    return (
+        email.strip().lower() == ADMIN_EMAIL
+        and secrets.compare_digest(password.strip(), ADMIN_PASSWORD)
+    )
 
 # =========================
 # 9) HELPERS
@@ -237,7 +234,7 @@ def require_auth(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
         if not is_authed():
-            return redirect(url_for("login"))
+            return redirect(url_for("login", next=request.path))
         return f(*args, **kwargs)
     return wrapper
 
@@ -257,8 +254,10 @@ def read_json_list(path: Path) -> list[dict]:
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
         return data if isinstance(data, list) else []
-    except Exception:
+    except Exception as e:
+        logger.warning("Could not read %s: %s", path, e)
         return []
+    
 
 def append_json_list(path: Path, item: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -266,24 +265,8 @@ def append_json_list(path: Path, item: dict) -> None:
     data.append(item)
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
-STUDY_SERIES: list[dict] = []
-VERSE_CARDS: list[dict] = []
-
-import random
-
-def load_json_list(path: Path) -> list[dict]:
-    if not path.exists():
-        return []
-    try:
-        with path.open("r", encoding="utf-8") as f:
-            data = json.load(f)
-        return data if isinstance(data, list) else []
-    except Exception:
-        return []
-
 def pick_random_request(topic: str | None = None) -> dict | None:
-    file = DATA_DIR / "prayer_requests.json"
-    items = load_json_list(file)
+    items = read_json_list(PRAYER_REQUESTS_FILE)
     if not items:
         return None
 
@@ -293,11 +276,11 @@ def pick_random_request(topic: str | None = None) -> dict | None:
         if filtered:
             return random.choice(filtered)
 
-    # fallback: any topic
     return random.choice(items)
 
+
 # =========================
-# 10) SOCIAL LINKS (Phase 3)
+# 10) SOCIAL LINKS
 # =========================
 FACEBOOK_URL = os.getenv("FACEBOOK_URL", "https://www.facebook.com/profile.php?id=61585837505269")
 LINKEDIN_URL = os.getenv("LINKEDIN_URL", "https://www.linkedin.com/company/silentsoulconnect")
@@ -310,19 +293,17 @@ SOCIAL_LINKS = {
 
 @app.context_processor
 def inject_globals():
-    """Injects variables into every single template automatically."""
-    from datetime import datetime
     return {
         "SOCIAL_LINKS": SOCIAL_LINKS,
         "SITE_JOIN_URL": SITE_JOIN_URL,
         "SITE_THEME": SITE_THEME,
         "APP_VERSION": APP_VERSION,
-        "PAYPAL_LINK": PAYPAL_LINK, # Ensure this matches the button logic
+        "PAYPAL_LINK": PAYPAL_LINK,
         "FACEBOOK_URL": FACEBOOK_URL,
         "LINKEDIN_URL": LINKEDIN_URL,
         "JOIN_URL": JOIN_URL,
         "SITE_URL": request.url_root.rstrip("/"),
-        "now": datetime.now(),  # <--- THIS FIXES THE 'now' ERROR
+        "now": datetime.now(),
     }
 
 # =========================
@@ -342,39 +323,10 @@ def normalize_date_str(s: str) -> str | None:
         except Exception:
             continue
     return None
+
 # ---------------------------------------------------------------------------
-# Donation log helpers
+# 12) Donation log helpers
 # ---------------------------------------------------------------------------
-
-def load_json_list(path: Path) -> list:
-    """Load a JSON list from file; return [] on missing/invalid."""
-    if not path.exists():
-        return []
-    try:
-        with path.open("r", encoding="utf-8") as f:
-            data = json.load(f)
-        if isinstance(data, list):
-            return data
-        # If someone accidentally stored a dict, wrap it
-        return [data]
-    except Exception as e:
-        logger.warning("Failed to load JSON list %s (%s)", path, e)
-        return []
-
-def append_json_list(path, item):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    data = []
-    if path.exists():
-        try:
-            data = json.loads(path.read_text(encoding="utf-8") or "[]")
-            if not isinstance(data, list):
-                data = []
-        except Exception:
-            data = []
-    data.append(item)
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
-
-
 # =============================================================================
 # Devotions helpers (year-based JSON, unified schema)
 # Normalized OUTPUT for a single devotion:
@@ -391,7 +343,7 @@ def append_json_list(path, item):
 #   "tags": [ ... ]
 # }
 # =============================================================================
-AMEN_LINE = "In Jesus’ name, Amen."
+AMEN_LINE = os.getenv("PRAYER_CLOSING", "In Jesus’ name, Amen.")
 
 def ensure_amen(text: str) -> str:
     t = (text or "").rstrip()
@@ -550,13 +502,14 @@ def load_devotion_for(target_date: date, slot: str = "morning") -> dict:
         body_text = verse_text or ""
 
     # ---- prayer ----
-    prayer = str(
+    prayer = ensure_amen(str(
         slot_block.get("prayer")
         or slot_block.get("morning_prayer")
         or slot_block.get("night_prayer")
         or day_block.get("prayer")
         or ""
-    ).strip()
+    ).strip())
+    
 
     tags = slot_block.get("tags") or day_block.get("tags") or []
     if not isinstance(tags, list):
@@ -574,19 +527,23 @@ def load_devotion_for(target_date: date, slot: str = "morning") -> dict:
         "tags": tags,
     }
 
-def build_whatsapp_text(entry: dict | None, mode: str, today: date) -> str:
+    prayer_raw = str(entry.get("prayer") or ""  ).strip()
+    prayer = ensure_amen(prayer_raw or "Lord, cover us today with Your peace.")
+
+def build_whatsapp_text(entry: dict | None, mode: str, day: date) -> str:
     """WhatsApp share text for a devotion entry (or empty string)."""
     if not entry:
         return ""
 
-    mode = (mode or "morning").lower()
-    date_str = today.strftime("%A, %B %d, %Y")
+    mode = (mode or "morning").lower().strip()
+    date_str = day.strftime("%A, %B %d, %Y")
 
-    heading = (
-        f"🌅 SoulStart Sunrise – {date_str}"
-        if mode == "morning"
-        else f"🌙 SoulStart Sunset – {date_str}"
-    )
+    # Icon: from entry.icon OR by mode
+    icon = (entry.get("icon") or "").strip()
+    if not icon:
+        icon = "🌅" if mode == "morning" else "🌙"
+
+    heading = f"{icon} SoulStart {'Sunrise' if mode=='morning' else 'Sunset'} – {date_str}"
 
     lines: list[str] = [heading, ""]
 
@@ -596,15 +553,23 @@ def build_whatsapp_text(entry: dict | None, mode: str, today: date) -> str:
 
     if theme:
         lines.append(f"Theme: {theme}")
-    if verse_ref:
-        line = f"📖 Scripture: {verse_ref}"
-        if verse_text:
-            line += f' — "{verse_text}"'
-        lines.append(line)
 
-    verse_meaning = (entry.get("verse_meaning") or "").strip()
-    if verse_meaning:
-        lines.extend(["", verse_meaning])
+    if verse_ref:
+        if verse_text:
+            lines.append(f"📖 Scripture: {verse_ref} — “{verse_text}”")
+        else:
+            lines.append(f"📖 Scripture: {verse_ref}")
+
+    # Meaning: try multiple keys (since your JSON varies by year/version)
+    meaning = (
+        (entry.get("verse_meaning") or "").strip()
+        or (entry.get("silent_soul_meaning") or "").strip()
+        or (entry.get("heart_picture") or "").strip()
+        or (entry.get("encouragement_intro") or "").strip()
+    )
+
+    if meaning:
+        lines.extend(["", f"💡 Meaning: {meaning}"])
 
     body = (entry.get("body") or "").strip()
     if body:
@@ -612,39 +577,66 @@ def build_whatsapp_text(entry: dict | None, mode: str, today: date) -> str:
 
     prayer = (entry.get("prayer") or "").strip()
     if prayer:
+        prayer = ensure_amen(prayer)
         lines.extend(["", f"🙏 Prayer: {prayer}"])
+    else:
+        # still ensure we end cleanly
+        lines.extend(["", AMEN_LINE])
 
-    # Footer link (use your single source of truth)
+    # Footer link
     lines.extend(["", f"🔗 Join us: {SITE_JOIN_URL}"])
 
     return "\n".join([l for l in lines if l]).strip()
 
+# =========================
+# JSON STORAGE HELPERS (single source of truth)
+# =========================
+def read_json_list(path: Path) -> list[dict]:
+    """Read a JSON list from disk safely."""
+    if not path.exists():
+        return []
+    try:
+        data = json.loads(path.read_text(encoding="utf-8") or "[]")
+        return data if isinstance(data, list) else []
+    except Exception:
+        return []
+
+def append_json_list(path: Path, item: dict) -> None:
+    """Append dict to a JSON list file safely."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    data = read_json_list(path)
+    data.append(item)
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+
 # ---------------------------------------------------------------------------
-# BLOG CONFIG (templates/blog/*.html are the posts)
+# BLOG CONFIG
 # ---------------------------------------------------------------------------
 BLOG_DIR = Path(app.template_folder or "templates") / "blog"
+_slug_re = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
-_slug_re = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")  # gods-love-beyond-sound
+# ✅ Correct static image folder
+BLOG_IMG_DIR = Path(app.static_folder) / "img" / "blog" / "soulspeaks"
 
-# Your static blog images folder (recommended)
-BLOG_IMG_DIR = Path(app.static_folder) / "img" / "soulspeaks"
+def _find_blog_image(slug: str) -> str | None:
+    """
+    Auto-match image to slug.
+    Example:
+    slug = 'gods-love-beyond-sound'
+    image file = 'gods-love-beyond-sound.jpg'
+    """
 
-# Optional: month themes banner
-MONTH_THEMES = {
-    (2026, 2): {"title": "God’s Love in Silence", "subtitle": "God’s Love Beyond Sound • Silence Is Not Absence"},
-    (2026, 3): {"title": "Seeing Beyond Noise", "subtitle": "Focus vs distraction • Faith without noise"},
-    (2026, 4): {"title": "Healing Without Spectacle", "subtitle": "God’s quiet restoration"},
-}
+    filename = f"{slug}.jpg"
+    img_path = BLOG_IMG_DIR / filename
 
-# Map blog slug -> image filename (keep it simple + explicit)
-BLOG_IMAGES = {
-    "gods-love-beyond-sound": "Feb Blog1.png",
-    "silence-is-not-absence": "Feb Blog2.png",
-    "peter-walks-on-water-faith-without-noise": "mar blog1.png",
-    "when-the-wind-is-loud-but-god-is-near": "mar blog2.png",
-    "healing-is-not-always-loud": "april blog1.png",
-    "when-jesus-touches-before-he-speaks": "april blog2.png",
-}
+    if img_path.exists():
+        return f"img/blog/soulspeaks/{filename}"
+
+    # fallback
+    default_path = BLOG_IMG_DIR / "default.jpg"
+    if default_path.exists():
+        return "img/blog/soulspeaks/default.jpg"
+
+    return None
 
 STUDY_PAGES = {
     # Introduction / Coin series
@@ -704,19 +696,6 @@ def _pretty_title_from_slug(slug: str) -> str:
     """Fallback title if the post doesn’t define one."""
     return slug.replace("-", " ").title()
 
-def _find_blog_image(slug: str) -> str | None:
-    """
-    Return a static-relative path like:
-      img/soulspeaks/Feb Blog1.png
-    """
-    filename = BLOG_IMAGES.get(slug)
-    if not filename:
-        return None
-    # file exists check (optional but helpful)
-    if (BLOG_IMG_DIR / filename).exists():
-        return f"img/soulspeaks/{filename}"
-    return f"img/soulspeaks/{filename}"  # still return even if missing (won’t crash)
-
 def _first_paragraph_from_template(slug: str) -> str:
     """
     Tiny excerpt helper (no heavy parsing):
@@ -733,7 +712,7 @@ def _first_paragraph_from_template(slug: str) -> str:
             return ""
         # strip tags inside that <p>
         text = re.sub(r"<[^>]+>", "", m.group(1)).strip()
-        return text[:220]  # keep short
+        return text[:220] + ("..." if len(text) > 220 else "")
     except Exception:
         return ""
 
@@ -781,16 +760,17 @@ def list_blog_posts() -> list[dict]:
         })
 
     # newest first
-    posts.sort(key=lambda x: (x.get("year", 0), x.get("month", 0), x.get("slug", "")), reverse=True)
+    posts.sort(key=lambda x: x.get("date", ""), reverse=True)
     return posts
 
 # =============================================================================
-# Routes
+# 14) Routes (clean block)
 # =============================================================================
 
 # ---------- Utilities ----------
 def _safe_static(filename: str) -> str | None:
     """Return static URL if file exists; else None."""
+    filename = (filename or "").lstrip("/\\")
     path = Path(app.static_folder) / filename
     return url_for("static", filename=filename) if path.exists() else None
 
@@ -799,7 +779,7 @@ def _safe_static(filename: str) -> str | None:
 def load_verses() -> list[dict]:
     """
     Load verse cards from data/verses.json if present.
-    Fallback to built-in defaults if missing or invalid.
+    Fallback to built-in defaults if missing/invalid.
     """
     fallback = [
         {"image": "Firelight.jpg", "ref": "Isaiah 60:1 (NLV)", "title": "Firelight",
@@ -824,9 +804,12 @@ def load_verses() -> list[dict]:
     try:
         with VERSES_FILE.open("r", encoding="utf-8") as f:
             data = json.load(f)
-        return data if isinstance(data, list) else fallback
+        if isinstance(data, list):
+            return data
+        logger.warning("verses.json is not a list (got %s). Using fallback.", type(data).__name__)
+        return fallback
     except Exception as e:
-        logger.warning("Failed to load verses (%s)", e)
+        logger.warning("Failed to load verses.json (%s). Using fallback.", e)
         return fallback
 
 
@@ -848,24 +831,17 @@ def devotion_study():
 DEFAULT_MODE = "morning"
 
 @app.route("/today", endpoint="today")
-@limiter.limit("20/minute")
+@limiter.limit("60 per minute")
 def today_view():
     """Show devotion for today (or requested date) + WhatsApp share preview."""
-    mode = (request.args.get("mode") or DEFAULT_MODE).lower().strip()
-    if mode not in ("morning", "night"):
-        mode = DEFAULT_MODE
+    mode = (request.args.get("mode") or DEFAULT_MODE).strip().lower()
+    mode = mode if mode in ("morning", "night") else DEFAULT_MODE
 
     raw_date = (request.args.get("date") or "").strip()
-    if raw_date:
-        norm = normalize_date_str(raw_date)
-        if norm:
-            try:
-                target_date = datetime.strptime(norm, "%Y-%m-%d").date()
-            except Exception:
-                target_date = date.today()
-        else:
-            target_date = date.today()
-    else:
+    norm = normalize_date_str(raw_date) if raw_date else None
+    try:
+        target_date = datetime.strptime(norm, "%Y-%m-%d").date() if norm else date.today()
+    except Exception:
         target_date = date.today()
 
     entry = load_devotion_for(target_date, mode)
@@ -884,7 +860,6 @@ def today_view():
         "whatsapp_preview": preview_text,
     })
 
-    # Yesterday link
     yday_date = target_date - timedelta(days=1)
     ctx["yday_url"] = url_for("today", date=yday_date.isoformat(), mode=mode)
     ctx["yday_label"] = "← Yesterday’s devotion"
@@ -892,15 +867,24 @@ def today_view():
     return render_template("devotion.html", **ctx)
 
 
+@app.route("/anchor", endpoint="anchor")
+def anchor():
+    ctx = common_page_ctx(active="anchor")
+    return render_template("anchor/index.html", **ctx)
+
+
 # ---------- Verses ----------
 @app.route("/verses", endpoint="verses")
 def verses():
     verses_data = load_verses()
-    cards = []
+    cards: list[dict] = []
 
     for idx, v in enumerate(verses_data):
         image = (v.get("image") or "").strip()
         src = _safe_static(f"img/verses/{image}") if image else None
+        if not src:
+            src = _safe_static("img/verses/placeholder.jpg")
+
         cards.append({
             "id": idx,
             "src": src,
@@ -923,6 +907,8 @@ def verse_detail(card_id: int):
     v = verses_data[card_id]
     image = (v.get("image") or "").strip()
     src = _safe_static(f"img/verses/{image}") if image else None
+    if not src:
+        src = _safe_static("img/verses/placeholder.jpg")
 
     card = {
         "id": card_id,
@@ -937,28 +923,62 @@ def verse_detail(card_id: int):
     return render_template("verse_detail.html", card=card, **ctx)
 
 
-# ---------- Prayer ----------
-PRAYER_REQUESTS_FILE = DATA_DIR / "prayer_requests.json"
+# ---------- Declarations ----------
+DECLARATION_IMAGES = [f"{chr(c)}.jpg" for c in range(ord("A"), ord("Z") + 1)]
 
+@app.route("/declarations", methods=["GET"], endpoint="declarations")
+def declarations():
+    ctx = common_page_ctx(active="declarations")
+
+    items: list[dict] = []
+    for i, fname in enumerate(DECLARATION_IMAGES):
+        slug = fname.rsplit(".", 1)[0]
+        img_url = _safe_static(f"img/declarations/{fname}")
+        if not img_url:
+            img_url = _safe_static("img/declarations/placeholder.jpg")
+
+        items.append({
+            "i": i,
+            "slug": slug,
+            "img": img_url,
+            "title": slug.replace("_", " ").title(),
+        })
+
+    open_slug = (request.args.get("open") or "").strip()
+    valid_slugs = {x["slug"] for x in items}
+    ctx["declarations"] = items
+    ctx["open_slug"] = open_slug if open_slug in valid_slugs else ""
+
+    return render_template("declarations/index.html", **ctx)
+
+
+# ---------- Prayer ----------
 PRAYER_TOPICS = [
-  {"value":"peace", "label":"🕊️ Peace / Anxiety"},
-  {"value":"relationships", "label":"💞 Relationships / Family"},
-  {"value":"grief", "label":"💔 Grief / Loss"},
-  {"value":"healing", "label":"🩺 Sickness / Healing"},
-  {"value":"work", "label":"💼 Work / Finances"},
-  {"value":"direction", "label":"🧭 Direction / Decisions"},
-  {"value":"faith", "label":"🙏 Faith / Spiritual Strength"},
-  {"value":"community", "label":"🧑‍🤝‍🧑 Community / Others"},
-  {"value":"other", "label":"✍️ Other"},
+    {"value": "peace",         "label": "🕊️ Peace / Anxiety"},
+    {"value": "relationships", "label": "💞 Relationships / Family"},
+    {"value": "grief",         "label": "💔 Grief / Loss"},
+    {"value": "healing",       "label": "🩺 Sickness / Healing"},
+    {"value": "work",          "label": "💼 Work / Finances"},
+    {"value": "direction",     "label": "🧭 Direction / Decisions"},
+    {"value": "faith",         "label": "🙏 Faith / Spiritual Strength"},
+    {"value": "community",     "label": "🧑‍🤝‍🧑 Community / Others"},
+    {"value": "other",         "label": "✍️ Other"},
 ]
+PRAYER_TOPIC_VALUES = {t["value"] for t in PRAYER_TOPICS}
 
 @app.route("/prayer", methods=["GET", "POST"], endpoint="prayer")
+@limiter.limit("5 per minute", methods=["POST"])
+@limiter.limit("30 per day", methods=["POST"])
 def prayer():
     if request.method == "POST":
-        name = (request.form.get("name") or "").strip()
-        contact = (request.form.get("contact") or "").strip()
+        name = (request.form.get("name") or "").strip()[:80]
+        contact = (request.form.get("contact") or "").strip()[:120]
         topic = (request.form.get("topic") or "").strip() or "other"
+        if topic not in PRAYER_TOPIC_VALUES:
+            topic = "other"
+
         req_text = (request.form.get("request") or "").strip()
+        req_text = req_text[:2000]
 
         if not req_text:
             flash("❌ Please write your prayer request.", "error")
@@ -972,8 +992,13 @@ def prayer():
             "request": req_text,
         }
 
-        file = DATA_DIR / "prayer_requests.json"
-        append_json_list(file, record)
+        append_json_list(PRAYER_REQUESTS_FILE, record)
+
+        try:
+            send_prayer_email(record)
+        except Exception:
+            # Don’t break the site if email is not configured
+            logger.info("Prayer email skipped (not configured or failed).")
 
         flash("🙏 Your prayer request was received.", "success")
         return redirect(url_for("prayer", ok=1))
@@ -983,11 +1008,47 @@ def prayer():
     return render_template("prayer.html", **ctx)
 
 
+def send_prayer_email(record: dict) -> bool:
+    to_addr = (os.getenv("ALERT_EMAIL_TO") or "").strip()
+    host = (os.getenv("SMTP_HOST") or "").strip()
+    port = int(os.getenv("SMTP_PORT", "587") or "587")
+    user = (os.getenv("SMTP_USER") or "").strip()
+    pwd = (os.getenv("SMTP_PASS") or "").strip()
+
+    if not all([to_addr, host, user, pwd]):
+        return False
+
+    msg = EmailMessage()
+    msg["Subject"] = f"New Prayer Request ({record.get('topic', 'other')})"
+    msg["From"] = (os.getenv("ALERT_EMAIL_FROM") or user).strip()
+    msg["To"] = to_addr
+    msg.set_content(
+        f"Time: {record.get('ts')}\n"
+        f"Name: {record.get('name')}\n"
+        f"Contact: {record.get('contact')}\n"
+        f"Topic: {record.get('topic')}\n\n"
+        f"Request:\n{record.get('request')}\n"
+    )
+
+    with smtplib.SMTP(host, port, timeout=10) as smtp:
+        smtp.ehlo()
+        smtp.starttls()
+        smtp.ehlo()
+        smtp.login(user, pwd)
+        smtp.send_message(msg)
+
+    return True
+
+
 # ---------- About ----------
 @app.route("/about", endpoint="about")
 def about():
     ctx = common_page_ctx(active="about")
     return render_template("about.html", **ctx)
+
+# =============================================================================
+# Study + Donation + Volunteer + Auth (clean block)
+# =============================================================================
 # ---------- Study ----------
 STUDIES_META_FILE = DATA_DIR / "studies.json"
 
@@ -1001,8 +1062,17 @@ def load_study_meta() -> dict:
     except Exception:
         return {}
 
+SLUG_RE = re.compile(r"^[a-z0-9_-]+$")
+
+def build_study_ctx(page_title: str):
+    ctx = common_page_ctx(active="study")
+    ctx["title"] = page_title
+    ctx["hero_class"] = "hero"
+    ctx["hero_bg"] = HERO_DAY_BG
+    return ctx
+
 # Single source of truth: slug -> template + title + group + order
-STUDY_PAGES = {
+STUDY_PAGES: dict[str, dict] = {
     # Introduction / Coin series
     "coin-1": {
         "order": 1,
@@ -1023,7 +1093,7 @@ STUDY_PAGES = {
         "group": "Introduction",
     },
 
-    # Master Plan
+    # Master Plan (confirmed order)
     "secret-inside-glove": {
         "order": 1,
         "title": "Lesson 01: The Secret Inside the Glove",
@@ -1050,38 +1120,43 @@ STUDY_PAGES = {
     },
 }
 
-
 SLUG_RE = re.compile(r"^[a-z0-9_-]+$")
 
-def build_study_ctx(page_title: str):
+
+def build_study_ctx(page_title: str) -> dict:
     ctx = common_page_ctx(active="study")
-    ctx["title"] = page_title
-    ctx["hero_class"] = "hero"
-    ctx["hero_bg"] = HERO_DAY_BG
+    ctx.update({
+        "title": page_title,
+        "hero_class": "hero",
+        "hero_bg": HERO_DAY_BG,
+    })
     return ctx
 
+
+# ---------- Study ----------
 @app.route("/study")
 def study_redirect():
     # legacy: /study -> /studies
     return redirect(url_for("study_index"))
 
+
 @app.route("/studies", endpoint="study_index")
 def study_index():
-    pages = []
+    pages: list[dict] = []
     for slug, meta in STUDY_PAGES.items():
         pages.append({
             "slug": slug,
-            "title": meta["title"],
+            "title": meta.get("title", slug),
             "group": meta.get("group", "Study"),
             "order": meta.get("order", 999),
         })
 
-    # Intro first, then Master Plan; within group use order then title
     group_order = {"Introduction": 1, "Master Plan": 2}
     pages.sort(key=lambda p: (group_order.get(p["group"], 99), p["order"], p["title"]))
 
     ctx = build_study_ctx("Study Hub")
     return render_template("study/index.html", pages=pages, **ctx)
+
 
 @app.route("/studies/<slug>", endpoint="study_detail")
 def study_detail(slug: str):
@@ -1092,52 +1167,65 @@ def study_detail(slug: str):
     if not meta:
         abort(404)
 
-    ctx = build_study_ctx(meta["title"])
-    return render_template(meta["template"], **ctx)
+    template = meta.get("template")
+    if not template:
+        abort(404)
+
+    ctx = build_study_ctx(meta.get("title", slug))
+    return render_template(template, **ctx)
+
 
 # ---- Optional legacy redirects (keep for old links) ----
 @app.route("/studies/coin/1")
 def legacy_coin_1():
-    return redirect(url_for("study_detail", slug="coin-1"))
+    return redirect(url_for("study_detail", slug="coin-1"), code=301)
+
 
 @app.route("/studies/coin/2")
 def legacy_coin_2():
-    return redirect(url_for("study_detail", slug="coin-2"))
+    return redirect(url_for("study_detail", slug="coin-2"), code=301)
+
 
 @app.route("/studies/coin/3")
 def legacy_coin_3():
-    return redirect(url_for("study_detail", slug="coin-3"))
+    return redirect(url_for("study_detail", slug="coin-3"), code=301)
+
 
 @app.route("/studies/master/secret-inside-glove")
 def legacy_secret_glove():
-    return redirect(url_for("study_detail", slug="secret-inside-glove"))
+    return redirect(url_for("study_detail", slug="secret-inside-glove"), code=301)
+
 
 @app.route("/studies/master/three-room-house")
 def legacy_three_room_house():
-    return redirect(url_for("study_detail", slug="three-room-house"))
+    return redirect(url_for("study_detail", slug="three-room-house"), code=301)
+
 
 @app.route("/studies/master/broken-tv")
 def legacy_broken_tv():
-    return redirect(url_for("study_detail", slug="broken-tv"))
+    return redirect(url_for("study_detail", slug="broken-tv"), code=301)
+
 
 @app.route("/studies/master/war-two-natures")
 def legacy_war_two_natures():
-    return redirect(url_for("study_detail", slug="war-two-natures"))
+    return redirect(url_for("study_detail", slug="war-two-natures"), code=301)
+
 
 # ---------- Donation (PUBLIC) ----------
 @app.route("/donation", endpoint="donation")
 def donation():
     ctx = common_page_ctx(active="donation")
-    ctx["paypal_link"] = None  # Coming soon for now
+    ctx["paypal_link"] = PAYPAL_LINK or None
     return render_template("donation.html", **ctx)
+
 
 # ---------- Volunteer (PUBLIC) ----------
 @app.route("/volunteer", methods=["GET", "POST"], endpoint="volunteer")
 def volunteer():
     if request.method == "POST":
-        name = (request.form.get("name") or "").strip()
-        skills = (request.form.get("skills") or "").strip()
-        contact = (request.form.get("contact") or "").strip()
+        name = (request.form.get("name") or "").strip()[:80]
+        skills = (request.form.get("skills") or "").strip()[:200]
+        contact = (request.form.get("contact") or "").strip()[:120]
 
         if name or skills or contact:
             record = {
@@ -1149,10 +1237,11 @@ def volunteer():
             append_json_list(VOLUNTEERS_FILE, record)
 
         flash("💚 Thank you for offering your skills!", "success")
-        return redirect(url_for("volunteer"))
+        return redirect(url_for("volunteer", ok=1))
 
     ctx = common_page_ctx(active="volunteer")
     return render_template("volunteer.html", **ctx)
+
 
 # ---------- Auth ----------
 @app.route("/login", methods=["GET", "POST"], endpoint="login")
@@ -1160,7 +1249,8 @@ def login():
     if is_authed():
         return redirect(url_for("admin"))
 
-    error = None
+    error: str | None = None
+
     if request.method == "POST":
         email = (request.form.get("email") or "").strip().lower()
         password = (request.form.get("password") or "").strip()
@@ -1178,6 +1268,7 @@ def login():
     ctx = common_page_ctx(active="login")
     return render_template("login.html", error=error, **ctx)
 
+
 @app.route("/logout", endpoint="logout")
 def logout():
     session.clear()
@@ -1187,9 +1278,47 @@ def logout():
 
 
 # =============================================================================
-# Admin Routes
+# Admin Routes (clean + consistent + safer)
 # =============================================================================
 
+# --- small helpers (admin) ---
+def _safe_filename(name: str) -> str:
+    """Allow only simple filenames like 'abc.jpg' (prevents path tricks)."""
+    name = (name or "").strip()
+    name = name.replace("\\", "/").split("/")[-1]  # basename only
+    return re.sub(r"[^A-Za-z0-9._-]+", "", name)
+
+def _slugify(text: str) -> str:
+    s = (text or "").strip().lower()
+    s = re.sub(r"[^a-z0-9]+", "-", s).strip("-")
+    return s or "post"
+
+def _truncate(s: str, n: int) -> str:
+    s = (s or "").strip()
+    return s[:n]
+
+def load_posts() -> list[dict]:
+    """Blog posts stored as JSON list (data/blog_posts.json)."""
+    path = Path(BLOG_DATA_PATH)
+    if not path.exists():
+        return []
+    try:
+        with path.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data if isinstance(data, list) else []
+    except Exception:
+        return []
+
+def save_posts(posts: list[dict]) -> None:
+    path = Path(BLOG_DATA_PATH)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as f:
+        json.dump(posts, f, ensure_ascii=False, indent=2)
+
+
+# =============================================================================
+# Admin Dashboard
+# =============================================================================
 @app.route("/admin", endpoint="admin")
 @require_auth
 def admin_dashboard():
@@ -1198,6 +1327,9 @@ def admin_dashboard():
     return render_template("admin/admin.html", **ctx)
 
 
+# =============================================================================
+# Admin — Verses
+# =============================================================================
 @app.route("/admin/verses", methods=["GET", "POST"], endpoint="admin_verses")
 @require_auth
 def admin_verses_view():
@@ -1206,69 +1338,62 @@ def admin_verses_view():
 
     verses_img_dir = Path(app.static_folder) / "img" / "verses"
     try:
-        image_files = sorted([
+        image_files = sorted(
             f.name for f in verses_img_dir.iterdir()
             if f.is_file() and f.suffix.lower() in (".jpg", ".jpeg", ".png")
-        ])
+        )
     except Exception:
         image_files = []
 
     verses = load_verses()
     action = (request.form.get("action") or "").strip().lower() if request.method == "POST" else ""
 
+    def _save_verses() -> None:
+        VERSES_FILE.parent.mkdir(parents=True, exist_ok=True)
+        with VERSES_FILE.open("w", encoding="utf-8") as f:
+            json.dump(verses, f, ensure_ascii=False, indent=2)
+
     if request.method == "POST":
-        if action == "delete":
-            idx_str = (request.form.get("index") or "").strip()
-            try:
-                idx = int(idx_str)
+        try:
+            if action == "delete":
+                idx = int((request.form.get("index") or "").strip())
                 if 0 <= idx < len(verses):
                     removed = verses.pop(idx)
-                    with VERSES_FILE.open("w", encoding="utf-8") as f:
-                        json.dump(verses, f, ensure_ascii=False, indent=2)
+                    _save_verses()
                     success = f"Deleted verse #{idx} ({removed.get('ref','')})."
                 else:
                     error = "Verse index out of range."
-            except Exception as e:
-                error = f"Could not delete verse: {e}"
 
-        elif action == "update":
-            idx_str = (request.form.get("index") or "").strip()
-            try:
-                idx = int(idx_str)
+            elif action == "update":
+                idx = int((request.form.get("index") or "").strip())
                 if 0 <= idx < len(verses):
                     rec = verses[idx]
-                    rec["image"] = (request.form.get("image") or rec.get("image", "")).strip()
-                    rec["ref"]   = (request.form.get("ref")   or rec.get("ref", "")).strip()
-                    rec["title"] = (request.form.get("title") or rec.get("title", "")).strip()
-                    rec["note"]  = (request.form.get("note")  or rec.get("note", "")).strip()
-
-                    with VERSES_FILE.open("w", encoding="utf-8") as f:
-                        json.dump(verses, f, ensure_ascii=False, indent=2)
+                    rec["image"] = _safe_filename(request.form.get("image") or rec.get("image", ""))
+                    rec["ref"]   = _truncate(request.form.get("ref") or rec.get("ref", ""), 120)
+                    rec["title"] = _truncate(request.form.get("title") or rec.get("title", ""), 140)
+                    rec["note"]  = _truncate(request.form.get("note") or rec.get("note", ""), 600)
+                    _save_verses()
                     success = f"Updated verse #{idx}."
                 else:
                     error = "Verse index out of range."
-            except Exception as e:
-                error = f"Could not update verse: {e}"
 
-        else:  # add
-            image = (request.form.get("image") or "").strip()
-            ref   = (request.form.get("ref") or "").strip()
-            title = (request.form.get("title") or "").strip() or ref
-            note  = (request.form.get("note") or "").strip()
+            else:  # add
+                image = _safe_filename(request.form.get("image") or "")
+                ref   = _truncate(request.form.get("ref") or "", 120)
+                title = _truncate((request.form.get("title") or "").strip() or ref, 140)
+                note  = _truncate(request.form.get("note") or "", 600)
 
-            if not image or not ref:
-                error = "Image filename and Scripture reference are required."
-            else:
-                verses.append({"image": image, "ref": ref, "title": title, "note": note})
-                try:
-                    VERSES_FILE.parent.mkdir(parents=True, exist_ok=True)
-                    with VERSES_FILE.open("w", encoding="utf-8") as f:
-                        json.dump(verses, f, ensure_ascii=False, indent=2)
+                if not image or not ref:
+                    error = "Image filename and Scripture reference are required."
+                else:
+                    verses.append({"image": image, "ref": ref, "title": title, "note": note})
+                    _save_verses()
                     success = "Verse added successfully."
-                except Exception as e:
-                    error = f"Could not save verses.json: {e}"
 
-    cards = []
+        except Exception as e:
+            error = f"Action failed: {e}"
+
+    cards: list[dict] = []
     for idx, v in enumerate(verses):
         image = (v.get("image") or "").strip()
         src = _safe_static(f"img/verses/{image}") if image else None
@@ -1291,15 +1416,15 @@ def admin_verses_view():
         **ctx,
     )
 
+
+# =============================================================================
+# Admin — Prayer Requests
+# =============================================================================
 @app.route("/admin/requests", endpoint="admin_requests")
 @require_auth
 def admin_requests():
-    items = load_json_list(PRAYER_REQUESTS_FILE)
-    items.reverse()  # newest first
-
-    print("READING FROM:", PRAYER_REQUESTS_FILE.resolve())
-    print("ITEM COUNT:", len(items))
-
+    items = read_json_list(PRAYER_REQUESTS_FILE)
+    items = list(reversed(items))  # newest first
     ctx = common_page_ctx(active="admin")
     return render_template("admin/admin_requests.html", items=items, **ctx)
 
@@ -1307,81 +1432,90 @@ def admin_requests():
 @app.route("/admin/requests/delete/<int:index>", methods=["POST"], endpoint="admin_request_delete")
 @require_auth
 def admin_request_delete(index: int):
-    """Archives a prayer request by removing it from the JSON list."""
-    items = load_json_list(PRAYER_REQUESTS_FILE)
-    
-    # Since the view is reversed, the index from the loop needs to be 
-    # handled carefully or we just pop from the list and re-save.
-    # The simplest way is to reverse the list back, pop, and save.
-    items.reverse() 
-    
-    if 0 <= index < len(items):
-        removed = items.pop(index)
-        # Save back to file
-        with open(PRAYER_REQUESTS_FILE, "w", encoding="utf-8") as f:
-            json.dump(items, f, indent=2)
+    items = load_json_list(PRAYER_REQUESTS_FILE) or []
+
+    # Convert display index to real index
+    real_index = len(items) - 1 - index
+
+    if 0 <= real_index < len(items):
+        removed = items.pop(real_index)
+        PRAYER_REQUESTS_FILE.parent.mkdir(parents=True, exist_ok=True)
+        with PRAYER_REQUESTS_FILE.open("w", encoding="utf-8") as f:
+            json.dump(items, f, ensure_ascii=False, indent=2)
         flash(f"Prayer from {removed.get('name', 'Anonymous')} archived.", "success")
     else:
         flash("Request not found.", "error")
-        
+
     return redirect(url_for("admin_requests"))
 
-def load_posts():
-    if not os.path.exists(BLOG_DATA_PATH):
-        return []
-    with open(BLOG_DATA_PATH, 'r') as f:
-        return json.load(f)
-
-def save_posts(posts):
-    with open(BLOG_DATA_PATH, 'w') as f:
-        json.dump(posts, f, indent=4)
-
-@app.route('/admin/blog', methods=['GET', 'POST'])
+# =============================================================================
+# Admin — Blog (JSON-backed)
+# =============================================================================
+# ✅ Admin — Blog (JSON-backed)
+@app.route("/admin/blog", methods=["GET", "POST"], endpoint="admin_blog")
+@require_auth
 def admin_blog():
-    if request.method == 'POST':
-        # Capture form data
+    if request.method == "POST":
+        title_raw = request.form.get("title") or ""
+        title = _truncate(title_raw, 140)
+        slug = _slugify(request.form.get("slug") or title)
+
         new_post = {
-            "title": request.form.get('title'),
-            "slug": request.form.get('title').lower().replace(" ", "-"),
-            "date_display": request.form.get('date'),
-            "month_label": request.form.get('month_label'),
-            "excerpt": request.form.get('excerpt'),
-            "section1_title": request.form.get('s1_title'),
-            "section1_text": request.form.get('s1_text'),
-            "scripture_ref": request.form.get('scripture_ref'),
-            "scripture_quote": request.form.get('scripture_quote'),
-            "image": request.form.get('image') or "default.jpg"
+            "title": title,
+            "slug": slug,
+            "date_display": _truncate(request.form.get("date") or "", 40),
+            "month_label": _truncate(request.form.get("month_label") or "", 40),
+            "excerpt": _truncate(request.form.get("excerpt") or "", 260),
+            "section1_title": _truncate(request.form.get("s1_title") or "", 120),
+            "section1_text": _truncate(request.form.get("s1_text") or "", 5000),
+            "scripture_ref": _truncate(request.form.get("scripture_ref") or "", 120),
+            "scripture_quote": _truncate(request.form.get("scripture_quote") or "", 600),
+            "image": _safe_filename(request.form.get("image") or "default.jpg"),
+            "created_at": datetime.now().isoformat(timespec="seconds"),
         }
-        
+
         posts = load_posts()
-        posts.insert(0, new_post) # Add to top
+        posts.insert(0, new_post)
         save_posts(posts)
-        flash("Post Published to Soul Speaks!")
-        return redirect(url_for('blog_index'))
-        
-    return render_template('admin/blog_form.html')
 
+        flash("Post published to Soul Speaks!", "success")
+        return redirect(url_for("admin_blog"))
 
+    ctx = common_page_ctx(active="admin")
+    ctx["posts_count"] = len(load_posts())
+
+    # ✅ FIXED TEMPLATE PATH
+    return render_template("admin/admin_blog_form.html", **ctx)
+
+# =============================================================================
+# Admin — Feedback / Volunteers / Donations
+# =============================================================================
 @app.route("/admin/feedback", endpoint="admin_feedback")
 @require_auth
-def admin_feedback_view():
-    items = load_json_list(FEEDBACK_FILE)
+def admin_feedback():
+    items = read_json_list(FEEDBACK_FILE)
+    items = list(reversed(items))
     ctx = common_page_ctx(active="admin")
     return render_template("admin/admin_feedback.html", items=items, **ctx)
 
+
 @app.route("/admin/volunteers", endpoint="admin_volunteers")
 @require_auth
-def admin_volunteers_view():
-    rows = load_json_list(VOLUNTEERS_FILE)
+def admin_volunteers():
+    rows = read_json_list(VOLUNTEERS_FILE)
+    rows = list(reversed(rows))
     ctx = common_page_ctx(active="admin")
     return render_template("admin/admin_volunteers.html", rows=rows, **ctx)
 
 
+# =============================================================================
+# Admin — Donations
+# =============================================================================
 @app.route("/admin/donations", methods=["GET", "POST"], endpoint="admin_donations")
 @require_auth
 def admin_donations_view():
-    error = None
-    success = None
+    error: str | None = None
+    success: str | None = None
 
     if request.method == "POST":
         donor_name = (request.form.get("donor_name") or "").strip()
@@ -1392,7 +1526,7 @@ def admin_donations_view():
 
         try:
             amount = float(amount_raw)
-        except ValueError:
+        except Exception:
             amount = None
 
         if amount is None or amount <= 0:
@@ -1409,17 +1543,19 @@ def admin_donations_view():
             append_json_list(DONATIONS_FILE, record)
             success = "Donation recorded successfully."
 
-    items = load_json_list(DONATIONS_FILE)
+    items = read_json_list(DONATIONS_FILE)
+
+    # newest first (safe sort)
     try:
         items.sort(key=lambda r: (r.get("date") or "", r.get("created_at") or ""), reverse=True)
     except Exception:
         pass
 
-    total_amount = sum(
-        (r.get("amount") or 0)
-        for r in items
-        if isinstance(r.get("amount"), (int, float))
-    )
+    total_amount = 0.0
+    for r in items:
+        amt = r.get("amount")
+        if isinstance(amt, (int, float)):
+            total_amount += float(amt)
 
     ctx = common_page_ctx(active="admin")
     return render_template(
@@ -1431,35 +1567,51 @@ def admin_donations_view():
         **ctx,
     )
 
+    return render_template("admin/admin_donations.html",
+                       items=items,
+                       total_amount=total_amount,
+                       error=error,
+                       success=success,
+                       **ctx)
 
+# =============================================================================
+# Admin — WhatsApp Builder
+# NOTE: build_share_payload() must exist in your app (same signature).
+# =============================================================================
 @app.route("/admin/whatsapp", methods=["GET", "POST"], endpoint="admin_whatsapp")
+@require_auth
 def admin_whatsapp():
     ctx = common_page_ctx(active="admin")
     ctx["prayer_topics"] = PRAYER_TOPICS
 
-    result = {}
+    result: dict = {}
     selected_topic = ""
 
     if request.method == "POST":
-        date_str = request.form.get("date") or date.today().isoformat()
-        mode = request.form.get("mode") or "morning"
-        selected_topic = request.form.get("topic") or ""
+        date_str = (request.form.get("date") or date.today().isoformat()).strip()
+        mode = (request.form.get("mode") or "morning").strip().lower()
+        if mode not in ("morning", "night"):
+            mode = "morning"
 
-        # your existing devotion builder...
-        devotion_payload = build_share_payload(date_str=date_str, mode=mode)  # example
+        selected_topic = (request.form.get("topic") or "").strip()
 
-        picked = pick_random_request(selected_topic)
+        # Must exist elsewhere in your file
+        devotion_payload = build_share_payload(date_str=date_str, mode=mode)
+
+        picked = None
+        if selected_topic:
+            picked = pick_random_request(selected_topic)
 
         add_on = ""
         if picked:
-            who = picked.get("name") or "Someone"
-            topic = picked.get("topic") or "Prayer"
-            req = (picked.get("request") or "").strip()
+            who = (picked.get("name") or "Someone").strip()[:80]
+            topic = (picked.get("topic") or "Prayer").strip()[:40]
+            req = (picked.get("request") or "").strip().replace("\n", " ")
             if len(req) > 240:
                 req = req[:240].rstrip() + "…"
 
             add_on = (
-                "\n\n🙏 **Prayer Focus (from community)**\n"
+                "\n\n🙏 Prayer Focus (from community)\n"
                 f"👤 {who}\n"
                 f"🏷️ {topic}\n"
                 f"📝 {req}\n"
@@ -1468,13 +1620,10 @@ def admin_whatsapp():
         else:
             add_on = "\n\nIn Jesus’ name, Amen."
 
-        # attach to each message variant
-        if devotion_payload.get("text"):
-            devotion_payload["text"] += add_on
-        if devotion_payload.get("text_morning"):
-            devotion_payload["text_morning"] += add_on
-        if devotion_payload.get("text_night"):
-            devotion_payload["text_night"] += add_on
+        # Attach to each message variant (if present)
+        for k in ("text", "text_morning", "text_night"):
+            if devotion_payload.get(k):
+                devotion_payload[k] += add_on
 
         result = devotion_payload
 
@@ -1484,27 +1633,48 @@ def admin_whatsapp():
     })
     return render_template("admin/admin_whatsapp.html", **ctx)
 
+
 @app.route("/admin/whatsapp/send", methods=["POST"], endpoint="admin_whatsapp_send")
 @require_auth
 def admin_whatsapp_send():
     today_ = date.today()
 
-    raw_mode = (request.form.get("mode") or "morning").lower().strip()
-    if raw_mode in ("morning", "m", "am"):
-        mode = "morning"
-    elif raw_mode in ("night", "n", "pm"):
-        mode = "night"
-    else:
-        mode = "both"
+    # ----------------------------
+    # 1) MODE (clean + robust)
+    # ----------------------------
+    raw_mode = (request.form.get("mode") or "").strip().lower()
 
+    MODE_MAP = {
+        "morning": "morning",
+        "m": "morning",
+        "am": "morning",
+
+        "night": "night",
+        "n": "night",
+        "pm": "night",
+
+        "both": "both",
+        "b": "both",
+        "morning & night": "both",
+        "morning-night": "both",
+        "morning and night": "both",
+    }
+    mode = MODE_MAP.get(raw_mode, "morning")  # default safe
+
+    # ----------------------------
+    # 2) DATE (safe)
+    # ----------------------------
     raw_date = (request.form.get("date") or today_.isoformat()).strip()
     try:
         target_date = datetime.strptime(raw_date, "%Y-%m-%d").date()
-    except ValueError:
+    except Exception:
         target_date = today_
         raw_date = today_.isoformat()
 
-    def make_share_urls(message: str) -> dict:
+    # ----------------------------
+    # 3) SHARE URL BUILDER (single source)
+    # ----------------------------
+    def make_share_urls(message: str) -> dict[str, str]:
         enc = quote(message)
         return {
             "share_web": f"https://web.whatsapp.com/send?text={enc}",
@@ -1512,21 +1682,27 @@ def admin_whatsapp_send():
             "share_wa":  f"https://wa.me/?text={enc}",
         }
 
+    # ----------------------------
+    # 4) SINGLE MODE RESPONSE
+    # ----------------------------
     if mode in ("morning", "night"):
         entry = load_devotion_for(target_date, mode) or placeholder_devotion(raw_date, mode)
         text = build_whatsapp_text(entry, mode, target_date)
         urls = make_share_urls(text)
-        return jsonify({
-            "ok": True,
-            "mode": mode,
-            "date": raw_date,
-            "text": text,
-            "share_web": urls["share_web"],
-            "share_api": urls["share_api"],
-            "share_wa":  urls["share_wa"],
-            "join_url": SITE_JOIN_URL,
-        })
+        return jsonify(
+            ok=True,
+            mode=mode,
+            date=raw_date,
+            text=text,
+            share_web=urls["share_web"],
+            share_api=urls["share_api"],
+            share_wa=urls["share_wa"],
+            join_url=SITE_JOIN_URL,
+        )
 
+    # ----------------------------
+    # 5) BOTH MODES RESPONSE
+    # ----------------------------
     entry_m = load_devotion_for(target_date, "morning") or placeholder_devotion(raw_date, "morning")
     entry_n = load_devotion_for(target_date, "night") or placeholder_devotion(raw_date, "night")
 
@@ -1536,20 +1712,24 @@ def admin_whatsapp_send():
     urls_m = make_share_urls(text_m)
     urls_n = make_share_urls(text_n)
 
-    return jsonify({
-        "ok": True,
-        "mode": "both",
-        "date": raw_date,
-        "text_morning": text_m,
-        "text_night": text_n,
-        "share_web_morning": urls_m["share_web"],
-        "share_api_morning": urls_m["share_api"],
-        "share_wa_morning":  urls_m["share_wa"],
-        "share_web_night": urls_n["share_web"],
-        "share_api_night": urls_n["share_api"],
-        "share_wa_night":  urls_n["share_wa"],
-        "join_url": SITE_JOIN_URL,
-    })
+    return jsonify(
+        ok=True,
+        mode="both",
+        date=raw_date,
+        text_morning=text_m,
+        text_night=text_n,
+        share_web_morning=urls_m["share_web"],
+        share_api_morning=urls_m["share_api"],
+        share_wa_morning=urls_m["share_wa"],
+        share_web_night=urls_n["share_web"],
+        share_api_night=urls_n["share_api"],
+        share_wa_night=urls_n["share_wa"],
+        join_url=SITE_JOIN_URL,
+    )
+
+# =============================================================================
+# BLOG: helpers + routes (clean, no duplicates, filters work)
+# =============================================================================
 
 # ----------------------------
 # Blog helpers (small + safe)
@@ -1566,38 +1746,24 @@ def _coerce_int(v, default=None):
     except Exception:
         return default
 
-# If your list_blog_posts() already exists, keep yours.
-# Expected output for each post:
-# {
-#   "slug": "gods-love-beyond-sound",
-#   "title": "God’s Love Beyond Sound",
-#   "date": "2026-02-01"  (ISO string preferred),
-#   "month": 2,
-#   "year": 2026,
-#   "excerpt": "...",
-#   "image": "img/blog/soulspeaks/gods-love-beyond-sound.jpg" (static-relative)
-# }
-
 def _filter_posts(posts: list[dict], year: int | None, month: int | None) -> list[dict]:
-    out = []
+    out: list[dict] = []
     for p in posts:
         y = p.get("year")
         m = p.get("month")
-        if year and y != year:
+        if year is not None and y != year:
             continue
-        if month and m != month:
+        if month is not None and m != month:
             continue
         out.append(p)
     return out
 
 def _decorate_posts(posts: list[dict]) -> list[dict]:
-    """Add labels for template."""
+    """Add labels for templates (month_label, date_display)."""
     for p in posts:
-        y = p.get("year")
         m = p.get("month")
         d = p.get("date")
         p["month_label"] = _month_label(m) if isinstance(m, int) else ""
-        # nice date display
         try:
             if isinstance(d, str) and d:
                 dt = datetime.strptime(d, "%Y-%m-%d").date()
@@ -1616,83 +1782,109 @@ MONTH_THEMES = {
 }
 
 def _get_month_theme(year: int | None, month: int | None):
-    if not year or not month:
+    if year is None or month is None:
         return None
     return MONTH_THEMES.get((year, month))
 
+def _sort_posts_newest_first(posts: list[dict]) -> list[dict]:
+    return sorted(
+        posts,
+        key=lambda p: (
+            p.get("year") or 0,
+            p.get("month") or 0,
+            p.get("date") or "",
+            p.get("slug") or "",
+        ),
+        reverse=True,
+    )
+
+def _get_available_years(posts: list[dict]) -> list[int]:
+    years = sorted({p.get("year") for p in posts if isinstance(p.get("year"), int)}, reverse=True)
+    return years or [date.today().year]
+
+def _valid_month(m: int | None) -> int | None:
+    return m if isinstance(m, int) and 1 <= m <= 12 else None
+
 
 # ----------------------------
-# Blog routes (clean)
+# Blog routes (PUBLIC)
 # ----------------------------
 @app.route("/blog", endpoint="blog_index")
 def blog_index():
-    # read filters
-    year = _coerce_int(request.args.get("year"), None)
-    month = _coerce_int(request.args.get("month"), None)
+    """
+    Public blog index page.
+    Supports filters: ?year=2026&month=2
+    """
+    # Read filters
+    year_q = _coerce_int(request.args.get("year"), None)
+    month_q = _coerce_int(request.args.get("month"), None)
+    month_q = _valid_month(month_q)  # returns 1..12 or None
 
-    posts_all = list_blog_posts()  # use yours
-    # ensure predictable sort (newest first)
-    posts_all = sorted(
-        posts_all,
-        key=lambda p: (p.get("year") or 0, p.get("month") or 0, p.get("date") or ""),
-        reverse=True
-    )
+    # Build posts list from templates/blog/*.html
+    posts_all = list_blog_posts()
+    posts_all = _sort_posts_newest_first(posts_all)
+    posts_all = _decorate_posts(posts_all)
 
-    # years + months for dropdown
-    years = sorted({p.get("year") for p in posts_all if isinstance(p.get("year"), int)}, reverse=True)
-    if not years:
-        years = [date.today().year]
-
+    # Dropdown options
+    years = _get_available_years(posts_all)
     months = [{"value": i, "label": _month_label(i)} for i in range(1, 13)]
 
-    # defaults (if no query params)
-    selected_year = year if year else years[0]
-    selected_month = month if month in range(1, 13) else ""
+    # Defaults
+    selected_year = year_q if (year_q in years) else (years[0] if years else date.today().year)
+    selected_month = month_q  # None = all months
 
-    posts = _filter_posts(posts_all, selected_year, month if month in range(1, 13) else None)
-    posts = list_blog_posts()
+    # Filter final list
+    posts = _filter_posts(posts_all, selected_year, selected_month)
 
     ctx = common_page_ctx(active="blog")
-    ctx["posts"] = list_blog_posts()
     ctx.update({
         "posts": posts,
-        "years": years,
+        "years": years if years else [date.today().year],
         "months": months,
         "selected_year": selected_year,
-        "selected_month": selected_month,
-        "month_theme": _get_month_theme(selected_year, month if month in range(1, 13) else None),
-        "SITE_URL": SITE_URL,  # used in template for Copy Link
+        "selected_month": selected_month or "",
+        "month_theme": _get_month_theme(selected_year, selected_month),
+        "SITE_URL": request.url_root.rstrip("/"),
     })
+
+    # ✅ THIS is the PUBLIC blog index template
     return render_template("blog/index.html", **ctx)
 
 
 @app.route("/blog/<slug>", endpoint="blog_post")
 def blog_post(slug: str):
+    """
+    Public blog post page. Template must exist:
+    templates/blog/<slug>.html
+    """
     slug = (slug or "").strip().lower()
     if not _slug_re.match(slug):
         abort(404)
 
-    # template file must be templates/blog/<slug>.html
-    rel_tpl = f"blog/{slug}.html"   # ✅ define it here (always)
     abs_path = BLOG_DIR / f"{slug}.html"
     if not abs_path.exists():
         abort(404)
 
-    # Find metadata from registry, else fallback
-    posts = list_blog_posts()
-    posts = [p for p in posts if p["slug"] != "silence-is-not-absence"]
-    meta = next((p for p in posts if (p.get("slug") == slug)), None)
+    # Metadata from registry (safe fallback)
+    posts_all = list_blog_posts()
+    meta = next((p for p in posts_all if p.get("slug") == slug), None)
 
     title = (meta.get("title") if meta else None) or _pretty_title_from_slug(slug)
     image = (meta.get("image") if meta else None) or _find_blog_image(slug)
+    excerpt = (meta.get("excerpt") if meta else "") if meta else ""
 
     ctx = common_page_ctx(active="blog")
-    ctx["post"] = {
-        "slug": slug,
-        "title": _pretty_title_from_slug(slug),
-        "image": _find_blog_image(slug),
-    }
+    ctx.update({
+        "post": {
+            "slug": slug,
+            "title": title,
+            "image": image,
+            "excerpt": excerpt,
+        },
+        "SITE_URL": request.url_root.rstrip("/"),
+    })
 
+    rel_tpl = f"blog/{slug}.html"
     return render_template(rel_tpl, **ctx)
 
 # =============================================================================
@@ -1700,12 +1892,14 @@ def blog_post(slug: str):
 # =============================================================================
 def _open_browser():
     try:
+        import webbrowser
         webbrowser.open(f"http://{HOST}:{PORT}/")
     except Exception:
         pass
 
 if __name__ == "__main__":
-    logger.info(f"💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… {APP_VERSION}")
+    from threading import Timer
+    logger.info("💜 SoulStart Devotion — Flask heartbeat ready (HTTP dev)… %s", APP_VERSION)
     if AUTO_OPEN:
         Timer(1.0, _open_browser).start()
-    app.run(host=HOST, port=PORT, debug=True)
+    app.run(host=HOST, port=PORT, debug=not IS_PROD)

@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block title %}Silence Is Not Absence — Soul Speaks{% endblock %}
+
+{% block content %}
+<section class="container page-wrap soulspeaks-post">
+
+  <header class="sp-hero">
+    <div class="sp-hero-inner">
+      <div class="sp-badge">Soul Speaks</div>
+      <h1 class="sp-title">Silence Is Not Absence</h1>
+
+      <div class="sp-meta">
+        <span>February 2026</span>
+        <span class="dot">•</span>
+        <span>Blog 2</span>
+        <span class="dot">•</span>
+        <span>Peace • Presence • Perspective</span>
+      </div>
+
+      <div class="sp-chips">
+        <span class="sp-chip">🤟 Visual Grace</span>
+        <span class="sp-chip">🧠 Simple English</span>
+        <span class="sp-chip">💬 Open Discussion</span>
+      </div>
+
+      <div class="sp-actions">
+        <a class="btn btn-ghost" href="{{ url_for('blog_index') }}">← Back to Blog</a>
+        <a class="btn btn-primary" href="{{ url_for('home') }}">Home</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="sp-grid">
+
+    <aside class="sp-side">
+      <div class="card soft sp-side-card">
+        <div class="sp-side-media">
+          {% if post and post.image %}
+            <img class="sp-side-img"
+                 src="{{ url_for('static', filename='img/blog/soulspeaks/silence-is-not-absence.jpg' ) }}"
+                 alt="Silence as a sacred space cover">
+          {% else %}
+            <div class="sp-side-img sp-side-placeholder">Sacred Space</div>
+          {% endif %}
+        </div>
+
+        <h3 class="sp-side-title">Join the Conversation</h3>
+        <p class="muted sp-side-sub">Share your thoughts or a video of your reflection.</p>
+
+        <div class="sp-connect">
+          <a class="btn btn-wide btn-primary"
+             href="{{ SOCIAL_LINKS.get('whatsapp', SITE_JOIN_URL) }}"
+             target="_blank" rel="noopener">💬 WhatsApp</a>
+
+          <a class="btn btn-wide"
+             href="{{ SOCIAL_LINKS.get('facebook', '#') }}"
+             target="_blank" rel="noopener">📘 Facebook Group</a>
+
+          <a class="btn btn-wide"
+             href="{{ SOCIAL_LINKS.get('instagram', '#') }}"
+             target="_blank" rel="noopener">📸 Instagram</a>
+        </div>
+      </div>
+    </aside>
+
+    <main class="sp-main">
+
+      <section class="sp-section">
+        <h2 class="sp-h2">Silence is a Sacred Space</h2>
+        <p>
+          In a world that equates noise with progress, silence is often misunderstood as "emptiness." But in the economy of God, 
+          <strong>silence is not a vacuum; it is a vessel.</strong> It is the quiet soil where faith grows deep, 
+          undisturbed by the distractions of the world.
+        </p>
+      </section>
+
+      <section class="sp-section">
+        <h2 class="sp-h2">The Theology of Quietude</h2>
+        <p>
+          In the Bible, silence is never portrayed as God’s absence. Instead, it is the environment of His most profound work. 
+          When Elijah sought God, he didn't find Him in the wind or the fire—God revealed Himself in a <strong>gentle whisper</strong>. 
+          God understands our hearts before words are ever formed. He responds to our sincerity, not our volume.
+        </p>
+      </section>
+
+      <section class="sp-callout">
+        <div class="sp-callout-title">Key Message</div>
+        <div class="sp-callout-text">
+          Silence is not absence. It is presence without pressure.
+        </div>
+      </section>
+
+      <section class="sp-section">
+        <h2 class="sp-h2">Visual Grace: Silence as Fullness</h2>
+        <p>
+          For the Deaf community, silence is not a "lack" of life. It is a visual, tactile, and deeply intentional way of 
+          experiencing the world. God is a God of <strong>sight, touch, and spirit.</strong> 
+          Just as Jesus used touch to heal and eye contact to restore dignity, He communicates His purpose 
+          directly to the "eyes of our hearts."
+        </p>
+      </section>
+
+      <section class="sp-section">
+        <h2 class="sp-h2">Honor the Silence</h2>
+        <p>
+          When we honor silence, we see differently. We discover that God often works quietly—shaping our character, 
+          restoring our peace, and guiding our steps without needing a spectacle. Silence does not block God; 
+          it invites us to be more aware of His constant presence.
+        </p>
+      </section>
+
+      <aside class="sp-scripture">
+        <div class="sp-scripture-label">📖 Scripture Anchor</div>
+        <div class="sp-scripture-ref">Psalm 46:10</div>
+        <blockquote class="sp-scripture-quote">
+          “Be still, and know that I am God.”
+        </blockquote>
+        <div class="sp-scripture-cite">— The Bible</div>
+      </aside>
+
+      <section class="sp-reflection card soft">
+        <h3 class="sp-h3">Open Discussion</h3>
+        <p class="muted">We value your unique perspective. Consider these two questions:</p>
+        <ul class="sp-list">
+          <li><strong>Perspective Shift:</strong> Is there an area of your life where God feels "silent"? How does it feel to think of that silence as "presence without pressure" instead of "absence"?</li>
+          <li><strong>Visual Faith:</strong> How can we "listen" with our hearts and eyes this week to see where God is moving?</li>
+        </ul>
+        <p class="muted" style="margin-top: 1rem; font-size: 0.9em;">
+          <em>Feel free to type your answer or send a video of yourself signing your thoughts to our WhatsApp.</em>
+        </p>
+      </section>
+
+      <div class="sp-tags">
+        <span class="sp-tag">Silence</span>
+        <span class="sp-tag">Presence</span>
+        <span class="sp-tag">Deaf Culture</span>
+        <span class="sp-tag">Visual Grace</span>
+        <span class="sp-tag">Reflection</span>
+      </div>
+
+      <div class="sp-bottom">
+        <a class="btn btn-ghost" href="{{ url_for('blog_index') }}">← Back to Blog</a>
+      </div>
+
+    </main>
+  </div>
+</section>
+{% endblock %}

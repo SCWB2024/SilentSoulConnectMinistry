@@ -25,33 +25,54 @@
 /* =============================
    01) VARIABLES / BRAND COLORS
    ============================= */
-:root {
+:root{
+  /* Brand */
   --brand: #0aa36e;
   --brand-dark: #087a52;
+
+  /* Core */
   --bg: #ffffff;
   --fg: #0b0f1a;
   --muted: #5b6a85;
-  --btn: #0aa36e;
-  --btnfg: #ffffff;
   --border: #e6e9ef;
+
+  /* Buttons */
+  --btn: var(--brand);
+  --btnfg: #ffffff;
+
+  /* Accents */
   --gold: #d4a017;
   --blue: #1b4fcc;
+  --accent: var(--blue);     /* used by btn-xml */
+  --primary: var(--brand);   /* used by section-title */
+
+  /* Effects */
   --overlay: rgba(0,0,0,.45);
   --shadow: 0 6px 16px rgba(0,0,0,.08);
   --ring: 0 0 0 3px rgba(10,163,110,.25);
+
+  /* Helpers */
+  --radius: 18px;
+  --text: var(--fg);         /* FIX: your CSS uses --text later */
 }
 
+/* =============================
+   HERO BASE (single source)
+   ============================= */
 .hero{
   position: relative;
-  border-radius: 18px;
+  border-radius: var(--radius);
   overflow: hidden;
 }
+
 .hero::before{
   content:"";
   position:absolute;
   inset:0;
   background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.35));
+  z-index: 1;
 }
+
 .hero-inner{
   position: relative;
   z-index: 2;
@@ -61,93 +82,134 @@
 /* =============================
    02) RESET & TYPOGRAPHY
    ============================= */
-* { box-sizing: border-box; }
-html, body { height: 100%; margin: 0; padding: 0; }
+*,
+*::before,
+*::after{ box-sizing: border-box; }
 
-body {
+html, body{
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body{
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--fg);
   background: var(--bg);
   line-height: 1.6;
   overflow-x: hidden;
+  text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3 { color: var(--fg); margin: 0 0 .6rem; }
-p { margin: .4rem 0; }
-.muted { color: var(--muted); }
+img{ max-width: 100%; height: auto; display: block; }
+
+a{ color: inherit; }
+
+h1, h2, h3{
+  color: var(--fg);
+  margin: 0 0 .6rem;
+  line-height: 1.2;
+}
+
+p{ margin: .4rem 0; }
+
+.muted{ color: var(--muted); }
 
 
 /* =============================
    03) HEADER + BRANDING
    ============================= */
-.header {
+.header{
   padding: 16px 20px;
   border-bottom: 1px solid var(--border);
 }
 
-.header.brand {
+.header.brand{
   background: var(--brand);
   color: #fff;
   border-bottom: none;
   box-shadow: var(--shadow);
 }
 
-.brand {
+.brand{
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.logo { width: 56px; height: auto; margin-right: 12px; }
-.title { font-size: 1.4rem; font-weight: 800; color: #fff; }
-.sub { font-size: 1rem; color: #fff; opacity: .9; margin-top: 2px; }
+.logo{
+  width: 56px;
+  height: auto;
+  margin-right: 12px;
+}
+
+.title{
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.1;
+}
+
+.sub{
+  font-size: 1rem;
+  color: #fff;
+  opacity: .9;
+  margin-top: 2px;
+}
 
 
 /* =============================
    04) NAVIGATION
    ============================= */
-.topnav {
+.topnav{
   display: flex;
   gap: 12px;
   margin-top: 10px;
   flex-wrap: wrap;
 }
 
-.topnav a {
+.topnav a{
   text-decoration: none;
   color: #fff;
   padding: 8px 12px;
-  border-radius: 8px;
+  border-radius: 10px;
   transition: background .2s ease, transform .12s ease;
 }
 
-.topnav a:hover {
+.topnav a:hover{
   background: rgba(255,255,255,.15);
+  transform: translateY(-1px);
 }
 
-.topnav a.active {
+.topnav a.active{
   background: #fff;
   color: var(--brand-dark);
-  font-weight: 700;
+  font-weight: 800;
 }
 
-.topnav a:focus-visible {
+.topnav a:focus-visible{
   outline: 2px solid #fff;
   outline-offset: 2px;
 }
 
-
 /* =============================
    05) LAYOUT
    ============================= */
-.main {
+.main{
   max-width: 980px;
   margin: 0 auto;
   padding: 20px;
   min-height: 80vh;
 }
 
-.footer {
+/* Optional helper (many templates use it) */
+.container{
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer{
   border-top: 1px solid var(--border);
   padding: 16px 20px;
   display: flex;
@@ -159,124 +221,165 @@ p { margin: .4rem 0; }
   color: var(--muted);
 }
 
+/* Make footer links readable but calm */
+.footer a{
+  text-decoration: none;
+  opacity: .9;
+}
+.footer a:hover{ opacity: 1; text-decoration: underline; }
+
 
 /* =============================
    06) BUTTONS + LINKS
    ============================= */
-.btn {
-  display: inline-block;
+.btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   padding: 10px 14px;
-  border-radius: 10px;
+  border-radius: 12px;
   background: var(--btn);
   color: var(--btnfg);
-  font-weight: 700;
+  font-weight: 800;
   text-decoration: none;
   border: 1px solid transparent;
-  transition: filter .15s, transform .12s, box-shadow .12s;
+  cursor: pointer;
+  transition: filter .15s, transform .12s, box-shadow .12s, background .15s;
 }
 
-.btn.small { padding: 8px 12px; font-weight: 600; }
+.btn.small{ padding: 8px 12px; font-weight: 700; }
 
-.btn.soft {
+.btn.soft{
   background: #fff;
-  color: var(--brand);
+  color: var(--brand-dark);
   border: 1px solid var(--border);
 }
 
-.btn:hover { filter: brightness(.95); }
-.btn:active { transform: translateY(1px); }
-.btn:focus-visible { box-shadow: var(--ring); }
+.btn:hover{ filter: brightness(.96); }
+.btn:active{ transform: translateY(1px); }
+.btn:focus-visible{ box-shadow: var(--ring); outline: none; }
 
-.btn.disabled, .btn.soft.disabled {
-  opacity: .6; pointer-events: none; cursor: default;
+.btn.disabled,
+.btn[disabled]{
+  opacity: .6;
+  pointer-events: none;
+  cursor: default;
 }
+
+/* Full-width button utility (you use this on blog + admin) */
+.btn-wide{ width: 100%; }
 
 /* Floating donate button – stronger contrast */
 .fab-donate{
   background: var(--blue);
-  color:#0f3d24;
-  border:2px solid #fff;
-  box-shadow:0 10px 24px rgba(0,0,0,.28);
+  color: #fff;
+  border: 2px solid #fff;
+  box-shadow: 0 10px 24px rgba(0,0,0,.28);
 }
 
 /* Optional: when header isn’t green, keep it visible too */
 .header:not(.brand) .fab-donate{
   background: var(--gold);
-  color:#1a1a1a;
-  border:1px solid rgba(0,0,0,.08);
+  color: #111;
+  border: 1px solid rgba(0,0,0,.08);
 }
 
-/* XML button style */
-.btn-xml {
-  display: inline-block;
-  background-color: var(--accent, #2a7bf6);
-  color: #fff;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
+/* XML button style (keep, but align to btn look) */
+.btn-xml{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: 12px;
   text-decoration: none;
-  font-size: 0.9rem;
-  transition: 0.2s ease;
+  font-size: 0.95rem;
+  font-weight: 800;
+  background: var(--accent, #2a7bf6);
+  color: #fff;
+  transition: filter .15s, transform .12s, box-shadow .12s;
 }
 
-.btn-xml:hover {
-  background-color: #1e5fb8;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+.btn-xml:hover{
+  filter: brightness(.95);
+  box-shadow: 0 8px 16px rgba(0,0,0,.12);
 }
 
-.link-inline {
-  font-size: 0.9rem;
-  font-weight: 600;
+/* Inline links */
+.link-inline{
+  font-size: 0.95rem;
+  font-weight: 700;
   color: var(--brand-dark);
+  text-decoration: none;
 }
-
-.link-inline:hover {
-  text-decoration: underline;
-}
+.link-inline:hover{ text-decoration: underline; }
 
 /* Phase 3: Social / Connection blocks */
-.connect-panel {
+.connect-panel{
   margin-top: 24px;
-  padding: 18px 18px;
+  padding: 18px;
   border-radius: 18px;
   background: rgba(2, 6, 23, 0.03);
   border: 1px solid rgba(2, 6, 23, 0.08);
 }
 
-.connect-panel h2 {
-  margin: 0 0 6px 0;
-}
+.connect-panel h2{ margin: 0 0 6px; }
 
-.connect-actions {
+.connect-actions{
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 10px;
 }
 
-.connect-actions.small .btn {
+.connect-actions.small .btn{
   padding: 10px 12px;
   font-size: 0.95rem;
 }
 
-.icon-link {
+.icon-link{
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 12px;
   border: 1px solid rgba(0,0,0,0.10);
   text-decoration: none;
+  transition: transform .12s ease, background .12s ease;
 }
 
-.icon-link:hover {
+.icon-link:hover{
   transform: translateY(-1px);
+  background: rgba(0,0,0,.03);
 }
 
 /* =============================
    07) CARDS + GRIDS
    ============================= */
-/* --- Study Series Grid & Cards (UI Polish #2) --- */
+
+/* Base card system (used by Admin, Blog, Home, Study) */
+.card{
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 16px;
+  box-shadow: 0 10px 26px rgba(0,0,0,.05);
+}
+
+.card.soft{ padding: 16px; }
+.card.pad{ padding: 20px; }
+
+.card-title{
+  margin: 0 0 10px;
+  font-weight: 900;
+}
+
+.grid{
+  display: grid;
+  gap: 14px;
+}
+
+/* --- Study Series Grid & Cards --- */
 .series-grid{
   display:grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -288,6 +391,17 @@ p { margin: .4rem 0; }
   align-items:center;
   gap:12px;
   padding:14px;
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,.08);
+  background:#fff;
+  box-shadow: 0 10px 22px rgba(0,0,0,.05);
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+
+.series-card:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(0,0,0,.07);
+  border-color: rgba(10,163,110,.25);
 }
 
 .series-icon{
@@ -297,14 +411,10 @@ p { margin: .4rem 0; }
 }
 
 .series-meta{ min-width:0; }
+.series-title{ margin:0 0 4px; font-weight:900; }
+.series-sub{ margin:0; color: var(--muted); }
 
-.series-title{
-  margin:0 0 4px;
-  font-weight:800;
-}
-
-.series-sub{ margin:0; }
-
+/* --- Study lessons grid --- */
 .study-grid{
   display:grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -316,16 +426,24 @@ p { margin: .4rem 0; }
   gap:12px;
   align-items:center;
   padding:14px;
-  border:1px solid var(--border);
+  border:1px solid rgba(0,0,0,.08);
   border-radius:16px;
   background:#fff;
-  box-shadow: var(--shadow);
+  box-shadow: 0 10px 22px rgba(0,0,0,.05);
   text-decoration:none;
-  color: var(--text);
+  color: var(--fg);                 /* ✅ was var(--text) */
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
 }
 
 .study-card:hover{
   transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(0,0,0,.07);
+  border-color: rgba(10,163,110,.25);
+}
+
+.study-card:focus-visible{
+  outline: none;
+  box-shadow: var(--ring), 0 14px 28px rgba(0,0,0,.07);
 }
 
 .study-ico{
@@ -335,18 +453,14 @@ p { margin: .4rem 0; }
   display:flex;
   align-items:center;
   justify-content:center;
-  background:#ecfdf5;
-  border:1px solid var(--border);
+  background: rgba(16,185,129,.10);
+  border:1px solid rgba(16,185,129,.20);
   font-size: 1.2rem;
+  flex: 0 0 auto;
 }
 
-.study-title{
-  font-weight: 800;
-}
-
-.study-sub{
-  font-size: .9rem;
-}
+.study-title{ font-weight: 900; margin: 0; }
+.study-sub{ font-size: .9rem; color: var(--muted); margin: 2px 0 0; }
 
 @media (max-width: 900px){
   .study-grid{ grid-template-columns: 1fr; }
@@ -443,47 +557,63 @@ p { margin: .4rem 0; }
 /* =============================
    09) HOME HELPERS
    ============================= */
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  margin: 0.75rem 0 0.25rem;
+
+/* Hero action buttons row */
+.hero-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin: 12px 0 6px;
 }
 
-.small-note {
-  font-size: 0.85rem;
+.small-note{ font-size: .85rem; }
+
+/* Quick links (chips) */
+.quick-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap: 12px;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
 }
 
-/* Quick chips on home page */
-.quick-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-.chip-link {
+.chip-link{
   display: inline-flex;
   align-items: center;
-  padding: 0.35rem 0.8rem;
-  border-radius: 999px;
-  background: #ecfdf5;
-  border: 1px solid var(--border);
-  font-size: 0.85rem;
+  padding: 8px 18px;
+  border-radius: 50px;
   text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+  background-color: #f1f3f5;
+  color: #495057;
+}
+
+.chip-link:hover{
+  background: #fff;
+  border-color: rgba(10,163,110,.30);   /* ✅ uses brand tone */
   color: var(--brand-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,.06);
 }
 
-.chip-link:hover {
-  background: #d1fae5;
+.chip-link:focus-visible{
+  outline:none;
+  box-shadow: var(--ring), 0 8px 18px rgba(0,0,0,.06);
 }
 
-.home-grid{
-  display:grid;
-  grid-template-columns: 280px 1fr;
-  gap: 18px;
-  align-items:start;
-  margin-top: 18px;
+/* Home page left/right layout (sidebar + main) */
+.home-grid {
+  display: flex;
+  gap: 24px;
+  align-items: stretch; /* The magic for equal height */
+  margin: 40px 0;
+}
+
+@media (max-width: 900px){
+  .home-grid{ grid-template-columns: 1fr; }
 }
 
 .home-side .side-box{
@@ -504,340 +634,43 @@ p { margin: .4rem 0; }
 
 .btn-share{ margin-top: 10px; width: 100%; }
 
-@media (max-width: 900px){
-  .home-grid{ grid-template-columns: 1fr; }
-}
-
-.social-icon {
-  width: 32px;
-  height: 32px;
-  object-fit: contain;
-  vertical-align: middle;
-}
-
-.footer-social a {
-  display: inline-flex;
-  align-items: center;
-  margin-right: 10px;
-}
-
-/* Footer social icons (small + consistent) */
+/* Social icons (footer + anywhere else) */
 .footer-social,
-.social-wrapper {
-  display: flex;
-  align-items: center;
+.social-wrapper{
+  display:flex;
+  align-items:center;
   gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.footer-social a{
+  display:inline-flex;
+  align-items:center;
 }
 
 .social-icon-link img,
-.social-icon {
+.social-icon{
   width: 26px;
   height: 26px;
-  display: block;
-  object-fit: contain;
-}
-
-#output {
-    font-size: 1.1rem; /* Slightly larger than standard */
-    line-height: 1.5;
-    background-color: #fdfdfd;
-    border: 2px dashed #00a86b; /* Makes the "Copy Zone" obvious */
-}
-/* =========================
-   Soul Speaks - Post Page
-   ========================= */
-
-.soulspeaks-post .sp-hero{
-  border-radius: 18px;
-  overflow: hidden;
-  margin: 18px 0 20px;
-  background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.35));
-  color: #fff;
-}
-
-.sp-hero-inner{ padding: 26px; max-width: 1000px; }
-
-.sp-badge{
-  display:inline-block;
-  padding:6px 10px;
-  border-radius:999px;
-  background: rgba(255,255,255,.16);
-  border: 1px solid rgba(255,255,255,.18);
-  font-weight: 800;
-  letter-spacing: .3px;
-  margin-bottom: 12px;
-}
-
-.sp-title{
-  margin: 0 0 8px;
-  font-weight: 900;
-  font-size: clamp(26px, 3vw, 40px);
-}
-
-.sp-meta{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  opacity:.92;
-  font-size: 14px;
-}
-.sp-meta .dot{ opacity:.6; }
-
-.sp-chips{
-  margin-top: 12px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.sp-chip{
-  display:inline-flex;
-  align-items:center;
-  padding: 7px 12px;
-  border-radius: 999px;
-  background: rgba(0,0,0,.22);
-  border: 1px solid rgba(255,255,255,.18);
-  color:#fff;
-  font-weight: 800;
-  font-size: 13px;
-}
-
-.sp-actions{ margin-top: 14px; display:flex; gap:10px; flex-wrap:wrap; }
-
-/* layout */
-.sp-grid{
-  display:grid;
-  grid-template-columns: 320px 1fr;
-  gap: 18px;
-  align-items:start;
-}
-@media (max-width: 980px){
-  .sp-grid{ grid-template-columns: 1fr; }
-}
-
-/* sidebar */
-.sp-side-card{ padding: 16px; }
-.sp-side-media{ margin-bottom: 12px; }
-.sp-side-img{
-  width:100%;
-  height:auto;
   display:block;
-  border-radius: 14px;
-  border: 1px solid rgba(0,0,0,.08);
-}
-.sp-side-placeholder{
-  height: 180px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background: rgba(16,185,129,.08);
-  border: 1px solid rgba(16,185,129,.18);
-  font-weight: 900;
-  color: #065f46;
-}
-.sp-side-title{ margin: 12px 0 6px; font-weight: 900; }
-.sp-side-sub{ margin: 0 0 12px; font-size: 14px; }
-
-.sp-connect{ display:grid; gap: 10px; }
-
-/* heart bullets (replaces green squares) */
-.sp-section{
-  padding: 14px 14px 14px 44px;
-  position: relative;
-  border-radius: 16px;
-  background: #fff;
-  border: 1px solid rgba(0,0,0,.08);
-  box-shadow: 0 10px 22px rgba(0,0,0,.04);
-  margin-bottom: 12px;
-}
-.sp-section::before{
-  content: "❤";
-  position:absolute;
-  left: 14px;
-  top: 16px;
-  font-size: 18px;
-  color: #10b981;
-  opacity: .95;
-}
-.sp-h2{ margin: 0 0 6px; font-weight: 900; font-size: 18px; }
-
-.sp-callout{
-  margin: 14px 0;
-  padding: 14px;
-  border-radius: 16px;
-  background: rgba(16,185,129,.08);
-  border: 1px solid rgba(16,185,129,.18);
-}
-.sp-callout-title{ font-weight: 900; margin-bottom: 4px; }
-.sp-callout-text{ font-weight: 800; }
-
-.sp-scripture{
-  margin-top: 14px;
-  padding: 16px;
-  border-radius: 16px;
-  background: #0b1220;
-  color: #fff;
-  border: 1px solid rgba(255,255,255,.12);
-}
-.sp-scripture-label{ font-weight: 900; opacity: .95; margin-bottom: 8px; }
-.sp-scripture-ref{ font-weight: 900; margin-bottom: 10px; opacity: .92; }
-.sp-scripture-quote{
-  margin: 0;
-  padding: 12px 14px;
-  border-left: 4px solid #10b981;
-  background: rgba(255,255,255,.06);
-  border-radius: 14px;
-}
-.sp-scripture-cite{ margin-top: 10px; text-align:right; opacity: .85; font-weight: 800; }
-
-.sp-reflection{ padding: 16px; margin-top: 14px; }
-.sp-h3{ margin: 0 0 8px; font-weight: 900; }
-
-.sp-list{ margin: 10px 0 0; padding-left: 18px; }
-.sp-list li{ margin: 6px 0; }
-
-.sp-tags{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top: 14px;
-  padding-top: 14px;
-  border-top: 1px solid rgba(0,0,0,.08);
-}
-.sp-tag{
-  display:inline-flex;
-  padding: 7px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(0,0,0,.10);
-  background: #fff;
-  font-weight: 800;
-  font-size: 13px;
+  object-fit:contain;
 }
 
-.sp-bottom{ margin-top: 14px; }
-
-/* =============================
-    9b) BLOG HELPERS (Upgraded)
-   ============================= */
-
-/* Make the hero image feel immersive rather than just a "box" */
-.blog-hero {
-  width: 100%;
-  max-width: 1000px; /* Slightly wider for modern feel */
-  border-radius: 24px; /* Softer corners */
-  display: block;
-  margin: 0 auto 24px auto;
-  box-shadow: 0 20px 40px rgba(0,0,0,.08); /* Deeper, softer shadow */
-  transition: transform 0.4s ease;
-}
-
-/* The Verse Card: Scripture should feel special/sacred */
-.verse-card {
-  border: 1px solid rgba(16, 185, 129, 0.2); /* Use your signature green */
-  border-radius: 20px;
-  padding: 24px;
-  margin: 32px 0;
-  background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%); /* Subtle glow */
-  position: relative;
-  overflow: hidden;
-}
-
-/* Add a visual "accent" to the verse card for Deaf-friendliness */
-.verse-card::before {
-  content: '🤟';
-  position: absolute;
-  right: 15px;
-  top: 15px;
-  font-size: 1.5rem;
-  opacity: 0.2;
-}
-
-.verse-title {
-  font-weight: 800;
-  color: #065f46; /* Darker green for readability */
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-size: 0.85rem;
-  margin-bottom: 8px;
-}
-
-.verse-text {
-  font-size: 1.25rem; /* Larger for better visual focus */
-  line-height: 1.6;
-  color: #1f2937;
-  font-family: 'Georgia', serif; /* A classic serif makes Scripture stand out */
-}
-
-/* The Reflection Block: Moving from "Gray bar" to "Soulful Quote" */
-.blog-block {
-  margin: 32px 0;
-  padding: 24px;
-  border-left: 4px solid #10b981; /* Thinner, more vibrant line */
-  background: rgba(16, 185, 129, 0.04); /* Very soft green tint */
-  border-radius: 0 16px 16px 0;
-  font-size: 1.1rem;
-  line-height: 1.7;
-}
-
-.blog-index .hero-blog {
-  background:
-    linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.15)),
-    url("/static/img/hero_day.jpg");
-}
-/* Keep this, it’s perfect logic */
-.post-cover {
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
+/* Copy zone / output box */
+#output{
+  font-size: 1.05rem;
+  line-height: 1.5;
+  background: #fdfdfd;
+  border: 2px dashed rgba(10,163,110,.45);
   border-radius: 12px;
-}
-
-.post-cover img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: scale 0.5s ease;
-}
-
-.post-card:hover .post-cover img {
-  scale: 1.05; /* Subtle zoom on hover for interactivity */
-}
-
-/* The Glassmorphism Container */
-.glass-card {
-  background: rgba(255, 255, 255, 0.7); /* Translucent white */
-  backdrop-filter: blur(12px);           /* The "frosted" blur effect */
-  -webkit-backdrop-filter: blur(12px);   /* Support for Safari */
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 24px;
-  padding: 30px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease;
-}
-
-.glass-card:hover {
-  transform: translateY(-5px); /* Adds a "living" feel when touched/clicked */
-}
-
-/* Specific styling for the ASL Video Toggle */
-.btn-asl-trigger {
-  background: #10b981;
-  color: white;
-  border-radius: 999px;
-  padding: 12px 24px;
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  border: none;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  padding: 12px;
 }
 
 /* =============================
    10) VIDEO BACKGROUND MODE + GLASS
    ============================= */
+
 /* Full-page video background */
 body.bg-video .bg-video{
   position: fixed;
@@ -845,7 +678,7 @@ body.bg-video .bg-video{
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: -1;
+  z-index: -2;               /* ✅ safer than -1 */
   pointer-events: none;
   filter: brightness(.75);
 }
@@ -860,8 +693,9 @@ body.bg-video .header,
 body.bg-video .footer{
   background: rgba(20,30,40,.60);
   color: #fff;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-color: rgba(255,255,255,.12);
 }
 
 body.bg-video .topnav a{ color:#fff; }
@@ -872,84 +706,16 @@ body.bg-video .topnav a.active{
 }
 
 /* Optional “glass” effect for readability */
-.glass {
+.glass{
   background: rgba(20, 30, 40, 0.55);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.12);  /* ✅ missing before */
   box-shadow: 0 10px 28px rgba(0,0,0,.18);
 }
 
-
-/* =============================
-   11) PAGE HELPERS (Page Hero, Verse Grid)
-   ============================= */
-/* --- Devotion helpers: Theme badge + Yesterday link + Meaning block --- */
-.badge-theme{
-  display:inline-block;
-  padding:6px 10px;
-  border-radius:999px;
-  background:rgba(0,0,0,0.10);
-  margin-top:10px;
-  font-size:0.95rem;
-}
-
-.yday-link{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin: 6px 0 14px;
-}
-
-.yday-link a{
-  text-decoration:none;
-  opacity:0.9;
-}
-
-.yday-link a:hover{
-  opacity:1;
-  text-decoration:underline;
-}
-
-.yday-link .sep{
-  opacity:0.5;
-}
-
-.section-title{
-  margin:18px 0 6px;
-  font-size:1.05rem;
-  font-weight:700;
-}
-
-.meaning-text{ margin-top:0; }
-
-.verse-block{ margin-bottom:6px; }
-.verse-line{ margin:0; }
-
-.page-hero{
-  margin: 0 0 1rem 0;
-  padding:1.25rem 1.5rem;
-  background:#e8f5e9;
-  border-radius:20px;
-  box-shadow:0 8px 24px rgba(0,0,0,.08);
-}
-
-.page-hero h1{margin:0 0 .25rem 0;font-size:2rem}
-.page-hero .subtitle{margin:0;opacity:.8}
-
-.voice-hero h1,
-.voice-hero p,
-.voice-hero .chip {
-  color: #fff;
-}
-
-.voice-hero .chip {
-  background: rgba(255,255,255,.15);
-  border: 1px solid rgba(255,255,255,.25);
-}
-
-/* Verse Grid */
-/* --- Verse Hero Overlay (for Study series pages) --- */
+/* Verse Grid (scoped to avoid collisions with scripture/other pages) */
 .verse-hero{
   border-radius:16px;
   min-height:200px;
@@ -971,9 +737,9 @@ body.bg-video .topnav a.active{
   justify-content:flex-end;
 }
 
-.verse-title{ margin:0; font-weight:800; }
-
-.verse-text{ margin:6px 0 0; opacity:.95; }
+/* ✅ scoped names */
+.verse-hero .verse-title{ margin:0; font-weight:800; }
+.verse-hero .verse-text{ margin:6px 0 0; opacity:.95; }
 
 .verses-grid{
   display:grid;
@@ -981,7 +747,8 @@ body.bg-video .topnav a.active{
   grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
 }
 
-.verse-card{
+/* ✅ scoped card styles */
+.verses-grid .verse-card{
   display:block;
   background:#fff;
   border-radius:16px;
@@ -990,14 +757,14 @@ body.bg-video .topnav a.active{
   text-decoration:none;
 }
 
-.verse-card img{
+.verses-grid .verse-card img{
   width:100%;
   height:340px;
   object-fit:cover;
   display:block;
 }
 
-.verse-card .cap{
+.verses-grid .verse-card .cap{
   padding:.75rem 1rem;
   color:#263238;
 }
@@ -1006,15 +773,76 @@ body.bg-video .topnav a.active{
 /* =============================
    12) MODALS
    ============================= */
-.verse-modal {
-  border: none;
-  border-radius: 16px;
-  max-width: 600px;
-  width: 90%;
-  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+
+/* Dark overlay behind modal (works for <dialog> + custom modals) */
+.modal-backdrop{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  display: none;
+  z-index: 50;
 }
 
-.verse-modal img { width: 100%; border-radius: 10px; }
+.modal-backdrop.is-open{ display: block; }
+
+/* If you're using <dialog class="verse-modal"> */
+.verse-modal{
+  border: none;
+  border-radius: 16px;
+  max-width: 720px;
+  width: min(92vw, 720px);
+  padding: 0;
+  box-shadow: 0 18px 50px rgba(0,0,0,.30);
+  overflow: hidden;
+}
+
+.verse-modal::backdrop{
+  background: rgba(0,0,0,.55);
+}
+
+.verse-modal .modal-hd{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: #0b1220;
+  color: #fff;
+}
+
+.verse-modal .modal-title{
+  margin: 0;
+  font-weight: 900;
+  font-size: 14px;
+  opacity: .92;
+}
+
+.verse-modal .modal-close{
+  border: 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 22px;
+  padding: 6px 10px;
+  border-radius: 12px;
+}
+
+.verse-modal .modal-close:hover{
+  background: rgba(255,255,255,.12);
+}
+
+.verse-modal .modal-bd{
+  padding: 14px;
+  background: #fff;
+}
+
+.verse-modal img{
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  display: block;
+}
 
 
 /* =============================
@@ -1072,92 +900,296 @@ body.bg-video .topnav a.active{
 
 .prayer-form .btn { margin-top: 12px; width: 100%; }
 
+.req-summary { cursor: pointer; list-style: none; }
+.req-summary::-webkit-details-marker { display: none; }
+.req-expanded { margin-top: 10px; padding: 10px; background: #f8fafc; border-radius: 8px; }
+.req-details[open] .req-summary { color: #0f172a; }
 
-/* =============================
-   14) ADMIN STYLES
-   NOTE:
-   These rules came from an inline:
-   <style nonce="{{ csp_nonce() }}"> ... </style>
-   block. Keep them here OR move to admin.css
-   and include on admin pages only.
-   ============================= */
-.admin-list {
+/* Prayer overlay: safer on small screens */
+@media (max-width: 700px){
+  .prayer-hero{ min-height: 78vh; }
+
+  .prayer-overlay{
+    left: 50%;
+    top: auto;
+    bottom: 18px;              /* ✅ anchors overlay */
+    transform: translateX(-50%);
+    width: min(560px, 92vw);
+    padding: 18px;
+  }
+
+/* =========================================
+   UNIFIED ADMIN MANAGEMENT SYSTEM (No Clashes)
+   ========================================= */
+
+:root {
+  --primary: #10b981;       /* Success/Action Green */
+  --sidebar-bg: #1e293b;    /* Deep Navy */
+  --app-bg: #f8fafc;        /* Soft White/Gray */
+  --border: #e2e8f0;        /* Light Dividers */
+  --text-main: #1e293b;     /* High Contrast Text */
+  --text-muted: #64748b;    /* Subtle Secondary Text */
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+/* 1. CORE LAYOUT (APP SHELL) */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-sidebar {
+  width: 260px;
+  background: var(--sidebar-bg);
+  color: white;
+  padding: 30px 20px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-top: 8px;
 }
 
-.admin-verse-row {
+.app-main {
+  flex-grow: 1;
   display: flex;
-  gap: 12px;
-  padding: 8px;
-  border-radius: 8px;
-  background: rgba(15, 23, 42, 0.35);
+  flex-direction: column;
+  background: var(--app-bg);
+  overflow-y: auto;
 }
 
-.admin-verse-row .thumb {
-  width: 72px;
-  height: 72px;
-  flex: 0 0 auto;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #020617;
+.app-container {
+  padding: 30px;
+  max-width: 1400px; /* Limits ultra-wide stretching */
+}
+
+/* 2. TOP NAVIGATION BAR */
+.app-topbar {
+  background: #ffffff;
+  border-bottom: 1px solid var(--border);
+  padding: 15px 35px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.page-title h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.status-tag {
+  font-size: 0.75rem;
+  color: var(--primary);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.status-tag .dot {
+  width: 7px;
+  height: 7px;
+  background: var(--primary);
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+/* 3. KPI / STATS GRID */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.k-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-shadow: var(--card-shadow);
+}
+
+.k-ico {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 1.4rem;
 }
 
-.admin-verse-row .thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.k-label { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin: 0; }
+.k-value { font-size: 1.4rem; font-weight: 900; margin: 0; color: var(--text-main); }
+
+/* KPI Icon Colors */
+.ico-purple { background: #f5f3ff; color: #7c3aed; }
+.ico-orange { background: #fff7ed; color: #ea580c; }
+.ico-blue   { background: #eff6ff; color: #2563eb; }
+.ico-green  { background: #ecfdf5; color: #059669; }
+
+/* 4. WORKSPACE & TOOL CARDS */
+.workspace-layout {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr;
+  gap: 25px;
 }
 
-.thumb-missing {
-  font-size: 0.7rem;
-  color: #9ca3af;
-  text-align: center;
-  padding: 4px;
+.tool-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 25px;
+  overflow: hidden;
 }
 
-.admin-verse-row .info {
-  flex: 1 1 auto;
-  font-size: 0.9rem;
+.tool-header {
+  background: #f8fafc;
+  padding: 18px 25px;
+  border-bottom: 1px solid var(--border);
 }
 
-.small { font-size: 0.8rem; }
-
-.field { margin-bottom: 0.5rem; }
-
-.field input,
-.field textarea,
-.field select {
-  width: 100%;
+.tool-header h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.admin-actions {
-  margin-top: 6px;
+.tool-body {
+  padding: 25px;
+}
+
+/* 5. FORM INPUTS (THE "MANAGEMENT" FEEL) */
+.form-row {
   display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
-.inline-form { display: inline-block; }
-
-.small-field label { font-size: 0.8rem; }
-
-.danger {
-  background: #b91c1c;
-  border-color: #7f1d1d;
+.field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.edit-form {
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid rgba(148, 163, 184, 0.4);
+.flex-2 { flex: 2; }
+
+label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #475569;
 }
 
+input, select, textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  font-size: 0.95rem;
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+input:focus, select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+  outline: none;
+}
+
+/* 6. SWITCHES & PLATFORMS */
+.switch-group {
+  display: flex;
+  gap: 20px;
+  background: #f1f5f9;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+}
+
+.switch-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.btn-main {
+  width: 100%;
+  background: var(--primary);
+  color: #ffffff;
+  border: none;
+  padding: 16px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.1s ease, background 0.2s ease;
+}
+
+.btn-main:hover {
+  background: #059669;
+  transform: translateY(-2px);
+}
+
+/* 7. ACTIVITY FEED STYLE */
+.admin-feed {
+  display: grid;
+  gap: 15px;
+}
+
+.feed-item {
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #f1f5f9;
+  background: #ffffff;
+  transition: background 0.2s;
+}
+
+.feed-item:hover {
+  background: #f8fafc;
+}
+
+.feed-item .t {
+  font-weight: 800;
+  margin: 0 0 4px;
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+.feed-item .s {
+  margin: 0;
+  opacity: 0.6;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* RESPONSIVE BREAKS */
+@media (max-width: 1100px) {
+  .workspace-layout { grid-template-columns: 1fr; }
+  .app-sidebar { width: 80px; padding: 20px 10px; }
+  .sidebar-brand span, .nav-link span { display: none; }
+}
+
+@media (max-width: 768px) {
+  .form-row { flex-direction: column; }
+  .kpi-grid { grid-template-columns: 1fr; }
+}
 
 /* =============================
    15) ABOUT PAGE (SSCM)
@@ -1166,9 +1198,8 @@ body.bg-video .topnav a.active{
 .about-hero{
   position: relative;
   height: 35vh;
-  overflow: hidden; 
+  overflow: hidden;
 }
-
 .about-hero .bg-video{
   position: absolute;
   inset: 0;
@@ -1176,14 +1207,12 @@ body.bg-video .topnav a.active{
   height: 100%;
   object-fit: cover;
 }
-
 .about-hero .overlay{
   position: absolute;
   inset: 0;
   background: rgba(0,0,0,.45);
   text-shadow: 0 2px 10px rgba(0,0,0,.55);
 }
-
 .about-hero .hero-content{
   position: relative;
   z-index: 2;
@@ -1194,7 +1223,6 @@ body.bg-video .topnav a.active{
   color: #fff;
   transform: translateY(-4%);
 }
-
 .about-hero .tagline{
   max-width: 520px;
   margin: .5rem auto 0;
@@ -1206,7 +1234,6 @@ body.bg-video .topnav a.active{
   margin: 0 auto;
   padding: 2.5rem 1.25rem;
 }
-
 .about-content blockquote{
   margin: 1.5rem 0;
   padding-left: 1rem;
@@ -1214,17 +1241,13 @@ body.bg-video .topnav a.active{
   color: var(--muted);
   font-style: italic;
 }
-.section-title{
-  color: var(--primary);
-  font-size: 2.2rem;
+
+/* About section title */
+.section-title {
+  font-size: 1.5rem;
   font-weight: 700;
-  margin-top: 0;
-}
-.section-title{
-  color: var(--primary);
-  font-size: 2.2rem;
-  font-weight: 700;
-  margin-top: 0;
+  color: #2d3436;
+  margin-bottom: 1.25rem;
 }
 
 /* About: Founder photo block */
@@ -1234,7 +1257,6 @@ body.bg-video .topnav a.active{
   align-items:flex-start;
   margin: 18px 0 10px;
 }
-
 .founder-photo{
   width:96px;
   height:96px;
@@ -1245,7 +1267,6 @@ body.bg-video .topnav a.active{
   box-shadow: 0 10px 25px rgba(0,0,0,.12);
   flex: 0 0 auto;
 }
-
 .founder-text{ flex:1; }
 
 @media (max-width: 700px){
@@ -1259,6 +1280,461 @@ body.bg-video .topnav a.active{
 @media (max-width: 600px) {
   .topnav a { padding: 6px 10px; }
   .main { padding: 16px; }
-  .card h3::after { width: 40px; }
   .footer { flex-direction: column; align-items: flex-start; }
+}
+
+/* =========================
+   17) Soul Speaks - Post Page
+   ========================= */
+
+.soulspeaks-post .sp-hero{
+  border-radius: 18px;
+  overflow: hidden;
+  margin: 18px 0 20px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  color: #fff;
+}
+.soulspeaks-post .sp-hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.35));
+}
+.soulspeaks-post .sp-hero-inner{
+  position: relative;
+  z-index: 1;
+  padding: 26px;
+  max-width: 1000px;
+}
+
+.soulspeaks-post .sp-badge{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  background: rgba(255,255,255,.16);
+  border: 1px solid rgba(255,255,255,.18);
+  font-weight: 800;
+  letter-spacing: .3px;
+  margin-bottom: 12px;
+}
+
+.soulspeaks-post .sp-title{
+  margin: 0 0 8px;
+  font-weight: 900;
+  font-size: clamp(26px, 3vw, 40px);
+}
+
+.soulspeaks-post .sp-meta{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  opacity:.92;
+  font-size: 14px;
+}
+.soulspeaks-post .sp-meta .dot{ opacity:.6; }
+
+.soulspeaks-post .sp-chips{
+  margin-top: 12px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.soulspeaks-post .sp-chip{
+  display:inline-flex;
+  align-items:center;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.22);
+  border: 1px solid rgba(255,255,255,.18);
+  color:#fff;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.soulspeaks-post .sp-actions{ margin-top: 14px; display:flex; gap:10px; flex-wrap:wrap; }
+
+/* layout */
+.soulspeaks-post .sp-grid{
+  display:grid;
+  grid-template-columns: 320px 1fr;
+  gap: 18px;
+  align-items:start;
+}
+@media (max-width: 980px){
+  .soulspeaks-post .sp-grid{ grid-template-columns: 1fr; }
+}
+
+/* sidebar */
+.soulspeaks-post .sp-side-card{ padding: 16px; }
+.soulspeaks-post .sp-side-media{ margin-bottom: 12px; }
+.soulspeaks-post .sp-side-img{
+  width:100%;
+  height:auto;
+  display:block;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,.08);
+}
+.soulspeaks-post .sp-side-placeholder{
+  height: 180px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(16,185,129,.08);
+  border: 1px solid rgba(16,185,129,.18);
+  font-weight: 900;
+  color: var(--brand-dark);
+}
+.soulspeaks-post .sp-side-title{ margin: 12px 0 6px; font-weight: 900; }
+.soulspeaks-post .sp-side-sub{ margin: 0 0 12px; font-size: 14px; }
+
+.soulspeaks-post .sp-connect{ display:grid; gap: 10px; }
+
+/* heart bullets */
+.soulspeaks-post .sp-section{
+  padding: 14px 14px 14px 44px;
+  position: relative;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.08);
+  box-shadow: 0 10px 22px rgba(0,0,0,.04);
+  margin-bottom: 12px;
+}
+.soulspeaks-post .sp-section::before{
+  content: "❤";
+  position:absolute;
+  left: 14px;
+  top: 16px;
+  font-size: 18px;
+  color: var(--brand);
+  opacity: .95;
+}
+.soulspeaks-post .sp-h2{ margin: 0 0 6px; font-weight: 900; font-size: 18px; }
+
+.soulspeaks-post .sp-callout{
+  margin: 14px 0;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(16,185,129,.08);
+  border: 1px solid rgba(16,185,129,.18);
+}
+.soulspeaks-post .sp-callout-title{ font-weight: 900; margin-bottom: 4px; }
+.soulspeaks-post .sp-callout-text{ font-weight: 800; }
+
+.soulspeaks-post .sp-scripture{
+  margin-top: 14px;
+  padding: 16px;
+  border-radius: 16px;
+  background: #0b1220;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.12);
+}
+.soulspeaks-post .sp-scripture-label{ font-weight: 900; opacity: .95; margin-bottom: 8px; }
+.soulspeaks-post .sp-scripture-ref{ font-weight: 900; margin-bottom: 10px; opacity: .92; }
+.soulspeaks-post .sp-scripture-quote{
+  margin: 0;
+  padding: 12px 14px;
+  border-left: 4px solid var(--brand);
+  background: rgba(255,255,255,.06);
+  border-radius: 14px;
+}
+.soulspeaks-post .sp-scripture-cite{ margin-top: 10px; text-align:right; opacity: .85; font-weight: 800; }
+
+.soulspeaks-post .sp-reflection{ padding: 16px; margin-top: 14px; }
+.soulspeaks-post .sp-h3{ margin: 0 0 8px; font-weight: 900; }
+
+.soulspeaks-post .sp-list{ margin: 10px 0 0; padding-left: 18px; }
+.soulspeaks-post .sp-list li{ margin: 6px 0; }
+
+.soulspeaks-post .sp-tags{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(0,0,0,.08);
+}
+.soulspeaks-post .sp-tag{
+  display:inline-flex;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.10);
+  background: #fff;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.soulspeaks-post .sp-bottom{ margin-top: 14px; }
+
+/* =============================
+   18) BLOG HELPERS (Scoped)
+   Applies ONLY to blog pages
+   ============================= */
+
+/* Blog hero image (inside blog posts) */
+.soulspeaks-post .blog-hero{
+  width: 100%;
+  max-width: 1000px;
+  border-radius: 24px;
+  display: block;
+  margin: 0 auto 24px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.08);
+}
+
+/* Scripture card styling ONLY in blog posts */
+.soulspeaks-post .sp-verse-card{
+  border: 1px solid rgba(16,185,129,.20);
+  border-radius: 20px;
+  padding: 24px;
+  margin: 32px 0;
+  background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+  position: relative;
+  overflow: hidden;
+}
+.soulspeaks-post .sp-verse-card::before{
+  content: "🤟";
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  font-size: 1.5rem;
+  opacity: 0.18;
+}
+.soulspeaks-post .sp-verse-title{
+  font-weight: 900;
+  color: var(--brand-dark);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+.soulspeaks-post .sp-verse-text{
+  font-size: 1.15rem;
+  line-height: 1.65;
+  color: #1f2937;
+  font-family: Georgia, serif;
+}
+
+/* Reflection block (blog posts) */
+.soulspeaks-post .blog-block{
+  margin: 32px 0;
+  padding: 24px;
+  border-left: 4px solid var(--brand);
+  background: rgba(16,185,129,.04);
+  border-radius: 0 16px 16px 0;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+/* Blog index card cover (safe, doesn’t affect other pages) */
+.blog-index .post-cover{
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 12px;
+}
+.blog-index .post-cover img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .5s ease;
+}
+.blog-index .post-card:hover .post-cover img{
+  transform: scale(1.05);
+}
+
+/* Hover Effect */
+.chip-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  background-color: #ffffff;
+}
+
+/* Individual Color Accents on Hover */
+.chip-about:hover { border-color: #3498db; color: #3498db; }   /* Blue */
+.chip-study:hover { border-color: #2ecc71; color: #2ecc71; }   /* Green */
+.chip-verses:hover { border-color: #9b59b6; color: #9b59b6; }  /* Purple/Pink */
+.chip-volunteer:hover { border-color: #f1c40f; color: #f39c12; } /* Gold */
+
+/* Glass card (optional utility) */
+.glass-card{
+  background: rgba(255,255,255,.70);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.30);
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.05);
+  transition: transform .3s ease;
+}
+.glass-card:hover{
+  transform: translateY(-5px);
+}
+
+/* ASL toggle button (utility) */
+.btn-asl-trigger{
+  background: var(--brand);
+  color: #fff;
+  border-radius: 999px;
+  padding: 12px 24px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 4px 15px rgba(16,185,129,.30);
+}
+
+
+/* ===============================
+   19) Home Highlight (Study + Flash)
+   Scoped to HOME only
+   =============================== */
+
+.home-page .home-grid{
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
+  margin: 40px 0;
+}
+.home-page .home-card{
+  flex: 1;
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.06);
+  display: flex;
+  flex-direction: column;
+}
+.home-page .card-header{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 1.25rem;
+  margin-bottom: 20px;
+  color: #2d3436;
+}
+.home-page .card-inner-layout{
+  display: flex;
+  gap: 20px;
+  height: 100%;
+}
+.home-page .card-img{
+  width: 45%;
+  max-width: 180px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0,0,0,.10);
+}
+.home-page .card-text-box{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.home-page .card-subtitle{
+  font-size: 1.05rem;
+  margin-bottom: 8px;
+}
+.home-page .card-description{
+  font-size: 0.95rem;
+  color: #636e72;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* badges */
+.badge-live, .badge-new{
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  vertical-align: middle;
+  margin-left: 8px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  display: inline-block;
+  position: relative;
+  top: -2px;
+  color: white;
+}
+}
+.badge-live{
+  background: #e74c3c;
+  color: #fff;
+}
+.badge-new{
+  background: #f1c40f;
+  color: #2d3436;
+}
+.badge-live::after{
+  content: '';
+  position: absolute;
+  width: 100%; height: 100%;
+  top: 0; left: 0;
+  background: inherit;
+  border-radius: inherit;
+  z-index: -1;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse{
+  0% { transform: scale(1); opacity: .6; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+@media (max-width: 800px){
+  .home-page .home-grid{ flex-direction: column; }
+  .home-page .card-inner-layout{ flex-direction: column; }
+  .home-page .card-img{ width: 100%; max-width: none; }
+}
+
+/* Header Alignment: Ensures both titles start at the left */
+.card-header {
+  text-align: left;
+  font-size: 1.25rem;
+  margin-bottom: 20px;
+  color: #2d3436;
+}
+
+/* The side-by-side layout inside the card */
+.card-inner-layout {
+  display: flex;
+  gap: 20px;
+  height: 100%; /* Ensures internal content fills the card */
+}
+
+.card-img {
+  width: 45%; 
+  max-width: 180px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Enhancement: Subtle shadow */
+}
+
+/* Text Box alignment */
+.card-text-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.card-subtitle {
+  font-size: 1.05rem;
+  margin-bottom: 8px;
+}
+
+.card-description {
+  font-size: 0.95rem;
+  color: #636e72;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* Responsive: Stacks vertically on mobile */
+@media (max-width: 800px) {
+  .home-grid { flex-direction: column; }
+  .card-inner-layout { flex-direction: column; }
+  .card-img { width: 100%; max-width: none; }
 }

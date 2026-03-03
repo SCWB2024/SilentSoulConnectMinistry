@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block title %}Faith Without Noise — Soul Speaks{% endblock %}
+
+{% block content %}
+<section class="container page-wrap soulspeaks-post">
+
+  <header class="sp-hero">
+    <div class="sp-hero-inner">
+      <div class="sp-badge">Soul Speaks</div>
+      <h1 class="sp-title">Faith Without Noise</h1>
+
+      <div class="sp-meta">
+        <span>March 2, 2026</span>
+        <span class="dot">•</span>
+        <span>Blog 3</span>
+        <span class="dot">•</span>
+        <span>Focus • Courage • Grace</span>
+      </div>
+
+      <div class="sp-chips">
+        <span class="sp-chip">🌊 Visual Focus</span>
+        <span class="sp-chip">🧠 Simple English</span>
+        <span class="sp-chip">🤟 Deaf Perspective</span>
+      </div>
+
+      <div class="sp-actions">
+        <a class="btn btn-ghost" href="{{ url_for('blog_index') }}">← Back to Blog</a>
+        <a class="btn btn-primary" href="{{ url_for('home') }}">Home</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="sp-grid">
+
+    <aside class="sp-side">
+      <div class="card soft sp-side-card">
+        <div class="sp-side-media">
+          {% if post and post.image %}
+            <img class="sp-side-img" src="{{ url_for('static', filename=post.image) }}" alt="{{ post.title }}"  loading="lazy">
+        {% else %}
+            <div class="sp-side-img sp-side-placeholder">Steady Focus</div>
+        {% endif %}
+        </div>
+
+        <h3 class="sp-side-title">Stay Connected</h3>
+        <p class="muted sp-side-sub">How does this story speak to you? Join our video chat or message us.</p>
+
+        <div class="sp-connect">
+          <a class="btn btn-wide btn-primary"
+             href="{{ SOCIAL_LINKS.get('whatsapp', SITE_JOIN_URL) }}"
+             target="_blank" rel="noopener">💬 WhatsApp</a>
+
+          <a class="btn btn-wide"
+             href="{{ SOCIAL_LINKS.get('facebook', '#') }}"
+             target="_blank" rel="noopener">📘 Facebook Community</a>
+        </div>
+      </div>
+    </aside>
+
+    <main class="sp-main">
+
+      <section class="sp-section">
+        <h2 class="sp-h2">The Power of Focus</h2>
+        <p>
+          The story of Peter walking on the water is often told as a lesson about fear. But when we look at it through 
+          the lens of silence, it reveals something deeper: <strong>the power of focus in a noisy world.</strong> 
+          Peter stepped out of the boat because his eyes were fixed on Jesus. As long as his focus remained steady, 
+          the water held him. Faith did not require calm conditions; it required visual attention.
+        </p>
+      </section>
+
+      <section class="sp-section">
+        <h2 class="sp-h2">Distraction vs. Direction</h2>
+        <p>
+          When Peter noticed the wind and the waves, his focus shifted. In that moment, the "noise" of the storm 
+          became more real to him than the call that brought him forward. Fear entered only when distraction 
+          replaced his visual connection with Christ. 
+        </p>
+      </section>
+
+      <div class="sp-callout">
+        <div class="sp-callout-title">The Deaf Perspective</div>
+        <div class="sp-callout-text">
+          Imagine if Peter were Deaf. The wind would still blow. The waves would still rise. But the <em>noise</em> 
+          would not command his attention. His eyes would remain on Jesus, undisturbed by the chaos.
+        </div>
+      </div>
+
+      <section class="sp-section">
+        <h2 class="sp-h2">Grace Meets Weakness</h2>
+        <p>
+          This story reminds us that faith does not fail because God moves away, but because our focus moves elsewhere. 
+          The world is filled with "noise"—pressure, fear, and opinions—yet God still calls us forward with a 
+          steady presence. Even when we begin to sink, Jesus reachs out immediately. Grace meets us in our 
+          moments of distraction.
+        </p>
+      </section>
+
+      <aside class="sp-scripture">
+        <div class="sp-scripture-label">📖 Scripture Anchor</div>
+        <div class="sp-scripture-ref">Matthew 14:30–31</div>
+        <blockquote class="sp-scripture-quote">
+          “But when he saw the wind, he was afraid and, beginning to sink, cried out, ‘Lord, save me!’ Immediately Jesus reached out His hand and caught him.”
+        </blockquote>
+        <div class="sp-scripture-cite">— The Bible</div>
+      </aside>
+
+      <section class="sp-reflection card soft">
+        <h3 class="sp-h3">Community Reflection</h3>
+        <p class="muted">Faith does not require silence around us; it requires stillness within us.</p>
+        <ul class="sp-list">
+          <li><strong>Identify the "Noise":</strong> What is the loudest distraction in your life right now (fear, work, opinions)?</li>
+          <li><strong>Visual Prayer:</strong> How can you practice "fixing your eyes" on Jesus today without using spoken words?</li>
+        </ul>
+        <p class="muted" style="margin-top: 1rem; font-size: 0.9em;">
+          <em>We invite you to share a video of your reflection in our WhatsApp group. Let's encourage each other!</em>
+        </p>
+      </section>
+
+      <div class="sp-tags">
+        <span class="sp-tag">Peter</span>
+        <span class="sp-tag">Focus</span>
+        <span class="sp-tag">Overcoming Fear</span>
+        <span class="sp-tag">Visual Faith</span>
+      </div>
+
+      <div class="sp-bottom">
+        <a class="btn btn-ghost" href="{{ url_for('blog_index') }}">← Back to Blog</a>
+      </div>
+
+    </main>
+  </div>
+</section>
+{% endblock %}

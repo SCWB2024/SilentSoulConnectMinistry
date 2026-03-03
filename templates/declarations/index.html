@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+{% block title %}Declarations{% endblock %}
+
+{% block content %}
+<section class="container page-wrap declarations-page">
+  <header class="page-header">
+    <h1>Declarations</h1>
+    <p class="muted">A–Z Affirmations — In the Eyes of God.</p>
+  </header>
+
+  <a href="{{ url_for('anchor') }}" class="muted">← Back to Anchor</a>
+  
+ 
+  <!-- GRID -->
+  <div class="decl-grid">
+    {% for d in declarations %}
+      {% set rel = (d.img or 'img/declarations/default.jpg') | replace('static/', '') %}
+      {% set thumb_src = url_for('static', filename=rel) %}
+
+      <button
+        type="button"
+        class="decl-thumb"
+        data-index="{{ d.i }}"
+        data-slug="{{ d.slug }}"
+        data-img="{{ thumb_src }}"
+        aria-label="Open {{ d.title }}"
+      >
+        <img
+          src="{{ thumb_src }}"
+          alt="{{ d.title }}"
+          loading="lazy"
+          onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/declarations/default.jpg') }}';"
+        />
+      </button>
+    {% endfor %}
+  </div>
+  
+  <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;">
+  <a class="btn" href="{{ url_for('static', filename='downloads/affirmations_eyes_of_god.pdf') }}" download>
+    📥 Download Declarations PDF
+  </a>
+  
+</div>
+
+  <!-- FULL SCREEN MODAL -->
+  <div class="decl-modal" id="declModal" aria-hidden="true">
+    <div class="decl-modal-inner" role="dialog" aria-modal="true">
+      <button class="decl-close" id="declClose" aria-label="Close">×</button>
+
+      <div class="decl-modal-body">
+        <img id="declFullImg" alt="Declaration" />
+      </div>
+
+      <div class="decl-modal-actions">
+        <button class="btn btn-outline" id="declPrev">← Prev</button>
+
+        <div class="decl-actions-right">
+          <button class="btn btn-outline" id="declCopy">Copy Link</button>
+          <button class="btn" id="declShare">Share</button>
+        </div>
+
+        <button class="btn btn-outline" id="declNext">Next →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .decl-hero{
+  border-radius:20px;
+  overflow:hidden;
+  margin-bottom:18px;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.65), rgba(0,0,0,.15)),
+    url("{{ url_for('static', filename='img/hero/declarations_hero.jpg') }}");
+  background-size:cover;
+  background-position:center;
+  min-height:220px;
+  display:flex;
+  align-items:flex-end;
+}
+.decl-hero-inner{
+  padding:18px 18px 20px;
+  color:#fff;
+}
+.decl-hero-badge{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.15);
+  backdrop-filter: blur(6px);
+  font-weight:600;
+  margin-bottom:8px;
+}
+.decl-hero-title{ margin:0; font-size:34px; }
+.decl-hero-subtitle{ margin:8px 0 0; opacity:.92; }
+  .decl-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:14px;
+    margin-top:16px;
+  }
+  .decl-thumb{
+    border:0; padding:0; background:transparent; cursor:pointer;
+  }
+  .decl-thumb img{
+    width:100%;
+    border-radius:16px;
+    box-shadow:0 8px 18px rgba(0,0,0,.08);
+  }
+
+  .decl-modal{ position:fixed; inset:0; background:rgba(0,0,0,.75); display:none; }
+  .decl-modal[aria-hidden="false"]{ display:block; }
+  .decl-modal-inner{
+    position:absolute;
+    inset:24px;
+    background:#0b1220;
+    border-radius:18px;
+    padding:14px;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;              /* IMPORTANT */
+ }
+  .decl-close{
+    align-self:flex-end; font-size:28px; line-height:28px;
+    background:transparent; color:#fff; border:0; cursor:pointer;
+    padding:6px 10px;
+  }
+  .decl-modal-body{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:10px;
+    overflow:auto;                /* IMPORTANT: body scrolls if needed */
+  }
+
+   #declFullImg{
+     max-width:100%;
+     max-height:calc(100vh - 180px);  /* IMPORTANT */
+     height:auto;
+     width:auto;
+     border-radius:16px;
+     background:#111827;
+  }
+
+.decl-modal-actions{
+  flex:0 0 auto;
+  position:sticky;
+  bottom:0;
+  background:#0b1220;
+  padding:10px 0 0;
+}
+
+  .decl-actions-right{ display:flex; gap:10px; }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+  const thumbs = Array.from(document.querySelectorAll(".decl-thumb"));
+  const modal = document.getElementById("declModal");
+  const closeBtn = document.getElementById("declClose");
+  const imgEl = document.getElementById("declFullImg");
+  const prevBtn = document.getElementById("declPrev");
+  const nextBtn = document.getElementById("declNext");
+  const copyBtn = document.getElementById("declCopy");
+  const shareBtn = document.getElementById("declShare");
+
+  let currentIndex = 0;
+
+  function openModal(index){
+    currentIndex = index;
+    const t = thumbs[currentIndex];
+    imgEl.src = t.dataset.img;
+
+    modal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal(){
+    modal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+
+  function prev(){
+    if(currentIndex > 0){
+      openModal(currentIndex - 1);
+    }
+  }
+
+  function next(){
+    if(currentIndex < thumbs.length - 1){
+      openModal(currentIndex + 1);
+    }
+  }
+
+  thumbs.forEach((btn, index) => {
+    btn.addEventListener("click", () => openModal(index));
+  });
+
+  closeBtn.addEventListener("click", closeModal);
+  prevBtn.addEventListener("click", prev);
+  nextBtn.addEventListener("click", next);
+
+});
+</script>
+
+{% endblock %}

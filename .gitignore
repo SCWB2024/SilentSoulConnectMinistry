@@ -16,6 +16,7 @@ __pycache__/
 .idea/
 
 # --- Logs & Temp Files ---
+logs/
 *.log
 *.bak
 
@@ -23,24 +24,7 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# Allow SoulStart static assets (must unignore folders first)
-!soulstart/static/
-!soulstart/static/**
-
-# --- SoulStart static assets (tracked) ---
-!soulstart/static/css/
-!soulstart/static/css/**
-
-!soulstart/static/img/
-!soulstart/static/img/**
-
-!soulstart/static/img/verses/
-!soulstart/static/img/verses/**
-
-!soulstart/static/img/videos/
-!soulstart/static/img/videos/**
-
-# Ignore runtime / user-generated files
+# --- Ignore runtime / user-generated files ---
 soulstart/static/uploads/
 soulstart/static/tmp/
 
@@ -48,23 +32,11 @@ soulstart/static/tmp/
 check_env.py
 video_sunset_sign.py
 
-!soulstart/static/img/blog/soulspeaks/**
-!soulstart/static/img/icons/**
-
-!soulstart/static/img/studies/**
-
 # --- Private ---
 private/
-
-logs/*.log
-
 stash_changes.txt*
 
-*old.html
-*.jpg
-*.png
-*.mp4
-static/
-img/
-icons/
-blog/
+# Virtual environment inside soulstart folder
+soulstart/Lib/
+soulstart/Scripts/
+soulstart/pyvenv.cfg

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Anchor{% endblock %}
+
+{% block content %}
+<section class="hero hero-anchor">
+  <div class="hero-inner">
+    <div class="hero-badge">⚓ Anchor</div>
+    <h1 class="hero-title">Rooted. Steady. Unshaken.</h1>
+    <p class="hero-subtitle">
+      God’s Word anchors your heart. Identity anchored in truth.
+    </p>
+  </div>
+</section>
+
+  <div class="anchor-grid">
+    <a class="anchor-card" href="{{ url_for('verses') }}">
+      <div class="anchor-icon">📖</div>
+      <h3>Verses</h3>
+      <p>Daily scripture library to strengthen your foundation.</p>
+    </a>
+
+    <a class="anchor-card" href="{{ url_for('declarations') }}">
+      <div class="anchor-icon">🟦</div>
+      <h3>Declarations</h3>
+      <p>A–Z affirmations grounded in God's truth.</p>
+    </a>
+  </div>
+</section>
+
+<style>
+.anchor-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:18px;
+  margin-top:24px;
+}
+
+.anchor-card{
+  display:block;
+  padding:24px;
+  border-radius:18px;
+  background:#ffffff;
+  box-shadow:0 10px 24px rgba(0,0,0,.08);
+  text-decoration:none;
+  color:inherit;
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+
+.anchor-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 14px 32px rgba(0,0,0,.12);
+}
+
+.anchor-icon{
+  font-size:32px;
+  margin-bottom:10px;
+}
+
+.anchor-card h3{
+  margin:0 0 6px;
+}
+
+.anchor-card p{
+  margin:0;
+  opacity:.75;
+}
+</style>
+
+{% endblock %}

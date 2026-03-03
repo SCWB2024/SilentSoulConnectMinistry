@@ -11,11 +11,60 @@
     <h1> FIND YOUR RHYTHM — Come, all who are thirsty.</h1>
     <p> Before sunrise I call to you for help; I place my hope in your promise. ~Psalms 119:147 GNT~</p>
 
-  <!-- Deaf-first quick scan -->
+      <!-- Deaf-first quick scan -->
 <div class="chip-row hero-chips" style="margin: 12px 0 0;">
   <span class="chip" style="pointer-events:none;">🤟 Deaf-friendly</span>
   <span class="chip" style="pointer-events:none;">🧠 Simple English</span>
   <span class="chip" style="pointer-events:none;">🤍 Inclusive Community</span>
+</div>
+
+</section>
+<section class="container page-wrap home-highlight">
+
+ <div class="home-grid">
+  <div class="home-card">
+    <h3 class="card-header">
+      📖 Weekly Bible Study 
+      <span class="badge-live">LIVE</span>
+    </h3>
+    
+    <div class="card-inner-layout">
+      <img src="{{ url_for('static', filename='img/promo/bible_study.png') }}" 
+           alt="Bible Study" class="card-img">
+
+      <div class="card-text-box">
+        <p class="card-subtitle"><strong>Sundays • 7PM EST</strong></p>
+        <p class="card-description">
+          Join our inclusive community for spiritual encouragement and restful living.
+        </p>
+        <a class="btn btn-primary" href="https://zoom.us/j/88914147780" target="_blank">
+          🔗 Join via Zoom
+        </a>
+      </div>
+    </div>
+  </div>
+
+ <div class="home-card">
+    <h3 class="card-header">
+      🌿 March Theme
+      <span class="badge-new">NEW</span>
+    </h3>
+    
+    <div class="card-inner-layout">
+      <img src="{{ url_for('static', filename='img/promo/march_theme.png') }}" 
+           alt="March Theme" class="card-img">
+
+      <div class="card-text-box">
+        <p class="card-subtitle"><strong>Courage in Quietness.</strong></p>
+        <p class="card-description">
+          Strength is not always loud. Sometimes it is steady, rooted, and faithful.
+        </p>
+        <a class="btn btn-outline" href="{{ url_for('blog_index') }}">
+          Explore This Month
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
 
 </section>
@@ -64,15 +113,13 @@
 
   </div>
 </section>
-
-<!-- QUICK LINKS -->
-<section style="margin-top: 2rem;">
-  <h2>Quick links</h2>
+<section class="quick-links-section">
+  <h2 class="section-title">Quick links</h2>
   <div class="quick-actions">
-    <a href="{{ url_for('about') }}" class="chip-link">ℹ️ About SSCM</a>
-    <a href="{{ url_for('study_index') }}" class="chip-link">📚 Study Hub</a>
-    <a href="{{ url_for('verses') }}" class="chip-link">✉️ Verses</a>
-    <a href="{{ url_for('volunteer') }}" class="chip-link">🤝 Volunteer</a>
+    <a href="{{ url_for('about') }}" class="chip-link chip-about">ℹ️ About SSCM</a>
+    <a href="{{ url_for('study_index') }}" class="chip-link chip-study">📚 Study Hub</a>
+    <a href="{{ url_for('verses') }}" class="chip-link chip-verses">✉️ Verses</a>
+    <a href="{{ url_for('volunteer') }}" class="chip-link chip-volunteer">🤝 Volunteer</a>
   </div>
 </section>
 

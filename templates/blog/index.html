@@ -15,28 +15,23 @@
         Gentle, God-centered reflections designed for Deaf-friendly clarity and calm focus.
       </p>
 
-<div class="hero-actions">
-  {% if posts and posts|length > 0 %}
-    <a class="btn btn-primary" href="{{ url_for('blog_post', slug=posts[0].slug) }}">
-      Read Latest
-    </a>
-  {% else %}
-    <a class="btn btn-primary" href="{{ url_for('blog_index') }}">
-      View Blog
-    </a>
-    
-  {% endif %}
-</div>
-
+      <div class="hero-actions">
+        {% if posts and posts|length > 0 %}
+          <a class="btn btn-primary" href="{{ url_for('blog_post', slug=posts[0].slug) }}">Read Latest</a>
+        {% else %}
+          <a class="btn btn-primary" href="{{ url_for('blog_index') }}">View Blog</a>
+        {% endif %}
+      </div>
     </div>
   </header>
 
   <div class="layout-grid">
 
-    <!-- LEFT: Quick Links (column) -->
+    <!-- LEFT: Quick Links -->
     <aside class="side-col">
       <div class="card soft">
         <h3 class="card-title">Quick Links</h3>
+
         <div class="pill-row">
           <a class="pill" href="{{ url_for('today') }}">Today</a>
           <a class="pill" href="{{ url_for('devotion_study') }}">Devotion</a>
@@ -47,17 +42,11 @@
 
         <hr class="sep">
 
-          <h4 class="small-title">Connect</h4>
+        <h4 class="small-title">Connect</h4>
         <div class="stack">
-          <a class="btn btn-wide" href="{{ SOCIAL_LINKS.get('facebook', '#') }}" target="_blank" rel="noopener">
-            Facebook
-          </a>
-          <a class="btn btn-wide" href="{{ SOCIAL_LINKS.get('linkedin', '#') }}" target="_blank" rel="noopener">
-            LinkedIn
-          </a>
-          <a class="btn btn-wide" href="{{ SOCIAL_LINKS.get('whatsapp', SITE_JOIN_URL) }}" target="_blank" rel="noopener">
-            WhatsApp Group
-          </a>
+          <a class="btn btn-wide" href="{{ SOCIAL_LINKS.get('facebook', '#') }}" target="_blank" rel="noopener">Facebook</a>
+          <a class="btn btn-wide" href="{{ SOCIAL_LINKS.get('linkedin', '#') }}" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="btn btn-wide" href="{{ SOCIAL_LINKS.get('whatsapp', SITE_JOIN_URL) }}" target="_blank" rel="noopener">WhatsApp Group</a>
         </div>
 
         <div class="share-row">
@@ -91,9 +80,7 @@
             <select id="month" name="month" class="select">
               <option value="">All months</option>
               {% for m in months %}
-                <option value="{{ m.value }}" {% if m.value == selected_month %}selected{% endif %}>
-                  {{ m.label }}
-                </option>
+                <option value="{{ m.value }}" {% if m.value == selected_month %}selected{% endif %}>{{ m.label }}</option>
               {% endfor %}
             </select>
 
@@ -109,7 +96,7 @@
           <div class="banner-kicker">Monthly theme</div>
           <div class="banner-title">{{ month_theme.title }}</div>
           {% if month_theme.subtitle %}
-          <div class="banner-subtitle">{{ month_theme.subtitle }}</div>
+            <div class="banner-subtitle">{{ month_theme.subtitle }}</div>
           {% endif %}
         </div>
       </div>
@@ -120,14 +107,20 @@
         {% if posts and posts|length > 0 %}
           {% for post in posts %}
           <article class="post-card">
-            <a class="post-cover" href="{{ url_for('blog_post', slug=post.slug) }}">
-          {% if post.image %}
-            <img src="{{ url_for('static', filename='img/soulspeaks/' ~ post.image) }}" alt="{{ post.title }}">
-          {% else %}
-            <img src="{{ url_for('static', filename='img/soulspeaks/default.jpg') }}" alt="Soul Speaks reflection">
-          {% endif %}
-           </a>
 
+        {# ✅ safe image handling per post (works with .post-cover CSS) #}
+        {% set default_rel = 'img/blog/soulspeaks/default.jpg' %}
+        {% set default_img = url_for('static', filename=default_rel) %}
+        {% set img_rel = (post.image or default_rel) %}
+
+        <div class="post-cover">
+          <img
+            src="{{ url_for('static', filename=img_rel) }}"
+            alt="{{ post.title }}"
+            loading="lazy"
+            onerror="this.onerror=null;this.src='{{ default_img }}';"
+          />
+        </div>
             <div class="post-body">
               <div class="post-meta">
                 <span class="chip">{{ post.month_label }}</span>
@@ -142,20 +135,12 @@
               {% if post.excerpt %}
                 <p class="post-excerpt">{{ post.excerpt }}</p>
               {% else %}
-                <p class="post-excerpt">
-                  A gentle reflection to help you stay rooted in God when life feels loud.
-                </p>
+                <p class="post-excerpt">A gentle reflection to help you stay rooted in God when life feels loud.</p>
               {% endif %}
 
               <div class="post-actions">
                 <a class="btn btn-primary" href="{{ url_for('blog_post', slug=post.slug) }}">Read</a>
 
-              <div class="post-nav">
-                <a class="btn btn-wide" href="{{ url_for('blog_index') }}">
-                 ← Back to Soul Speaks
-                </a>
-            </div>
-                <!-- Share site = copy link (replaces footer-right buttons) -->
                 <button class="btn btn-wide"
                         type="button"
                         onclick="navigator.clipboard.writeText('{{ SITE_URL.rstrip('/') }}{{ url_for('blog_post', slug=post.slug) }}')">
@@ -163,6 +148,7 @@
                 </button>
               </div>
             </div>
+
           </article>
           {% endfor %}
         {% else %}
@@ -184,7 +170,7 @@
   overflow: hidden;
   margin: 18px 0 20px;
   background: linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.35)),
-            url("{{ url_for('static', filename='img/soulspeaks/hero_day.jpg') }}");
+            url("{{ url_for('static', filename='img/blog/soulspeaks/hero_day.jpg') }}");
   background-size: cover;
   background-position: center;
   color: #fff;
@@ -220,7 +206,6 @@
   text-decoration: none;
 }
 .stack{ display:grid; gap: 10px; }
-.hint{ margin-top: 12px; font-size: 13px; opacity: .8; }
 .share-row{ margin-top: 12px; }
 
 .toolbar{
@@ -247,13 +232,9 @@
 }
 .post-card{ border-radius: 16px; overflow:hidden; border: 1px solid rgba(0,0,0,.08); background:#fff; }
 .post-cover{ display:block; aspect-ratio: 16/10; background: rgba(0,0,0,.04); }
-.post-cover img{ width:40%; height:40%; object-fit: cover; display:block; }
-.cover-placeholder{
-  height:60%; display:flex; align-items:center; justify-content:center;
-  font-weight: 800; opacity:.7;
-}
+.post-cover img{ width:100%; height:100%; object-fit: cover; display:block; }
 .post-body{ padding: 14px; }
-.post-meta{ display:flex; gap: 8px; align-items:center; font-size: 13px; opacity:.8; }
+.post-meta{ display:flex; gap: 8px; align-items:center; font-size: 13px; opacity: .8; }
 .chip{
   display:inline-block; padding: 4px 10px; border-radius: 999px;
   background: rgba(16, 185, 129, .10);
@@ -273,4 +254,23 @@
 .empty{ padding: 18px; text-align:center; }
 .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
 </style>
+
+<style>
+/* ... your existing CSS ... */
+
+.sp-side-img{
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 16px;
+}
+
+@supports (aspect-ratio: 1) {
+  .sp-side-img{
+    aspect-ratio: 16/10;
+    object-fit: cover;
+  }
+}
+</style>
+
 {% endblock %}

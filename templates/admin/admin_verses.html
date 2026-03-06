@@ -1,118 +1,231 @@
-{# ... Hero Section remains the same ... #}
+{# templates/admin/verses.html #}
+{% extends "base.html" %}
+{% block title %}Admin — Verse Cards{% endblock %}
 
-<div class="card admin-card">
-  <h3>📖 Add New Verse Card</h3>
-  {# Error/Success messages remain the same #}
+{% block content %}
+<section class="container page-wrap admin-verses">
 
-  <form method="post" novalidate id="add-verse-form">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <input type="hidden" name="action" value="add">
+  <div class="admin-grid">
 
-    <div class="field" style="display: flex; gap: 15px; align-items: flex-start;">
-      <div style="flex: 1;">
-        <label for="image">Choose Image</label>
-        <select id="image-select" name="image" class="form-select" onchange="previewImage(this, 'add-preview')">
-          <option value="">-- Select an image --</option>
-          {% for img in image_files %}
-            <option value="{{ img }}">{{ img }}</option>
-          {% endfor %}
-        </select>
-        <input name="image" type="text" placeholder="Or manual filename.jpg" style="margin-top: 8px;">
-      </div>
-      {# Live Preview for Deaf-friendly visual confirmation #}
-      <div id="add-preview" class="thumb" style="width: 100px; height: 100px; border: 2px dashed #444;">
-        <span class="muted small" style="display:block; text-align:center; padding-top:35px;">Preview</span>
-      </div>
-    </div>
+    <!-- LEFT: COLLECTION (TOP) -->
+    <div class="card admin-card">
+      <div class="card-head">
+        <h3 style="margin:0;">📚 Verse Collection</h3>
 
-    <div class="field">
-      <label for="ref">📖 Scripture Reference</label>
-      <input id="ref" name="ref" type="text" required placeholder="Isaiah 60:1 (NLV)">
-    </div>
-
-    <div class="field">
-      <label for="note">✨ Note / Caption</label>
-      <textarea id="note" name="note" rows="3" placeholder="Explain the promise. Remember: In Jesus’ name, Amen."></textarea>
-    </div>
-
-    <button type="submit" class="btn btn-primary">➕ Add to Collection</button>
-  </form>
-</div>
-
-<div class="card admin-card">
-  <h3>📜 Current Collection</h3>
-  {% if cards %}
-    <div class="admin-list">
-      {% for c in cards %}
-        <div class="admin-verse-row" style="border-left: 4px solid #00a86b;">
-          <div class="thumb">
-            {% if c.image %}
-              <img src="{{ url_for('static', filename='img/verses/' + c.image) }}" alt="{{ c.ref }}">
-            {% else %}
-              <div class="thumb-missing">No image</div>
-            {% endif %}
-          </div>
-
-          <div class="info">
-            <div style="display: flex; justify-content: space-between;">
-                <strong>{{ c.ref }}</strong>
-                <span class="muted">#{{ c.index }}</span>
-            </div>
-            <div class="muted small">{{ c.note|truncate(100) }}</div>
-
-            <div class="admin-actions">
-              <button class="btn small" onclick="toggleEdit('edit-{{ c.index }}')">✏️ Edit</button>
-              <form method="post" class="inline-form" onsubmit="return confirm('Delete this verse?');">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="index" value="{{ c.index }}">
-                <button type="submit" class="btn small danger">🗑 Delete</button>
-              </form>
-            </div>
-
-            {# Collapsible Edit form to keep page clean #}
-            <div id="edit-{{ c.index }}" style="display: none; margin-top: 15px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;">
-                <form method="post">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <input type="hidden" name="action" value="update">
-                    <input type="hidden" name="index" value="{{ c.index }}">
-                    
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                        <div class="field small-field">
-                            <label>Image File</label>
-                            <input name="image" type="text" value="{{ c.image }}">
-                        </div>
-                        <div class="field small-field">
-                            <label>Reference</label>
-                            <input name="ref" type="text" value="{{ c.ref }}">
-                        </div>
-                    </div>
-                    <div class="field small-field">
-                        <label>Caption</label>
-                        <textarea name="note" rows="2">{{ c.note }}</textarea>
-                    </div>
-                    <button type="submit" class="btn small">💾 Save Changes</button>
-                </form>
-            </div>
-          </div>
+        <div class="collection-tools">
+          <input id="search" class="form-input" type="text" placeholder="Search ref, theme, caption…"
+                 oninput="filterCards()">
+          <select id="themeFilter" class="form-select" onchange="filterCards()">
+            <option value="">Any theme</option>
+            {% set themes = [] %}
+            {% for c in cards %}
+              {% if c.theme and c.theme not in themes %}
+                {% set _ = themes.append(c.theme) %}
+              {% endif %}
+            {% endfor %}
+            {% for t in themes|sort %}
+              <option value="{{ t }}">{{ t }}</option>
+            {% endfor %}
+          </select>
         </div>
-      {% endfor %}
+      </div>
+
+      {% if cards %}
+        <div id="cardsGrid" class="cards-grid">
+          {% for c in cards %}
+          <article class="mini-card"
+                   data-ref="{{ (c.ref or '')|lower }}"
+                   data-theme="{{ (c.theme or '')|lower }}"
+                   data-note="{{ (c.note or '')|lower }}"
+                   onclick="openPreview(...stuff...)"({{
+                     c.index|tojson
+                   }}, {{
+                     (c.ref or '')|tojson
+                   }}, {{
+                     (c.note or '')|tojson
+                   }}, {{
+                     (c.theme or '')|tojson
+                   }}, {{
+                     (c.image or '')|tojson
+                   }})">
+
+            <div class="mini-thumb">
+              {% if c.image %}
+                <img src="{{ url_for('static', filename='img/verses/' + c.image) }}"
+                     alt="{{ c.ref }}" loading="lazy">
+              {% else %}
+                <div class="thumb-missing">No image</div>
+              {% endif %}
+            </div>
+
+            <div class="mini-meta">
+              <div class="mini-top">
+                <strong class="mini-ref">{{ c.ref }}</strong>
+                <span class="mini-id">#{{ c.index }}</span>
+              </div>
+              <div class="mini-theme">
+                {% if c.theme %}<span class="chip">{{ c.theme }}</span>{% endif %}
+              </div>
+            </div>
+
+          </article>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="muted">No verse cards yet.</p>
+      {% endif %}
     </div>
-  {% endif %}
-</div>
 
-<script nonce="{{ csp_nonce() }}">
-function previewImage(select, previewId) {
-    const preview = document.getElementById(previewId);
-    if (select.value) {
-        preview.innerHTML = `<img src="/static/img/verses/${select.value}" style="width:100%; height:100%; object-fit:cover;">`;
-    } else {
-        preview.innerHTML = `<span class="muted small" style="display:block; text-align:center; padding-top:35px;">Preview</span>`;
-    }
-}
+    <!-- RIGHT: PREVIEW PANEL (ONE ICON + DROPDOWN) -->
+    <div class="card admin-card preview-card" id="previewCard">
+      <div class="card-head">
+        <h3 style="margin:0;">👁 Card Preview</h3>
 
-function toggleEdit(id) {
-    const el = document.getElementById(id);
-    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+        <div class="preview-actions">
+          <button type="button" class="icon-btn" title="Preview">
+            👁
+          </button>
+
+          <details class="menu" id="previewMenu">
+            <summary class="icon-btn" title="Actions">⋯</summary>
+            <div class="menu-panel">
+              <button type="button" class="menu-item" onclick="doEdit()">✏️ Edit</button>
+              <button type="button" class="menu-item" onclick="doWhatsApp()">📲 Send WhatsApp</button>
+              <button type="button" class="menu-item" onclick="copyCaption()">📋 Copy caption</button>
+              <button type="button" class="menu-item" onclick="copyImageLink()">🔗 Copy image link</button>
+              <a id="dlImage" class="menu-item" href="#" download>⬇️ Download image</a>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <div class="preview-body">
+        <div class="preview-thumb" id="previewThumb">
+          <span class="muted small">Click a card to preview</span>
+        </div>
+
+        <div class="preview-text">
+          <div class="muted small" id="previewTheme"></div>
+          <div class="preview-ref" id="previewRef">—</div>
+          <div class="preview-note" id="previewNote">—</div>
+          <div class="muted small" id="previewFile"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ADD NEW VERSE CARD (BELOW) -->
+  <div class="card admin-card" style="margin-top:16px;">
+    <div class="card-head">
+      <h3 style="margin:0;">➕ Add New Verse Card</h3>
+      <div class="muted small">Fast add with preview. Exports sit here with publishing.</div>
+    </div>
+
+    <form method="post" novalidate id="add-verse-form" class="add-grid">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="action" value="add">
+
+      <div class="field">
+        <label for="add-image">🖼 Image filename</label>
+        <input id="add-image" name="image" class="form-input"
+               type="text" placeholder="example.jpg"
+               autocomplete="off"
+               oninput="setPreviewFromInput(this.value,'addPreview')">
+        <div class="muted small">Tip: paste filename from your folder. Preview confirms visually.</div>
+      </div>
+
+      <div class="field">
+        <label for="add-ref">📖 Scripture Reference</label>
+        <input id="add-ref" name="ref" class="form-input"
+               type="text" required placeholder="Isaiah 60:1 (NLV)">
+      </div>
+
+      <div class="field">
+        <label for="add-theme">🏷 Theme</label>
+        <input id="add-theme" name="theme" class="form-input"
+               type="text" placeholder="Hope / Rest / Courage / Sabbath">
+      </div>
+
+      <div class="field">
+        <label for="add-note">✨ Caption / Meaning</label>
+        <textarea id="add-note" name="note" class="form-input" rows="3"
+                  placeholder="Short meaning in simple English…"></textarea>
+      </div>
+
+      <div class="add-preview">
+        <div class="preview-thumb" id="addPreview">
+          <span class="muted small">Add preview</span>
+        </div>
+      </div>
+
+      <!-- PUBLISH / EXPORT ROW -->
+      <div class="add-actions">
+        <button type="submit" class="btn btn-primary">➕ Add to Collection</button>
+
+        {# Export tools near creation/publishing (your request) #}
+        <a class="btn" href="{{ url_for('admin_export_verses_json') }}">⬇️ Download verses.json</a>
+        <a class="btn" href="{{ url_for('admin_export_verses_zip') }}">📦 Download ZIP (json + images)</a>
+      </div>
+    </form>
+  </div>
+
+</section>
+
+<script src="{{ url_for('static', filename='js/admin_verses.js') }}" defer></script>
+<script>
+function openPreview(index, ref, note, theme, image) {
+  const thumb = document.getElementById("previewThumb");
+  const refEl = document.getElementById("previewRef");
+  const noteEl = document.getElementById("previewNote");
+  const themeEl = document.getElementById("previewTheme");
+  const fileEl = document.getElementById("previewFile");
+
+  const origin = window.location.origin;
+  const imgUrl = image ? `${origin}/static/img/verses/${image}` : "";
+
+  if (!image) {
+    thumb.innerHTML = `<span class="muted small">Click a card to preview</span>`;
+    refEl.textContent = "—";
+    noteEl.textContent = "—";
+    themeEl.textContent = "";
+    fileEl.textContent = "";
+    return;
+  }
+
+  thumb.innerHTML = `<img src="${imgUrl}" alt="Preview ${ref}">`;
+  refEl.textContent = ref || "—";
+  noteEl.textContent = note || "—";
+  themeEl.textContent = theme ? `Theme: ${theme}` : "";
+  fileEl.textContent = `File: ${image}`;
 }
+ <script>
+window.openPreview = function(index, ref, note, theme, image) {
+
+  const thumb = document.getElementById("previewThumb");
+  const refEl = document.getElementById("previewRef");
+  const noteEl = document.getElementById("previewNote");
+  const themeEl = document.getElementById("previewTheme");
+  const fileEl = document.getElementById("previewFile");
+
+  if (!thumb) return;
+
+  if (!image) {
+    thumb.innerHTML = "No preview";
+    return;
+  }
+
+  const imgUrl = "/static/img/verses/" + image;
+
+  thumb.innerHTML =
+    `<img src="${imgUrl}" style="width:100%;height:100%;object-fit:contain;">`;
+
+  if (refEl) refEl.textContent = ref;
+  if (noteEl) noteEl.textContent = note;
+  if (themeEl) themeEl.textContent = theme;
+  if (fileEl) fileEl.textContent = image;
+
+};
 </script>
+
+{% endblock %}

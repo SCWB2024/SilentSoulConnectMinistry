@@ -7,10 +7,12 @@ from __future__ import annotations
 import json
 import logging
 import os
+import io
 import re
 import secrets
 import smtplib
 import random
+import zipfile  
 from calendar import month_name
 from datetime import date, datetime, timedelta
 from functools import wraps
@@ -35,6 +37,7 @@ from flask import (
     redirect,
     render_template,
     request,
+    send_file, 
     send_from_directory,
     session,
     url_for,
@@ -1415,7 +1418,42 @@ def admin_verses_view():
         image_files=image_files,
         **ctx,
     )
+@app.get("/admin/verses/export/json")
+def admin_export_verses_json():
+    cards = load_verse_cards()  # <-- use your existing loader
+    data = json.dumps(cards, indent=2, ensure_ascii=False).encode("utf-8")
 
+    return send_file(
+        io.BytesIO(data),
+        mimetype="application/json",
+        as_attachment=True,
+        download_name="verses.json"
+    )
+
+@app.get("/admin/verses/export/zip")
+def admin_export_verses_zip():
+    cards = load_verse_cards()
+    verses_dir = os.path.join(current_app.static_folder, "img", "verses")
+
+    mem = io.BytesIO()
+    with zipfile.ZipFile(mem, "w", zipfile.ZIP_DEFLATED) as z:
+        z.writestr("verses.json", json.dumps(cards, indent=2, ensure_ascii=False))
+
+        for c in cards:
+            img = (c.get("image") or "").strip()
+            if not img:
+                continue
+            img_path = os.path.join(verses_dir, img)
+            if os.path.exists(img_path):
+                z.write(img_path, arcname=f"images/{img}")
+
+    mem.seek(0)
+    return send_file(
+        mem,
+        mimetype="application/zip",
+        as_attachment=True,
+        download_name="verses_export.zip"
+    )
 
 # =============================================================================
 # Admin — Prayer Requests

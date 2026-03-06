@@ -6,8 +6,23 @@
 {% block content %}
 <section class="container page-wrap blog-index">
 
-  <!-- HERO -->
-  <header class="hero hero-blog">
+  <!-- HERO (VIDEO BACKGROUND) -->
+  <header class="hero hero-blog hero-video">
+    <div class="hero-media" aria-hidden="true">
+      <video
+        class="hero-bg"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        poster="{{ url_for('static', filename='img/blog/soulspeaks/hero_day.jpg') }}"
+      >
+        <source src="{{ url_for('static', filename='img/videos/above trees.mp4') }}" type="video/mp4">
+      </video>
+      <div class="hero-overlay"></div>
+    </div>
+
     <div class="hero-inner">
       <div class="hero-badge">Soul Speaks</div>
       <h1 class="hero-title">Quiet Reflections for Noisy Times</h1>
@@ -108,19 +123,20 @@
           {% for post in posts %}
           <article class="post-card">
 
-        {# ✅ safe image handling per post (works with .post-cover CSS) #}
-        {% set default_rel = 'img/blog/soulspeaks/default.jpg' %}
-        {% set default_img = url_for('static', filename=default_rel) %}
-        {% set img_rel = (post.image or default_rel) %}
+            {# ✅ safe image handling per post (works with .post-cover CSS) #}
+            {% set default_rel = 'img/blog/soulspeaks/default.jpg' %}
+            {% set default_img = url_for('static', filename=default_rel) %}
+            {% set img_rel = (post.image or default_rel) %}
 
-        <div class="post-cover">
-          <img
-            src="{{ url_for('static', filename=img_rel) }}"
-            alt="{{ post.title }}"
-            loading="lazy"
-            onerror="this.onerror=null;this.src='{{ default_img }}';"
-          />
-        </div>
+            <div class="post-cover">
+              <img
+                src="{{ url_for('static', filename=img_rel) }}"
+                alt="{{ post.title }}"
+                loading="lazy"
+                onerror="this.onerror=null;this.src='{{ default_img }}';"
+              />
+            </div>
+
             <div class="post-body">
               <div class="post-meta">
                 <span class="chip">{{ post.month_label }}</span>
@@ -141,7 +157,7 @@
               <div class="post-actions">
                 <a class="btn btn-primary" href="{{ url_for('blog_post', slug=post.slug) }}">Read</a>
 
-                <button class="btn btn-wide"
+                <button class="btn btn-secondary"
                         type="button"
                         onclick="navigator.clipboard.writeText('{{ SITE_URL.rstrip('/') }}{{ url_for('blog_post', slug=post.slug) }}')">
                   Copy Link
@@ -162,115 +178,5 @@
     </main>
   </div>
 </section>
-
-<style>
-/* Minimal page CSS; keep most styling in theme.css */
-.blog-index .hero-blog{
-  border-radius: 16px;
-  overflow: hidden;
-  margin: 18px 0 20px;
-  background: linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.35)),
-            url("{{ url_for('static', filename='img/blog/soulspeaks/hero_day.jpg') }}");
-  background-size: cover;
-  background-position: center;
-  color: #fff;
-}
-.hero-inner{ padding: 28px; max-width: 980px; }
-.hero-badge{
-  display:inline-block; padding:6px 10px; border-radius: 999px;
-  background: rgba(255,255,255,.16); backdrop-filter: blur(6px);
-  font-weight: 700; letter-spacing: .4px; margin-bottom: 10px;
-}
-.hero-title{ font-size: clamp(26px, 3vw, 40px); margin: 6px 0 8px; }
-.hero-subtitle{ max-width: 62ch; opacity: .92; }
-.hero-actions{ display:flex; gap:10px; margin-top: 14px; flex-wrap: wrap; }
-
-.layout-grid{
-  display:grid; grid-template-columns: 320px 1fr; gap: 18px; align-items:start;
-}
-@media (max-width: 980px){
-  .layout-grid{ grid-template-columns: 1fr; }
-}
-
-.card{ border: 1px solid rgba(0,0,0,.08); border-radius: 16px; background:#fff; box-shadow: 0 10px 30px rgba(0,0,0,.04); }
-.card.soft{ padding: 16px; }
-.sep{ border:0; border-top:1px solid rgba(0,0,0,.08); margin: 14px 0; }
-.small-title{ margin: 0 0 10px; font-size: 14px; opacity: .8; }
-
-.pill-row{ display:flex; flex-wrap:wrap; gap:10px; }
-.pill{
-  display:inline-flex; align-items:center; gap:6px;
-  padding: 8px 12px; border-radius: 999px;
-  background: rgba(16, 185, 129, .08);
-  border: 1px solid rgba(16, 185, 129, .20);
-  text-decoration: none;
-}
-.stack{ display:grid; gap: 10px; }
-.share-row{ margin-top: 12px; }
-
-.toolbar{
-  display:flex; justify-content:space-between; gap: 14px;
-  align-items:flex-end; margin-bottom: 12px; flex-wrap: wrap;
-}
-.section-title{ margin: 0; }
-.section-subtitle{ margin: 4px 0 0; opacity:.75; font-size: 14px; }
-.filters{ display:flex; gap: 10px; align-items:center; flex-wrap: wrap; }
-.select{ padding: 10px 12px; border-radius: 12px; border:1px solid rgba(0,0,0,.12); background:#fff; }
-
-.banner{ padding: 14px 16px; margin-bottom: 16px; }
-.banner-kicker{ font-size: 12px; opacity:.75; text-transform: uppercase; letter-spacing: .5px; }
-.banner-title{ font-size: 18px; font-weight: 800; margin-top: 2px; }
-.banner-subtitle{ opacity:.75; margin-top: 2px; }
-
-.cards-grid{
-  display:grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
-@media (max-width: 980px){
-  .cards-grid{ grid-template-columns: 1fr; }
-}
-.post-card{ border-radius: 16px; overflow:hidden; border: 1px solid rgba(0,0,0,.08); background:#fff; }
-.post-cover{ display:block; aspect-ratio: 16/10; background: rgba(0,0,0,.04); }
-.post-cover img{ width:100%; height:100%; object-fit: cover; display:block; }
-.post-body{ padding: 14px; }
-.post-meta{ display:flex; gap: 8px; align-items:center; font-size: 13px; opacity: .8; }
-.chip{
-  display:inline-block; padding: 4px 10px; border-radius: 999px;
-  background: rgba(16, 185, 129, .10);
-  border: 1px solid rgba(16, 185, 129, .22);
-  font-weight: 700;
-}
-.dot{ opacity:.5; }
-.muted{ opacity:.75; }
-.post-title{ margin: 10px 0 8px; font-size: 18px; }
-.post-title a{ text-decoration:none; }
-.post-excerpt{ margin: 0 0 12px; opacity:.86; }
-.post-actions{ display:flex; gap: 10px; flex-wrap: wrap; }
-.btn{ padding: 10px 14px; border-radius: 12px; border:1px solid transparent; cursor:pointer; text-decoration:none; display:inline-flex; justify-content:center; align-items:center; }
-.btn-wide{ width: 100%; }
-.btn-primary{ background: #10b981; color: #fff; }
-.btn-ghost{ background: transparent; border-color: rgba(0,0,0,.12); }
-.empty{ padding: 18px; text-align:center; }
-.sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
-</style>
-
-<style>
-/* ... your existing CSS ... */
-
-.sp-side-img{
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 16px;
-}
-
-@supports (aspect-ratio: 1) {
-  .sp-side-img{
-    aspect-ratio: 16/10;
-    object-fit: cover;
-  }
-}
-</style>
 
 {% endblock %}

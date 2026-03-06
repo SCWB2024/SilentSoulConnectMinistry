@@ -35,13 +35,13 @@
     <aside class="sp-side">
       <div class="card soft sp-side-card">
         <div class="sp-side-media">
-          {% if post and post.image %}
-            <img class="sp-side-img"
-                 src="{{ url_for('static', filename='img/blog/soulspeaks/silence-is-not-absence.jpg' ) }}"
-                 alt="Silence as a sacred space cover">
-          {% else %}
-            <div class="sp-side-img sp-side-placeholder">Sacred Space</div>
-          {% endif %}
+          {% set default_rel = 'img/blog/soulspeaks/default.jpg' %}
+          {% set img_rel = post.image if post and post.image else 'img/blog/soulspeaks/silence-is-not-absence.jpg' %}
+          <img class="sp-side-img"
+               src="{{ url_for('static', filename=img_rel) }}"
+               alt="Silence Is Not Absence cover"
+               loading="lazy"
+               onerror="this.onerror=null;this.src='{{ url_for('static', filename=default_rel) }}';">
         </div>
 
         <h3 class="sp-side-title">Join the Conversation</h3>
@@ -66,20 +66,21 @@
     <main class="sp-main">
 
       <section class="sp-section">
-        <h2 class="sp-h2">Silence is a Sacred Space</h2>
+        <h2 class="sp-h2">Silence is a sacred space</h2>
         <p>
-          In a world that equates noise with progress, silence is often misunderstood as "emptiness." But in the economy of God, 
-          <strong>silence is not a vacuum; it is a vessel.</strong> It is the quiet soil where faith grows deep, 
-          undisturbed by the distractions of the world.
+          In a world that equates noise with progress, silence is often misunderstood as emptiness.
+          But in the economy of God, <strong>silence is not a vacuum; it is a vessel.</strong>
+          It is the quiet soil where faith grows deep, undisturbed by the distractions of the world.
         </p>
       </section>
 
       <section class="sp-section">
-        <h2 class="sp-h2">The Theology of Quietude</h2>
+        <h2 class="sp-h2">God often works in quiet ways</h2>
         <p>
-          In the Bible, silence is never portrayed as God’s absence. Instead, it is the environment of His most profound work. 
-          When Elijah sought God, he didn't find Him in the wind or the fire—God revealed Himself in a <strong>gentle whisper</strong>. 
-          God understands our hearts before words are ever formed. He responds to our sincerity, not our volume.
+          In Scripture, silence is not proof that God is absent.
+          Often it is the setting for His deepest work.
+          He understands our hearts before words are formed.
+          He responds to sincerity, not volume.
         </p>
       </section>
 
@@ -91,21 +92,22 @@
       </section>
 
       <section class="sp-section">
-        <h2 class="sp-h2">Visual Grace: Silence as Fullness</h2>
+        <h2 class="sp-h2">Visual grace is still real grace</h2>
         <p>
-          For the Deaf community, silence is not a "lack" of life. It is a visual, tactile, and deeply intentional way of 
-          experiencing the world. God is a God of <strong>sight, touch, and spirit.</strong> 
-          Just as Jesus used touch to heal and eye contact to restore dignity, He communicates His purpose 
-          directly to the "eyes of our hearts."
+          For the Deaf community, silence is not a lack of life.
+          It is a visual, intentional, and deeply meaningful way of experiencing the world.
+          God is a God of <strong>sight, touch, and spirit</strong>.
+          He communicates purpose to the eyes of the heart.
         </p>
       </section>
 
       <section class="sp-section">
-        <h2 class="sp-h2">Honor the Silence</h2>
+        <h2 class="sp-h2">Honor the silence</h2>
         <p>
-          When we honor silence, we see differently. We discover that God often works quietly—shaping our character, 
-          restoring our peace, and guiding our steps without needing a spectacle. Silence does not block God; 
-          it invites us to be more aware of His constant presence.
+          When we honor silence, we begin to see differently.
+          We notice that God often restores peace, shapes character, and guides steps without spectacle.
+          Silence does not block God.
+          It can awaken us to His constant presence.
         </p>
       </section>
 
@@ -120,13 +122,14 @@
 
       <section class="sp-reflection card soft">
         <h3 class="sp-h3">Open Discussion</h3>
-        <p class="muted">We value your unique perspective. Consider these two questions:</p>
+        <p class="muted">Take a quiet moment and think about one of these:</p>
         <ul class="sp-list">
-          <li><strong>Perspective Shift:</strong> Is there an area of your life where God feels "silent"? How does it feel to think of that silence as "presence without pressure" instead of "absence"?</li>
-          <li><strong>Visual Faith:</strong> How can we "listen" with our hearts and eyes this week to see where God is moving?</li>
+          <li>Where in my life do I need to see silence as presence, not absence?</li>
+          <li>How can I listen with my heart and eyes this week?</li>
+          <li>What quiet space is God using to strengthen me?</li>
         </ul>
-        <p class="muted" style="margin-top: 1rem; font-size: 0.9em;">
-          <em>Feel free to type your answer or send a video of yourself signing your thoughts to our WhatsApp.</em>
+        <p class="muted" style="margin-top:1rem;">
+          <em>You can type your reflection or share a short signed video through WhatsApp.</em>
         </p>
       </section>
 
@@ -145,4 +148,46 @@
     </main>
   </div>
 </section>
+
+<style>
+/* Soul Speaks blog layout */
+
+.sp-grid{
+  display:grid;
+  grid-template-columns:320px 1fr;
+  gap:24px;
+}
+
+.sp-side{
+  position:sticky;
+  top:18px;
+}
+
+.sp-main{
+  display:grid;
+  gap:16px;
+}
+
+.sp-section,
+.sp-callout,
+.sp-scripture,
+.sp-reflection{
+  background:#fff;
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 10px 26px rgba(0,0,0,.05);
+}
+
+.sp-side-img{
+  width:100%;
+  border-radius:14px;
+}
+
+@media (max-width:980px){
+  .sp-grid{ grid-template-columns:1fr; }
+  .sp-side{ position:static; }
+}
+</style>
+
 {% endblock %}

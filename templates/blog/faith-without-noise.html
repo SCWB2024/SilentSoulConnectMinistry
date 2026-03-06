@@ -3,14 +3,14 @@
 
 {% block content %}
 <section class="container page-wrap soulspeaks-post">
-
+  
   <header class="sp-hero">
     <div class="sp-hero-inner">
       <div class="sp-badge">Soul Speaks</div>
       <h1 class="sp-title">Faith Without Noise</h1>
 
       <div class="sp-meta">
-        <span>March 2, 2026</span>
+        <span>March 2026</span>
         <span class="dot">•</span>
         <span>Blog 3</span>
         <span class="dot">•</span>
@@ -35,15 +35,17 @@
     <aside class="sp-side">
       <div class="card soft sp-side-card">
         <div class="sp-side-media">
-          {% if post and post.image %}
-            <img class="sp-side-img" src="{{ url_for('static', filename=post.image) }}" alt="{{ post.title }}"  loading="lazy">
-        {% else %}
-            <div class="sp-side-img sp-side-placeholder">Steady Focus</div>
-        {% endif %}
+          {% set default_rel = 'img/blog/soulspeaks/default.jpg' %}
+          {% set img_rel = post.image if post and post.image else 'img/blog/soulspeaks/faith-without-noise.jpg' %}
+          <img class="sp-side-img"
+               src="{{ url_for('static', filename=img_rel) }}"
+               alt="Faith Without Noise cover"
+               loading="lazy"
+               onerror="this.onerror=null;this.src='{{ url_for('static', filename=default_rel) }}';">
         </div>
 
-        <h3 class="sp-side-title">Stay Connected</h3>
-        <p class="muted sp-side-sub">How does this story speak to you? Join our video chat or message us.</p>
+        <h3 class="sp-side-title">How to respond</h3>
+        <p class="muted sp-side-sub">Share a short thought, prayer, or signed reflection.</p>
 
         <div class="sp-connect">
           <a class="btn btn-wide btn-primary"
@@ -52,7 +54,11 @@
 
           <a class="btn btn-wide"
              href="{{ SOCIAL_LINKS.get('facebook', '#') }}"
-             target="_blank" rel="noopener">📘 Facebook Community</a>
+             target="_blank" rel="noopener">📘 Facebook</a>
+
+          <a class="btn btn-wide"
+             href="{{ SOCIAL_LINKS.get('youtube', '#') }}"
+             target="_blank" rel="noopener">▶ YouTube</a>
         </div>
       </div>
     </aside>
@@ -60,39 +66,48 @@
     <main class="sp-main">
 
       <section class="sp-section">
-        <h2 class="sp-h2">The Power of Focus</h2>
+        <h2 class="sp-h2">Faith stays steady when focus stays right</h2>
         <p>
-          The story of Peter walking on the water is often told as a lesson about fear. But when we look at it through 
-          the lens of silence, it reveals something deeper: <strong>the power of focus in a noisy world.</strong> 
-          Peter stepped out of the boat because his eyes were fixed on Jesus. As long as his focus remained steady, 
-          the water held him. Faith did not require calm conditions; it required visual attention.
+          Peter walked on water because his eyes were on Jesus.
+          Faith is not the absence of wind, trouble, or pressure.
+          Faith is keeping your eyes fixed on the One who holds you.
         </p>
       </section>
 
       <section class="sp-section">
-        <h2 class="sp-h2">Distraction vs. Direction</h2>
+        <h2 class="sp-h2">Distraction can pull the heart down</h2>
         <p>
-          When Peter noticed the wind and the waves, his focus shifted. In that moment, the "noise" of the storm 
-          became more real to him than the call that brought him forward. Fear entered only when distraction 
-          replaced his visual connection with Christ. 
+          The moment Peter focused on the waves, fear entered.
+          That is still true for us today.
+          When our attention is pulled by panic, opinions, bills, or stress,
+          we begin to sink inside before anything changes outside.
         </p>
       </section>
 
-      <div class="sp-callout">
-        <div class="sp-callout-title">The Deaf Perspective</div>
+      <section class="sp-callout">
+        <div class="sp-callout-title">Key Message</div>
         <div class="sp-callout-text">
-          Imagine if Peter were Deaf. The wind would still blow. The waves would still rise. But the <em>noise</em> 
-          would not command his attention. His eyes would remain on Jesus, undisturbed by the chaos.
+          Faith does not need noise. It needs focus.
         </div>
-      </div>
+      </section>
 
       <section class="sp-section">
-        <h2 class="sp-h2">Grace Meets Weakness</h2>
+        <h2 class="sp-h2">Grace responds quickly</h2>
         <p>
-          This story reminds us that faith does not fail because God moves away, but because our focus moves elsewhere. 
-          The world is filled with "noise"—pressure, fear, and opinions—yet God still calls us forward with a 
-          steady presence. Even when we begin to sink, Jesus reachs out immediately. Grace meets us in our 
-          moments of distraction.
+          Peter cried, “Lord, save me,” and Jesus reached immediately.
+          That moment is full of mercy.
+          Even when faith feels weak, grace is still near.
+          Jesus is not slow to help those who call on Him.
+        </p>
+      </section>
+
+       <section class="sp-section">
+        <h2 class="sp-h2">A Deaf perspective on faith</h2>
+        <p>
+          For Deaf believers, this story carries deep meaning.
+          Wind may blow and waves may rise, but noise does not control the soul.
+          Faith can be deeply visual.
+          Eyes can stay on Jesus even when the world feels loud in other ways.
         </p>
       </section>
 
@@ -100,27 +115,26 @@
         <div class="sp-scripture-label">📖 Scripture Anchor</div>
         <div class="sp-scripture-ref">Matthew 14:30–31</div>
         <blockquote class="sp-scripture-quote">
-          “But when he saw the wind, he was afraid and, beginning to sink, cried out, ‘Lord, save me!’ Immediately Jesus reached out His hand and caught him.”
+          “Lord, save me! Immediately Jesus reached out His hand and caught him.”
         </blockquote>
         <div class="sp-scripture-cite">— The Bible</div>
       </aside>
 
       <section class="sp-reflection card soft">
-        <h3 class="sp-h3">Community Reflection</h3>
-        <p class="muted">Faith does not require silence around us; it requires stillness within us.</p>
+        <h3 class="sp-h3">Reflection (Simple)</h3>
+        <p class="muted">Pause for a moment and answer one:</p>
         <ul class="sp-list">
-          <li><strong>Identify the "Noise":</strong> What is the loudest distraction in your life right now (fear, work, opinions)?</li>
-          <li><strong>Visual Prayer:</strong> How can you practice "fixing your eyes" on Jesus today without using spoken words?</li>
+          <li>What is trying to steal my focus today?</li>
+          <li>Where do I need to call on Jesus quickly and honestly?</li>
+          <li>What one calm step can I take in faith today?</li>
         </ul>
-        <p class="muted" style="margin-top: 1rem; font-size: 0.9em;">
-          <em>We invite you to share a video of your reflection in our WhatsApp group. Let's encourage each other!</em>
-        </p>
       </section>
 
       <div class="sp-tags">
-        <span class="sp-tag">Peter</span>
+        <span class="sp-tag">Faith</span>
         <span class="sp-tag">Focus</span>
-        <span class="sp-tag">Overcoming Fear</span>
+        <span class="sp-tag">Grace</span>
+        <span class="sp-tag">Courage</span>
         <span class="sp-tag">Visual Faith</span>
       </div>
 
@@ -131,4 +145,46 @@
     </main>
   </div>
 </section>
+
+<style>
+/* Soul Speaks blog layout */
+
+.sp-grid{
+  display:grid;
+  grid-template-columns:320px 1fr;
+  gap:24px;
+}
+
+.sp-side{
+  position:sticky;
+  top:18px;
+}
+
+.sp-main{
+  display:grid;
+  gap:16px;
+}
+
+.sp-section,
+.sp-callout,
+.sp-scripture,
+.sp-reflection{
+  background:#fff;
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 10px 26px rgba(0,0,0,.05);
+}
+
+.sp-side-img{
+  width:100%;
+  border-radius:14px;
+}
+
+@media (max-width:980px){
+  .sp-grid{ grid-template-columns:1fr; }
+  .sp-side{ position:static; }
+}
+</style>
+
 {% endblock %}

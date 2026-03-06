@@ -4,7 +4,6 @@
 {% block content %}
 <section class="container page-wrap soulspeaks-post">
 
-  <!-- Post Hero (matches site header style via base.html) -->
   <header class="sp-hero">
     <div class="sp-hero-inner">
       <div class="sp-badge">Soul Speaks</div>
@@ -33,18 +32,16 @@
 
   <div class="sp-grid">
 
-    <!-- LEFT: image + connect -->
     <aside class="sp-side">
       <div class="card soft sp-side-card">
         <div class="sp-side-media">
-          <!-- Optional image (your post image) -->
-          {% if post and post.image %}
-            <img class="sp-side-img"
-                 src="{{ url_for('static', filename='img/blog/soulspeaks/gods-love-beyond-sound.jpg' ) }}"
-                 alt="{{ post.title }} cover">
-          {% else %}
-            <div class="sp-side-img sp-side-placeholder">Soul Speaks</div>
-          {% endif %}
+          {% set default_rel = 'img/blog/soulspeaks/default.jpg' %}
+          {% set img_rel = post.image if post and post.image else default_rel %}
+          <img class="sp-side-img"
+               src="{{ url_for('static', filename=img_rel) }}"
+               alt="God’s Love Beyond Sound cover"
+               loading="lazy"
+               onerror="this.onerror=null;this.src='{{ url_for('static', filename=default_rel) }}';">
         </div>
 
         <h3 class="sp-side-title">How to connect</h3>
@@ -66,7 +63,6 @@
       </div>
     </aside>
 
-    <!-- RIGHT: post content -->
     <main class="sp-main">
 
       <section class="sp-section">
@@ -88,9 +84,9 @@
       </section>
 
       <section class="sp-callout">
-        <div class="sp-callout-title">Key message</div>
+        <div class="sp-callout-title">Key Message</div>
         <div class="sp-callout-text">
-          Silence does not remove purpose. God’s love still holds you—fully and personally.
+          Silence does not remove purpose. God’s love still holds you — fully and personally.
         </div>
       </section>
 
@@ -145,4 +141,46 @@
     </main>
   </div>
 </section>
+
+<style>
+/* Soul Speaks blog layout */
+
+.sp-grid{
+  display:grid;
+  grid-template-columns:320px 1fr;
+  gap:24px;
+}
+
+.sp-side{
+  position:sticky;
+  top:18px;
+}
+
+.sp-main{
+  display:grid;
+  gap:16px;
+}
+
+.sp-section,
+.sp-callout,
+.sp-scripture,
+.sp-reflection{
+  background:#fff;
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 10px 26px rgba(0,0,0,.05);
+}
+
+.sp-side-img{
+  width:100%;
+  border-radius:14px;
+}
+
+@media (max-width:980px){
+  .sp-grid{ grid-template-columns:1fr; }
+  .sp-side{ position:static; }
+}
+</style>
+
 {% endblock %}

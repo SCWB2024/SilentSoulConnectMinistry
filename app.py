@@ -816,6 +816,23 @@ def load_verses() -> list[dict]:
         return fallback
 
 
+def load_verse_cards() -> list[dict]:
+    """Load verses and return processed card data for export."""
+    verses_data = load_verses()
+    cards: list[dict] = []
+
+    for idx, v in enumerate(verses_data):
+        cards.append({
+            "id": idx,
+            "image": (v.get("image") or "").strip(),
+            "ref": v.get("ref", "Untitled"),
+            "title": v.get("title", ""),
+            "note": v.get("note", ""),
+        })
+
+    return cards
+
+
 # ---------- Home ----------
 @app.route("/", endpoint="home")
 def home():
@@ -1613,8 +1630,43 @@ def admin_donations_view():
                        **ctx)
 
 # =============================================================================
+# WhatsApp Share Payload Builder
+# =============================================================================
+def build_share_payload(date_str: str, mode: str) -> dict:
+    """
+    Build WhatsApp share payload for devotion content.
+    Returns dict with 'text', 'text_morning', 'text_night' keys.
+    """
+    try:
+        target_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+    except Exception:
+        target_date = date.today()
+
+    mode = (mode or "morning").lower()
+    if mode not in ("morning", "night"):
+        mode = "morning"
+
+    payload = {}
+
+    if mode in ("morning", "night"):
+        entry = load_devotion_for(target_date, mode)
+        text = build_whatsapp_text(entry, mode, target_date)
+        payload["text"] = text
+        payload[f"text_{mode}"] = text
+    else:
+        # Both modes
+        entry_m = load_devotion_for(target_date, "morning")
+        entry_n = load_devotion_for(target_date, "night")
+        text_m = build_whatsapp_text(entry_m, "morning", target_date)
+        text_n = build_whatsapp_text(entry_n, "night", target_date)
+        payload["text_morning"] = text_m
+        payload["text_night"] = text_n
+        payload["text"] = text_m  # default to morning
+
+    return payload
+
+# =============================================================================
 # Admin — WhatsApp Builder
-# NOTE: build_share_payload() must exist in your app (same signature).
 # =============================================================================
 @app.route("/admin/whatsapp", methods=["GET", "POST"], endpoint="admin_whatsapp")
 @require_auth

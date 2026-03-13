@@ -56,6 +56,10 @@
   --text: var(--fg);         /* FIX: your CSS uses --text later */
 }
 
+html, body {
+  background: #ffffff;
+}
+
 /* =============================
    HERO BASE (single source)
    ============================= */
@@ -2006,15 +2010,17 @@ input:focus, select:focus {
   top: -2px;
   color: white;
 }
-}
+
 .badge-live{
   background: #e74c3c;
   color: #fff;
 }
+
 .badge-new{
   background: #f1c40f;
   color: #2d3436;
 }
+
 .badge-live::after{
   content: '';
   position: absolute;
@@ -2023,7 +2029,7 @@ input:focus, select:focus {
   background: inherit;
   border-radius: inherit;
   z-index: -1;
-  animation: pulse 2s infinite;
+  /* animation: pulse 2s infinite; */
 }
 
 @keyframes pulse{
@@ -2085,4 +2091,165 @@ input:focus, select:focus {
   .home-grid { flex-direction: column; }
   .card-inner-layout { flex-direction: column; }
   .card-img { width: 100%; max-width: none; }
+}
+
+/* =========================
+   ABOUT PAGE
+========================= */
+
+.about-page .mission-card,
+.about-page .genesis-card,
+.about-page .about-series-card,
+.about-page .about-cta-card {
+  border-radius: 25px;
+  border: 1px solid #e2e8f0;
+  line-height: 1.9;
+}
+
+.about-page .mission-card {
+  max-width: 950px;
+  margin: 30px auto 20px;
+  padding: 40px;
+}
+
+.about-page .genesis-card {
+  padding: 50px;
+  margin-bottom: 40px;
+}
+
+.about-page .section-title {
+  color: var(--primary);
+  font-size: 2.2rem;
+  margin-top: 0;
+}
+
+.about-page .founder-row {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin: 20px 0 16px;
+}
+
+.about-page .founder-photo {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 18px;
+  border: 2px solid rgba(255,255,255,.9);
+  box-shadow: 0 10px 25px rgba(0,0,0,.12);
+  flex: 0 0 auto;
+}
+
+.about-page .founder-text {
+  flex: 1;
+}
+
+.about-page .about-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-bottom: 50px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.about-page .about-feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 30px rgba(15, 23, 42, 0.12);
+}
+
+.about-page .about-feature-card:hover h3 {
+  color: var(--gold);
+}
+
+.about-page .about-feature-card {
+  background: white;
+  padding: 34px 28px;
+  border-radius: 25px;
+  text-align: center;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 12px 22px rgba(15, 23, 42, 0.06);
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.about-page .about-series-card {
+  padding: 55px;
+  background: #fffcf0;
+  border: 2px solid #fef3c7;
+  margin-bottom: 50px;
+}
+
+.about-page .about-quote-card {
+  text-align: center;
+  margin-bottom: 50px;
+  padding: 60px 40px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+}
+
+.about-page .about-quote-card p:first-child {
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.about-page .about-quote-card p:first-child {
+  font-size: 1.55rem;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.about-page .about-cta-card {
+  background: var(--primary);
+  color: white;
+  padding: 50px;
+  text-align: center;
+  border: none;
+}
+
+@media (max-width: 700px) {
+  .about-page .founder-row {
+    flex-direction: column;
+  }
+
+  .about-page .founder-photo {
+    width: 140px;
+    height: 140px;
+  }
+
+  .about-page .mission-card,
+  .about-page .genesis-card,
+  .about-page .about-series-card,
+  .about-page .about-cta-card {
+    padding: 28px;
+  }
+}
+
+.about-hero::after {
+  content: "";
+  position: relative;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 80px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0), #f1f5f9);
+  pointer-events: none;
+}
+
+.scripture-divider {
+  width: 80px;
+  height: 3px;
+  margin: 0 auto 25px auto;
+  border-radius: 10px;
+  background: linear-gradient(
+      90deg,
+      transparent,
+      var(--gold),
+      transparent
+  );
+  opacity: 0.8;
 }

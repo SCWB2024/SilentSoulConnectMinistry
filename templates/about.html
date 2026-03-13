@@ -2,162 +2,170 @@
 {% block title %}Our Story — Silent SoulConnect{% endblock %}
 
 {% block content %}
+<section class="about-page">
 
-<section class="about-hero" style="position: relative; height: 65vh; min-height: 450px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-  <video class="bg-video" autoplay muted loop playsinline style="position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; z-index: -1; transform: translate(-50%, -50%); object-fit: cover;">
-    <source src="{{ url_for('static', filename='img/videos/seaside 1.mp4') }}" type="video/mp4">
-  </video>
-  <div class="overlay" style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 0;"></div>
+  <section class="about-hero" style="position: relative; height: 25vh; min-height: 220px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+    <video class="bg-video" autoplay muted loop playsinline style="position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; z-index: -1; transform: translate(-50%, -50%); object-fit: cover;">
+      <source src="{{ url_for('static', filename='img/videos/seaside 1.mp4') }}" type="video/mp4">
+    </video>
 
-  <div class="hero-content" style="z-index: 1; text-align: center; color: white; padding: 0 20px;">
-    <div style="background: rgba(255, 255, 255, 0.92); padding: 50px; border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); max-width: 800px; border: 1px solid white;">
-      <h1 style="color: var(--primary); margin: 0; font-size: 1.15rem; font-weight: 800; letter-spacing: -1px;">Silent SoulConnect</h1>
-      <p style="color: #64748b; font-size: 1.3rem; margin-top: 15px; font-weight: 500; font-style: italic;">"Faith to Rise, Grace to Rest"</p>
-      <hr style="width: 60px; border: 2px solid var(--gold); margin: 20px auto;">
-      <p style="color: #334155; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem;">A Branch of SCWB Global Impact</p>
+    <div class="overlay" style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 0;"></div>
+
+    <div class="hero-content" style="z-index: 1; text-align: center; color: white; padding: 0 20px;">
+      <div style="background: rgba(255, 255, 255, 0.92); padding: 36px 40px; border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); max-width: 700px; border: 1px solid white;">
+        <h1 style="color: var(--primary); margin: 0; font-size: 1.15rem; font-weight: 800; letter-spacing: -1px;">Silent SoulConnect</h1>
+        <p style="color: #64748b; font-size: 1.3rem; margin-top: 15px; font-weight: 500; font-style: italic;">"Faith to Rise, Grace to Rest"</p>
+        <hr style="width: 60px; border: 2px solid var(--gold); margin: 20px auto;">
+        <p style="color: #334155; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem;">A Branch of SCWB Global Impact</p>
+      </div>
     </div>
-  </div>
-</section>
-<div class="container" style="max-width: 950px; margin: 30px auto 0; padding: 0 20px;">
+  </section>
 
-  <div class="card" style="border-radius: 25px; padding: 50px; margin-bottom: 40px; border: 1px solid #e2e8f0; line-height: 1.9;">
-    
-    <h2 class="section-title">Our Mission</h2>
+  <div class="container" style="max-width: 1100px; margin: 30px auto 0; padding: 0 20px;">
+    <section class="card mission-card">
+      <h2 class="section-title">Our Mission</h2>
 
-    <p style="font-size: 1.15rem; color: #334155;">
-      Silent SoulConnect Ministry exists to nurture the inner life beyond noise,
-      labels, and tradition—guiding individuals into a deeper connection with God
-      through truth, compassion, discernment, and lived wisdom.
-    </p>
+      <p style="font-size: 1.15rem; color: #334155;">
+        Silent SoulConnect Ministry exists to nurture the inner life beyond noise,
+        labels, and tradition—guiding individuals into a deeper connection with God
+        through truth, compassion, discernment, and lived wisdom.
+      </p>
 
-    <p style="color: #475569;">
-      We honor culture without being bound by it, creating sacred space for
-      healing, clarity, and spiritual growth that transcends language,
-      ability, and background.
-    </p>
+      <p style="color: #475569;">
+        We honor culture without being bound by it, creating sacred space for
+        healing, clarity, and spiritual growth that transcends language,
+        ability, and background.
+      </p>
 
-    <p style="color: #475569; font-weight: 600;">
-      We are not building another denomination —
-      we are preparing hearts to meet our Lord and Savior, Jesus Christ.
-    </p>
-
+      <p style="color: #475569; font-weight: 600;">
+        We are not building another denomination —
+        we are preparing hearts to meet our Lord and Savior, Jesus Christ.
+      </p>
+    </section>
   </div>
 
-</div>
+  <div class="container" style="max-width: 950px; margin: -60px auto 80px; padding: 0 20px; position: relative; z-index: 2;">
 
-</section>
+    <div class="card genesis-card">
+      <h2 class="section-title">Our Genesis</h2>
 
-<div class="container" style="max-width: 950px; margin: -60px auto 80px; padding: 0 20px; position: relative; z-index: 2;">
-  
-  <div class="card" style="border-radius: 25px; padding: 50px; margin-bottom: 40px; border: 1px solid #e2e8f0; line-height: 1.9;">
-    <h2 style="color: var(--primary); font-size: 2.2rem; margin-top: 0;">Our Genesis</h2>
-    <div class="founder-row">
-  <img
-    src="{{ url_for('static', filename='img/founder_sandra.jpg') }}"
-    alt="Founder of Silent SoulConnect Ministry"
-    class="founder-photo"
-  >
-  <div class="founder-text">
-    <p style="font-size: 1.15rem; color: #334155; margin-top: 0;">
-      Silent SoulConnect Ministry (SSCM) was birthed out of a profound observation: Many Deaf and Hard of Hearing individuals sit in pews across the globe, yet remain spiritually isolated.
-    </p>
-  </div>
-</div>
+      <div class="founder-row">
+        <img
+          src="{{ url_for('static', filename='img/founder_sandra.jpg') }}"
+          alt="Founder of Silent SoulConnect Ministry"
+          class="founder-photo"
+        >
 
-    <p style="font-size: 1.15rem; color: #334155;">
-        Silent SoulConnect Ministry (SSCM) was birthed out of a profound observation: Many Deaf and Hard of Hearing individuals sit in pews across the globe, yet remain spiritually isolated. 
-    </p>
-    <p style="color: #475569;">
-        Led by an <strong>evangelist and counselor with lived Deaf experience</strong>, our founder saw the struggle firsthand. Unclear communication, high-level theological jargon, and past experiences of embarrassment or control had caused many to quietly withdraw—not just from the church building, but from the intimacy of God's Word. 
-    </p>
-    <p style="color: #475569;">
+        <div class="founder-text">
+          <p style="font-size: 1.15rem; color: #334155; margin-top: 0;">
+            Silent SoulConnect Ministry (SSCM) was birthed out of a profound observation: Many Deaf and Hard of Hearing individuals sit in pews across the globe, yet remain spiritually isolated.
+          </p>
+        </div>
+      </div>
+
+      <p style="font-size: 1.15rem; color: #334155;">
+        Silent SoulConnect Ministry (SSCM) was birthed out of a profound observation: Many Deaf and Hard of Hearing individuals sit in pews across the globe, yet remain spiritually isolated.
+      </p>
+
+      <p style="color: #475569;">
+        Led by an <strong>evangelist and counselor with lived Deaf experience</strong>, our founder saw the struggle firsthand. Unclear communication, high-level theological jargon, and past experiences of embarrassment or control had caused many to quietly withdraw—not just from the church building, but from the intimacy of God's Word.
+      </p>
+
+      <p style="color: #475569;">
         We started with a single mission: <strong>To bridge the gap between the Silent and the Savior.</strong> We believe that the Gospel doesn't need "sound" to be heard; it needs "SoulConnect" to be understood.
-    </p>
-    
-    <div style="margin-top: 30px; padding: 25px; background: #f8fafc; border-radius: 15px; border-left: 5px solid var(--gold);">
+      </p>
+
+      <div style="margin-top: 30px; padding: 25px; background: #f8fafc; border-radius: 15px; border-left: 5px solid var(--gold);">
         <h4 style="margin-top: 0; color: var(--primary);">“More of Him, less of us.”</h4>
         <p style="margin: 0; font-style: italic;">Our founding philosophy is simple: Jesus at the center. We remove the noise of the world to help souls find rest in the grace of Christ.</p>
+      </div>
     </div>
-  </div>
 
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 50px;">
-    <div style="background: white; padding: 40px; border-radius: 25px; text-align: center; border: 1px solid #e2e8f0; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);">
-      <div style="font-size: 3rem; margin-bottom: 20px;">📖</div>
-      <h3 style="color: var(--primary);">Accessibility</h3>
-      <p class="small muted">Scripture explained in "Plain English" and visual concepts that respect how Deaf individuals process truth.</p>
-    </div>
-    <div style="background: white; padding: 40px; border-radius: 25px; text-align: center; border: 1px solid #e2e8f0; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);">
-      <div style="font-size: 3rem; margin-bottom: 20px;">🙏</div>
-      <h3 style="color: var(--primary);">Intercession</h3>
-      <p class="small muted">A dedicated space for prayer where "silent" doesn't mean "unheard." We carry your burdens to the Throne.</p>
-    </div>
-    <div style="background: white; padding: 40px; border-radius: 25px; text-align: center; border: 1px solid #e2e8f0; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);">
-      <div style="font-size: 3rem; margin-bottom: 20px;">🤟</div>
-      <h3 style="color: var(--primary);">Restoration</h3>
-      <p class="small muted">Healing the heart from past church hurt and restoring the joy of fellowship through modern connection.</p>
-    </div>
-  </div>
+    <div class="about-features">
+      <div class="about-feature-card">
+        <div style="font-size: 3rem; margin-bottom: 20px;">📖</div>
+        <h3 style="color: var(--primary);">Accessibility</h3>
+        <p class="small muted">Scripture explained in "Plain English" and visual concepts that respect how Deaf individuals process truth.</p>
+      </div>
 
-  <div class="card" style="border-radius: 30px; padding: 55px; background: #fffcf0; border: 2px solid #fef3c7; margin-bottom: 50px;">
-    <div style="text-align: center; max-width: 700px; margin: 0 auto 40px;">
+      <div class="about-feature-card">
+        <div style="font-size: 3rem; margin-bottom: 20px;">🙏</div>
+        <h3 style="color: var(--primary);">Intercession</h3>
+        <p class="small muted">A dedicated space for prayer where "silent" doesn't mean "unheard." We carry your burdens to the Throne.</p>
+      </div>
+
+      <div class="about-feature-card">
+        <div style="font-size: 3rem; margin-bottom: 20px;">🤟</div>
+        <h3 style="color: var(--primary);">Restoration</h3>
+        <p class="small muted">Healing the heart from past church hurt and restoring the joy of fellowship through modern connection.</p>
+      </div>
+    </div>
+
+    <div class="card about-series-card">
+      <div style="text-align: center; max-width: 700px; margin: 0 auto 40px;">
         <span style="background: #92400e; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Featured Series</span>
         <h2 style="color: #856404; font-size: 2.2rem; margin-top: 15px;">Found in the Stillness</h2>
         <p style="color: #92400e; line-height: 1.6;">Our introductory study series uses the visual power of figurative language to show you how much God values your soul.</p>
-    </div>
+      </div>
 
-    <div style="display: grid; gap: 40px;">
-      <div style="display: flex; gap: 30px; align-items: flex-start;">
-        <div style="font-size: 2.5rem; opacity: 0.3; font-weight: 900; line-height: 1;">01</div>
-        <div>
-          <h4 style="margin: 0; color: #92400e; font-size: 1.3rem;">The Silent Shadow</h4>
-          <p style="line-height: 1.8; color: #78350f;">
-            A silver coin slips from a hand. It doesn't scream as it falls. It hits the dust in <strong>perfect silence</strong>. Lost in the shadows of a busy house, it sits still, unable to move itself back to the light. Many in our community feel like this coin—valuable, but hidden under the "dust" of barriers.
-          </p>
+      <div style="display: grid; gap: 40px;">
+        <div style="display: flex; gap: 30px; align-items: flex-start;">
+          <div style="font-size: 2.5rem; opacity: 0.3; font-weight: 900; line-height: 1;">01</div>
+          <div>
+            <h4 style="margin: 0; color: #92400e; font-size: 1.3rem;">The Silent Shadow</h4>
+            <p style="line-height: 1.8; color: #78350f;">
+              A silver coin slips from a hand. It doesn't scream as it falls. It hits the dust in <strong>perfect silence</strong>. Lost in the shadows of a busy house, it sits still, unable to move itself back to the light. Many in our community feel like this coin—valuable, but hidden under the "dust" of barriers.
+            </p>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 30px; align-items: flex-start;">
+          <div style="font-size: 2.5rem; opacity: 0.3; font-weight: 900; line-height: 1;">02</div>
+          <div>
+            <h4 style="margin: 0; color: #92400e; font-size: 1.3rem;">The Sweeping Search</h4>
+            <p style="line-height: 1.8; color: #78350f;">
+              The Owner does not give up. A lamp is lit, flooding the dark corners with <strong>golden light</strong>. The broom moves with purpose, sifting through the dirt. This is the heart of SSCM—we are here to light the lamp of the Gospel and sweep away the confusion so you can be found by Truth.
+            </p>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 30px; align-items: flex-start;">
+          <div style="font-size: 2.5rem; opacity: 0.3; font-weight: 900; line-height: 1;">03</div>
+          <div>
+            <h4 style="margin: 0; color: #92400e; font-size: 1.3rem;">The Visual Victory</h4>
+            <p style="line-height: 1.8; color: #78350f;">
+              When the coin is found, the joy is not just a whisper—it is a <strong>celebration</strong>! The Woman calls her neighbors to see. In the same way, Heaven signs "Hallelujah" when one soul connects with the Creator. Our studies end here: in the light, held tight, and fully known.
+            </p>
+          </div>
         </div>
       </div>
 
-      <div style="display: flex; gap: 30px; align-items: flex-start;">
-        <div style="font-size: 2.5rem; opacity: 0.3; font-weight: 900; line-height: 1;">02</div>
-        <div>
-          <h4 style="margin: 0; color: #92400e; font-size: 1.3rem;">The Sweeping Search</h4>
-          <p style="line-height: 1.8; color: #78350f;">
-            The Owner does not give up. A lamp is lit, flooding the dark corners with <strong>golden light</strong>. The broom moves with purpose, sifting through the dirt. This is the heart of SSCM—we are here to light the lamp of the Gospel and sweep away the confusion so you can be found by Truth.
-          </p>
-        </div>
-      </div>
-
-      <div style="display: flex; gap: 30px; align-items: flex-start;">
-        <div style="font-size: 2.5rem; opacity: 0.3; font-weight: 900; line-height: 1;">03</div>
-        <div>
-          <h4 style="margin: 0; color: #92400e; font-size: 1.3rem;">The Visual Victory</h4>
-          <p style="line-height: 1.8; color: #78350f;">
-            When the coin is found, the joy is not just a whisper—it is a <strong>celebration</strong>! The Woman calls her neighbors to see. In the same way, Heaven signs "Hallelujah" when one soul connects with the Creator. Our studies end here: in the light, held tight, and fully known.
-          </p>
-        </div>
+      <div style="text-align: center; margin-top: 50px;">
+        <a href="{{ url_for('study_index') }}" class="btn" style="background: #92400e; color: white; padding: 18px 50px; font-size: 1.1rem; box-shadow: 0 10px 20px rgba(146, 64, 14, 0.2);">Begin the "Lost Coin" Journey</a>
       </div>
     </div>
 
-    <div style="text-align: center; margin-top: 50px;">
-      <a href="{{ url_for('study_index') }}" class="btn" style="background: #92400e; color: white; padding: 18px 50px; font-size: 1.1rem; box-shadow: 0 10px 20px rgba(146, 64, 14, 0.2);">Begin the "Lost Coin" Journey</a>
-    </div>
-  </div>
+    <div class="about-quote-card">
+      
+      <div class="scripture-divider"></div>
 
-  <div style="text-align: center; margin-bottom: 60px; padding: 40px; border-radius: 25px; background: white; border: 1px solid #e2e8f0;">
-    <p style="font-size: 1.4rem; font-style: italic; color: var(--primary); margin-bottom: 10px;">“For the message of the cross is the power of God.”</p>
-    <span style="font-weight: 800; color: var(--gold);">— 1 CORINTHIANS 1:18</span>
-    <p style="margin-top: 25px; color: #64748b; font-size: 0.9rem; max-width: 500px; margin-left: auto; margin-right: auto;">
+      <p style="font-size: 1.4rem; font-style: italic; color: var(--primary); margin-bottom: 10px;">“For the message of the cross is the power of God.”</p>
+      <span style="font-weight: 800; color: var(--gold);">— 1 CORINTHIANS 1:18</span>
+      <p style="margin-top: 25px; color: #64748b; font-size: 0.9rem; max-width: 500px; margin-left: auto; margin-right: auto;">
         “Go therefore and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit.” — Matthew 28:19
-    </p>
-  </div>
+      </p>
+    </div>
 
-  <div class="card" style="border-radius: 30px; background: var(--primary); color: white; padding: 50px; text-align: center; border: none;">
-    <h2 style="color: white; margin-top: 0;">Be Part of the Story</h2>
-    <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 30px;">Whether you need a place to rest in grace or a place to serve in faith, there is a seat for you at our table.</p>
-    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+    <div class="card about-cta-card">
+      <h2 style="color: white; margin-top: 0;">Be Part of the Story</h2>
+      <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 30px;">Whether you need a place to rest in grace or a place to serve in faith, there is a seat for you at our table.</p>
+      <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
         <a href="{{ url_for('volunteer') }}" class="btn" style="background: var(--gold); color: #453505; border: none; padding: 15px 40px; font-weight: bold;">Volunteer with Us</a>
         <a href="{{ url_for('home') }}" class="btn soft" style="background: rgba(255,255,255,0.1); color: white; padding: 15px 40px; border: 1px solid rgba(255,255,255,0.3);">Back to Home</a>
+      </div>
     </div>
+
   </div>
 
-</div>
+</section>
 {% endblock %}

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}The PATH Journey{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+  <h1>Walk the PATH</h1>
+  <p class="subtitle">
+    A gentle spiritual journey for reflection, prayer, and growth.
+  </p>
+</section>
+
+<section class="container page-wrap">
+
+<div class="path-journey">
+
+<!-- Pause -->
+<div class="journey-step">
+<h2>Pause</h2>
+<p>
+Slow down and quiet your heart before God.  
+Begin the day with a simple devotion.
+</p>
+
+<p class="verse">
+“Be still and know that I am God.” – Psalm 46:10
+</p>
+
+<a class="btn btn-primary" href="{{ url_for('today') }}">
+Start Today's Devotion
+</a>
+</div>
+
+<!-- Anchor -->
+<div class="journey-step">
+<h2>Anchor</h2>
+<p>
+Build your faith by studying God's word and understanding His truth.
+</p>
+
+<a class="btn btn-outline" href="{{ url_for('study_index') }}">
+Visit Study Hub
+</a>
+</div>
+
+<!-- Talk -->
+<div class="journey-step">
+<h2>Talk</h2>
+<p>
+Prayer is conversation with God. Bring your burdens, gratitude, and hopes.
+</p>
+
+<a class="btn btn-outline" href="{{ url_for('prayer') }}">
+Submit Prayer Request
+</a>
+</div>
+
+<!-- Hope -->
+<div class="journey-step">
+<h2>Hope</h2>
+<p>
+Receive encouragement and quiet reflections for life’s journey.
+</p>
+
+<a class="btn btn-outline" href="{{ url_for('blog_index') }}">
+Read Soul Speaks
+</a>
+</div>
+
+</div>
+
+</section>
+
+{% endblock %}

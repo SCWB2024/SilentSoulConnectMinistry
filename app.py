@@ -839,6 +839,11 @@ def home():
     ctx = common_page_ctx(active="home")
     return render_template("home.html", **ctx)
 
+# ---------- Path ----------
+@app.route("/path")
+def path():
+    return render_template("path.html")
+
 
 # ---------- Devotion / Study Hub ----------
 @app.route("/devotion-study", endpoint="devotion_study")

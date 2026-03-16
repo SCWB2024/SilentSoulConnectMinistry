@@ -5,149 +5,186 @@
 {% block content %}
 
 <!-- HERO -->
-<section class="hero"
-         style="background: white; margin-bottom: 1.5rem;">
-  <div class="hero-inner" style="color: #2d3436;">
-    <h1> FIND YOUR RHYTHM — Come, all who are thirsty.</h1>
-    <p> Before sunrise I call to you for help; I place my hope in your promise. ~Psalms 119:147 GNT~</p>
+<section class="hero hero-home">
+  <div class="hero-inner hero-home-inner">
+    <h1>FIND YOUR RHYTHM — Come, all who are thirsty.</h1>
+    <p>
+      Before sunrise I call to you for help; I place my hope in your promise.
+      <span class="verse-ref">~ Psalms 119:147 GNT ~</span>
+    </p>
 
-      <!-- Deaf-first quick scan -->
-<div class="chip-row hero-chips" style="margin: 12px 0 0;">
-  <span class="chip" style="pointer-events:none;">🤟 Deaf-friendly</span>
-  <span class="chip" style="pointer-events:none;">🧠 Simple English</span>
-  <span class="chip" style="pointer-events:none;">🤍 Inclusive Community</span>
-</div>
-
+    <div class="chip-row hero-chips">
+      <span class="chip hero-chip-static">🤟 Deaf-friendly</span>
+      <span class="chip hero-chip-static">🧠 Simple English</span>
+      <span class="chip hero-chip-static">🤍 Inclusive Community</span>
+    </div>
+  </div>
 </section>
+
+<!-- FEATURE + PROMOTION -->
 <section class="container page-wrap home-highlight">
+  <div class="home-feature-grid">
 
- <div class="home-grid">
-  <div class="home-card">
-    <h3 class="card-header">
-      📖 Weekly Bible Study 
-      <span class="badge-live">LIVE</span>
-    </h3>
-    
-    <div class="card-inner-layout">
-      <img src="{{ url_for('static', filename='img/promo/bible_study.png') }}" 
-           alt="Bible Study" class="card-img">
+    <!-- LEFT COLUMN -->
+    <div class="home-feature-side">
 
-      <div class="card-text-box">
-        <p class="card-subtitle"><strong>Sundays • 7PM EST</strong></p>
-        <p class="card-description">
-          Join our inclusive community for spiritual encouragement and restful living.
-        </p>
-        <a class="btn btn-primary" href="https://zoom.us/j/88914147780" target="_blank">
-          🔗 Join via Zoom
-        </a>
-      </div>
+      <!-- LIVE FEATURE -->
+      <article class="home-card feature-card live-feature-card">
+        <h3 class="card-header">
+          📖 Weekly Bible Study
+          <span class="badge-live">LIVE</span>
+        </h3>
+
+        <div class="card-inner-layout card-inner-layout-stack">
+          <img
+            src="{{ url_for('static', filename='img/promo/bible_study.png') }}"
+            alt="Weekly Bible Study promotion"
+            class="card-img card-img-small"
+          >
+
+          <div class="card-text-box">
+            <p class="card-subtitle"><strong>Sundays • 8PM AST</strong></p>
+            <p class="card-description">
+              Join our inclusive community for spiritual encouragement and restful living.
+            </p>
+            <a class="btn btn-primary" href="https://zoom.us/j/88914147780" target="_blank" rel="noopener">
+              🔗 Join via Zoom
+            </a>
+          </div>
+        </article>
+
+      <!-- QUICK LINKS UNDER LIVE -->
+      <section class="home-quick-links-card">
+        <div class="quick-actions quick-actions-vertical">
+          <a href="{{ url_for('about') }}" class="chip-link chip-about">ℹ️ About SSCM</a>
+          <a href="{{ url_for('verses') }}" class="chip-link chip-verses">✉️ Verses</a>
+          <a href="{{ url_for('volunteer') }}" class="chip-link chip-volunteer">🤝 Volunteer</a>
+          <a href="{{ url_for('donation') }}" class="chip-link chip-donate">❤️ Donation</a>
+        </div>
+      </section>
+
     </div>
-  </div>
 
- <div class="home-card">
-    <h3 class="card-header">
-      🌿 March Theme
-      <span class="badge-new">NEW</span>
-    </h3>
-    
-    <div class="card-inner-layout">
-      <img src="{{ url_for('static', filename='img/promo/march_theme.png') }}" 
-           alt="March Theme" class="card-img">
+    <!-- RIGHT COLUMN -->
+    <article class="home-card feature-card theme-feature-card">
+      <h3 class="card-header">
+        🌿 March Theme
+        <span class="badge-new">NEW</span>
+      </h3>
 
-      <div class="card-text-box">
-        <p class="card-subtitle"><strong>Courage in Quietness.</strong></p>
-        <p class="card-description">
-          Strength is not always loud. Sometimes it is steady, rooted, and faithful.
-        </p>
-        <a class="btn btn-outline" href="{{ url_for('blog_index') }}">
-          Explore This Month
-        </a>
+      <div class="card-inner-layout card-inner-layout-stack">
+        <img
+          src="{{ url_for('static', filename='img/promo/march_theme.png') }}"
+          alt="March theme promotion"
+          class="card-img card-img-large"
+        >
+
+        <div class="card-text-box">
+          <p class="card-subtitle"><strong>Courage in Quietness.</strong></p>
+          <p class="card-description">
+            Strength is not always loud. Sometimes it is steady, rooted, and faithful.
+          </p>
+          <a class="btn btn-outline" href="{{ url_for('blog_index') }}">
+            Explore This Month
+          </a>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
+    </article>
 
+  </div>
 </section>
 
-<!-- DAILY RHYTHM -->
-<section class="page-hero" style="margin-bottom: 1.2rem;">
-  <h1>~~ WELCOME TO SILENT SOULCONNECT MINISTRY ~~</h1>
+<!-- WELCOME -->
+<section class="page-hero page-hero-home">
+  <h2>WELCOME TO SILENT SOULCONNECT MINISTRY</h2>
   <p class="subtitle">
-    One small step in the morning, one quiet surrender at night. The rest of the day belongs to Him.
+    One small step in the morning, one quiet surrender at night.
+    The rest of the day belongs to Him.
   </p>
 </section>
 
-<!-- CORE USER PATH (3 blocks) -->
-<section>
-  <div class="core-grid">
+<div class="path-meaning">
+  <span class="path-letter p">P</span> Pause
+  <span class="path-letter a">A</span> Anchor
+  <span class="path-letter t">T</span> Talk
+  <span class="path-letter h">H</span> Hope
+</div>
 
-    <!-- 1) Devotion -->
-    <article class="core-card">
-      <div class="core-ico" aria-hidden="true">🌅</div>
-      <h3 class="core-title">Devotion</h3>
-      <p class="core-sub">Daily devotion • Simple meaning </p>
-      <div class="core-actions">
-        <a class="btn" href="{{ url_for('today') }}">Start Today</a>
-      </div>
-    </article>
+  <div class="path-grid">
+    <a class="path-card path-link-card" href="{{ url_for('today') }}">
+      <div class="path-ico" aria-hidden="true">⏸️</div>
+      <h3>Pause</h3>
+      <p>Slow down, breathe, and make room for God at the start of your day.</p>
+      <span class="path-link-text">Start Today →</span>
+    </a>
 
-    <!-- 2) Prayer -->
-    <article class="core-card">
-      <div class="core-ico" aria-hidden="true">🙏</div>
-      <h3 class="core-title">Prayer</h3>
-      <p class="core-sub">Submit a request •  • Receive comfort</p>
-      <div class="core-actions">
-        <a class="btn" href="{{ url_for('prayer') }}">Request Prayer</a>
-      </div>
-    </article>
+    <a class="path-card path-link-card" href="{{ url_for('study_index') }}">
+      <div class="path-ico" aria-hidden="true">📖</div>
+      <h3>Anchor</h3>
+      <p>Read, learn, and let scripture steady your heart.</p>
+      <span class="path-link-text">Go to Study Hub →</span>
+    </a>
 
-    <!-- 3) Soul Speaks (replaces Verses) -->
-    <article class="core-card">
-      <div class="core-ico" aria-hidden="true">🕊️</div>
-      <h3 class="core-title">Soul Speaks</h3>
-      <p class="core-sub">Quiet reflections •  •  • Faith & dignity</p>
-      <div class="core-actions">
-        <a class="btn" href="{{ url_for('blog_index') }}">Read Soul Speaks</a>
-      </div>
-    </article>
+    <a class="path-card path-link-card" href="{{ url_for('prayer') }}">
+      <div class="path-ico" aria-hidden="true">🙏</div>
+      <h3>Talk</h3>
+      <p>Bring your burdens, your thanks, and your quiet prayers before God.</p>
+      <span class="path-link-text">Submit Prayer →</span>
+    </a>
 
+    <a class="path-card path-link-card" href="{{ url_for('blog_index') }}">
+      <div class="path-ico" aria-hidden="true">🕊️</div>
+      <h3>Hope</h3>
+      <p>Find encouragement, declarations, and life-giving reflections.</p>
+      <span class="path-link-text">Read Soul Speaks →</span>
+    </a>
   </div>
-</section>
-<section class="quick-links-section">
-  <h2 class="section-title">Quick links</h2>
-  <div class="quick-actions">
-    <a href="{{ url_for('about') }}" class="chip-link chip-about">ℹ️ About SSCM</a>
-    <a href="{{ url_for('study_index') }}" class="chip-link chip-study">📚 Study Hub</a>
-    <a href="{{ url_for('verses') }}" class="chip-link chip-verses">✉️ Verses</a>
-    <a href="{{ url_for('volunteer') }}" class="chip-link chip-volunteer">🤝 Volunteer</a>
+
+  <div class="path-cta">
+    <a class="btn btn-primary" href="{{ url_for('path') }}">Start the Full Path</a>
   </div>
 </section>
 
-<style>
-.core-grid{
-  display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap:16px;
-  margin-top:12px;
-}
-.core-card{
-  background:#fff;
-  border-radius:18px;
-  padding:18px;
-  border:1px solid rgba(0,0,0,0.08);
-  box-shadow: 0 10px 22px rgba(0,0,0,0.06);
-}
-.core-ico{
-  width:56px; height:56px;
-  border-radius:14px;
-  display:flex; align-items:center; justify-content:center;
-  background:rgba(0,0,0,0.06);
-  font-size:1.8rem;
-  margin-bottom:10px;
-}
-.core-title{ margin:0 0 6px; font-weight:900; font-size:1.2rem; }
-.core-sub{ margin:0 0 14px; opacity:0.9; }
-.core-actions{ display:flex; gap:10px; flex-wrap:wrap; }
-</style>
+<!-- BEGIN HERE -->
+<section class="container page-wrap home-core-section">
+  <div class="section-heading">
+    <h2 class="section-title">Begin Here</h2>
+    <p class="section-intro">
+      Choose the next step that meets your need today.
+    </p>
+  </div>
+ 
+<section class="home-support-area">
 
+  <!-- SUPPORT THE MINISTRY -->
+  <div class="home-block support-block">
+    <h3>Support This Quiet Work</h3>
+
+    <p>
+      Silent SoulConnect Ministry provides devotion, prayer, and study
+      resources designed to be Deaf-friendly, simple, and encouraging.
+      If this space blesses you, consider supporting the mission.
+    </p>
+
+    <a href="/donation" class="btn btn-support">Support the Ministry</a>
+  </div>
+
+
+  <!-- MINISTRY RESOURCE / BOOK -->
+  <div class="home-block resource-block">
+
+    <h3>Ministry Resource</h3>
+
+    <p>
+      Explore reflections, study guides, and ministry resources created
+      to encourage faith and spiritual growth.
+    </p>
+
+    <a href="https://read.amazon.com/sample/B0G8HXNJ3H?clientId=share"  target="_blank" class="btn btn-resource">
+      View Resource
+    </a>
+
+  </div>
+
+</section>
 {% endblock %}

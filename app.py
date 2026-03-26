@@ -281,6 +281,16 @@ def pick_random_request(topic: str | None = None) -> dict | None:
 
     return random.choice(items)
 
+def load_json_list(path):
+    """Load a JSON file that should contain a list."""
+    try:
+        if not path.exists():
+            return []
+        with path.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+            return data if isinstance(data, list) else []
+    except (json.JSONDecodeError, OSError):
+        return []
 
 # =========================
 # 10) SOCIAL LINKS

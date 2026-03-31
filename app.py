@@ -288,9 +288,21 @@ def load_json_list(path):
             return []
         with path.open("r", encoding="utf-8") as f:
             data = json.load(f)
-            return data if isinstance(data, list) else []
+        return data if isinstance(data, list) else []
     except (json.JSONDecodeError, OSError):
         return []
+
+
+def save_json_list(path, items):
+    """Save a list to a JSON file."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as f:
+        json.dump(items, f, ensure_ascii=False, indent=2)
+
+
+def prayer_topic_labels():
+    return {t["value"]: t["label"] for t in PRAYER_TOPICS}
+
 
 # =========================
 # 10) SOCIAL LINKS
@@ -993,13 +1005,15 @@ PRAYER_TOPICS = [
     {"value": "relationships", "label": "💞 Relationships / Family"},
     {"value": "grief",         "label": "💔 Grief / Loss"},
     {"value": "healing",       "label": "🩺 Sickness / Healing"},
-    {"value": "work",          "label": "💼 Work / Finances"},
+    {"value": "provision",     "label": "💼 Provision / Finances"},
     {"value": "direction",     "label": "🧭 Direction / Decisions"},
     {"value": "faith",         "label": "🙏 Faith / Spiritual Strength"},
     {"value": "community",     "label": "🧑‍🤝‍🧑 Community / Others"},
     {"value": "other",         "label": "✍️ Other"},
 ]
+
 PRAYER_TOPIC_VALUES = {t["value"] for t in PRAYER_TOPICS}
+PRAYER_TOPIC_LABELS = {t["value"]: t["label"] for t in PRAYER_TOPICS}
 
 @app.route("/prayer", methods=["GET", "POST"], endpoint="prayer")
 @limiter.limit("5 per minute", methods=["POST"])
@@ -1008,22 +1022,39 @@ def prayer():
     if request.method == "POST":
         name = (request.form.get("name") or "").strip()[:80]
         contact = (request.form.get("contact") or "").strip()[:120]
-        topic = (request.form.get("topic") or "").strip() or "other"
-        if topic not in PRAYER_TOPIC_VALUES:
-            topic = "other"
+        pref_method = (request.form.get("pref_method") or "").strip()[:40]
 
-        req_text = (request.form.get("request") or "").strip()
-        req_text = req_text[:2000]
+        topics = request.form.getlist("topics")
+        topics = [t.strip() for t in topics if t and t.strip()]
+        topics = [t for t in topics if t in PRAYER_TOPIC_VALUES][:2]
 
-        if not req_text:
-            flash("❌ Please write your prayer request.", "error")
+        topic_other = (request.form.get("topic_other") or "").strip()[:120]
+
+        req_text = (request.form.get("request") or "").strip()[:2000]
+
+        # Require at least one topic OR a written request
+        if not topics and not req_text:
+            flash("❌ Please choose at least one prayer topic or write a short request.", "error")
             return redirect(url_for("prayer"))
+
+        # Build display labels
+        topic_labels = []
+        for t in topics:
+            if t == "other":
+                topic_labels.append(topic_other if topic_other else "Other")
+            else:
+                topic_labels.append(PRAYER_TOPIC_LABELS.get(t, t))
+
+        topic_display = ", ".join(topic_labels) if topic_labels else "General"
 
         record = {
             "ts": datetime.now().isoformat(timespec="seconds"),
             "name": name,
             "contact": contact,
-            "topic": topic,
+            "pref_method": pref_method,
+            "topic": topic_display,   # human-friendly display
+            "topics": topics,         # raw values list
+            "topic_other": topic_other,
             "request": req_text,
         }
 
@@ -1032,7 +1063,6 @@ def prayer():
         try:
             send_prayer_email(record)
         except Exception:
-            # Don’t break the site if email is not configured
             logger.info("Prayer email skipped (not configured or failed).")
 
         flash("🙏 Your prayer request was received.", "success")
@@ -1054,15 +1084,17 @@ def send_prayer_email(record: dict) -> bool:
         return False
 
     msg = EmailMessage()
-    msg["Subject"] = f"New Prayer Request ({record.get('topic', 'other')})"
+    msg["Subject"] = f"New Prayer Request ({record.get('topic', 'General')})"
     msg["From"] = (os.getenv("ALERT_EMAIL_FROM") or user).strip()
     msg["To"] = to_addr
+
     msg.set_content(
         f"Time: {record.get('ts')}\n"
-        f"Name: {record.get('name')}\n"
-        f"Contact: {record.get('contact')}\n"
-        f"Topic: {record.get('topic')}\n\n"
-        f"Request:\n{record.get('request')}\n"
+        f"Name: {record.get('name') or 'Anonymous'}\n"
+        f"Contact: {record.get('contact') or '-'}\n"
+        f"Preferred Method: {record.get('pref_method') or '-'}\n"
+        f"Topic(s): {record.get('topic') or 'General'}\n\n"
+        f"Request:\n{record.get('request') or '[No written request — topic-only submission]'}\n"
     )
 
     with smtplib.SMTP(host, port, timeout=10) as smtp:
@@ -1073,7 +1105,6 @@ def send_prayer_email(record: dict) -> bool:
         smtp.send_message(msg)
 
     return True
-
 
 # ---------- About ----------
 @app.route("/about", endpoint="about")

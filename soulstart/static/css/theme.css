@@ -162,6 +162,12 @@ p{ margin: .4rem 0; }
 }
 
 
+@media (max-width: 900px) {
+  .home-top-row .top-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* =============================
    04) NAVIGATION
    ============================= */
@@ -1033,6 +1039,47 @@ p{ margin: .4rem 0; }
   gap: 18px;
 }
 
+/* PROMO SIDE BY SIDE */
+.top-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.live-card,
+.theme-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.live-image img,
+.theme-image img {
+  width: 100%;
+  display: block;
+  border-radius: 12px;
+}
+
+.live-label,
+.theme-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.card-text-box,
+.theme-actions {
+  margin-top: 0.9rem;
+}
+
+@media (max-width: 900px) {
+  .top-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .live-feature-card,
 .theme-feature-card,
 .home-quick-links-card {
@@ -1548,6 +1595,31 @@ body.bg-video .topnav a.active{
     width: min(560px, 92vw);
     padding: 18px;
   }
+
+    .btn-delete {
+    background:#b91c1c;
+    color:#fff;
+    border:none;
+    padding:8px 12px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:700;
+    font-size:.85rem;
+  }
+  .btn-delete:hover { filter:brightness(.95);
+  }
+
+  .topic-checks label {
+  background: rgba(255,255,255,0.08);
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.topic-checks input {
+  transform: scale(1.2);
+}
+
 
 /* =========================================
    UNIFIED ADMIN MANAGEMENT SYSTEM (No Clashes)
@@ -2306,158 +2378,176 @@ input:focus, select:focus {
   .sp-side{ position:static; }
 }
 
-/* ===============================
-   19) Home Highlight (Study + Flash)
-   Scoped to HOME only
-   =============================== */
+/* =========================
+   HOME PAGE ENHANCEMENTS
+========================= */
 
-.home-page .home-grid{
-  display: flex;
-  gap: 24px;
-  align-items: stretch;
-  margin: 40px 0;
-}
-.home-page .home-card{
-  flex: 1;
-  background: #fff;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,.06);
-  display: flex;
-  flex-direction: column;
-}
-.home-page .card-header{
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  font-size: 1.25rem;
-  margin-bottom: 20px;
-  color: #2d3436;
-}
-.home-page .card-inner-layout{
-  display: flex;
-  gap: 20px;
-  height: 100%;
-}
-.home-page .card-img{
-  width: 45%;
-  max-width: 180px;
-  border-radius: 10px;
-  object-fit: cover;
-  box-shadow: 0 2px 8px rgba(0,0,0,.10);
-}
-.home-page .card-text-box{
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-.home-page .card-subtitle{
-  font-size: 1.05rem;
-  margin-bottom: 8px;
-}
-.home-page .card-description{
-  font-size: 0.95rem;
-  color: #636e72;
-  margin-bottom: 20px;
-  line-height: 1.5;
+/* HERO spacing */
+.home-hero .hero-inner {
+  padding: 2.5rem 2rem;
 }
 
-/* badges */
-.badge-live, .badge-new{
-  font-size: 0.65rem;
-  padding: 2px 8px;
-  border-radius: 4px;
-  vertical-align: middle;
-  margin-left: 8px;
-  font-weight: bold;
-  letter-spacing: 1px;
+.hero-tags {
+  margin: 0.75rem 0 1.25rem;
+}
+
+.hero-tags span {
   display: inline-block;
-  position: relative;
-  top: -2px;
-  color: white;
+  background: rgba(255,255,255,0.15);
+  padding: 0.25rem 0.6rem;
+  margin-right: 0.4rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
 }
 
-.badge-live{
-  background: #e74c3c;
-  color: #fff;
+
+/* =========================
+   LIVE + THEME GRID
+========================= */
+
+.home-top-row .top-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: stretch;
 }
 
-.badge-new{
-  background: #f1c40f;
-  color: #2d3436;
+.live-card,
+.theme-card {
+  background: #fff;
+  border-radius: 11px;
+  padding: 1rem;
+  box-shadow: 0 6px 11px rgba(0,0,0,0.06);
 }
 
-.badge-live::after{
-  content: '';
-  position: absolute;
-  width: 100%; height: 100%;
-  top: 0; left: 0;
-  background: inherit;
-  border-radius: inherit;
-  z-index: -1;
-  /* animation: pulse 2s infinite; */
+.live-image img,
+.theme-image img {
+  width: 60%;
+  height: auto;
+  border-radius: 08px;
+  margin-bottom: 0.45rem;
 }
 
-@keyframes pulse{
-  0% { transform: scale(1); opacity: .6; }
-  100% { transform: scale(1.4); opacity: 0; }
+
+/* =========================
+   PATH GRID (ALL IN ONE LINE)
+========================= */
+
+.path-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.2rem;
 }
 
-@media (max-width: 800px){
-  .home-page .home-grid{ flex-direction: column; }
-  .home-page .card-inner-layout{ flex-direction: column; }
-  .home-page .card-img{ width: 100%; max-width: none; }
-}
-
-/* Header Alignment: Ensures both titles start at the left */
-.card-header {
+.path-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 1rem;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
   text-align: left;
-  font-size: 1.25rem;
-  margin-bottom: 20px;
-  color: #2d3436;
+  transition: transform 0.2s ease;
 }
 
-/* The side-by-side layout inside the card */
-.card-inner-layout {
-  display: flex;
-  gap: 20px;
-  height: 100%; /* Ensures internal content fills the card */
+.path-card:hover {
+  transform: translateY(-3px);
 }
 
-.card-img {
-  width: 45%; 
-  max-width: 180px;
+.path-letter {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #999;
+  margin-bottom: 0.3rem;
+}
+
+.path-icon {
+  font-size: 1.2rem;
+  margin-bottom: 0.3rem;
+}
+
+.path-subtitle {
+  font-size: 0.8rem;
+  color: #777;
+  margin-bottom: 0.4rem;
+}
+
+
+/* =========================
+   LIVE BUTTON
+========================= */
+
+.live-actions .btn {
+  margin-top: 0.4rem;
+}
+
+
+/* =========================
+   NAV BAR POLISH
+========================= */
+
+.nav a {
+  font-weight: 500;
+  padding: 0.5rem 0.8rem;
   border-radius: 10px;
-  object-fit: cover;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Enhancement: Subtle shadow */
+  transition: background 0.2s ease;
 }
 
-/* Text Box alignment */
-.card-text-box {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+.nav a:hover {
+  background: rgba(255,255,255,0.15);
 }
 
-.card-subtitle {
-  font-size: 1.05rem;
-  margin-bottom: 8px;
+.nav a.active {
+  background: #fff;
+  color: #0c8f5c; /* your green */
+  font-weight: 600;
 }
 
-.card-description {
-  font-size: 0.95rem;
-  color: #636e72;
-  margin-bottom: 20px;
-  line-height: 1.5;
+
+/* =========================
+   UPDATE CARD
+========================= */
+
+/* UPDATE ALERT STYLE */
+.update-card {
+  background: #fff5f5;
+  border-radius: 18px;
+  padding:21rem;
 }
 
-/* Responsive: Stacks vertically on mobile */
-@media (max-width: 800px) {
-  .home-grid { flex-direction: column; }
-  .card-inner-layout { flex-direction: column; }
-  .card-img { width: 100%; max-width: none; }
+.site-update-notice .update-card h2 {
+  color: #d90429 !important;
+  text-shadow:
+    0 0 4px rgba(217, 4, 41, 0.45),
+    0 0 10px rgba(217, 4, 41, 0.30),
+    0 0 16px rgba(217, 4, 41, 0.18);
+  font-weight: 1500;
+  letter-spacing: 0.02em;
+}
+
+.site-update-notice .update-card {
+  background: #c22549;
+  border: 1px solid rgba(33, 7, 12, 0);
+}
+
+/* =========================
+   RESPONSIVE (IMPORTANT)
+========================= */
+
+@media (max-width: 900px) {
+
+  .home-top-row .top-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .path-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+
+  .path-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* =========================

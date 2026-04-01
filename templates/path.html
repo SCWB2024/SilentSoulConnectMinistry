@@ -3,71 +3,123 @@
 
 {% block content %}
 
-<section class="page-hero">
-  <h1>Walk the PATH</h1>
-  <p class="subtitle">
-    A gentle spiritual journey for reflection, prayer, and growth.
-  </p>
-</section>
-
 <section class="container page-wrap">
 
-<div class="path-journey">
+  <div class="path-layout">
 
-<!-- Pause -->
-<div class="journey-step">
-<h2>Pause</h2>
-<p>
-Slow down and quiet your heart before God.  
-Begin the day with a simple devotion.
-</p>
+    <!-- LEFT: HERO + INTRO -->
+    <div class="path-content">
 
-<p class="verse">
-“Be still and know that I am God.” – Psalm 46:10
-</p>
+      <section class="page-hero path-hero">
+        <div class="path-hero-inner">
+          <h1>Walk the PATH</h1>
+          <p class="subtitle">
+            A gentle spiritual journey to pause, stay grounded, trust God, and live with hope.
+          </p>
+        </div>
+      </section>
 
-<a class="btn btn-primary" href="{{ url_for('today') }}">
-Start Today's Devotion
-</a>
+      <div class="path-intro-card">
+        <h2>Your Guided Journey</h2>
+        <p>
+          PATH is a simple way to move through devotion, study, prayer, and reflection.
+          Take one step at a time and return whenever you need strength, clarity, or peace.
+        </p>
+      </div>
+
+    </div>
+
+   <!-- RIGHT: IMAGE -->
+<div class="path-visual">
+  <div class="path-visual-card">
+    <div class="theme-label">You are the LAMPSTAND!</div>
+
+    <div class="theme-image">
+      <img src="{{ url_for('static', filename='img/verses/lampstand.png') }}" alt="Light and guidance">
+    </div>
+  </div>
 </div>
 
-<!-- Anchor -->
-<div class="journey-step">
-<h2>Anchor</h2>
-<p>
-Build your faith by studying God's word and understanding His truth.
-</p>
+    <!-- Pause -->
+    <article class="journey-step step-pause">
+      <div class="step-icon">⏸️</div>
+      <h2>Pause</h2>
+      <p class="step-tag">Daily Devotion</p>
+      <p>
+        Slow down and quiet your heart before God. Begin the day with a simple devotion
+        that helps you breathe, reflect, and receive strength.
+      </p>
+      <p class="verse">
+        “Be still and know that I am God.” — Psalm 46:10
+      </p>
+      <a class="btn btn-primary" href="{{ url_for('today') }}">
+        Start Today’s Devotion
+      </a>
+    </article>
 
-<a class="btn btn-outline" href="{{ url_for('study_index') }}">
-Visit Study Hub
-</a>
-</div>
+    <!-- Anchor -->
+    <article class="journey-step step-anchor">
+      <div class="step-icon">📖</div>
+      <h2>Anchor</h2>
+      <p class="step-tag">Study Hub</p>
+      <p>
+        Build your faith by studying God’s Word and growing in understanding.
+        Stay rooted in truth that does not change.
+      </p>
+      <p class="verse">
+        “Your word is a lamp to my feet and a light to my path.” — Psalm 119:105
+      </p>
+      <a class="btn btn-outline" href="{{ url_for('study_index') }}">
+        Visit Study Hub
+      </a>
+    </article>
 
-<!-- Talk -->
-<div class="journey-step">
-<h2>Talk</h2>
-<p>
-Prayer is conversation with God. Bring your burdens, gratitude, and hopes.
-</p>
+    <!-- Trust -->
+    <article class="journey-step step-trust">
+      <div class="step-icon">🙏</div>
+      <h2>Trust</h2>
+      <p class="step-tag">Prayer</p>
+      <p>
+        Prayer is conversation with God. Bring your burdens, gratitude, questions,
+        and hopes to the One who listens with love.
+      </p>
+      <p class="verse">
+        “Trust in the Lord with all your heart.” — Proverbs 3:5
+      </p>
+      <a class="btn btn-outline" href="{{ url_for('prayer') }}">
+        Submit Prayer Request
+      </a>
+    </article>
 
-<a class="btn btn-outline" href="{{ url_for('prayer') }}">
-Submit Prayer Request
-</a>
-</div>
+    <!-- Hope -->
+    <article class="journey-step step-hope">
+      <div class="step-icon">🕊️</div>
+      <h2>Hope</h2>
+      <p class="step-tag">Soul Speaks</p>
+      <p>
+        Receive encouragement and quiet reflections for life’s journey.
+        Let hope rise again through stories, insight, and grace-filled reminders.
+      </p>
+      <p class="verse">
+        “May the God of hope fill you with all joy and peace.” — Romans 15:13
+      </p>
+      <a class="btn btn-outline" href="{{ url_for('blog_index') }}">
+        Read Soul Speaks
+      </a>
+    </article>
 
-<!-- Hope -->
-<div class="journey-step">
-<h2>Hope</h2>
-<p>
-Receive encouragement and quiet reflections for life’s journey.
-</p>
+  </div>
 
-<a class="btn btn-outline" href="{{ url_for('blog_index') }}">
-Read Soul Speaks
-</a>
-</div>
-
-</div>
+  <div class="path-closing-card">
+    <h2>Take the Next Step</h2>
+    <p>
+      You do not need to do everything at once. Start where your heart needs it most today.
+    </p>
+    <div class="path-closing-actions">
+      <a class="btn btn-primary" href="{{ url_for('today') }}">Start Here</a>
+      <a class="btn btn-outline" href="{{ url_for('prayer') }}">Ask for Prayer</a>
+    </div>
+  </div>
 
 </section>
 

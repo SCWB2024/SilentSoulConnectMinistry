@@ -138,12 +138,13 @@
             </div>
 
             <div class="post-body">
-              <div class="post-meta">
-                <span class="chip">{{ post.month_label }}</span>
-                <span class="dot">•</span>
-                <span class="muted">{{ post.date_display }}</span>
-              </div>
-
+            <div class="post-meta">
+  <span class="chip">{{ post.month_label }}</span>
+  <span class="dot">•</span>
+  <span class="muted">Blog{{ post.blog_no }}</span>
+  <span class="dot">•</span>
+  <span class="muted">{{ post.date_display }}</span>
+</div>  
               <h3 class="post-title">
                 <a href="{{ url_for('blog_post', slug=post.slug) }}">{{ post.title }}</a>
               </h3>

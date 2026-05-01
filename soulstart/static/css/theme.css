@@ -1042,9 +1042,9 @@ p{ margin: .4rem 0; }
 /* PROMO SIDE BY SIDE */
 .top-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
+  justify-items: center;
   gap: 1.5rem;
-  align-items: start;
 }
 
 .live-card,
@@ -1053,6 +1053,16 @@ p{ margin: .4rem 0; }
   border-radius: 16px;
   padding: 1rem;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  max-width: 900px;
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.theme-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
 }
 
 .live-image img,
@@ -2403,41 +2413,167 @@ input:focus, select:focus {
   margin-top:6px;
 }
 
-/* =============================
-   SOUL SPEAKS BLOG POSTS
-   ============================= */
+/* Soul Speaks layout */
 .sp-grid{
   display:grid;
-  grid-template-columns: 320px 1fr;
-  gap: 24px;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap:24px;
   align-items:start;
 }
+
 .sp-side{
-  position: sticky;
-  top: 20px;
+  position:sticky;
+  top:18px;
 }
-.sp-side-img{
-  width:100%;
-  border-radius:14px;
-  display:block;
-}
+
 .sp-main{
   display:grid;
   gap:16px;
 }
+
+.sp-side-card,
 .sp-section,
 .sp-callout,
 .sp-scripture,
 .sp-reflection{
   background:#fff;
   border:1px solid rgba(0,0,0,.08);
-  border-radius:16px;
+  border-radius:18px;
   padding:20px;
   box-shadow:0 10px 26px rgba(0,0,0,.05);
 }
+
+.sp-side-card{
+  padding:16px;
+}
+
+.sp-side-media{
+  margin-bottom:12px;
+}
+
+.sp-side-img{
+  width:100%;
+  display:block;
+  border-radius:14px;
+  object-fit:cover;
+  max-height:220px;
+}
+
+.sp-side-title{
+  margin:0 0 6px;
+  font-size:1.45rem;
+  line-height:1.2;
+}
+
+.sp-side-sub{
+  margin:0 0 14px;
+  font-size:.98rem;
+}
+
+.sp-connect{
+  display:grid;
+  gap:10px;
+}
+
+.btn-wide{
+  width:100%;
+  justify-content:center;
+  text-align:center;
+}
+
+.sp-section p,
+.sp-callout,
+.sp-scripture,
+.sp-reflection{
+  font-size:1rem;
+  line-height:1.75;
+}
+
+.sp-h2{
+  margin:0 0 10px;
+  font-size:2rem;
+  line-height:1.2;
+}
+
+.sp-h3{
+  margin:0 0 10px;
+  font-size:1.5rem;
+  line-height:1.2;
+}
+
+.sp-callout-title{
+  font-size:.95rem;
+  color:var(--muted);
+  margin-bottom:8px;
+}
+
+.sp-callout-text{
+  font-size:1.15rem;
+  font-weight:700;
+  line-height:1.5;
+}
+
+.sp-scripture-label{
+  font-size:.95rem;
+  color:var(--muted);
+  margin-bottom:8px;
+}
+
+.sp-scripture-ref{
+  font-weight:700;
+  margin-bottom:10px;
+}
+
+.sp-scripture-quote{
+  margin:0;
+  padding-left:18px;
+  border-left:3px solid rgba(0,0,0,.12);
+  font-style:italic;
+}
+
+.sp-scripture-cite{
+  margin-top:12px;
+}
+
+.sp-list{
+  margin:0;
+  padding-left:20px;
+  line-height:1.8;
+}
+
+.sp-reflection-note{
+  margin-top:14px;
+  font-style:italic;
+}
+
+.sp-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.sp-tag{
+  display:inline-flex;
+  align-items:center;
+  padding:.45rem .8rem;
+  border-radius:999px;
+  background:#f3f4f6;
+  border:1px solid rgba(0,0,0,.06);
+  font-size:.92rem;
+}
+
 @media (max-width: 980px){
-  .sp-grid{ grid-template-columns:1fr; }
-  .sp-side{ position:static; }
+  .sp-grid{
+    grid-template-columns:1fr;
+  }
+
+  .sp-side{
+    position:static;
+  }
+
+  .sp-side-img{
+    max-height:none;
+  }
 }
 
 /* =========================
@@ -2462,16 +2598,35 @@ input:focus, select:focus {
   font-size: 0.75rem;
 }
 
+.theme-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.theme-center img {
+  max-width: 100%;
+  border-radius: 12px;
+}
+
 
 /* =========================
    LIVE + THEME GRID
 ========================= */
 
 .home-top-row .top-grid {
-  display: grid;
+  display: flex;
+  justify-content: center;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
   align-items: stretch;
+}
+
+.top-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  width: 100%;
 }
 
 .live-card,
@@ -2490,6 +2645,17 @@ input:focus, select:focus {
   margin-bottom: 0.45rem;
 }
 
+.theme-card {
+  width: 100%;
+  max-width: 1000px;
+}
+
+.donation-push {
+  text-align: center;
+  font-weight: 600;
+  margin-top: 20px;
+  color: #444;
+}
 
 
 /* =========================
@@ -2555,11 +2721,7 @@ input:focus, select:focus {
 
 @media (max-width: 900px) {
 
-  .home-top-row .top-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .path-grid {
+   .path-grid {
     grid-template-columns: 1fr 1fr;
   }
 }

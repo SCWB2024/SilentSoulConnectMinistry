@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Lesson 2 — Why Can I Trust the Bible?{% endblock %}
+{% block body_class %}study-lesson-page-body{% endblock %}
+
+{% block content %}
+
+<section class="study-lesson-page" aria-label="Lesson 2: Why Can I Trust the Bible?">
+  <div class="study-shell">
+
+    <header class="lesson-hero">
+      <img
+        src="{{ url_for('static', filename='img/study/bible/bible2.jpg') }}"
+        alt="Trusting the Bible"
+        class="lesson-image">
+
+      <span class="series-tag">Level 1 • Introduction Series</span>
+
+      <h1>Lesson 2: Why Can I Trust the Bible?</h1>
+
+      <p class="lesson-subtitle">
+        Start Here — Understanding the Bible
+      </p>
+
+      <p class="lesson-progress lesson-progress-center">
+        Lesson 2 of 3
+      </p>
+    </header>
+
+    <article class="study-card card-real-life">
+      <h2><span aria-hidden="true">🎬</span> Real Life</h2>
+      <p>When directions are wrong, you get lost.</p>
+      <p>Good directions lead you safely.</p>
+    </article>
+
+    <article class="study-card card-question">
+      <h2><span aria-hidden="true">❓</span> Main Question</h2>
+      <p>How do I know the Bible is true?</p>
+    </article>
+
+    <article class="study-card card-bible">
+      <h2><span aria-hidden="true">📖</span> Bible</h2>
+      <p class="verse-ref"><strong>Isaiah 40:8</strong></p>
+      <blockquote>“The word of our God stands forever.”</blockquote>
+    </article>
+
+    <article class="study-card card-discover">
+      <h2><span aria-hidden="true">🔍</span> Discover</h2>
+
+      <div class="qa-block">
+        <h3>What does this verse show?</h3>
+        <p>God’s Word does not change.</p>
+        <p>People change, but God does not.</p>
+        <p>What He says stays true forever.</p>
+        <p class="example">
+          <strong>Example:</strong> Like a strong rock that does not move.
+        </p>
+      </div>
+
+      <div class="qa-block">
+        <h3>Why does that matter?</h3>
+        <p>If something keeps changing, you cannot trust it.</p>
+        <p>But if it stays the same, you can depend on it.</p>
+        <p>God’s Word is stable and sure.</p>
+        <p class="example">
+          <strong>Example:</strong> Like a clock that always shows the correct time.
+        </p>
+      </div>
+
+      <div class="qa-block">
+        <h3>What does this mean for me?</h3>
+        <p>I can trust the Bible even when I feel unsure.</p>
+        <p>I do not need to depend only on feelings.</p>
+        <p>God’s truth will guide me.</p>
+        <p class="example">
+          <strong>Example:</strong> When life feels confusing, the Bible gives direction.
+        </p>
+      </div>
+    </article>
+
+    <article class="study-card card-truth">
+      <h2><span aria-hidden="true">💡</span> Simple Truth</h2>
+      <p>God’s Word is always true.</p>
+      <p>It does not change with time or people.</p>
+      <p>Because of this, you can trust it every day.</p>
+    </article>
+
+    <article class="study-card card-response">
+      <h2><span aria-hidden="true">❤️</span> Response</h2>
+      <ul>
+        <li>I TRUST the Bible</li>
+        <li>I DO NOT depend on feelings</li>
+        <li>I STAND on truth</li>
+      </ul>
+    </article>
+
+    <article class="study-card card-recap">
+      <h2><span aria-hidden="true">🔁</span> Recap</h2>
+      <ul>
+        <li>God’s Word does not change</li>
+        <li>It is always true</li>
+        <li>I can depend on it</li>
+      </ul>
+    </article>
+
+    <article class="study-card card-prayer">
+      <h2><span aria-hidden="true">🙏</span> Prayer</h2>
+      <p>
+        Lord, help me trust Your Word fully.
+        Keep me grounded in truth.
+        In Jesus’ name, Amen.
+      </p>
+    </article>
+
+    <nav class="lesson-nav" aria-label="Lesson navigation">
+      <a
+        class="study-btn study-btn-secondary"
+        href="{{ url_for('study_lesson_1') }}"
+        aria-label="Go to Lesson 1: What Is the Bible?">
+        ← Previous
+      </a>
+
+      <a
+        class="study-btn"
+        href="{{ url_for('study_lesson_3') }}"
+        aria-label="Go to Lesson 3: How Do I Study the Bible?">
+        Next Lesson →
+      </a>
+    </nav>
+
+  </div>
+</section>
+
+{% endblock %}

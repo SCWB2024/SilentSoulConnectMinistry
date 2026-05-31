@@ -1,0 +1,28 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<section class="admin-page">
+  <div class="admin-wrap">
+    <div class="admin-card">
+
+      <header class="admin-header">
+        <p class="admin-kicker">Back Office</p>
+        <h1 class="admin-title">Admin Dashboard</h1>
+        <p class="admin-text">Manage your content from here.</p>
+      </header>
+
+      <div class="admin-actions">
+        <a href="{{ url_for('admin_blog') }}" class="admin-btn admin-btn-primary">
+          ✍️ Create New Blog Post
+        </a>
+        <a class="btn btn-primary" href="{{ url_for('admin_blog_list') }}">Manage Blog Posts</a>
+        <a href="{{ url_for('home') }}" class="admin-btn admin-btn-secondary">
+          🏠 View Website
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

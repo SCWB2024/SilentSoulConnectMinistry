@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ post.title }} — Soul Speaks
+{% endblock %}
+
+{% block body_class %}
+single-blog-page-body
+{% endblock %}
+
+{% block content %}
+
+<main class="single-blog-page">
+
+  <!-- HERO -->
+  <header class="single-blog-hero">
+
+    {% set img = post.image or "" %}
+
+    {% if img.startswith("img/") %}
+      {% set image_src = url_for('static', filename=img) %}
+    {% else %}
+      {% set image_src = url_for(
+        'static',
+        filename='img/blog/uploads/soulspeaks/' ~ img
+      ) %}
+    {% endif %}
+
+    {% if post.image %}
+    <div class="single-blog-image-wrap">
+      <img
+        class="single-blog-image"
+        src="{{ image_src }}"
+        alt="{{ post.title }}"
+        loading="lazy">
+
+      {% if post.blog_number >= "SS007" %}
+      <div class="single-blog-overlay">
+        <div class="single-blog-overlay-inner">
+
+          <div class="blog-badge">
+            {{ post.category }}
+          </div>
+
+          <h1 class="single-blog-title">
+            {{ post.title }}
+          </h1>
+
+          {% if post.excerpt %}
+          <p class="single-blog-subtitle">
+            {{ post.excerpt }}
+          </p>
+          {% endif %}
+
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="single-blog-meta">
+      {{ post.display_date or post.publish_date or post.date }}
+
+      <span>•</span>
+
+      {{ post.category }}
+
+      <span>•</span>
+
+      {{ post.blog_number }}
+
+      {% if post.reading_time %}
+        <span>•</span>
+        {{ post.reading_time }}
+      {% endif %}
+    </div>
+
+    {% if post.tags %}
+    <div class="sp-tags">
+      {% for tag in post.tags %}
+        <span class="sp-tag">
+          {{ tag }}
+        </span>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+  </header>
+
+
+  <!-- BLOG CONTENT -->
+  <article class="single-blog-content">
+
+    {% for block in post.content %}
+
+      <!-- SECTION -->
+      {% if block.type == "section" %}
+      <section class="sp-card">
+        <h2>{{ block.title }}</h2>
+        <p>{{ block.text }}</p>
+      </section>
+
+      <!-- REAL LIFE -->
+      {% elif block.type == "real_life_example" %}
+      <section class="sp-card soft-card">
+        <div class="sp-label">
+          🌿 Real Life Example
+        </div>
+
+        <h2>{{ block.title }}</h2>
+
+        <p>{{ block.text }}</p>
+      </section>
+
+      <!-- SCRIPTURE + FIGURATIVE -->
+      {% elif block.type == "scripture_with_meaning" %}
+      <section class="sp-scripture-card">
+
+        <div class="sp-scripture-ref">
+          📖 {{ block.reference }}
+        </div>
+
+        <blockquote>
+          {{ block.text }}
+        </blockquote>
+
+        {% if block.figurative_meaning %}
+        <div class="sp-meaning-box">
+          <h4>Figurative Meaning</h4>
+          <p>{{ block.figurative_meaning }}</p>
+        </div>
+        {% endif %}
+
+      </section>
+
+      <!-- REFLECTION -->
+      {% elif block.type == "reflection" %}
+      <section class="sp-card reflection-card">
+
+        <h3>Reflection</h3>
+
+        <ul>
+          {% for point in block.points %}
+          <li>{{ point }}</li>
+          {% endfor %}
+        </ul>
+
+      </section>
+
+      <!-- SCRIPTURE ANCHOR -->
+      {% elif block.type == "scripture_anchor" %}
+      <aside class="sp-anchor-box">
+
+        <div class="sp-anchor-title">
+          📖 Scripture Anchor
+        </div>
+
+        <strong>
+          {{ block.reference }}
+        </strong>
+
+        <blockquote>
+          {{ block.text }}
+        </blockquote>
+
+      </aside>
+
+      <!-- PRAYER -->
+      {% elif block.type == "closing_prayer" %}
+      <section class="sp-prayer-box">
+
+        <h3>
+          🙏 {{ block.title }}
+        </h3>
+
+        <p>{{ block.text }}</p>
+
+      </section>
+
+      <!-- POWER THOUGHT -->
+      {% elif block.type == "power_punch" %}
+      <section class="sp-power-box">
+
+        <h3>
+          ✨ {{ block.title }}
+        </h3>
+
+        <p>{{ block.text }}</p>
+
+      </section>
+
+      {% endif %}
+
+    {% endfor %}
+
+  </article>
+
+
+  <!-- MISSION SUPPORT -->
+<section class="sp-support-box">
+
+  <p>
+    🌍 Your support helps us continue
+    reaching Deaf and hearing hearts
+    with hope.
+  </p>
+
+</section>
+
+  <!-- ACTIONS -->
+<div class="blog-actions">
+
+  <a
+    class="btn btn-secondary"
+    href="{{ url_for('blog_index') }}">
+    ← Back to Blog
+  </a>
+
+</div>
+
+</main>
+
+{% endblock %}

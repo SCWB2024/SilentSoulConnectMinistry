@@ -1,0 +1,39 @@
+[
+  {
+    "id": "FF001",
+    "title": "Why Trust the Bible?",
+    "slug": "why-trust-the-bible",
+    "publish_date": "2026-06-12",
+    "pillar": "Faith Foundations",
+    "category": "Bible Truth Made Simple",
+    "status": "published",
+    "image": "img/blog/uploads/faith_foundation/ff001-trust-bible.jpg",
+    "cover_image": "img/blog/uploads/faith_foundation/faith-foundation-hero.jpg",
+
+    "excerpt": "Can we still trust the Bible today? A simple look at why God’s Word still matters.",
+
+    "question": "Can we still trust the Bible today?",
+
+    "why_it_matters": "Every day we hear many voices — social media, opinions, trends, and fears. Some people wonder if the Bible is too old, changed, or no longer important. But in a noisy world, knowing what truth to trust matters more than ever.",
+
+    "truth_simple": "The Bible has guided lives for generations because it points people to hope, wisdom, correction, and God’s love. Times change. Cultures change. Technology changes. But truth still matters.",
+
+    "scripture": {
+      "verse_ref": "Psalm 119:105",
+      "verse_text": "Your word is a lamp to guide my feet and a light for my path."
+    },
+
+    "misunderstanding": "Some people believe the Bible is outdated or only for the past. But truth does not expire simply because the world changes.",
+
+    "reflection": "What voice shapes your thinking most today — trends, fear, opinions, or God’s Word?",
+
+    "closing_thought": "The Bible is not just an old book. It is a light for the path, a guide for the heart, and a foundation for faith.",
+
+    "study_connection": {
+  "enabled": true,
+  "title": "Why Can I Trust the Bible?",
+  "label": "Read & Study",
+  "url": "/study/introduction/lesson-2"
+}
+    }
+  ]

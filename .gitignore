@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Environment
+.venv/
+
+# PyCharm
+.idea/
+
+# Browser Profiles
+chrome_profile_whatsapp/
+wa_profile/
+wa_edge_profile/
+
+# Environment
+.env
+
+# OS
+Thumbs.db
+.DS_Store

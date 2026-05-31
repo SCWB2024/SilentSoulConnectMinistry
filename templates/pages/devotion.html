@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}{{ "Night" if mode == "night" else "Today" }} — SoulStart{% endblock %}
+{% block body_class %}devotion-page-body{% endblock %}
+
+{% block content %}
+<div class="devotion-page" aria-label="SoulStart daily devotion">
+
+  {% if devotion_image %}
+  <section
+    class="devotion-hero{% if mode == 'night' %} night-hero{% endif %}"
+    style="background-image: url('{{ url_for('static', filename=devotion_image) }}');"
+    aria-label="{{ 'Night devotion' if mode == 'night' else 'Morning devotion' }} hero image">
+
+    <div class="devotion-hero-inner">
+      <p class="devotion-kicker">
+        <span aria-hidden="true">{{ '🌙' if mode == 'night' else '🌅' }}</span>
+        {{ 'Night Devotion' if mode == 'night' else 'Morning Devotion' }}
+      </p>
+
+      {% if entry.theme %}
+        <h1>{{ entry.theme }}</h1>
+      {% else %}
+        <h1>SoulStart Devotion</h1>
+      {% endif %}
+
+      {% if entry.verse_ref %}
+        <p class="devotion-verse-ref">{{ entry.verse_ref }}</p>
+      {% endif %}
+
+      {% if entry.verse_text %}
+        <p class="devotion-verse-preview">{{ entry.verse_text }}</p>
+      {% endif %}
+    </div>
+  </section>
+  {% endif %}
+
+  <div class="devotion-content-container">
+
+    <div class="chip-row" aria-label="Choose morning or night devotion">
+      <a class="chip {{ 'active' if mode=='morning' else '' }}" href="{{ url_for('today', mode='morning') }}" aria-label="Read the morning devotion">
+        <span aria-hidden="true">🌅</span> Morning
+      </a>
+      <a class="chip {{ 'active' if mode=='night' else '' }}" href="{{ url_for('today', mode='night') }}" aria-label="Read the night devotion">
+        <span aria-hidden="true">🌙</span> Night
+      </a>
+    </div>
+
+    {% if yday_url is defined and yday_url %}
+      <div class="yday-link" aria-label="Devotion date navigation">
+        <a href="{{ yday_url }}" aria-label="Read yesterday's devotion">← Yesterday</a>
+        <span class="sep" aria-hidden="true">|</span>
+        <a href="{{ url_for('today', mode=mode) }}" aria-label="Read today's devotion">Today</a>
+      </div>
+    {% endif %}
+
+    {% set has_content = entry and (entry.theme or entry.verse_ref or entry.verse_text or entry.body or entry.verse_meaning or entry.prayer) %}
+
+    {% if has_content %}
+      <article class="devotion-card{% if mode=='night' %} night-tone{% endif %}" aria-label="{{ 'Night devotion' if mode == 'night' else 'Morning devotion' }}">
+
+        {% if entry.theme %}
+          <div class="badge-theme" style="background:#f0f0f0;color:#333;">
+            <span aria-hidden="true">🏷</span> Theme: {{ entry.theme }}
+          </div>
+        {% endif %}
+
+        {% if entry.verse_ref or entry.verse_text %}
+          <div class="verse-box">
+            <p class="verse-line">
+              <strong><span aria-hidden="true">📖</span>{{ entry.verse_ref or "" }}</strong>
+              {% if entry.verse_text %} — {{ entry.verse_text }}{% endif %}
+            </p>
+          </div>
+        {% endif %}
+
+        {% if entry.verse_meaning %}
+          <div class="meaning-box">
+            <h3 class="section-title"><span aria-hidden="true">💡</span> Meaning</h3>
+            <p class="meaning-text">{{ entry.verse_meaning }}</p>
+          </div>
+        {% endif %}
+
+        {% if entry.body %}
+          <div class="declaration-box" aria-label="Devotion declarations">
+            {{ entry.body | replace('\n', '<br>') | safe }}
+          </div>
+        {% endif %}
+
+        <div class="prayer-box">
+          <h3 class="section-title"><span aria-hidden="true">🙏</span> Prayer</h3>
+          {% if entry.prayer %}
+            <p>{{ entry.prayer }}</p>
+          {% else %}
+            <p>
+              {% if mode == "night" %}
+                Lord, quiet my mind and keep me in Your care. Amen.
+              {% else %}
+                Lord, order my steps today. Amen.
+              {% endif %}
+            </p>
+          {% endif %}
+        </div>
+
+        <div class="devotion-actions">
+          <a class="btn" href="{{ join_url }}" target="_blank" rel="noopener" aria-label="Join the Silent SoulConnect WhatsApp community">
+            <span aria-hidden="true">💬</span> Join WhatsApp
+          </a>
+          <a class="btn soft" href="{{ url_for('home') }}" aria-label="Return to home page">
+            <span aria-hidden="true">🏠</span> Back Home
+          </a>
+        </div>
+
+      </article>
+    <p class="devotion-gentle-quote">
+  🍂 A simple gift can bring quiet strength to a searching heart. 💛
+</p>
+
+    {% else %}
+      <div class="devotion-card{% if mode=='night' %} night-tone{% endif %}" aria-label="No devotion entry found">
+        <p class="muted">No devotion entry found for this date.</p>
+        <div class="devotion-actions">
+          <a class="btn soft" href="{{ url_for('home') }}" aria-label="Return to home page">
+            <span aria-hidden="true">🏠</span> Back Home
+          </a>
+        </div>
+      </div>
+    {% endif %}
+
+  </div> </div> {% endblock %}

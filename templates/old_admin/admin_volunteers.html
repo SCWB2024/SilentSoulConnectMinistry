@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Admin — Volunteers{% endblock %}
+{% block content %}
+
+<section class="hero hero-day" style="background-image:url('{{ url_for('static', filename='img/serve_bg.jpg') }}')">
+  <div class="hero-inner" style="padding:24px 22px;">
+    <h1>Volunteer Submissions</h1>
+    <p class="muted">All who offered their hands and hearts to serve.</p>
+  </div>
+</section>
+
+{% if rows and rows|length > 0 %}
+<div class="card admin-card" style="overflow:auto;">
+  <table style="width:100%; border-collapse:collapse;">
+    <thead>
+      <tr>
+        <th>When</th><th>Name</th><th>Contact</th><th>Skills</th><th>Availability</th><th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr>
+        <td>{{ r.ts }}</td>
+        <td><strong>{{ r.name }}</strong></td>
+        <td>{{ r.contact }}</td>
+        <td>{{ r.skills }}</td>
+        <td>{{ r.availability }}</td>
+        <td>{{ r.notes }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="card"><p class="muted">No volunteer submissions yet.</p></div>
+{% endif %}
+
+<div class="center mt-4">
+  <a class="btn soft" href="{{ url_for('admin') }}">⬅️ Back to Admin</a>
+  <a class="btn soft" href="{{ url_for('home') }}">🏠 Home</a>
+</div>
+
+<style nonce="{{ csp_nonce() }}">
+  table th, table td { text-align:left; border-bottom:1px solid var(--border); padding:8px; font-size:.95rem; }
+  thead { background:#f8fafc; }
+</style>
+{% endblock %}

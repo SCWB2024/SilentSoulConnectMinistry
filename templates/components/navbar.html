@@ -1,0 +1,61 @@
+<header class="site-header" aria-label="Site header">
+  <div class="nav-container">
+
+    <a
+      class="site-brand"
+      href="{{ url_for('home') }}"
+      aria-label="Go to Silent SoulConnect Ministry home page">
+
+      <span class="site-brand-text">
+        Silent SoulConnect Ministry
+      </span>
+    </a>
+
+    <nav class="site-nav" aria-label="Main navigation">
+
+      <a
+        href="{{ url_for('home') }}"
+        class="{% if active == 'home' %}active{% endif %}"
+        aria-label="Go to Home page"
+        {% if active == 'home' %}aria-current="page"{% endif %}>
+        Home
+      </a>
+
+      <a
+        href="{{ url_for('about') }}"
+        class="{% if active == 'about' %}active{% endif %}"
+        aria-label="Learn about Silent SoulConnect Ministry"
+        {% if active == 'about' %}aria-current="page"{% endif %}>
+        About Us
+      </a>
+
+      <a
+        href="{{ url_for('today') }}"
+        class="{% if active == 'today' %}active{% endif %}"
+        aria-label="Read today's SoulStart devotion"
+        {% if active == 'today' %}aria-current="page"{% endif %}>
+        Devotion
+      </a>
+
+      <a
+        href="{{ url_for('prayer') }}"
+        class="{% if active == 'prayer' %}active{% endif %}"
+        aria-label="Submit a prayer request"
+        {% if active == 'prayer' %}aria-current="page"{% endif %}>
+        Prayer
+      </a>
+
+      {% if study_index is defined %}
+      <a
+        href="{{ url_for('study_index') }}"
+        class="{% if active == 'study' %}active{% endif %}"
+        aria-label="Open Bible study lessons"
+        {% if active == 'study' %}aria-current="page"{% endif %}>
+        Study
+      </a>
+      {% endif %}
+
+    </nav>
+
+  </div>
+</header>

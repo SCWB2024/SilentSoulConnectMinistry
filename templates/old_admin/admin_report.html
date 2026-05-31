@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} — Admin{% endblock %}
+
+{% block content %}
+<section class="hero hero-day" style="background-image:url('{{ url_for('static', filename='img/hero_day.jpg') }}')">
+  <div class="hero-inner" style="padding:24px 22px;">
+    <h1>{{ title }}</h1>
+    <p class="muted">Read-only report list from your data folder.</p>
+  </div>
+</section>
+
+<div class="card admin-card">
+  {% if items %}
+    <pre style="max-height:360px; overflow:auto; font-size:0.9rem;">
+{{ items | tojson(indent=2) }}
+    </pre>
+  {% else %}
+    <p class="muted">No entries found yet.</p>
+  {% endif %}
+</div>
+
+<div class="center mt-4">
+  <a class="btn soft" href="{{ url_for('admin') }}">← Back to Admin</a>
+</div>
+{% endblock %}

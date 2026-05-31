@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% block title %}About Us — Silent SoulConnect Ministry{% endblock %}
+{% block body_class %}about-page{% endblock %}
+
+{% block content %}
+
+<section class="about-hero"
+  aria-label="About Silent SoulConnect Ministry"
+  style="background-image:
+    linear-gradient(rgba(20,20,20,.50), rgba(20,20,20,.42)),
+    url('{{ url_for('static', filename='img/about/hero.jpg') }}');">
+
+  <div class="about-hero-inner">
+    <h1>Silent SoulConnect Ministry</h1>
+
+    <p class="about-hero-text">
+      Faith. Hope. Strength in Quietness.
+    </p>
+
+    <div class="hero-actions">
+      <a
+        class="btn gold"
+        href="{{ url_for('path') }}"
+        aria-label="Walk the PATH spiritual journey">
+        Walk the PATH
+      </a>
+
+      <a
+        class="btn blue"
+        href="{{ url_for('today') }}"
+        aria-label="Read today's SoulStart devotion">
+        Today's Devotion
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="about-sscm section-shell" aria-label="Who we are">
+  <div class="founder-grid align-center">
+
+    <div class="founder-photo-wrap">
+      <img
+        src="{{ url_for('static', filename='img/logo.png') }}"
+        alt="Silent SoulConnect Ministry logo"
+        class="founder-photo">
+    </div>
+
+    <div class="founder-copy">
+      <h2>Who We Are</h2>
+
+      <p>
+        Silent SoulConnect Ministry is a faith-centered space created to encourage hearts
+        through simple, clear, and meaningful spiritual connection. We welcome Deaf,
+        hard of hearing, and anyone seeking peace, truth, and hope in God.
+      </p>
+
+      <!-- SCWB TRUST BLOCK -->
+      <div class="about-trust-inline">
+        <span class="trust-mini">
+          🌍 Under SCWB Global Impact
+        </span>
+
+        <p>
+          Silent SoulConnect Ministry is supported by a wider vision of
+          faith, accessibility, advocacy, and community encouragement—
+          helping create more inclusive and meaningful spiritual spaces.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<section class="about-founder section-shell" aria-label="Founder profile">
+  <div class="founder-grid align-center">
+
+    <div class="founder-photo-wrap">
+      <img
+        src="{{ url_for('static', filename='img/about/founder.jpg') }}"
+        alt="Sandra White-Belgrave, founder of Silent SoulConnect Ministry"
+        class="founder-photo">
+    </div>
+
+    <div class="founder-copy">
+      <span class="mini-label">
+        Founder Profile • Deaf Advocate • Evangelist
+      </span>
+
+      <h2>Sandra White-Belgrave</h2>
+
+      <p>
+        Sandra White-Belgrave founded Silent SoulConnect Ministry with
+        a heart to make faith more accessible, more visual, and more welcoming
+        for those often overlooked in spiritual spaces.
+      </p>
+
+      <p class="about-sub-note">
+        Her vision is rooted in compassion, clarity, and a desire to help people
+        reconnect with God in a way that feels simple, steady, and real.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<section class="about-future section-shell" aria-label="Future of Silent SoulConnect Ministry">
+  <div class="founder-grid align-center">
+
+    <div class="founder-photo-wrap">
+      <img
+        src="{{ url_for('static', filename='img/about/future.jpg') }}"
+        alt="A quiet visual Bible study moment representing the future of Silent SoulConnect Ministry"
+        class="founder-photo">
+    </div>
+
+    <div class="founder-copy">
+      <span class="mini-label">
+        Where We’re Going
+      </span>
+
+      <h2>The Future of Silent SoulConnect</h2>
+
+      <p>
+        Silent SoulConnect Ministry is growing into a space where faith meets
+        accessibility in deeper ways.
+      </p>
+
+      <p>
+        We are building pathways that make spiritual learning more visual,
+        more inclusive, and easier to understand—especially for the Deaf
+        and hard of hearing.
+      </p>
+
+      <p>
+        Through digital tools, guided study, and quiet reflection, we aim
+        to reach hearts beyond physical walls and nurture a global community
+        rooted in truth, clarity, and connection with God.
+      </p>
+
+      <div class="hero-actions future-actions">
+        <a
+          class="btn blue"
+          href="{{ url_for('foundation') }}"
+          aria-label="Explore the foundation of Silent SoulConnect Ministry">
+          Explore Our Foundation
+        </a>
+      </div>
+
+      <p class="future-caption">
+        Discover the heart, mission, and spiritual pathway guiding this ministry.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<section class="about-heart-banner"
+  aria-label="Scripture from Psalm 119 verse 105"
+  style="background-image:
+    linear-gradient(rgba(15,15,15,.45), rgba(15,15,15,.45)),
+    url('{{ url_for('static', filename='img/about/heart-banner.jpg') }}');">
+
+  <div class="about-heart-inner">
+    <h2>“Your word is a lamp to my feet and a light to my path.”</h2>
+    <p class="about-heart-verse">Psalm 119:105</p>
+  </div>
+</section>
+
+{% endblock %}

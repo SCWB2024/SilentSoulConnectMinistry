@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Server Error — SoulStart{% endblock %}
+{% block content %}
+<section class="hero hero-day" style="background-image:url('{{ url_for('static', filename='img/hero_day.jpg') }}')">
+  <div class="hero-inner" style="padding:24px 22px;">
+    <h1>Something went wrong</h1>
+    <p class="muted">We’re fixing it. Please try again shortly.</p>
+    <p><a class="btn" href="{{ url_for('home') }}">🏠 Back Home</a></p>
+  </div>
+</section>
+{% endblock %}

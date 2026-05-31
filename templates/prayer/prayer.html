@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% block title %}Prayer Request — Silent SoulConnect Ministry{% endblock %}
+{% block body_class %}prayer-page{% endblock %}
+
+{% block content %}
+
+<section class="prayer-hero"
+  aria-label="Prayer support and encouragement"
+  style="background-image:
+    linear-gradient(rgba(15,15,15,.50), rgba(15,15,15,.45)),
+    url('{{ url_for('static', filename='img/hero_prayer.jpg') }}');">
+
+  <div class="prayer-overlay" aria-hidden="true"></div>
+
+  <div class="prayer-inner">
+
+    <div class="prayer-heading">
+      <span class="prayer-badge">
+        <span aria-hidden="true">🙏</span> You Are Not Alone
+      </span>
+
+      <h1>We Pray With You</h1>
+
+      <p>
+        Send your request, and we will stand with you in prayer.
+      </p>
+
+      <p class="quick-sub">
+        Start here. No perfect words needed.
+      </p>
+
+      <p class="prayer-note">
+        <span aria-hidden="true">🔒</span>
+        Your request can remain private. You are safe here.
+      </p>
+    </div>
+
+    {% if request.args.get("ok") == "1" %}
+      <div class="prayer-success" role="status" aria-live="polite">
+        <p>
+          <span aria-hidden="true">✅</span>
+          Thank you. Your prayer request was received.
+        </p>
+        <p>
+          <span aria-hidden="true">📖</span>
+          “The LORD is near to the brokenhearted.”
+          <strong>Psalm 34:18</strong>
+        </p>
+        <p>
+          <span aria-hidden="true">🙏</span>
+          We are praying with you.
+          <strong>In Jesus’ name, Amen.</strong>
+        </p>
+      </div>
+    {% endif %}
+
+    <div class="prayer-layout">
+
+      <form method="post" class="prayer-form" id="prayerForm" aria-label="Prayer request form">
+
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <label for="name" class="sr-only">Your name, optional</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Your name (optional)">
+
+        <label for="contact" class="sr-only">Email, phone, or WhatsApp, optional</label>
+        <input
+          type="text"
+          id="contact"
+          name="contact"
+          placeholder="Email, phone, or WhatsApp (optional)">
+
+        <label for="pref_method" class="sr-only">Preferred contact method</label>
+        <select id="pref_method" name="pref_method">
+          <option value="text">Text / SMS</option>
+          <option value="email">Email</option>
+          <option value="video">Video Call / Zoom</option>
+        </select>
+
+        <label for="topic" class="sr-only">Prayer topic</label>
+        <select id="topic" name="topic" required>
+          <option value="">Select prayer topic</option>
+          {% for t in prayer_topics %}
+            <option value="{{ t.value }}">{{ t.label }}</option>
+          {% endfor %}
+        </select>
+
+        <div id="topicOtherWrap" style="display:none;">
+          <label for="topic_other" class="sr-only">Other prayer topic details</label>
+          <input
+            type="text"
+            id="topic_other"
+            name="topic_other"
+            placeholder="Short details for other topic">
+        </div>
+
+        <label for="request" class="sr-only">Prayer request</label>
+        <textarea
+          id="request"
+          name="request"
+          rows="6"
+          placeholder="Share what is on your heart..."
+          required></textarea>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          id="sendBtn"
+          aria-label="Send prayer request">
+          <span aria-hidden="true">🙏</span>
+          Send Prayer Request
+        </button>
+
+        <a
+          class="btn soft prayer-back"
+          href="{{ url_for('home') }}"
+          aria-label="Return to home page">
+          <span aria-hidden="true">🏠</span>
+          Back Home
+        </a>
+
+      </form>
+
+      <aside class="quick-prayer-card" aria-label="Simple prayer from Mark chapter 9 verse 24">
+        <div class="holy-glow" aria-hidden="true">✨</div>
+
+        <h2>Need a Simple Prayer?</h2>
+
+        <p>
+          Lord, I come quietly before You.<br>
+          I surrender what I cannot carry.<br>
+          Strengthen my faith, calm my heart,<br>
+          and help my unbelief.
+        </p>
+
+        <span>Mark 9:24</span>
+      </aside>
+
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  (function () {
+    const form = document.getElementById("prayerForm");
+    const btn = document.getElementById("sendBtn");
+    const sel = document.getElementById("topic");
+    const wrap = document.getElementById("topicOtherWrap");
+
+    if (form && btn) {
+      form.addEventListener("submit", function () {
+        btn.innerText = "Sending...";
+        btn.disabled = true;
+      });
+    }
+
+    if (sel && wrap) {
+      function toggleOtherTopic() {
+        wrap.style.display = sel.value === "other" ? "block" : "none";
+      }
+
+      sel.addEventListener("change", toggleOtherTopic);
+      toggleOtherTopic();
+    }
+  })();
+</script>
+{% endblock %}

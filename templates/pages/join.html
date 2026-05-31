@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block title %}Join Us — Silent SoulConnect Ministry{% endblock %}
+{% block body_class %}join-page-body{% endblock %}
+
+{% block content %}
+
+<section class="join-hero"
+  aria-label="Join Silent SoulConnect Ministry"
+  style="background:
+    linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.45)),
+    url('{{ url_for('static', filename='img/hero_joinus.jpg') }}') center/cover no-repeat;">
+
+  <div class="join-hero-inner">
+
+    <h1>Join the Mission</h1>
+    <p>You are not here by accident. There is a place for you.</p>
+  </div>
+</section>
+
+{% if request.args.get("ok") %}
+  <div class="container" style="margin-top:20px;">
+    <div class="card" role="status" aria-live="polite" style="text-align:center; padding:20px; border-left:5px solid var(--primary);">
+      <h3><span aria-hidden="true">🙏</span> Thank You</h3>
+      <p>Your message has been received. We will connect with you soon.</p>
+    </div>
+  </div>
+{% endif %}
+
+<section class="container join-page" aria-label="Join Silent SoulConnect Ministry details">
+
+  <div class="join-card join-intro">
+    <h2>Our Purpose</h2>
+    <p>
+      Silent SoulConnect exists to share accessible, plain-language Gospel truth
+      so the Deaf and hard-of-hearing can grow in faith without confusion.
+    </p>
+
+    <div class="join-focus-grid">
+      <div class="join-focus-card">
+        <h3><span aria-hidden="true">🔇</span> The Silent Focus</h3>
+        <p>
+          We serve those who communicate through sign, sight, and stillness.
+          We remove barriers of sound and make space for the beauty of God’s Word.
+        </p>
+        <small>“The ears of the deaf shall be unstopped.” — Isaiah 35:5</small>
+      </div>
+
+      <div class="join-focus-card">
+        <h3><span aria-hidden="true">🤝</span> The SoulConnect Focus</h3>
+        <p>
+          Ministry is not only information. It is connection.
+          We help isolated hearts reconnect with faith, hope, and the Body of Christ.
+        </p>
+        <small>“Being knit together in love...” — Colossians 2:2</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="join-card">
+    <h2>Your Place in the Mission</h2>
+    <p class="join-subtitle">Everyone has a role. No role is too small.</p>
+
+    <div class="join-role-grid">
+      <div class="join-role">
+        <span aria-hidden="true">🤟</span>
+        <h3>Language</h3>
+        <p>Plain English, ASL support, interpretation, and accessibility.</p>
+      </div>
+
+      <div class="join-role">
+        <span aria-hidden="true">🙏</span>
+        <h3>Prayer</h3>
+        <p>Intercession, encouragement, and spiritual support.</p>
+      </div>
+
+      <div class="join-role">
+        <span aria-hidden="true">💻</span>
+        <h3>Digital</h3>
+        <p>Media, captions, graphics, posting, and online support.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="join-card join-encourage">
+    <h2>You Don’t Need to Be Perfect</h2>
+    <p>
+      You don’t need all the answers. You don’t need special training.
+      You only need a willing heart.
+    </p>
+    <strong>God uses what you already have.</strong>
+  </div>
+
+  <div class="join-card join-form-card">
+    <h2>Step Into Purpose</h2>
+    <p class="join-subtitle">Tell us how you would like to serve or connect.</p>
+
+    <form method="post" class="join-form" aria-label="Join Silent SoulConnect Ministry form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <label for="name">Your Name*</label>
+      <input id="name" name="name" type="text" required>
+
+      <label for="contact">Contact — WhatsApp or Email*</label>
+      <input id="contact" name="contact" type="text" required>
+
+      <label for="skills">Area of Service</label>
+      <select id="skills" name="skills">
+        <option value="Accessibility">Plain English Accessibility</option>
+        <option value="Prayer">Prayer Support</option>
+        <option value="Study">Bible Study Prep</option>
+        <option value="Media">Media & Captions</option>
+        <option value="Translator">Translation & Interpretation</option>
+        <option value="General">General Support</option>
+      </select>
+
+      <div class="join-checks">
+        <p><span aria-hidden="true">🤟</span> Communication Preference</p>
+
+        <label>
+          <input type="checkbox" name="asl">
+          Sign Language
+        </label>
+
+        <label>
+          <input type="checkbox" name="text">
+          Text / WhatsApp
+        </label>
+
+        <label>
+          <input type="checkbox" name="plain">
+          Plain English
+        </label>
+      </div>
+
+      <label for="availability">Availability</label>
+      <input id="availability" name="availability" type="text" placeholder="Example: 1 hour weekly">
+
+      <label for="notes">Your Heart for this Ministry</label>
+      <textarea id="notes" name="notes" rows="4" placeholder="Briefly share why you want to serve or connect."></textarea>
+
+      <button
+        class="btn btn-primary join-submit"
+        type="submit"
+        aria-label="Submit join ministry form">
+        Step Into Purpose <span aria-hidden="true">🕊️</span>
+      </button>
+    </form>
+  </div>
+
+</section>
+
+<section class="join-closing" aria-label="Closing encouragement">
+  <h2>You Belong in This Mission</h2>
+  <p>
+    God can use your hands, your heart, your story, and your gifts.
+  </p>
+
+  <a href="{{ url_for('prayer') }}" class="btn btn-primary">
+    Step Into Purpose 🤟
+  </a>
+</section>
+
+{% endblock %}

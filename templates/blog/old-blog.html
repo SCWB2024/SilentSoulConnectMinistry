@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} — Soul Speaks{% endblock %}
+{% block body_class %}blog-post-page{% endblock %}
+
+{% block content %}
+
+<section class="container page-wrap soulspeaks-post" aria-label="Soul Speaks blog post">
+
+  <!-- HERO -->
+  <header class="sp-hero" aria-label="Blog post header">
+    <div class="sp-hero-inner">
+
+      <div class="sp-badge">Soul Speaks</div>
+
+      <h1 class="sp-title">{{ title }}</h1>
+
+      <div class="sp-meta">
+        <span>{{ date }}</span>
+        <span class="dot" aria-hidden="true">•</span>
+        <span>{{ blog_number }}</span>
+        <span class="dot" aria-hidden="true">•</span>
+        <span>{{ tags_line }}</span>
+      </div>
+
+      <div class="sp-actions">
+        <a
+          class="btn btn-ghost"
+          href="{{ url_for('blog_index') }}"
+          aria-label="Return to Soul Speaks blog">
+          ← Back to Blog
+        </a>
+
+        <a
+          class="btn btn-primary"
+          href="{{ url_for('home') }}"
+          aria-label="Return to Silent SoulConnect Ministry home page">
+          Home
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <div class="sp-grid">
+
+    <!-- SIDEBAR -->
+    <aside class="sp-side" aria-label="Post image and connection links">
+      <div class="card soft sp-side-card">
+
+        {% set img_rel = img_base ~ '/' ~ image %}
+
+        <img
+          class="sp-side-img"
+          src="{{ url_for('static', filename=img_rel) }}"
+          alt="{{ title }} cover image"
+          loading="lazy"
+          onerror="this.onerror=null;this.src='{{ url_for('static', filename=img_base ~ '/default.jpg') }}';">
+
+        <h3 class="sp-side-title">Connect</h3>
+
+        <div class="sp-connect">
+          <a
+            class="btn btn-wide btn-primary"
+            href="{{ SOCIAL_LINKS.get('whatsapp', SITE_JOIN_URL) }}"
+            target="_blank"
+            rel="noopener"
+            aria-label="Join Silent SoulConnect on WhatsApp">
+            WhatsApp
+          </a>
+
+          <a
+            class="btn btn-wide"
+            href="{{ SOCIAL_LINKS.get('facebook', '#') }}"
+            target="_blank"
+            rel="noopener"
+            aria-label="Visit Silent SoulConnect on Facebook">
+            Facebook
+          </a>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <article class="sp-main" aria-label="Blog post content">
+
+      {{ content | safe }}
+
+      {% if tags %}
+        <div class="sp-tags" aria-label="Post tags">
+          {% for tag in tags %}
+            <span class="sp-tag">{{ tag }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="sp-bottom">
+        <a
+          class="btn btn-ghost"
+          href="{{ url_for('blog_index') }}"
+          aria-label="Return to Soul Speaks blog">
+          ← Back to Blog
+        </a>
+      </div>
+
+    </article>
+
+  </div>
+
+</section>
+
+{% endblock %}

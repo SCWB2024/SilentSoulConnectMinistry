@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0" />
+
+  <title>
+    {% block title %}
+      Silent SoulConnect Ministry
+    {% endblock %}
+  </title>
+
+  {% if 'admin' in request.path %}
+
+    <!-- ADMIN -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/admin.css') }}">
+
+  {% else %}
+
+    <!-- GLOBAL -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}?v=30">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/theme.css') }}?v=30">
+
+    <!-- PAGE CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/study.css') }}?v=30">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/blog.css') }}?v=33">
+
+    {% if request.endpoint == 'join' %}
+      <link rel="stylesheet"
+            href="{{ url_for('static', filename='css/join.css') }}?v=1">
+    {% endif %}
+
+  {% endif %}
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">
+    Skip to content
+  </a>
+
+  <!-- Navbar -->
+  {% include "components/navbar.html" %}
+
+  <!-- Main Content -->
+  <main id="main-content"
+        class="site-main"
+        aria-label="Main content">
+
+    {% block content %}
+    {% endblock %}
+
+  </main>
+
+  <!-- Footer -->
+  {% include "components/footer.html" %}
+
+  {% block extra_js %}
+  {% endblock %}
+
+</body>
+</html>

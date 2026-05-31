@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block title %}Home — Silent SoulConnect Ministry{% endblock %}
+{% block body_class %}home-page{% endblock %}
+
+{% block content %}
+
+<section class="home-hero"
+  aria-label="Welcome to Silent SoulConnect Ministry"
+  style="background-image:
+    linear-gradient(rgba(15,15,15,.38), rgba(15,15,15,.38)),
+    url('{{ url_for('static', filename='img/home/hero.jpg') }}');">
+
+  <div class="home-hero-inner">
+
+    <div class="home-logo-wrap">
+      <img
+        src="{{ url_for('static', filename='img/logo.png') }}"
+        alt="Silent SoulConnect Ministry logo"
+        class="home-logo">
+    </div>
+
+    <h1>Welcome to</hi
+      <div></div>
+      <h1> Silent SoulConnect Ministry</h1>
+
+    <p class="hero-subtitle">
+      Faith. Hope. Strength in Quietness.
+    </p>
+
+    <div class="hero-actions">
+
+      <a
+        class="btn gold"
+        href="{{ url_for('today') }}"
+        aria-label="Read today's SoulStart devotion">
+        Today's Devotion
+        <span>Slow down and meet God today.</span>
+      </a>
+
+      <a
+        class="btn blue"
+        href="{{ url_for('path') }}"
+        aria-label="Start the PATH spiritual journey">
+        Start Your Journey
+        <span>Take a step toward your needs today.</span>
+      </a>
+
+    </div>
+
+  </div>
+</section>
+
+<section class="quick-links section-shell"
+  aria-label="Quick links to ministry pages">
+
+  <div class="quick-links-grid">
+
+    <a
+      class="quick-link-item"
+      href="{{ url_for('about') }}"
+      aria-label="Learn about Silent SoulConnect Ministry">
+      <span class="quick-icon" aria-hidden="true">🏠</span>
+      <span class="label">About Us</span>
+      <span class="sub-label">Our heart and mission</span>
+    </a>
+
+    <a
+      class="quick-link-item"
+      href="{{ url_for('prayer') }}"
+      aria-label="Submit a prayer request">
+      <span class="quick-icon" aria-hidden="true">🙏</span>
+      <span class="label">Prayer</span>
+      <span class="sub-label">Share your burden</span>
+    </a>
+
+    <a
+      class="quick-link-item"
+      href="{{ url_for('join') }}"
+      aria-label="Join the Silent SoulConnect community">
+      <span class="quick-icon" aria-hidden="true">🤝</span>
+      <span class="label">Join Us</span>
+      <span class="sub-label">Find your place</span>
+    </a>
+
+    <a
+      class="quick-link-item"
+      href="{{ url_for('donate') }}"
+      aria-label="Support Silent SoulConnect Ministry through giving">
+      <span class="quick-icon" aria-hidden="true">💛</span>
+      <span class="label">Donate</span>
+      <span class="sub-label">Support the mission</span>
+    </a>
+
+  </div>
+
+</section>
+
+<section class="home-heart-banner"
+  aria-label="Encouragement message from Silent SoulConnect Ministry"
+  style="background-image:
+    linear-gradient(rgba(20,20,20,.48), rgba(20,20,20,.48)),
+    url('{{ url_for('static', filename='img/home/heart-banner.jpg') }}');">
+
+  <div class="home-heart-inner">
+
+    <p class="welcome-tag">
+      Faith. Hope. Accessible Gospel Truth.
+    </p>
+
+    <h2>
+      You are seen. You are heard. Even in silence.
+    </h2>
+
+  </div>
+
+</section>
+
+<section class="home-support-note section-shell"
+  aria-label="Support Silent SoulConnect Ministry">
+
+  <p>
+    Your prayer, presence, and support help Silent SoulConnect continue
+    sharing faith, hope, and accessible Gospel truth.
+  </p>
+
+</section>
+
+{% endblock %}

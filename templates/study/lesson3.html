@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Lesson 3 — How Do I Study the Bible?{% endblock %}
+{% block body_class %}study-lesson-page-body{% endblock %}
+
+{% block content %}
+
+<section class="study-lesson-page" aria-label="Lesson 3: How Do I Study the Bible?">
+  <div class="study-shell">
+
+    <header class="lesson-hero">
+      <img
+        src="{{ url_for('static', filename='img/study/bible/bible3.jpg') }}"
+        alt="How to study the Bible"
+        class="lesson-image">
+
+      <span class="series-tag">Level 1 • Introduction Series</span>
+
+      <h1>Lesson 3: How Do I Study the Bible?</h1>
+
+      <p class="lesson-subtitle">
+        Start Here — Understanding the Bible
+      </p>
+
+      <p class="lesson-progress lesson-progress-center">
+        Lesson 3 of 3
+      </p>
+    </header>
+
+    <article class="study-card card-real-life">
+      <h2><span aria-hidden="true">🎬</span> Real Life</h2>
+      <p>If you rush instructions, you miss steps.</p>
+      <p>Taking time helps you understand clearly.</p>
+    </article>
+
+    <article class="study-card card-question">
+      <h2><span aria-hidden="true">❓</span> Main Question</h2>
+      <p>How can I understand the Bible correctly?</p>
+    </article>
+
+    <article class="study-card card-bible">
+      <h2><span aria-hidden="true">📖</span> Bible</h2>
+      <p class="verse-ref"><strong>Psalm 119:105</strong></p>
+      <blockquote>“Your word is a lamp to my feet…”</blockquote>
+    </article>
+
+    <article class="study-card card-discover">
+      <h2><span aria-hidden="true">🔍</span> Discover</h2>
+
+      <div class="qa-block">
+        <h3>What does this verse show?</h3>
+        <p>God’s Word gives direction.</p>
+        <p>It helps you see what to do next.</p>
+        <p>It guides you step by step.</p>
+        <p class="example">
+          <strong>Example:</strong> Like a light in a dark place.
+        </p>
+      </div>
+
+      <div class="qa-block">
+        <h3>How do I study the Bible?</h3>
+        <p>Read slowly, not fast.</p>
+        <p>Ask questions about what you read.</p>
+        <p>Think about what it means.</p>
+        <p class="example">
+          <strong>Example:</strong> Like learning step by step, not rushing.
+        </p>
+      </div>
+
+      <div class="qa-block">
+        <h3>What must I do daily?</h3>
+        <p>Spend time with God’s Word every day.</p>
+        <p>Even a little time helps you grow.</p>
+        <p>Practice what you learn.</p>
+        <p class="example">
+          <strong>Example:</strong> Like daily habits that make you stronger.
+        </p>
+      </div>
+    </article>
+
+    <article class="study-card card-truth">
+      <h2><span aria-hidden="true">💡</span> Simple Truth</h2>
+      <p>God’s Word guides your life step by step.</p>
+      <p>You understand more when you take your time.</p>
+      <p>Daily reading helps you grow stronger.</p>
+    </article>
+
+    <article class="study-card card-response">
+      <h2><span aria-hidden="true">❤️</span> Response</h2>
+      <ul>
+        <li>I READ the Bible daily</li>
+        <li>I ASK questions</li>
+        <li>I APPLY what I learn</li>
+      </ul>
+    </article>
+
+    <article class="study-card card-recap">
+      <h2><span aria-hidden="true">🔁</span> Recap</h2>
+      <ul>
+        <li>God’s Word gives direction</li>
+        <li>I study it step by step</li>
+        <li>I live what I learn</li>
+      </ul>
+    </article>
+
+    <article class="study-card card-prayer">
+      <h2><span aria-hidden="true">🙏</span> Prayer</h2>
+      <p>
+        Lord, teach me how to understand Your Word.
+        Guide me daily.
+        In Jesus’ name, Amen.
+      </p>
+    </article>
+
+    <nav class="lesson-nav" aria-label="Lesson navigation">
+      <a
+        class="study-btn study-btn-secondary"
+        href="{{ url_for('study_lesson_2') }}"
+        aria-label="Go to Lesson 2: Why Can I Trust the Bible?">
+        ← Previous
+      </a>
+
+      <a
+        class="study-btn"
+        href="{{ url_for('intro_series') }}"
+        aria-label="Finish the introduction series and return to the series page">
+        Finish Series →
+      </a>
+    </nav>
+
+  </div>
+</section>
+
+{% endblock %}

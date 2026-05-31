@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block title %}Admin — Intercessor Center{% endblock %}
+{% block content %}
+
+<section class="hero hero-day" style="background-image:url('{{ url_for('static', filename='img/prayer.jpg') }}')">
+  <div class="hero-inner" style="padding:24px 22px;">
+    <h1>🙏 Prayer Intercessor Center</h1>
+    <p class="muted">Standing in the gap for our community. <strong>In Jesus’ name, Amen.</strong></p>
+  </div>
+</section>
+
+{# 1. THE INBOX #}
+<div class="card admin-card" style="overflow:auto; padding: 0; margin-bottom: 30px; border-radius: 12px;">
+  <table style="width:100%; border-collapse:collapse; min-width: 800px;">
+    <thead>
+      <tr>
+        <th>📅 Date</th>
+        <th>👤 Name</th>
+        <th>🏷️ Topic</th>
+        <th>📝 Their Burden</th>
+        <th>⚡ Intercede</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in items %}
+      <tr>
+        <td>{{ r.ts }}</td>
+        <td><strong>{{ r.name or "Anonymous" }}</strong></td>
+        <td><span class="badge">{{ r.topic or "General" }}</span></td>
+        <td style="color: #64748b; font-style: italic;">"{{ r.request|truncate(60) }}"</td>
+        <td>
+          <button class="btn-gen" 
+                  onclick="prepareIntercession('{{ r.name|default('Friend', true) }}', '{{ r.topic }}', '{{ r.request|replace('\n', ' ')|replace('\'', '') }}', '{{ r.contact }}')">
+            🙏 Pray Now
+          </button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{# 2. THE INTERCESSOR WORKSTATION #}
+<div id="generator-section" class="card" style="max-width: 750px; margin: 0 auto 60px; border-top: 6px solid #00a86b; display:none; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+    <h2 style="margin-top:0;">✨ Compose Intercession</h2>
+    <p class="muted">Drafting for: <span id="target-display" style="font-weight:bold; color:#00a86b;"></span></p>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+        <div>
+            <label>🌅 Time of Day</label>
+            <select id="mode" onchange="updatePreview()">
+                <option value="☀️ Morning">Morning</option>
+                <option value="🌙 Night">Night</option>
+                <option value="🕊️ Daily">General</option>
+            </select>
+        </div>
+        <div>
+            <label>📖 Scripture Foundation</label>
+            <select id="scripture" onchange="updatePreview()">
+                <option value="Psalm 34:18 — The LORD is near to the brokenhearted and saves the crushed in spirit.">Psalm 34:18 (Comfort)</option>
+                <option value="Philippians 4:6-7 — Do not be anxious... the peace of God will guard your heart.">Phil 4:6 (Peace)</option>
+                <option value="Isaiah 41:10 — Fear not, for I am with you; I will strengthen you and help you.">Isaiah 41:10 (Strength)</option>
+                <option value="Jeremiah 29:11 — Plans to prosper you and not to harm you, plans for hope.">Jeremiah 29:11 (Future)</option>
+                <option value="Matthew 11:28 — Come to me, all who labor and are heavy laden, I will give you rest.">Matt 11:28 (Rest)</option>
+            </select>
+        </div>
+    </div>
+
+    <label>📜 Intercessory Message (Auto-Generated)</label>
+    <textarea id="output" rows="12" style="width:100%; font-size: 1.05rem; padding:20px; border-radius:10px; border:2px solid #e2e8f0; line-height:1.6; background: #fafafa;"></textarea>
+    
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px; margin-top:20px;">
+        <button class="btn soft" onclick="copyText()" style="border: 2px solid #ddd;">📋 Copy Text</button>
+        <button class="btn-wa" onclick="sendWA('web')">💻 WA Web</button>
+        <button class="btn-wa" onclick="sendWA('api')" style="background:#128C7E;">📱 WA Phone</button>
+    </div>
+</div>
+
+<style nonce="{{ csp_nonce() }}">
+  .btn-gen { background: #00a86b; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+  .btn-gen:hover { background: #008f5a; transform: scale(1.05); }
+  .badge { background: #f1f5f9; color: #475569; padding: 4px 10px; border-radius: 6px; font-weight: 600; text-transform: capitalize; }
+  .btn-wa { background: #25D366; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; font-size: 0.9rem; }
+  label { font-weight: bold; display: block; margin-bottom: 5px; color: #334155; }
+</style>
+
+<script nonce="{{ csp_nonce() }}">
+let currentUser = { name: '', topic: '', request: '', contact: '' };
+
+const intercessoryBridges = {
+    "peace": "We speak over the storm in your mind and command the Shalom of God to prevail. We rebuke every spirit of heaviness and anxiety in the name of Jesus.",
+    "healing": "We stand in faith for your total restoration. We pray for every cell in your body to align with God's design for health and wholeness.",
+    "relationships": "We pray for the oil of the Holy Spirit to soften hearts and mend what is broken. Let there be grace, forgiveness, and clear communication.",
+    "work": "We pray for divine favor in your workplace and wisdom in your finances. We ask God to open doors of opportunity that no man can close.",
+    "faith": "We pray for a fresh wind of the Spirit to blow upon you. May your spiritual eyes be opened to see the victory God has already prepared.",
+    "grief": "We ask the 'God of all Comfort' to shield your heart today. We pray that even in silence, you would feel the warmth of His presence.",
+    "direction": "We ask for the 'Lamp unto your feet.' May your path be made straight and every confusion be replaced by a clear word from Heaven.",
+    "default": "We lift your specific request to the Throne of Grace. We agree in prayer that God’s perfect will be done in this situation."
+};
+
+function prepareIntercession(name, topic, request, contact) {
+    currentUser = { name, topic, request, contact };
+    document.getElementById('target-display').innerText = name.toUpperCase() + " — " + topic.toUpperCase();
+    document.getElementById('generator-section').style.display = 'block';
+    updatePreview();
+    document.getElementById('generator-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+function updatePreview() {
+    const mode = document.getElementById('mode').value;
+    const scripture = document.getElementById('scripture').value;
+    const topicKey = currentUser.topic.toLowerCase().trim();
+    
+    // Select bridge based on topic or default
+    const bridge = intercessoryBridges[topicKey] || intercessoryBridges["default"];
+    
+    const message = 
+`🕊️ *Silent SoulConnect Intercession* 🕊️
+${mode} Prayer
+
+Dear ${currentUser.name},
+
+We have received your request regarding *${currentUser.topic}*. We are not just hearing you; we are standing with you in the gap before the Lord.
+
+🙏 *Our Intercession for You:*
+"${bridge}"
+
+📖 *The Word:*
+${scripture}
+
+✨ We agree with you for breakthrough. May you find rest in His grace today.
+
+In Jesus’ name, Amen.`;
+    
+    document.getElementById('output').value = message;
+}
+
+function sendWA(platform) {
+    const phone = currentUser.contact.replace(/\D/g,'');
+    const text = encodeURIComponent(document.getElementById('output').value);
+    const url = (platform === 'web') 
+        ? `https://web.whatsapp.com/send?phone=${phone}&text=${text}`
+        : `https://api.whatsapp.com/send?phone=${phone}&text=${text}`;
+    window.open(url, '_blank');
+}
+
+function copyText() {
+    const textArea = document.getElementById("output");
+    textArea.select();
+    navigator.clipboard.writeText(textArea.value);
+    alert("Intercession copied for " + currentUser.name);
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,355 @@
+{% extends "base.html" %}
+{% block title %}Communion: Biblical Truth or Church Tradition? — Soul Speaks{% endblock %}
+
+{% block content %}
+<section class="container page-wrap soulspeaks-post">
+
+  <header class="sp-hero">
+    <div class="sp-hero-inner">
+      <div class="sp-badge sp-badge-foundation">Faith Foundation</div>
+      <h1 class="sp-title">Communion: Biblical Truth or Church Tradition?</h1>
+
+      <div class="sp-meta">
+        <span>April 03rd, 2026</span>
+        <span class="dot">•</span>
+        <span>Blog 1</span>
+        <span class="dot">•</span>
+        <span>Communion • Truth • Reflection</span>
+      </div>
+
+      <div class="sp-chips">
+        <span class="sp-chip">🤟 Visual Grace</span>
+        <span class="sp-chip">🧠 Simple English</span>
+        <span class="sp-chip">💬 Open Discussion</span>
+      </div>
+
+      <div class="sp-actions">
+        <a class="btn btn-ghost" href="{{ url_for('blog_index') }}">← Back to Blog</a>
+        <a class="btn btn-primary" href="{{ url_for('home') }}">Home</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="sp-grid">
+
+    <aside class="sp-side">
+      <div class="card soft sp-side-card">
+        <div class="sp-side-media">
+          {% set default_rel = 'img/blog/soulspeaks/default.jpg' %}
+          {% set img_rel = post.image if post and post.image else 'img/blog/soulspeaks/communion.jpg' %}
+          <img class="sp-side-img"
+                src="{{ url_for('static', filename=img_rel) }}"
+                alt="Communion: Biblical Truth or Church Tradition"
+                loading="lazy"
+                onerror="this.onerror=null;this.src='{{ url_for('static', filename=default_rel) }}';"></div>
+            <div></div>
+
+        <h3 class="sp-side-title">Join the Conversation</h3>
+        <p class="muted sp-side-sub">Share your thoughts or a short reflection.</p>
+
+        <div class="sp-connect">
+          <a class="btn btn-wide btn-primary"
+             href="{{ SOCIAL_LINKS.get('whatsapp', '#') }}"
+             target="_blank" rel="noopener">💬 WhatsApp</a>
+
+          <a class="btn btn-wide"
+             href="{{ SOCIAL_LINKS.get('facebook', '#') }}"
+             target="_blank" rel="noopener">📘 Facebook</a>
+
+          <a class="btn btn-wide"
+             href="{{ SOCIAL_LINKS.get('instagram', '#') }}"
+             target="_blank" rel="noopener">📸 Instagram</a>
+        </div>
+      </div>
+    </aside>
+
+    <main class="sp-main">
+
+      <section class="sp-section">
+        <h2 class="sp-h2">Many practice it, few question it</h2>
+        <p>
+          Communion is something many believers practice, but not everyone stops to ask:
+          <strong>Where did it really come from?</strong>
+        </p>
+        <p>
+          Some take it as routine. Others see it as sacred.
+          But understanding begins when we return to the origin.
+        </p>
+      </section>
+
+      <section class="sp-section">
+        <h2 class="sp-h2">It began with Jesus</h2>
+        <p>
+          Communion started with Jesus at the Last Supper. He sat with His disciples,
+          took bread, gave thanks, broke it, and shared it. Then He took the cup and gave it to them.
+        </p>
+        <p>
+          In that moment, He gave a clear instruction:
+          <em>“Do this in remembrance of Me.”</em>
+        </p>
+      </section>
+
+      <section class="sp-callout">
+        <div class="sp-callout-title">Key Message</div>
+        <div class="sp-callout-text">
+          Communion is rooted in Christ, not created by tradition.
+        </div>
+      </section>
+
+      <section class="sp-section">
+        <h2 class="sp-h2">The meaning is simple but powerful</h2>
+        <p>
+          The bread represents His body. The cup represents His blood.
+        </p>
+        <p>
+          Together, they remind us of His sacrifice, His love, and the price He paid for us.
+        </p>
+      </section>
+
+      <section class="sp-section">
+        <h2 class="sp-h2">Tradition shaped the method</h2>
+        <p>
+          Over time, churches developed different ways of practicing communion.
+          Some serve it weekly, some monthly. Some use wine, others grape juice.
+        </p>
+        <p>
+          These differences show that tradition has influenced the method,
+          but it should never replace the meaning.
+        </p>
+      </section>
+
+      <section class="sp-section">
+        <h2 class="sp-h2">Meaning must remain</h2>
+        <p>
+          Communion is not about performance. It is not about appearance.
+        </p>
+        <p>
+          It is about remembrance. It is about examining the heart.
+          It is about staying connected to Christ.
+        </p>
+      </section>
+
+      <section class="sp-section">
+        <h2 class="sp-h2">Routine or relationship?</h2>
+        <p>
+          When communion becomes routine without understanding, its power is reduced.
+        </p>
+        <p>
+          But when taken with truth, humility, and awareness,
+          even the simplest moment becomes deeply meaningful.
+        </p>
+      </section>
+
+      <aside class="sp-scripture">
+        <div class="sp-scripture-label">📖 Scripture Anchor</div>
+       <div class="sp-scripture-ref">Luke 22:19</div>
+            <blockquote class="sp-scripture-quote">
+            “Do this in remembrance of Me.”
+            </blockquote>
+        <div class="sp-scripture-cite">— The Bible</div>
+      </aside>
+
+      <section class="sp-reflection card soft">
+        <h3 class="sp-h3">Open Discussion</h3>
+        <p class="muted">Take a quiet moment and think about one of these:</p>
+        <ul class="sp-list">
+          <li>Do I understand the meaning of communion?</li>
+          <li>Am I following routine or remembering Christ?</li>
+          <li>How can I make this moment more meaningful?</li>
+        </ul>
+        <p class="muted sp-reflection-note">
+          You can type your reflection or share a short message through WhatsApp.
+        </p>
+      </section>
+
+      <div class="sp-tags">
+        <span class="sp-tag">Communion</span>
+        <span class="sp-tag">Truth</span>
+        <span class="sp-tag">Faith</span>
+        <span class="sp-tag">Reflection</span>
+      </div>
+
+      <div class="sp-bottom">
+        <a class="btn btn-ghost" href="{{ url_for('blog_index') }}">← Back to Blog</a>
+      </div>
+
+    </main>
+  </div>
+</section>
+
+<style>
+/* Soul Speaks blog layout */
+
+/* GRID */
+.sp-grid{
+  display:grid;
+  grid-template-columns:280px 1fr;
+  gap:28px;
+  align-items:start;
+}
+
+/* SIDE */
+.sp-side{
+  position:sticky;
+  top:18px;
+}
+
+.sp-side-card{
+  padding:14px;
+}
+
+/* IMAGE FIX (important) */
+.sp-side-img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+  border-radius:12px;
+  display:block;
+  margin-bottom:10px;
+}
+
+/* TEXT SCALE */
+.sp-side-title{
+  font-size:1.25rem;
+  margin-bottom:6px;
+}
+
+.sp-side-sub{
+  font-size:.9rem;
+  margin-bottom:12px;
+}
+
+/* BUTTON STACK */
+.sp-connect{
+  display:grid;
+  gap:8px;
+}
+
+/* MAIN CONTENT */
+.sp-main{
+  display:grid;
+  gap:18px;
+}
+
+/* CONTENT CARDS */
+,.sp-section,
+.sp-callout,
+.sp-scripture,
+.sp-reflection{
+  background:#fff;
+  border-radius:16px;
+  padding:22px;
+  border:1px solid rgba(0,0,0,.06);
+  box-shadow:0 6px 18px rgba(0,0,0,.04);
+}
+
+.sp-section + .sp-section {
+  margin-top:2px;
+}
+
+/* HEADINGS */
+.sp-h2{
+  font-size:1.50rem;
+  font-weight:700;
+  margin-bottom:10px;
+}
+
+.sp-h3{
+  font-size:1.3rem;
+}
+
+.sp-section:hover,
+.sp-callout:hover,
+.sp-scripture:hover{
+  transform:translateY(-2px);
+  transition:all .2s ease;
+}
+
+/* CALLOUT */
+.sp-callout{
+  background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+  border-left: 4px solid var(--brand);
+  padding:18px 20px;
+}
+
+.sp-callout-title{
+  font-size:.8rem;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  color:#6b7280;
+  margin-bottom:6px;
+}
+
+.sp-callout-text{
+  font-size:1.05rem;
+  font-weight:600;
+}
+
+/* SCRIPTURE */
+.sp-scripture{
+  background:#f8fafc;
+  border-left:4px solid #c7d2fe;
+  padding:18px 20px;
+}
+
+.sp-scripture-ref{
+  font-weight:600;
+  margin-bottom:6px;
+}
+
+.sp-scripture-quote{
+  font-size:1.05rem;
+  font-style:italic;
+  margin:6px 0;
+}
+
+.sp-scripture-cite{
+  font-size:.9rem;
+  color:#6b7280;
+}
+
+/* TAGS */
+.sp-tags{
+  margin-top:6px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.sp-tag{
+  font-size:.85rem;
+  padding:6px 10px;
+  background:#f1f5f9;
+  border-radius:999px;
+}
+
+/* MOBILE */
+@media (max-width:980px){
+  .sp-grid{
+    grid-template-columns:1fr;
+  }
+
+  .sp-side{
+    position:static;
+  }
+
+  .sp-side-img{
+    height:auto;
+  }
+
+ .sp-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:.75rem;
+  font-weight:600;
+}
+
+.sp-badge-foundation{
+  background:#ecfdf5;
+  color:#065f46;
+}
+
+{% endblock %}

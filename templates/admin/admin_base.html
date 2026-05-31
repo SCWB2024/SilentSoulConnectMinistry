@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Admin{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+
+<body class="admin-body">
+
+  <!-- HEADER (must be inside body) -->
+  <header class="admin-topbar">
+    <a class="admin-brand" href="/admin">Silent SoulConnect Admin</a>
+
+    <nav class="admin-nav">
+      <a href="/admin">Dashboard</a>
+      <a href="/admin/blog">Blog</a>
+      <a href="/admin/whatsapp">WhatsApp</a>
+      <a href="/">View Site</a>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="admin-page">
+    <div class="admin-wrap">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+
+</body>
+</html>

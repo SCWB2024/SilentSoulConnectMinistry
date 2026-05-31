@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Start Here — Understanding the Bible{% endblock %}
+{% block body_class %}study-intro-page{% endblock %}
+
+{% block content %}
+
+<section class="study-series-page" aria-label="Introduction Bible study series">
+  <div class="study-shell">
+
+    <header class="series-hero">
+      <img
+        src="{{ url_for('static', filename='img/study/bible/intro.jpg') }}"
+        alt="Introduction to Bible study"
+        class="lesson-image">
+
+      <span class="series-tag">
+        Level 1 • Introduction Series
+      </span>
+
+      <h1>Start Here — Understanding the Bible</h1>
+
+      <p class="series-summary">
+        A simple Bible study series to help beginners understand what the Bible is,
+        why it can be trusted, and how to study it step by step.
+      </p>
+    </header>
+
+    <section class="series-grid" aria-label="Bible study lessons">
+
+      <a
+        href="{{ url_for('study_lesson_1') }}"
+        class="series-link"
+        aria-label="Open Lesson 1: What Is the Bible?">
+
+        <article class="series-card">
+          <img
+            src="{{ url_for('static', filename='img/study/bible/bible1.jpg') }}"
+            alt="Lesson 1 image"
+            class="series-thumb">
+
+          <div class="series-card-top">
+            <span class="lesson-number">Lesson 1</span>
+            <h2>What Is the Bible?</h2>
+          </div>
+
+          <p class="lesson-progress">
+            Lesson 1 of 3
+          </p>
+
+          <p>
+            Learn that the Bible is God’s message, given to guide,
+            teach, and help us live right.
+          </p>
+
+          <span class="study-btn" aria-hidden="true">
+            Open Lesson
+          </span>
+        </article>
+      </a>
+
+      <a
+        href="{{ url_for('study_lesson_2') }}"
+        class="series-link"
+        aria-label="Open Lesson 2: Why Can I Trust the Bible?">
+
+        <article class="series-card">
+          <img
+            src="{{ url_for('static', filename='img/study/bible/bible2.jpg') }}"
+            alt="Lesson 2 image"
+            class="series-thumb">
+
+          <div class="series-card-top">
+            <span class="lesson-number">Lesson 2</span>
+            <h2>Why Can I Trust the Bible?</h2>
+          </div>
+
+          <p class="lesson-progress">
+            Lesson 2 of 3
+          </p>
+
+          <p>
+            Discover why God’s Word is true, steady,
+            and safe to follow in every season of life.
+          </p>
+
+          <span class="study-btn" aria-hidden="true">
+            Open Lesson
+          </span>
+        </article>
+      </a>
+
+      <a
+        href="{{ url_for('study_lesson_3') }}"
+        class="series-link"
+        aria-label="Open Lesson 3: How Do I Study the Bible?">
+
+        <article class="series-card">
+          <img
+            src="{{ url_for('static', filename='img/study/bible/bible3.jpg') }}"
+            alt="Lesson 3 image"
+            class="series-thumb">
+
+          <div class="series-card-top">
+            <span class="lesson-number">Lesson 3</span>
+            <h2>How Do I Study the Bible?</h2>
+          </div>
+
+          <p class="lesson-progress">
+            Lesson 3 of 3
+          </p>
+
+          <p>
+            Learn a simple way to read, understand,
+            and apply the Bible a little at a time.
+          </p>
+
+          <span class="study-btn" aria-hidden="true">
+            Open Lesson
+          </span>
+        </article>
+      </a>
+
+    </section>
+
+  </div>
+</section>
+
+{% endblock %}

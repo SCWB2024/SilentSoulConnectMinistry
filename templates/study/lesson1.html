@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Lesson 1 — What Is the Bible?{% endblock %}
+{% block body_class %}study-lesson-page-body{% endblock %}
+
+{% block content %}
+
+<section class="study-lesson-page" aria-label="Lesson 1: What Is the Bible?">
+  <div class="study-shell">
+
+    <header class="lesson-hero">
+      <img
+        src="{{ url_for('static', filename='img/study/bible/bible1.jpg') }}"
+        alt="What is the Bible"
+        class="lesson-image">
+
+      <span class="series-tag">Level 1 • Introduction Series</span>
+
+      <h1>Lesson 1: What Is the Bible?</h1>
+
+      <p class="lesson-subtitle">
+        Start Here — Understanding the Bible
+      </p>
+
+      <p class="lesson-progress lesson-progress-center">
+        Lesson 1 of 3
+      </p>
+    </header>
+
+    <article class="study-card card-real-life">
+      <h2><span aria-hidden="true">🎬</span> Real Life</h2>
+      <p>A manual tells you how something works.</p>
+      <p>Without it, you guess—and mistakes happen.</p>
+    </article>
+
+    <article class="study-card card-question">
+      <h2><span aria-hidden="true">❓</span> Main Question</h2>
+      <p>What is the Bible, and why do we need it?</p>
+    </article>
+
+    <article class="study-card card-bible">
+      <h2><span aria-hidden="true">📖</span> Bible</h2>
+      <p class="verse-ref"><strong>2 Timothy 3:16</strong></p>
+      <blockquote>“All Scripture is God-breathed…”</blockquote>
+    </article>
+
+    <article class="study-card card-discover">
+      <h2><span aria-hidden="true">🔍</span> Discover</h2>
+
+      <div class="qa-block">
+        <h3>What does this verse show?</h3>
+        <p>The Bible comes from <strong>God</strong>, not just people.</p>
+        <p>This means it is not only human ideas.</p>
+        <p>God guided people to write His truth.</p>
+        <p class="example">
+          <strong>Example:</strong> Like a teacher helping a student write the correct answer.
+        </p>
+      </div>
+
+      <div class="qa-block">
+        <h3>Why is that important?</h3>
+        <p>God knows everything and does not make mistakes.</p>
+        <p>If the Bible comes from God, it is true and reliable.</p>
+        <p>We do not have to guess what is right or wrong.</p>
+        <p class="example">
+          <strong>Example:</strong> Like using correct directions instead of guessing your way.
+        </p>
+      </div>
+
+      <div class="qa-block">
+        <h3>What is the Bible for?</h3>
+        <p>The Bible teaches us how to live.</p>
+        <p>It shows right from wrong.</p>
+        <p>It corrects us and helps us grow.</p>
+        <p class="example">
+          <strong>Example:</strong> Like a guide that keeps you on the right path.
+        </p>
+      </div>
+    </article>
+
+    <article class="study-card card-truth">
+      <h2><span aria-hidden="true">💡</span> Simple Truth</h2>
+      <p>The Bible is God’s message to you.</p>
+      <p>It is a guide for your life.</p>
+      <p>When you follow it, you learn how to live and stay close to God.</p>
+    </article>
+
+    <article class="study-card card-response">
+      <h2><span aria-hidden="true">❤️</span> Response</h2>
+      <ul>
+        <li>I TRUST God’s Word</li>
+        <li>I WANT to learn</li>
+        <li>I FOLLOW His truth</li>
+      </ul>
+    </article>
+
+    <article class="study-card card-recap">
+      <h2><span aria-hidden="true">🔁</span> Recap</h2>
+      <ul>
+        <li>The Bible comes from God</li>
+        <li>It teaches me how to live</li>
+        <li>I can trust it every day</li>
+      </ul>
+    </article>
+
+    <article class="study-card card-prayer">
+      <h2><span aria-hidden="true">🙏</span> Prayer</h2>
+      <p>
+        Lord, thank You for Your Word.
+        Help me understand and follow it daily.
+        In Jesus’ name, Amen.
+      </p>
+    </article>
+
+    <nav class="lesson-nav" aria-label="Lesson navigation">
+      <a
+        class="study-btn study-btn-secondary"
+        href="{{ url_for('intro_series') }}"
+        aria-label="Go back to the introduction series">
+        ← Back to Series
+      </a>
+
+      <a
+        class="study-btn"
+        href="{{ url_for('study_lesson_2') }}"
+        aria-label="Go to Lesson 2: Why Can I Trust the Bible?">
+        Next Lesson →
+      </a>
+    </nav>
+
+  </div>
+</section>
+
+{% endblock %}

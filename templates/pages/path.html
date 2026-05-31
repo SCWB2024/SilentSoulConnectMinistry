@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block title %}PATH — Silent SoulConnect Ministry{% endblock %}
+{% block body_class %}path-page{% endblock %}
+
+{% block content %}
+
+<section class="path-hero"
+  aria-label="The PATH spiritual journey"
+  style="background-image:
+    linear-gradient(rgba(20,20,20,.50), rgba(20,20,20,.50)),
+    url('{{ url_for('static', filename='img/path/hero.jpg') }}');">
+
+ <div class="path-hero-inner">
+
+  <h1>Walk the PATH</h1>
+
+  <p class="path-subtitle">
+    Begin where your heart needs today — pause, grow,
+    trust, and rise again.
+  </p>
+
+  <div class="hero-verse">
+    <p>
+      “Your word is a lamp to my feet
+      and a light to my path.”
+    </p>
+
+    <span>— Psalm 119:105</span>
+  </div>
+
+</div>
+</section>
+
+
+<section class="path-intro section-shell center">
+  <h2>Your Guided Journey</h2>
+  <p>
+    PATH is a simple way to move through devotion, study, prayer, and reflection.
+    Take one step at a time and return whenever you need strength, clarity, or peace.
+  </p>
+
+  <div class="path-meaning">
+    <span class="path-letter-word p">Pause</span>
+    <span class="path-letter-word a">Anchor</span>
+    <span class="path-letter-word t">Trust</span>
+    <span class="path-letter-word h">Hope</span>
+  </div>
+
+  <p class="path-caption">
+    You do not need to do everything at once. Start where you need most.
+  </p>
+</section>
+
+
+<section id="path-steps" class="path-steps section-shell"
+  aria-label="Choose a step in the PATH spiritual journey">
+
+  <div class="path-grid">
+
+    <a href="{{ url_for('today') }}" class="path-card path-link-card">
+      <div class="path-ico" aria-hidden="true">⏸️</div>
+      <h3>Pause</h3>
+      <p class="path-subtitle">Daily Devotion</p>
+      <p>
+        Slow down and quiet your heart before God. Begin the day with a simple devotion.
+      </p>
+      <p class="verse">“Be still and know that I am God.” — Psalm 46:10</p>
+      <span class="path-link-text">Start Today →</span>
+    </a>
+
+    <a href="{{ url_for('intro_series') }}" class="path-card path-link-card">
+      <div class="path-ico" aria-hidden="true">📖</div>
+      <h3>Anchor</h3>
+      <p class="path-subtitle">Study Hub</p>
+      <p class="verse">
+  “The truth will set you free.”
+  — John 8:32
+</p>
+    <span class="path-link-text">Go to Study Hub →</span>
+    </a>
+
+    <a href="{{ url_for('prayer') }}" class="path-card path-link-card">
+      <div class="path-ico" aria-hidden="true">🙏</div>
+      <h3>Trust</h3>
+      <p class="path-subtitle">Prayer</p>
+      <p>
+        Bring your burdens, your thanks, and your quiet prayers before God.
+      </p>
+      <p class="verse">“Trust in the Lord with all your heart.” — Proverbs 3:5</p>
+      <span class="path-link-text">Submit Prayer →</span>
+    </a>
+
+    <a href="{{ url_for('blog_index') }}" class="path-card path-link-card">
+      <div class="path-ico" aria-hidden="true">🕊️</div>
+      <h3>Hope</h3>
+      <p class="path-subtitle">Soul Speaks</p>
+      <p>
+        Be encouraged through reflections, stories, and faith-filled insights.
+      </p>
+      <p class="verse">“May the God of hope fill you with joy and peace.” — Romans 15:13</p>
+      <span class="path-link-text">Read Reflections →</span>
+    </a>
+
+  </div>
+</section>
+
+
+<section class="path-guidance" aria-label="PATH journey guidance">
+  <p>
+    Start where you are. Return anytime. Move at your own pace.
+  </p>
+</section>
+
+
+<section class="path-next section-shell center">
+  <h3>Need something deeper?</h3>
+  <a href="{{ url_for('foundation') }}" class="btn blue">
+    Learn Our Foundation
+  </a>
+  <p class="path-caption">
+    Understand the mission, purpose, and heart behind Silent SoulConnect.
+  </p>
+</section>
+
+
+<section class="path-community-banner"
+  aria-label="Community and support"
+  style="background-image:
+    linear-gradient(rgba(15,15,15,.58), rgba(15,15,15,.55)),
+    url('{{ url_for('static', filename='img/hero_joinus.jpg') }}');">
+
+  <div class="path-community-inner">
+    <span class="mini-label light">YOU DON’T WALK ALONE</span>
+
+    <h2>Faith grows stronger in community.</h2>
+
+    <p class="path-community-text">
+      Join through WhatsApp, online Bible study, daily devotion,
+      and weekly spiritual encouragement.
+    </p>
+
+    <div class="hero-actions">
+      <a class="btn gold" href="{{ url_for('join') }}">Join the Community</a>
+      <a class="btn blue" href="{{ url_for('donate') }}">Support the Mission</a>
+    </div>
+
+   </div>
+</section>
+
+{% endblock %}

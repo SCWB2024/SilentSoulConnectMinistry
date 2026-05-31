@@ -1,0 +1,189 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Admin: New Blog Post{% endblock %}
+
+{% block content %}
+<section class="admin-page">
+  <div class="admin-wrap">
+    <div class="admin-card">
+
+      <header class="admin-header">
+        <p class="admin-kicker">Back Office</p>
+        <h1 class="admin-title">Create New Blog Post</h1>
+        <p class="admin-text">
+          Fill in the details below and save your post.
+        </p>
+      </header>
+
+      <form method="POST" enctype="multipart/form-data" class="admin-form">
+
+        <div class="admin-grid two">
+          <div class="admin-field">
+            <label for="title">Blog Title</label>
+            <input type="text" id="title" name="title" required>
+          </div>
+
+          <div class="admin-field">
+            <label for="publish_date">Publish Date</label>
+            <input type="date" id="publish_date" name="publish_date" required>
+          </div>
+        </div>
+
+        <div class="admin-grid two">
+          <div class="admin-field">
+            <label for="category">Category</label>
+            <select id="category" name="category" required>
+              <option value="">Select category</option>
+              <option value="Soul Speaks">Soul Speaks</option>
+              <option value="Faith Foundations">Faith Foundations</option>
+              <option value="Practical Growth">Practical Growth</option>
+              <option value="Community & Advocacy">Community & Advocacy</option>
+            </select>
+          </div>
+
+          <div class="admin-field">
+            <label for="blog_number">Blog Number</label>
+            <input type="text" id="blog_number" name="blog_number" readonly>
+          </div>
+        </div>
+
+        <div class="admin-grid three">
+          <div class="admin-field">
+            <label for="topic_1">Topic 1</label>
+            <select id="topic_1" name="topic_1">
+              <option value="">Select topic</option>
+            </select>
+          </div>
+
+          <div class="admin-field">
+            <label for="topic_2">Topic 2</label>
+            <select id="topic_2" name="topic_2">
+              <option value="">Select topic</option>
+            </select>
+          </div>
+
+          <div class="admin-field">
+            <label for="topic_3">Topic 3</label>
+            <select id="topic_3" name="topic_3">
+              <option value="">Select topic</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="admin-grid two">
+          <div class="admin-field">
+            <label for="image">Featured Image</label>
+            <input type="file" id="image" name="image" accept="image/*">
+            <small class="admin-help">Choose one image for the blog cover.</small>
+          </div>
+
+          <div class="admin-field">
+            <label>Preview</label>
+            <div class="admin-preview">
+              <img id="image_preview" alt="Preview">
+              <span id="image_placeholder">No image selected</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-field">
+          <label for="content">Blog Content</label>
+          <textarea
+            id="content"
+            name="content"
+            rows="18"
+            placeholder="Write or paste your blog here. Use a blank line between paragraphs."
+            required
+          ></textarea>
+          <small class="admin-help">
+            Write in plain text. The system will format paragraphs automatically.
+          </small>
+        </div>
+
+        <div class="admin-actions">
+          <button type="submit" class="admin-btn admin-btn-primary">Save Blog Post</button>
+          <a href="{{ url_for('admin_dashboard') }}" class="admin-btn admin-btn-secondary">Back to Dashboard</a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+const categoryConfig = {
+  "Soul Speaks": {
+    topics: ["Quiet Faith", "Pain and Healing", "Waiting on God", "Hope", "Fear and Peace", "Presence of God"]
+  },
+  "Faith Foundations": {
+    topics: ["Salvation", "Grace", "Faith", "Obedience", "Prayer", "Jesus", "The Bible", "Church"]
+  },
+  "Practical Growth": {
+    topics: ["Daily Discipline", "Communication", "Forgiveness", "Family Life", "Leadership", "Time Management", "Spiritual Habits"]
+  },
+  "Community & Advocacy": {
+    topics: ["Deaf Awareness", "Accessibility", "Inclusion", "Ministry Outreach", "Disability Rights", "Community Support"]
+  }
+};
+
+const categorySelect = document.getElementById("category");
+const blogNumberInput = document.getElementById("blog_number");
+const topic1 = document.getElementById("topic_1");
+const topic2 = document.getElementById("topic_2");
+const topic3 = document.getElementById("topic_3");
+const imageInput = document.getElementById("image");
+const imagePreview = document.getElementById("image_preview");
+const imagePlaceholder = document.getElementById("image_placeholder");
+
+function resetTopicSelect(selectEl) {
+  selectEl.innerHTML = '<option value="">Select topic</option>';
+}
+
+function loadTopics(category) {
+  resetTopicSelect(topic1);
+  resetTopicSelect(topic2);
+  resetTopicSelect(topic3);
+
+  if (!category || !categoryConfig[category]) return;
+
+  categoryConfig[category].topics.forEach(topic => {
+    topic1.add(new Option(topic, topic));
+    topic2.add(new Option(topic, topic));
+    topic3.add(new Option(topic, topic));
+  });
+}
+
+async function loadNextBlogNumber(category) {
+  blogNumberInput.value = "";
+  if (!category) return;
+
+  try {
+    const response = await fetch(`/admin/blog/next-number?category=${encodeURIComponent(category)}`);
+    const data = await response.json();
+    blogNumberInput.value = data.blog_number || "";
+  } catch (error) {
+    console.error("Could not load blog number:", error);
+  }
+}
+
+categorySelect.addEventListener("change", function () {
+  const selectedCategory = this.value;
+  loadTopics(selectedCategory);
+  loadNextBlogNumber(selectedCategory);
+});
+
+imageInput.addEventListener("change", function (event) {
+  const file = event.target.files[0];
+
+  if (!file) {
+    imagePreview.src = "";
+    imagePreview.style.display = "none";
+    imagePlaceholder.style.display = "inline";
+    return;
+  }
+
+  imagePreview.src = URL.createObjectURL(file);
+  imagePreview.style.display = "block";
+  imagePlaceholder.style.display = "none";
+});
+</script>
+{% endblock %}

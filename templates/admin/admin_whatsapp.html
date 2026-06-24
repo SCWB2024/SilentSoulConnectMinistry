@@ -12,7 +12,7 @@
 <div class="card" role="region" aria-labelledby="wa-form-title">
   <h2 id="wa-form-title">Send WhatsApp</h2>
 
-  <form method="post" action="{{ url_for('admin_whatsapp_send') }}">
+  <form method="post" action="{{ url_for('admin_whatsapp') }}">
     <label for="date">Date</label>
     <input type="date" id="date" name="date"
            value="{{ selected_date or today.isoformat() }}">

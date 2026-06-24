@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Silent SoulConnect Ministry</title>
+
+  <meta http-equiv="refresh" content="8;url=https://new-sscm-2026.onrender.com/" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background:
+        linear-gradient(rgba(0, 35, 28, 0.45), rgba(0, 20, 18, 0.75)),
+        url("{{ url_for('static', filename='img/home/sscm-gateway-bg.jpg') }}");
+      background-size: cover;
+      background-position: center;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .gateway {
+      max-width: 760px;
+      padding: 42px 32px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 28px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 25px 70px rgba(0,0,0,0.35);
+    }
+
+    .logo {
+      width: 90px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 4rem);
+      margin-bottom: 14px;
+      line-height: 1.1;
+    }
+
+    .tagline {
+      font-size: 1.2rem;
+      margin-bottom: 22px;
+      color: #f3f7f2;
+    }
+
+    .verse {
+      font-style: italic;
+      margin-bottom: 30px;
+      color: #f8e7b0;
+    }
+
+    .notice {
+      margin-bottom: 28px;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 16px 28px;
+      border-radius: 999px;
+      background: #00a66a;
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.05rem;
+      transition: 0.25s ease;
+    }
+
+    .btn:hover {
+      background: #07885b;
+      transform: translateY(-2px);
+    }
+
+    .small {
+      margin-top: 22px;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    .small a {
+      color: #f8e7b0;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="gateway">
+    <img
+      class="logo"
+      src="{{ url_for('static', filename='img/logo.png') }}"
+      alt="Silent SoulConnect Ministry Logo"
+    />
+
+    <h1>Welcome to Silent SoulConnect Ministry</h1>
+
+    <p class="tagline">
+      A quiet place for faith, healing, truth, and hope.
+    </p>
+
+    <p class="verse">
+      “Be still, and know that I am God.” — Psalm 46:10
+    </p>
+
+    <p class="notice">
+      We are stepping into a renewed ministry home.<br>
+      You will be redirected to the new SSCM site shortly.
+    </p>
+
+    <a class="btn" href="https://new-sscm-2026.onrender.com/">
+      🚪 Enter the New Ministry Site
+    </a>
+
+    <p class="small">
+      If nothing happens, tap the button above.
+    </p>
+  </main>
+</body>
+</html>

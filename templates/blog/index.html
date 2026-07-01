@@ -26,9 +26,15 @@
 
       <div class="hero-actions">
         {% if posts and posts|length > 0 %}
-          <a class="btn btn-primary" href="{{ url_for('blog_post', slug=posts[0].slug) }}">
-            Read Latest
-          </a>
+          {% if posts[0].pillar == "Faith Foundations" %}
+            <a class="btn btn-primary" href="{{ url_for('faith_foundation_post', slug=posts[0].slug) }}">
+              Read Latest
+            </a>
+          {% else %}
+            <a class="btn btn-primary" href="{{ url_for('blog_post', slug=posts[0].slug) }}">
+              Read Latest
+            </a>
+          {% endif %}
         {% else %}
           <a class="btn btn-primary" href="{{ url_for('blog_index') }}">
             View Blog
@@ -114,6 +120,13 @@
         {% if posts and posts|length > 0 %}
 
           {% for post in posts %}
+
+            {% if post.pillar == "Faith Foundations" %}
+              {% set post_url = url_for('faith_foundation_post', slug=post.slug) %}
+            {% else %}
+              {% set post_url = url_for('blog_post', slug=post.slug) %}
+            {% endif %}
+
             <article class="post-card">
 
               {% set img = post.image or "default.jpg" %}
@@ -137,7 +150,7 @@
                       {% endif %}
 
                       <div class="blog-overlay-footer">
-                        {{ post.category or post.category_label or "Soul Speaks" }}
+                        {{ post.category or post.category_label or post.pillar or "Soul Speaks" }}
                         |
                         Silent SoulConnect Ministry
                       </div>
@@ -149,17 +162,26 @@
               <div class="post-body">
 
                 <div class="post-meta">
-                  <span class="chip">{{ post.month_label or post.month }}</span>
-
-                  {% if post.category_label or post.category %}
+                  {% if post.month_label or post.month %}
+                    <span class="chip">{{ post.month_label or post.month }}</span>
                     <span class="dot" aria-hidden="true">•</span>
-                    <span class="chip">{{ post.category_label or post.category }}</span>
                   {% endif %}
 
-                  <span class="dot" aria-hidden="true">•</span>
-                  <span class="muted">{{ post.blog_number }}</span>
+                  {% if post.pillar %}
+                    <span class="chip">{{ post.pillar }}</span>
+                    <span class="dot" aria-hidden="true">•</span>
+                  {% endif %}
 
-                  <span class="dot" aria-hidden="true">•</span>
+                  {% if post.category_label or post.category %}
+                    <span class="chip">{{ post.category_label or post.category }}</span>
+                    <span class="dot" aria-hidden="true">•</span>
+                  {% endif %}
+
+                  {% if post.blog_number or post.id %}
+                    <span class="muted">{{ post.blog_number or post.id }}</span>
+                    <span class="dot" aria-hidden="true">•</span>
+                  {% endif %}
+
                   <span class="muted">{{ post.publish_date or post.date }}</span>
                 </div>
 
@@ -174,7 +196,7 @@
                 {% endif %}
 
                 <h3 class="post-title">
-                  <a href="{{ url_for('blog_post', slug=post.slug) }}">
+                  <a href="{{ post_url }}">
                     {{ post.title }}
                   </a>
                 </h3>
@@ -184,20 +206,21 @@
                 </p>
 
                 <div class="post-actions">
-                  <a class="btn btn-primary" href="{{ url_for('blog_post', slug=post.slug) }}">
+                  <a class="btn btn-primary" href="{{ post_url }}">
                     Read
                   </a>
 
                   <button
                     class="btn btn-secondary"
                     type="button"
-                    onclick="navigator.clipboard.writeText('{{ SITE_URL.rstrip('/') }}{{ url_for('blog_post', slug=post.slug) }}')">
+                    onclick="navigator.clipboard.writeText('{{ SITE_URL.rstrip('/') }}{{ post_url }}')">
                     Copy Link
                   </button>
                 </div>
 
               </div>
             </article>
+
           {% endfor %}
 
         {% else %}

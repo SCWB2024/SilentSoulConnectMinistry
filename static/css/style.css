@@ -2261,6 +2261,107 @@ footer p {
 }
 
 /* =========================
+   Q-WELCOME PAGE
+========================= */
+/* Q3 Welcome Page */
+.q-welcome {
+  background: linear-gradient(180deg, #eef8f7 0%, #ffffff 100%);
+  padding: 3rem 1.25rem 4rem;
+}
+
+.q-welcome-wrap {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.q-hero {
+  background: linear-gradient(rgba(4, 48, 50, .58), rgba(4, 48, 50, .58)),
+              url("/static/img/devotion/2026/July/01.jpg") center/cover no-repeat;
+  color: #fff;
+  border-radius: 24px;
+  padding: 4rem 2rem;
+  box-shadow: 0 18px 45px rgba(0,0,0,.18);
+  margin-bottom: 2rem;
+}
+
+.q-eyebrow {
+  font-weight: 700;
+  letter-spacing: .04em;
+  margin-bottom: .75rem;
+}
+
+.q-hero h1 {
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  line-height: 1.05;
+  margin: 0 0 .5rem;
+}
+
+.q-hero h2 {
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  margin: 0 0 1rem;
+  color: #f8d77a;
+}
+
+.q-card {
+  background: #fff;
+  border-radius: 22px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 12px 35px rgba(0,0,0,.08);
+}
+
+.q-months {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.q-month-card {
+  background: #f7fbfa;
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 18px;
+  padding: 1.5rem;
+}
+
+.q-month-card h3 {
+  margin-top: 0;
+  color: #075f56;
+}
+
+.q-declaration {
+  background: #07383b;
+  color: #fff;
+  text-align: center;
+}
+
+.q-declaration blockquote {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  margin: 1rem auto 2rem;
+  max-width: 720px;
+}
+
+.q-btn {
+  display: inline-block;
+  background: #d9a520;
+  color: #fff;
+  padding: .9rem 1.4rem;
+  border-radius: 12px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+@media (max-width: 760px) {
+  .q-months {
+    grid-template-columns: 1fr;
+  }
+
+  .q-hero {
+    padding: 3rem 1.4rem;
+  }
+}
+
+/* =========================
    PRAYER PAGE
 ========================= */
 .prayer-hero {

@@ -26,7 +26,7 @@ DEVOTION_FILE = BASE_DIR / "devotions" / "devotions_2026.json"
 
 BLOG_DATA_PATH = BASE_DIR / "data" / "blog_backup.json"
 UPLOAD_FOLDER = BASE_DIR / "static" / "uploads" / "blog_images"
-BLOG_POSTS_JSON = BASE_DIR / "data" / "blog" / "blog.posts.json"
+BLOG_POSTS_JSON = BASE_DIR / "data" / "blog" / "soul_speaks_2026.json"
 
 
 CATEGORY_MAP = {
@@ -168,36 +168,45 @@ def load_devotion_for(target_date, mode):
             }
     return {}
 
-
 def ensure_devotion_image(target_date, mode="morning"):
-    date_str = target_date.strftime("%Y-%m-%d")
     year_str = target_date.strftime("%Y")
+    month_str = target_date.strftime("%B")
+    day_str = target_date.strftime("%d")
 
-    image_rel = f"img/devotion/hero/{year_str}/{date_str}.jpg"
-    image_full = Path(app.static_folder) / "img" / "devotion" / "hero" / year_str / f"{date_str}.jpg"
+    image_rel = f"img/devotion/{year_str}/{month_str}/{day_str}.jpg"
+    image_full = Path(app.static_folder) / "img" / "devotion" / year_str / month_str / f"{day_str}.jpg"
 
     print(f"[CHECK] Looking for: {image_full}")
 
     if image_full.exists():
-        print("[FOUND] Image exists")
+        print("[FOUND] Daily devotion image exists")
         return image_rel
 
-    print("[MISSING] Generating image...")
+    print("[MISSING] Using fallback devotion image")
 
-    try:
-        from soulstart.services.generate_devotion_image import generate_devotion_image
-        generate_devotion_image(date_str, mode=mode)
-    except Exception as e:
-        print(f"[ERROR] Generation failed for {date_str}: {e}")
+    # fallback image already in your background library
+    return "img/backgrounds/sunrise/1.jpg"
+
+def get_devotion_image(devotion):
+    # devotion["date"] = "2026-07-15"
+    date_str = devotion.get("date", "")
+    year = date_str[:4]
+    month_num = date_str[5:7]
+    day = date_str[8:10]
+
+    month_names = {
+        "01": "January", "02": "February", "03": "March",
+        "04": "April", "05": "May", "06": "June",
+        "07": "July", "08": "August", "09": "September",
+        "10": "October", "11": "November", "12": "December"
+    }
+
+    month_folder = month_names.get(month_num)
+
+    if not year or not month_folder or not day:
         return None
 
-    if image_full.exists():
-        print("[SUCCESS] Image generated")
-        return image_rel
-
-    print("[FAIL] Image still missing after generation")
-    return None
-
+    return f"img/devotion/{year}/{month_folder}/{day}.jpg"
 
 def common_page_ctx(active=""):
     return {
@@ -352,7 +361,6 @@ def admin_whatsapp_send():
         result=result
     )
 
-
 @app.context_processor
 def inject_global_vars():
     return {
@@ -366,6 +374,10 @@ def inject_global_vars():
         "LINKEDIN_URL": LINKEDIN_URL,
         "SOCIAL_LINKS": SOCIAL_LINKS,
     }
+
+# =========================
+# BASIC PAGE ROUTES
+# =========================
 
 @app.route("/")
 def home():
@@ -384,22 +396,59 @@ def foundation():
 
 @app.route("/path")
 def path():
-    return render_template("pages/path.html", active="path")
+    return render_template("path/path.html", active="path")
+
+@app.route("/devotion")
+def devotion():
+    return render_template("devotion/devotion.html")
+
+@app.route("/devotion/q3-welcome")
+def q3_welcome():
+    return render_template("devotion/q3_welcome.html")
 
 
+# =========================
+# DEVOTION ROUTE
+# =========================
 @app.route("/today", endpoint="today")
 def today_view():
-    mode = (request.args.get("mode") or DEFAULT_MODE).strip().lower()
-    mode = mode if mode in ("morning", "night") else DEFAULT_MODE
+    mode_arg = (request.args.get("mode") or "").strip().lower()
+    mode = mode_arg if mode_arg in ("morning", "night") else DEFAULT_MODE
 
     raw_date = (request.args.get("date") or "").strip()
     norm = normalize_date_str(raw_date) if raw_date else None
-
 
     try:
         target_date = datetime.strptime(norm, "%Y-%m-%d").date() if norm else date.today()
     except Exception:
         target_date = date.today()
+
+    WELCOME_DATES = {
+        date(2026, 7, 1): "devotion/q3_welcome.html",
+        date(2026, 10, 1): "devotion/q4_welcome.html",
+    }
+
+    welcome_template = WELCOME_DATES.get(target_date)
+
+    show_welcome = (
+        welcome_template
+        and not request.args.get("begin")
+        and not mode_arg
+    )
+
+    if show_welcome:
+        ctx = common_page_ctx(active="today")
+        ctx.update({
+            "today": target_date,
+            "mode": mode,
+            "begin_url": url_for(
+                "today",
+                date=target_date.isoformat(),
+                mode=mode,
+                begin=1
+            ),
+        })
+        return render_template(welcome_template, **ctx)
 
     entry = load_devotion_for(target_date, mode)
     preview_text = build_whatsapp_message(target_date.isoformat(), mode)
@@ -407,7 +456,7 @@ def today_view():
     hero_bg = HERO_NIGHT_BG if mode == "night" else HERO_DAY_BG
     hero_class = "hero night-tone" if mode == "night" else "hero"
 
-    devotion_image = ensure_devotion_image(target_date,mode)
+    devotion_image = ensure_devotion_image(target_date, mode)
 
     ctx = common_page_ctx(active="today")
     ctx.update({
@@ -424,8 +473,12 @@ def today_view():
     ctx["yday_url"] = url_for("today", date=yday_date.isoformat(), mode=mode)
     ctx["yday_label"] = "← Yesterday’s devotion"
 
-    return render_template("pages/devotion.html", **ctx)
+    return render_template("devotion/devotion.html", **ctx)
 
+# =========================
+# STUDY ROUTES
+# old Introduction series stays HTML
+# =========================
 
 @app.route("/study")
 def study_index():
@@ -452,28 +505,138 @@ def study_lesson_3():
     return render_template("study/lesson3.html")
 
 
+# =========================
+# STUDY JSON LOADERS
+# new studies going forward
+# =========================
+
+def load_study_series(series_slug):
+    path = os.path.join(app.root_path, "data", "study", f"{series_slug}.json")
+
+    if not os.path.exists(path):
+        return None
+
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"Study JSON error for {series_slug}:", e)
+        return None
+
+
+@app.route("/study/<series_slug>")
+def study_series(series_slug):
+    study = load_study_series(series_slug)
+
+    if not study:
+        abort(404)
+
+    return render_template("study/study_series.html", study=study)
+
+
+@app.route("/study/<series_slug>/<lesson_slug>")
+def study_lesson_json(series_slug, lesson_slug):
+    study = load_study_series(series_slug)
+
+    if not study:
+        abort(404)
+
+    if lesson_slug == "introduction":
+        lesson = study.get("introduction")
+    else:
+        lesson = next(
+            (item for item in study.get("lessons", []) if item.get("id") == lesson_slug),
+            None
+        )
+
+    if not lesson:
+        abort(404)
+
+    return render_template(
+        "study/study_lesson.html",
+        study=study,
+        lesson=lesson
+    )
+
+# =========================
+# BLOG LOADERS
+# current blog JSON only
+# =========================
+
+def load_soul_speaks():
+    path = os.path.join(app.root_path, "data", "blog", "soul_speaks_2026.json")
+
+    if not os.path.exists(path):
+        return []
+
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            posts = json.load(f)
+            return posts if isinstance(posts, list) else []
+    except Exception as e:
+        print("Soul Speaks JSON error:", e)
+        return []
+
+def load_faith_foundations():
+    path = os.path.join(app.root_path, "data", "faith_foundations", "faith_foundations_2026.json")
+
+    if not os.path.exists(path):
+        return []
+
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            posts = json.load(f)
+            return posts if isinstance(posts, list) else []
+    except Exception as e:
+        print("Faith Foundations JSON error:", e)
+        return []
+
+
+# =========================
+# BLOG ROUTES
+# =========================
 @app.route("/blog")
 def blog_index():
     selected_category = request.args.get("category", "").strip()
     selected_tag = request.args.get("tag", "").strip()
 
+    old_posts = OLD_BLOGS
     backup_posts = load_blog_posts()
-    json_posts = load_json_blog_posts()
+    soul_posts = load_soul_speaks()
+    faith_posts = load_faith_foundations()
 
-    print("JSON POSTS:", len(json_posts))
-    print("JSON SLUGS:", [p.get("slug") for p in json_posts])
+    posts = old_posts + soul_posts + faith_posts + backup_posts
 
-    posts = OLD_BLOGS + json_posts + backup_posts
+    posts = [
+        p for p in posts
+        if p.get("status", "published") == "published"
+        or not p.get("status")
+    ]
+
+    today = date.today().isoformat()
+
+    posts = [
+        p for p in posts
+        if (p.get("publish_date") or p.get("date", "")) <= today
+    ]
 
     if selected_category:
-        posts = [p for p in posts if p.get("category") == selected_category or p.get("category_label") == selected_category]
+        posts = [
+            p for p in posts
+            if p.get("category") == selected_category
+            or p.get("category_label") == selected_category
+            or p.get("pillar") == selected_category
+        ]
 
     if selected_tag:
-        posts = [p for p in posts if selected_tag in p.get("tags", [])]
+        posts = [
+            p for p in posts
+            if selected_tag in p.get("tags", [])
+        ]
 
     posts = sorted(
         posts,
-        key=lambda p: p.get("date") or p.get("publish_date", ""),
+        key=lambda p: p.get("publish_date") or p.get("date", ""),
         reverse=True
     )
 
@@ -486,111 +649,37 @@ def blog_index():
 
 @app.route("/blog/<slug>")
 def blog_post(slug):
-    json_posts = load_json_blog_posts()
+    posts = load_soul_speaks()
 
-    print("LOOKING FOR:", slug)
-    print("JSON SLUGS:", [p.get("slug") for p in json_posts])
+    post = next((p for p in posts if p.get("slug") == slug), None)
 
-    json_post = next((p for p in json_posts if p.get("slug") == slug), None)
+    if not post:
+        abort(404)
 
-    if json_post:
-        return render_template(
-            "blog/post.html",
-            post=json_post,
-            support_line=random.choice(SUPPORT_LINES) if "SUPPORT_LINES" in globals() else ""
-        )
+    return render_template(
+        "blog/post.html",
+        post=post,
+        support_line=random.choice(SUPPORT_LINES) if "SUPPORT_LINES" in globals() else ""
+    )
 
-    # keep your old_blogs map below this
+@app.route("/blog/faith-foundation/<slug>")
+def faith_foundation_post(slug):
+    posts = load_faith_foundations()
 
-    # 2. Existing backup blog system
-    backup_posts = load_blog_posts()
-    backup_post = next((p for p in backup_posts if p.get("slug") == slug), None)
+    print("Faith posts loaded:", len(faith_posts))
+    print("Faith slugs:", [p.get("slug") for p in faith_posts])
+    print("Faith titles:", [p.get("title") for p in faith_posts])
 
-    if backup_post:
-        related_posts = [p for p in backup_posts if p.get("slug") != slug][:3]
-        return render_template(
-            "blog/post.html",
-            post=backup_post,
-            related_posts=related_posts,
-            support_line=random.choice(SUPPORT_LINES) if "SUPPORT_LINES" in globals() else ""
-        )
+    post = next((p for p in posts if p.get("slug") == slug), None)
 
-    # 3. Old HTML archive fallback
-    old_blogs = {
-        "gods-love-beyond-sound": {
-            "title": "God’s Love Beyond Sound",
-            "date": "February 02, 2026",
-            "blog_number": "SS001",
-            "tags_line": "Love • Dignity • Belonging",
-            "tags": ["Love", "Deaf Identity", "Presence", "Faith", "Silence"],
-            "image": "gods-love-beyond-sound.jpg",
-            "content": render_template("blog/soulspeaks/content/ss001.html")
-        },
-        "silence-is-not-absence": {
-            "title": "Silence Is Not Absence",
-            "date": "February 16, 2026",
-            "blog_number": "SS002",
-            "tags_line": "Peace • Presence • Perspective",
-            "tags": ["Silence", "Presence", "Deaf Culture", "Reflection"],
-            "image": "silence-is-not-absence.jpg",
-            "content": render_template("blog/soulspeaks/content/ss002.html")
-        },
-        "faith-without-noise": {
-            "title": "Faith Without Noise",
-            "date": "March 09, 2026",
-            "blog_number": "SS003",
-            "tags_line": "Focus • Courage • Grace",
-            "tags": ["Faith", "Focus", "Grace", "Courage", "Visual Faith"],
-            "image": "faith-without-noise.jpg",
-            "content": render_template("blog/soulspeaks/content/ss003.html")
-        },
-        "when-the-wind-is-loud": {
-            "title": "When the Wind Is Loud but God Is Near",
-            "date": "March 23, 2026",
-            "blog_number": "SS004",
-            "tags_line": "Storms • Presence • Peace",
-            "tags": ["Storms", "Presence", "Faith", "Deaf Perspective", "Reflection"],
-            "image": "when-the-wind-is-loud.jpg",
-            "content": render_template("blog/soulspeaks/content/ss004.html")
-        },
-        "jesus-touches-before-he-speaks": {
-            "title": "When Jesus Touches Before He Speaks",
-            "date": "April 20, 2026",
-            "blog_number": "SS005",
-            "tags_line": "Healing • Presence • Compassion",
-            "tags": ["Healing", "Presence", "Compassion"],
-            "image": "jesus-touches-before-he-speaks.jpg",
-            "content": render_template("blog/soulspeaks/content/ss006.html")
-        },
-        "healing-is-not-always-loud": {
-            "title": "Healing Is Not Always Loud",
-            "date": "April 26, 2026",
-            "blog_number": "SS006",
-            "tags_line": "Healing • Restoration • Quiet Grace",
-            "tags": ["Healing", "Restoration", "Quiet Grace", "Deaf Perspective"],
-            "image": "healing-is-not-always-loud.jpg",
-            "content": render_template("blog/soulspeaks/content/ss005.html")
-        }
-    }
+    if not post:
+        abort(404)
 
-    blog = old_blogs.get(slug)
+    return render_template("blog/faith-foundation/faith_foundation.html", post=post)
 
-    if blog:
-        return render_template(
-            "blog/old-blog.html",
-            **blog,
-            img_base="img/blog/uploads/soulspeaks"
-        )
-
-    abort(404)
-
-@app.route("/faith-foundations")
-def faith_foundations():
-    return render_template("blog/faith-foundation/faith_foundation.html")
-
-@app.route("/study/lesson2")
-def lesson2():
-    return render_template("study/lesson2.html")
+# =========================
+# PRAYER ROUTE
+# =========================
 
 @app.route("/prayer", methods=["GET", "POST"])
 def prayer():
@@ -639,6 +728,11 @@ def prayer():
         active="prayer",
         prayer_topics=prayer_topics
     )
+
+
+# =========================
+# DONATION ROUTE
+# =========================
 
 @app.route("/donate", methods=["GET", "POST"])
 def donate():

@@ -35,5 +35,47 @@
   "label": "Read & Study",
   "url": "/study/introduction/lesson-2"
 }
-    }
+    },
+  {
+  "id": "FF002",
+  "title": "Communion: Biblical Truth or Church Tradition?",
+  "slug": "communion-biblical-truth-or-church-tradition",
+  "publish_date": "2026-04-03",
+  "pillar": "Faith Foundations",
+  "category": "Communion • Truth • Reflection",
+  "status": "published",
+  "image": "img/blog/soulspeaks/communion.jpg",
+  "cover_image": "img/blog/uploads/faith_foundation/faith-foundation-hero.jpg",
+
+  "excerpt": "Communion is practiced by many believers, but do we understand its meaning, origin, and purpose?",
+
+  "question": "Is communion biblical truth or just church tradition?",
+
+  "why_it_matters": "Communion is one of the most practiced acts in the church, yet many believers move through it as routine. Understanding its origin helps us return to Christ, not just church habit.",
+
+  "truth_simple": "Communion began with Jesus at the Last Supper. He used bread and the cup to point to His body, His blood, His sacrifice, and His love. The method may vary, but the meaning must remain.",
+
+  "scripture": {
+    "verse_ref": "Luke 22:19",
+    "verse_text": "Do this in remembrance of Me."
+  },
+
+  "misunderstanding": "Some people see communion only as a church tradition or repeated ritual. But communion is rooted in Christ and calls the heart to remember Him with understanding.",
+
+  "reflection": "Am I following routine, or am I truly remembering Christ?",
+
+  "closing_thought": "Communion is not about performance or appearance. It is a sacred reminder of Christ’s sacrifice, love, and covenant with us.",
+
+  "study_connection": {
+    "enabled": true,
+    "title": "Communion: Meaning Over Method",
+    "label": "Read & Study",
+    "url": "/study/communion"
+  },
+
+  "tags": [
+    "Communion",
+    "Truth",
+    "Faith",
+    "Reflection"
   ]

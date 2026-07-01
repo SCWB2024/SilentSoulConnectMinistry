@@ -1,0 +1,46 @@
+{
+  "series": {
+    "id": "communion",
+    "title": "Communion — Meaning Over Method",
+    "description": "A five-part journey into the biblical meaning of communion.",
+    "hero_image": "img/study/communion/hero.jpg"
+  },
+
+  "introduction": {
+    "title": "The Table You Cannot Approach Casually",
+    "content": "...",
+    "next": "lesson-1"
+  },
+
+  "lessons": [
+    {
+      "id": "lesson-1",
+      "title": "The Origin — A Covenant Established by Christ",
+      "scriptures": [
+        "Luke 22:19-20",
+        "Matthew 26:26-28",
+        "1 Corinthians 11:23-25"
+      ],
+      "core_truth": "...",
+      "questions": [],
+      "reflection": "...",
+      "prayer": "...",
+      "next": "lesson-2"
+    },
+
+    {
+      "id": "lesson-2",
+      "title": "The Warning — The Table Is Not Casual"
+    },
+
+    {
+      "id": "lesson-3",
+      "title": "The Separation — Belonging vs Being Present"
+    },
+
+    {
+      "id": "lesson-4",
+      "title": "Living the Covenant"
+    }
+  ]
+}

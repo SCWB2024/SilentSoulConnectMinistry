@@ -7,9 +7,8 @@ import platform
 import pyautogui
 import pyperclip
 from datetime import datetime
-from pathlib import Path
 
-from soulstart.services.build_whatsapp_message import build_whatsapp_message
+from for_review.build_whatsapp_message import build_whatsapp_message
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 sys.stderr.reconfigure(encoding="utf-8", errors="replace")

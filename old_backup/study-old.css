@@ -1,0 +1,633 @@
+/* =========================
+   STUDY HUB / LESSON STYLES
+   ========================= */
+.study-series-page,
+.study-lesson-page {
+  padding: 2rem 1rem 4rem;
+}
+
+.study-shell {
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+/* hero */
+
+.series-hero,
+.lesson-hero {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.series-tag {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(46, 125, 90, 0.12);
+  color: #1f5a42;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.series-hero h1,
+.lesson-hero h1 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.8rem, 3.4vw, 2.5rem);
+  line-height: 1.2;
+}
+
+.series-summary,
+.lesson-subtitle {
+  max-width: 680px;
+  margin: 0 auto;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #5a5f66;
+}
+
+.lesson-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 18px;
+  margin-bottom: 1rem;
+}
+
+.series-hero .lesson-image {
+  height: 240px;
+}
+
+/* series list */
+
+.series-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.series-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.series-card {
+  background: #ffffff;
+  border: 1px solid #e7e7e7;
+  border-radius: 20px;
+  padding: 1.25rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.series-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.08);
+}
+
+.series-thumb {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 0.75rem;
+}
+
+.series-card-top {
+  margin-bottom: 0.6rem;
+}
+
+.lesson-number {
+  display: inline-block;
+  margin-bottom: 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #1f5a42;
+}
+
+.lesson-progress {
+  margin: 0 0 0.45rem;
+  font-size: 0.85rem;
+  color: #6b7178;
+  font-weight: 500;
+}
+
+.series-card h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.3;
+}
+
+.series-card p {
+  margin: 0.85rem 0 1rem;
+  line-height: 1.7;
+  color: #50555c;
+}
+
+/* lesson cards */
+
+.study-card {
+  background: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 20px;
+  padding: 1.1rem 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.045);
+  padding: 1.6rem;
+}
+
+.study-card h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.15rem;
+  line-height: 1.3;
+}
+
+.study-card p,
+.study-card li,
+.study-card blockquote {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: #31363c;
+}
+
+.study-card p {
+  margin: 0 0 0.45rem;
+}
+
+.verse-ref {
+  margin-bottom: 0.5rem;
+}
+
+.study-card blockquote {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border-left: 4px solid #2f7d5a;
+  background: #f6fbf8;
+  border-radius: 12px;
+  font-style: normal;
+}
+
+.qa-block + .qa-block {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ececec;
+}
+
+.qa-block h3 {
+  margin: 0 0 0.55rem;
+  font-size: 1.02rem;
+  line-height: 1.4;
+}
+
+.example {
+  margin-top: 0.55rem;
+  padding-left: 0.8rem;
+  border-left: 3px solid #cfe1d7;
+  color: #4d555c;
+}
+
+.study-card ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.study-card li + li {
+  margin-top: 0.35rem;
+}
+
+/* color identity */
+
+.card-real-life {
+  background: #fffaf1;
+}
+
+.card-question {
+  background: #f8fbff;
+}
+
+.card-bible {
+  background: #f7fcf8;
+}
+
+.card-discover {
+  background: #ffffff;
+}
+
+.card-truth {
+  background: #fffdf6;
+}
+
+.card-response {
+  background: #fff7fb;
+}
+
+.card-recap {
+  background: #f7fbfa;
+}
+
+.card-prayer {
+  background: #fbf8ff;
+}
+
+/* buttons */
+
+.lesson-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.study-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0.75rem 1.15rem;
+  border-radius: 999px;
+  background: #2f7d5a;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.study-btn:hover {
+  opacity: 0.95;
+  transform: translateY(-1px);
+}
+
+.study-btn-secondary {
+  background: #eef3f0;
+  color: #234d39;
+}
+
+/* extra links */
+
+.path-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* mobile */
+
+@media (max-width: 640px) {
+  .study-series-page,
+  .study-lesson-page {
+    padding: 1.25rem 0.85rem 3rem;
+  }
+
+  .study-card,
+  .series-card {
+    border-radius: 16px;
+    padding: 1rem 0.9rem;
+  }
+
+  .lesson-nav {
+    flex-direction: column;
+  }
+
+  .study-btn,
+  .study-btn-secondary {
+    width: 100%;
+  }
+
+  .lesson-image {
+    height: 180px;
+  }
+
+  .series-hero .lesson-image {
+    height: 200px;
+  }
+
+  .series-thumb {
+    height: 120px;
+  }
+/* =========================
+   JSON STUDY SERIES PAGE
+   ========================= */
+
+.study-series-page {
+  background: #eef6f8;
+}
+
+.study-series {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+
+/* HERO */
+
+.study-series-hero {
+  overflow: hidden;
+  margin-bottom: 2rem;
+  background: #ffffff;
+  border: 1px solid #e4ece8;
+  border-radius: 24px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+}
+
+.study-series-hero-image {
+  display: block;
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+.study-series-hero-content {
+  padding: 2rem;
+  text-align: center;
+}
+
+.study-badge,
+.study-step-label {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(46, 125, 90, 0.12);
+  color: #1f5a42;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.study-series-hero h1 {
+  margin: 0 0 0.65rem;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.15;
+}
+
+.study-series-subtitle {
+  margin: 0 auto 0.5rem;
+  max-width: 720px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #40505a;
+}
+
+.study-series-description {
+  max-width: 760px;
+  margin: 0.75rem auto;
+  line-height: 1.7;
+  color: #59636b;
+}
+
+.study-series-meta {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.study-series-meta span {
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  background: #f0f4f2;
+  color: #42534b;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+
+/* MAIN LAYOUT */
+
+.study-series-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 290px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.study-series-main {
+  min-width: 0;
+}
+
+.study-series-side {
+  position: sticky;
+  top: 1.5rem;
+}
+
+
+/* CARDS */
+
+.study-series .card {
+  background: #ffffff;
+  border: 1px solid #e5ebe8;
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+.study-introduction-card {
+  margin-bottom: 1.5rem;
+  border-left: 5px solid #dba515;
+}
+
+.study-introduction-card h2,
+.study-course-summary h2 {
+  margin: 0 0 0.75rem;
+}
+
+.study-introduction-card p,
+.study-course-summary p,
+.study-course-summary li {
+  line-height: 1.7;
+  color: #4d575e;
+}
+
+
+/* LESSONS */
+
+.study-section-heading {
+  margin-bottom: 1rem;
+}
+
+.study-section-heading h2 {
+  margin-bottom: 0.25rem;
+}
+
+.study-section-heading p {
+  margin: 0;
+  color: #626c73;
+}
+
+.study-lesson-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.study-lesson-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.study-lesson-card h3 {
+  margin: 0 0 0.75rem;
+  line-height: 1.35;
+}
+
+.study-lesson-card p {
+  flex-grow: 1;
+  margin: 0 0 1rem;
+  line-height: 1.65;
+  color: #535d64;
+}
+
+
+/* SUMMARY */
+
+.study-course-summary {
+  margin-top: 1.5rem;
+  background: #f7fbf9;
+}
+
+.study-course-summary ul {
+  padding-left: 1.25rem;
+}
+
+.study-course-summary li + li {
+  margin-top: 0.45rem;
+}
+
+.study-closing-thought {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-left: 4px solid #2f7d5a;
+  background: #ffffff;
+  border-radius: 12px;
+}
+
+
+/* SIDEBAR */
+
+.study-series-side .soft {
+  background: #f8fbfa;
+}
+
+.study-series-side h3 {
+  margin-top: 0;
+}
+
+.study-series-side p {
+  line-height: 1.6;
+}
+
+
+/* BUTTONS */
+
+.study-series .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0.75rem 1.15rem;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.study-series .btn:hover {
+  transform: translateY(-1px);
+  opacity: 0.94;
+}
+
+.study-series .btn-primary {
+  background: #dba515;
+  color: #ffffff;
+}
+
+.study-series .btn-secondary {
+  background: #2f7d5a;
+  color: #ffffff;
+}
+
+.study-series .btn-wide {
+  width: 100%;
+  margin-top: 0.65rem;
+  background: #dba515;
+  color: #ffffff;
+}
+
+
+/* TABLET */
+
+@media (max-width: 850px) {
+  .study-series-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .study-series-side {
+    position: static;
+  }
+
+  .study-series-side .soft {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .study-series-side h3 {
+    grid-column: 1 / -1;
+  }
+}
+
+
+/* MOBILE */
+
+@media (max-width: 640px) {
+  .study-series {
+    padding: 1.25rem 0.85rem 3rem;
+  }
+
+  .study-series-hero,
+  .study-series .card {
+    border-radius: 16px;
+  }
+
+  .study-series-hero-image {
+    height: 200px;
+  }
+
+  .study-series-hero-content {
+    padding: 1.4rem 1rem;
+  }
+
+  .study-lesson-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .study-series-side .soft {
+    display: block;
+  }
+
+  .study-series .btn,
+  .study-series .btn-wide {
+    width: 100%;
+  }
+}
+
+/* TEST — JSON STUDY PAGE */
+
+body.study-series-page .study-series-layout {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 290px !important;
+  gap: 1.5rem !important;
+}
+
+body.study-series-page .study-series {
+  max-width: 1100px !important;
+  margin: 0 auto !important;
+  padding: 2rem 1rem 4rem !important;
+  outline: 8px solid red !important;
+}
+}

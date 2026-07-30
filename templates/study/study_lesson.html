@@ -1,10 +1,150 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}
+  {{ lesson.title }} — {{ study.series.title }}
+{% endblock %}
+
+{% block body_class %}study-lesson-page{% endblock %}
+
+{% block content %}
+
+<section class="container page-wrap study-lesson">
+
+  <header class="study-lesson-header">
+    <span class="study-badge">
+      {{ study.series.title }}
+    </span>
+
+    <h1>{{ lesson.title }}</h1>
+
+    {% if lesson.summary %}
+      <p>{{ lesson.summary }}</p>
+    {% endif %}
+  </header>
+
+
+  <div class="study-lesson-layout">
+
+    <main class="study-lesson-main">
+
+      {% if lesson.content %}
+        <section class="card study-content">
+          {% for paragraph in lesson.content %}
+            <p>{{ paragraph }}</p>
+          {% endfor %}
+        </section>
+      {% endif %}
+
+
+      {% if lesson.core_truth %}
+        <section class="card study-core-truth">
+          <h2>Core Truth</h2>
+          <p>{{ lesson.core_truth }}</p>
+        </section>
+      {% endif %}
+
+
+      {% if lesson.scriptures %}
+        <section class="card study-scriptures">
+          <h2>Scripture Focus</h2>
+
+          <ul>
+            {% for scripture in lesson.scriptures %}
+              <li>{{ scripture }}</li>
+            {% endfor %}
+          </ul>
+        </section>
+      {% endif %}
+
+
+      {% if lesson.questions %}
+        <section class="study-questions">
+          <h2>Questions and Answers</h2>
+
+          {% for item in lesson.questions %}
+            <article class="card study-question-card">
+              <h3>{{ item.question }}</h3>
+
+              {% if item.answer %}
+                <p>
+                  <strong>Answer:</strong>
+                  {{ item.answer }}
+                </p>
+              {% endif %}
+
+              {% if item.meaning %}
+                <p>
+                  <strong>Meaning:</strong>
+                  {{ item.meaning }}
+                </p>
+              {% endif %}
+            </article>
+          {% endfor %}
+        </section>
+      {% endif %}
+
+
+      {% if lesson.pastoral_care %}
+        <section class="card study-pastoral-care">
+          <h2>Pastoral Care</h2>
+          <p>{{ lesson.pastoral_care }}</p>
+        </section>
+      {% endif %}
+
+
+      {% if lesson.reflection %}
+        <section class="card study-reflection">
+          <h2>Personal Reflection</h2>
+          <p>{{ lesson.reflection }}</p>
+        </section>
+      {% endif %}
+
+
+      {% if lesson.prayer %}
+        <section class="card study-prayer">
+          <h2>Prayer</h2>
+          <p>{{ lesson.prayer }}</p>
+        </section>
+      {% endif %}
+
+
+      <nav class="study-lesson-navigation">
+
+        <a
+          class="btn btn-secondary"
+          href="{{ url_for(
+            'study_series',
+            series_slug=study.series.id
+          ) }}">
+          Course Home
+        </a>
+
+        {% if lesson.next %}
+          <a
+            class="btn btn-primary"
+            href="{{ url_for(
+              'study_lesson_json',
+              series_slug=study.series.id,
+              lesson_slug=lesson.next
+            ) }}">
+            Continue →
+          </a>
+        {% else %}
+          <a
+            class="btn btn-primary"
+            href="{{ url_for('study_index') }}">
+            Finish Study
+          </a>
+        {% endif %}
+
+      </nav>
+
+    </main>
+
+  </div>
+
+</section>
+
+{% include "components/prayer_invite.html" %}
+
+{% endblock %}

@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>
     {% block title %}
@@ -11,32 +14,105 @@
     {% endblock %}
   </title>
 
-  {% if 'admin' in request.path %}
+  {% if request.path.startswith('/admin') %}
 
     <!-- ADMIN -->
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/admin.css') }}">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/admin.css') }}?v=31"
+    >
 
   {% else %}
 
     <!-- GLOBAL -->
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css') }}?v=30">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}?v=32"
+    >
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/theme.css') }}?v=30">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/theme.css') }}?v=31"
+    >
 
-    <!-- PAGE CSS -->
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/study.css') }}?v=30">
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/blog.css') }}?v=33">
-
-    {% if request.endpoint == 'join' %}
-      <link rel="stylesheet"
-            href="{{ url_for('static', filename='css/join.css') }}?v=1">
+    <!-- FOUNDATION -->
+    {% if request.endpoint == 'foundation' %}
+      <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/foundation.css') }}?v=1"
+      >
     {% endif %}
+
+    <!-- PATH + ANCHOR -->
+    {% if request.endpoint in ['path', 'anchor'] %}
+      <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/path.css') }}?v=1"
+      >
+    {% endif %}
+
+    <!-- TODAY / DEVOTION -->
+    {% if request.endpoint in ['today', 'devotion', 'q3_welcome'] %}
+      <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/today.css') }}?v=1"
+      >
+    {% endif %}
+
+    <!-- PRAYER -->
+    {% if request.endpoint == 'prayer' %}
+      <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/prayer.css') }}?v=1"
+      >
+    {% endif %}
+
+    <!-- DONATE -->
+    {% if request.endpoint == 'donate' %}
+      <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/donate.css') }}?v=1"
+      >
+    {% endif %}
+
+    <!-- STUDY -->
+    {% if request.endpoint in [
+      'study_index',
+      'intro_series',
+      'study_lesson_1',
+      'study_lesson_2',
+      'study_lesson_3',
+      'study_series',
+      'study_lesson_json'
+    ] %}
+      <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/study.css') }}?v=40"
+      >
+    {% endif %}
+
+    <!-- BLOG -->
+    {% if request.endpoint in [
+      'blog_index',
+      'blog_post',
+      'faith_foundation_post'
+    ] %}
+      <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/blog.css') }}?v=34"
+      >
+    {% endif %}
+
+    <!-- JOIN -->
+    {% if request.endpoint == 'join' %}
+      <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/join.css') }}?v=2"
+      >
+    {% endif %}
+
+    {% block extra_css %}
+    {% endblock %}
 
   {% endif %}
 </head>
@@ -48,17 +124,17 @@
     Skip to content
   </a>
 
-  <!-- Navbar -->
+  <!-- Navigation -->
   {% include "components/navbar.html" %}
 
   <!-- Main Content -->
-  <main id="main-content"
-        class="site-main"
-        aria-label="Main content">
-
+  <main
+    id="main-content"
+    class="site-main"
+    aria-label="Main content"
+  >
     {% block content %}
     {% endblock %}
-
   </main>
 
   <!-- Footer -->

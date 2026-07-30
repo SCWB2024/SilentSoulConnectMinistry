@@ -2,13 +2,31 @@
   "series": {
     "id": "communion",
     "title": "Communion — Meaning Over Method",
-    "description": "A five-part journey into the biblical meaning of communion.",
-    "hero_image": "img/study/communion/hero.jpg"
+    "subtitle": "Returning to the meaning behind Christ's table",
+    "description": "A four-lesson Bible study that explores the biblical foundation, purpose, and personal significance of communion.",
+    "hero_image": "img/communion/c_hero.jpg",
+    "category": "Faith Foundations",
+    "estimated_time": "4 Lessons",
+    "level": "Foundations",
+    "related_blog": "/blog/faith-foundation/communion-biblical-truth-or-church-tradition"
   },
 
   "introduction": {
     "title": "The Table You Cannot Approach Casually",
-    "content": "...",
+    "summary": "Communion is one of the most practiced acts in the Christian church, yet it is often one of the least understood. Before exploring the lessons, prepare your heart to understand what Christ established.",
+    "content": [
+      "Communion is one of the most practiced acts in the church—yet one of the most misunderstood.",
+      "It is often treated as routine. Passed from hand to hand. Observed without question.",
+      "But Scripture does not present it that way.",
+      "Communion is rooted in covenant.",
+      "It is tied to sacrifice.",
+      "It carries both meaning and warning.",
+      "When Jesus broke the bread and shared the cup, He was establishing a covenant through His own body and blood.",
+      "Every time communion is taken, truth is remembered, the heart is examined, and our relationship with Christ is renewed.",
+      "Do not approach this study simply to gain information. Allow God's Word to transform your understanding."
+    ],
+    "reflection": "Before beginning Lesson One, ask yourself: What does communion mean to me today?",
+    "prayer": "Lord, open my heart as I begin this study. Help me understand not only what communion represents, but what You desire to accomplish in my life through it. In Jesus' name, Amen.",
     "next": "lesson-1"
   },
 
@@ -17,30 +35,92 @@
       "id": "lesson-1",
       "title": "The Origin — A Covenant Established by Christ",
       "scriptures": [
-        "Luke 22:19-20",
-        "Matthew 26:26-28",
-        "1 Corinthians 11:23-25"
+        "Luke 22:19–20",
+        "Matthew 26:26–28",
+        "1 Corinthians 11:23–25"
       ],
-      "core_truth": "...",
-      "questions": [],
-      "reflection": "...",
-      "prayer": "...",
+      "core_truth": "Communion was not created by the church. It was established by Christ as a covenant rooted in His sacrifice.",
+      "questions": [
+        {
+          "question": "What did Jesus establish at the table?",
+          "answer": "A new covenant in His blood.",
+          "meaning": "Christ Himself became the sacrifice once and for all."
+        },
+        {
+          "question": "Why did Jesus command remembrance?",
+          "answer": "Because truth fades when it is not remembered intentionally.",
+          "meaning": "Communion continually points believers back to the cross."
+        }
+      ],
+      "pastoral_care": "Before communion became part of church practice, it was first an act of love shared by Jesus with His disciples. He still invites us to remember Him today with grateful hearts.",
+      "reflection": "Do I approach communion with understanding, or simply because it is familiar?",
+      "prayer": "Lord, thank You for establishing this covenant through Your sacrifice. Help me never lose sight of the cross or the love You demonstrated there. Amen.",
       "next": "lesson-2"
     },
 
     {
       "id": "lesson-2",
-      "title": "The Warning — The Table Is Not Casual"
+      "title": "The Warning — The Table Is Not Casual",
+      "scriptures": [
+        "1 Corinthians 11:27–30",
+        "Hebrews 10:29"
+      ],
+      "core_truth": "Communion carries responsibility. It must be approached with discernment and reverence.",
+      "questions": [
+        {
+          "question": "Why does Paul warn believers about communion?",
+          "answer": "Because it should never be taken carelessly.",
+          "meaning": "God calls His people to sincere self-examination."
+        }
+      ],
+      "pastoral_care": "God is not looking for perfect people at His table. He welcomes humble people who are willing to repent, trust Him, and receive His grace.",
+      "reflection": "Is there anything I need to surrender to Christ before coming to His table?",
+      "prayer": "Search my heart, Lord. Reveal anything that separates me from You and help me come with honesty, repentance, and faith. Amen.",
+      "next": "lesson-3"
     },
 
     {
       "id": "lesson-3",
-      "title": "The Separation — Belonging vs Being Present"
+      "title": "The Separation — Belonging vs Being Present",
+      "scriptures": [
+        "Exodus 12:43–48",
+        "John 6:53–56",
+        "1 Corinthians 10:16–17"
+      ],
+      "core_truth": "Communion reveals who truly belongs to the covenant.",
+      "questions": [
+        {
+          "question": "Is attending church the same as belonging to Christ?",
+          "answer": "No.",
+          "meaning": "Communion points to an authentic covenant relationship with Jesus."
+        }
+      ],
+      "pastoral_care": "Christ's invitation remains open. Communion reminds us that belonging to Him is not about outward appearance but a surrendered heart.",
+      "reflection": "Am I simply present in worship, or truly walking with Christ each day?",
+      "prayer": "Lord, thank You for inviting me into Your family. Help me live each day as someone who truly belongs to You. Amen.",
+      "next": "lesson-4"
     },
 
     {
       "id": "lesson-4",
-      "title": "Living the Covenant"
+      "title": "Living the Covenant",
+      "scriptures": [
+        "John 13:34–35",
+        "Romans 12:1",
+        "Colossians 3:12–17"
+      ],
+      "core_truth": "Communion does not end when the service ends. It continues in the life of every believer.",
+      "questions": [
+        {
+          "question": "What should communion change in my daily life?",
+          "answer": "It should shape how I love, forgive, serve, and follow Christ.",
+          "meaning": "The covenant is lived every day, not remembered only during church services."
+        }
+      ],
+      "pastoral_care": "The table is not the finish line—it is the beginning of a life transformed by Christ's love. Every act of kindness, forgiveness, and obedience reflects the covenant you have remembered.",
+      "reflection": "How will I live differently this week because of what Christ has done for me?",
+      "prayer": "Lord Jesus, thank You for Your body, Your blood, and Your everlasting covenant. Help me live each day in gratitude, humility, and faithful obedience. Amen.",
+      "next": null
     }
   ]
 }

@@ -37,45 +37,127 @@
 }
     },
   {
-  "id": "FF002",
-  "title": "Communion: Biblical Truth or Church Tradition?",
-  "slug": "communion-biblical-truth-or-church-tradition",
-  "publish_date": "2026-04-03",
+    "id": "FF002",
+    "title": "Communion: Biblical Truth or Church Tradition?",
+    "slug": "communion-biblical-truth-or-church-tradition",
+    "publish_date": "2026-07-03",
+    "pillar": "Faith Foundations",
+    "category": "Communion • Truth • Reflection",
+    "status": "published",
+    "image":"img/blog/uploads/faith_foundation/ff001-trust-bible.jpg",
+    "cover_image": "img/blog/uploads/faith_foundation/faith-foundation-hero.jpg",
+    "excerpt": "Communion is practiced by many believers, but do we understand its meaning, origin, and purpose?",
+    "question": "Is communion biblical truth or just church tradition?",
+    "why_it_matters": "Communion is one of the most practiced acts in the church, yet many believers move through it as routine. Understanding its origin helps us return to Christ, not just church habit.",
+    "truth_simple": "Communion began with Jesus at the Last Supper. He used bread and the cup to point to His body, His blood, His sacrifice, and His love. The method may vary, but the meaning must remain.",
+    "scripture": {
+      "verse_ref": "Luke 22:19",
+      "verse_text": "Do this in remembrance of Me."
+    },
+    "misunderstanding": "Some people see communion only as a church tradition or repeated ritual. But communion is rooted in Christ and calls the heart to remember Him with understanding.",
+    "reflection": "Am I following routine, or am I truly remembering Christ?",
+    "closing_thought": "Communion is not about performance or appearance. It is a sacred reminder of Christ’s sacrifice, love, and covenant with us.",
+    "study_connection": {
+      "enabled": true,
+      "title": "Communion: Meaning Over Method",
+      "label": "Read & Study",
+      "url": "/study/communion"
+    },
+    "tags": [
+      "Communion",
+      "Truth",
+      "Faith",
+      "Reflection"
+    ]
+  },
+    {
+  "id": "FF003",
+  "title": "Why Did Jesus Have to Die?",
+  "slug": "why-did-jesus-have-to-die",
+  "publish_date": "2026-08-04",
   "pillar": "Faith Foundations",
-  "category": "Communion • Truth • Reflection",
+  "category": "Salvation Made Simple",
   "status": "published",
-  "image": "img/blog/soulspeaks/communion.jpg",
+  "image": "img/blog/uploads/faith_foundation/ff001-trust-bible.jpg",
   "cover_image": "img/blog/uploads/faith_foundation/faith-foundation-hero.jpg",
 
-  "excerpt": "Communion is practiced by many believers, but do we understand its meaning, origin, and purpose?",
+  "excerpt": "If God is loving, why was the cross necessary? A simple look at why Jesus’ sacrifice is at the heart of Christian faith.",
 
-  "question": "Is communion biblical truth or just church tradition?",
+  "question": "Why did Jesus have to die?",
 
-  "why_it_matters": "Communion is one of the most practiced acts in the church, yet many believers move through it as routine. Understanding its origin helps us return to Christ, not just church habit.",
+  "why_it_matters": "Many people believe Jesus died simply because people rejected Him. Others think His death was only an example of love. But the Bible reveals something much deeper. Understanding the cross helps us understand God’s justice, mercy, and love.",
 
-  "truth_simple": "Communion began with Jesus at the Last Supper. He used bread and the cup to point to His body, His blood, His sacrifice, and His love. The method may vary, but the meaning must remain.",
+  "truth_simple": "Sin separates us from God, and its consequence is death. Jesus willingly took our place, bearing what we could not carry, so that through Him we could receive forgiveness, reconciliation, and eternal life. The cross was not an accident. It was God’s plan of redemption.",
 
   "scripture": {
-    "verse_ref": "Luke 22:19",
-    "verse_text": "Do this in remembrance of Me."
+    "verse_ref": "Romans 5:8",
+    "verse_text": "But God demonstrates His own love for us in this: While we were still sinners, Christ died for us."
   },
 
-  "misunderstanding": "Some people see communion only as a church tradition or repeated ritual. But communion is rooted in Christ and calls the heart to remember Him with understanding.",
+  "misunderstanding": "Some people believe Jesus died only as a good teacher or martyr. Scripture teaches that He died as the perfect sacrifice for sin, accomplishing what no human effort could ever achieve.",
 
-  "reflection": "Am I following routine, or am I truly remembering Christ?",
+  "reflection": "What does Christ’s sacrifice mean personally to me today?",
 
-  "closing_thought": "Communion is not about performance or appearance. It is a sacred reminder of Christ’s sacrifice, love, and covenant with us.",
+  "closing_thought": "The cross is more than a symbol. It is where God’s justice and love met so that every person could find forgiveness, hope, and restored relationship with Him.",
 
   "study_connection": {
     "enabled": true,
-    "title": "Communion: Meaning Over Method",
+    "title": "The Cross — God’s Plan of Salvation",
     "label": "Read & Study",
-    "url": "/study/communion"
+    "url": "/study/salvation/lesson-1"
   },
 
   "tags": [
-    "Communion",
-    "Truth",
-    "Faith",
-    "Reflection"
+    "Salvation",
+    "Cross",
+    "Jesus",
+    "Grace",
+    "Faith Foundations"
+  ]
+},
+{
+  "id": "FF004",
+  "title": "Can We Really Know God’s Will?",
+  "slug": "can-we-really-know-gods-will",
+  "publish_date": "2026-09-08",
+  "pillar": "Faith Foundations",
+  "category": "Christian Living",
+  "status": "published",
+  "image": "img/blog/uploads/faith_foundation/ff001-trust-bible.jpg",
+  "cover_image": "img/blog/uploads/faith_foundation/faith-foundation-hero.jpg",
+
+  "excerpt": "Many people ask God for direction. But how does He guide us today?",
+
+  "question": "Can we really know God’s will?",
+
+  "why_it_matters": "Life is filled with decisions — relationships, work, ministry, family, and faith. Many believers fear making the wrong choice and wonder if they can truly recognize God’s leading.",
+
+  "truth_simple": "God has not left His children without guidance. Through His Word, prayer, wise counsel, and the work of the Holy Spirit, He continues to direct those who seek Him with sincere hearts.",
+
+  "scripture": {
+    "verse_ref": "Proverbs 3:5–6",
+    "verse_text": "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to Him, and He will make your paths straight."
+  },
+
+  "misunderstanding": "Some people expect God’s will to come only through dramatic signs or miraculous experiences. More often, God leads His people through Scripture, prayer, wisdom, and daily obedience.",
+
+  "reflection": "Am I seeking God’s direction, or simply asking Him to approve my own plans?",
+
+  "closing_thought": "God delights in guiding His children. His will is not hidden to confuse us but revealed to transform us as we walk with Him.",
+
+  "study_connection": {
+    "enabled": true,
+    "title": "Knowing God’s Will",
+    "label": "Read & Study",
+    "url": "/study/gods_will/lesson-1"
+  },
+
+  "tags": [
+    "God’s Will",
+    "Guidance",
+    "Discernment",
+    "Prayer",
+    "Faith Foundations"
+  ]
+}
   ]

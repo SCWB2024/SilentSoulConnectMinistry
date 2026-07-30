@@ -1,10 +1,335 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Study Hub — Silent SoulConnect Ministry{% endblock %}
+{% block body_class %}study-hub-page{% endblock %}
+
+{% block content %}
+
+<section
+  class="study-hub"
+  aria-labelledby="study-hub-title"
+>
+
+  <!-- =========================
+       STUDY HUB HERO
+  ========================== -->
+  <header
+    class="study-hub-hero"
+    style="
+      background-image:
+        linear-gradient(
+          90deg,
+          rgba(8, 28, 22, 0.78) 0%,
+          rgba(8, 28, 22, 0.48) 48%,
+          rgba(8, 28, 22, 0.32) 100%
+        ),
+        url('{{ url_for(
+          'static',
+          filename='img/devotion/backgrounds/grace/grace3.jpg'
+        ) }}');
+    "
+  >
+    <div class="study-hub-hero-inner">
+
+      <span class="study-badge">
+        Anchor • Study Hub
+      </span>
+
+      <h1 id="study-hub-title">
+        Study Hub
+      </h1>
+
+      <p>
+        Explore guided Bible studies designed to help you
+        grow in God’s Word one lesson at a time.
+      </p>
+
+    </div>
+  </header>
+
+
+  <!-- =========================
+       START HERE
+  ========================== -->
+  <section
+    class="study-hub-section"
+    aria-labelledby="start-here-title"
+  >
+
+    <div class="study-hub-heading">
+
+      <span class="study-hub-kicker">
+        New to Bible study?
+      </span>
+
+      <h2 id="start-here-title">
+        Start Here
+      </h2>
+
+      <p>
+        Learn what the Bible is, why it can be trusted,
+        and how to study it.
+      </p>
+
+    </div>
+
+
+    <article
+      class="study-hub-featured-card"
+      style="
+        background-image:
+          linear-gradient(
+            90deg,
+            rgba(11, 34, 27, 0.84) 0%,
+            rgba(11, 34, 27, 0.66) 48%,
+            rgba(11, 34, 27, 0.28) 100%
+          ),
+          url('{{ url_for(
+            'static',
+            filename='img/study/bible/intro.jpg'
+          ) }}');
+      "
+    >
+
+      <div class="study-hub-featured-content">
+
+        <span class="study-hub-label">
+          Introduction Series • 3 Lessons
+        </span>
+
+        <h3>
+          Understanding the Bible
+        </h3>
+
+        <p>
+          A simple beginner-friendly foundation for reading
+          and understanding God’s Word with confidence.
+        </p>
+
+        <a
+          class="btn btn-primary"
+          href="{{ url_for('intro_series') }}"
+        >
+          Begin This Series
+        </a>
+
+      </div>
+
+    </article>
+
+  </section>
+
+
+  <!-- =========================
+       AVAILABLE STUDIES
+  ========================== -->
+  <section
+    class="study-hub-section"
+    aria-labelledby="available-studies-title"
+  >
+
+    <div class="study-hub-heading">
+
+      <span class="study-hub-kicker">
+        Continue Growing
+      </span>
+
+      <h2 id="available-studies-title">
+        Available Studies
+      </h2>
+
+      <p>
+        Choose the topic that speaks to where you are
+        in your journey today.
+      </p>
+
+    </div>
+
+
+    <div class="study-hub-grid">
+
+      <!-- COMMUNION -->
+      <article class="study-hub-card study-image-card">
+
+        <div
+          class="study-card-image"
+          style="
+            background-image:
+              linear-gradient(
+                rgba(8, 31, 24, 0.08),
+                rgba(8, 31, 24, 0.30)
+              ),
+              url('{{ url_for(
+                'static',
+                filename='img/communion/c_hero.jpg'
+              ) }}');
+          "
+          aria-hidden="true"
+        ></div>
+
+        <div class="study-hub-card-content">
+
+          <span class="study-hub-label">
+            Faith Foundations
+          </span>
+
+          <h3>
+            Communion — Meaning Over Method
+          </h3>
+
+          <p>
+            Discover the meaning of Communion and why
+            remembering Jesus matters more than empty routine.
+          </p>
+
+          <a
+            class="btn btn-secondary"
+            href="{{ url_for(
+              'study_series',
+              series_slug='communion'
+            ) }}"
+          >
+            Open Study
+          </a>
+
+        </div>
+
+      </article>
+
+
+      <!-- SALVATION -->
+      <article class="study-hub-card study-image-card">
+
+        <div
+          class="study-card-image"
+          style="
+            background-image:
+              linear-gradient(
+                rgba(8, 31, 24, 0.08),
+                rgba(8, 31, 24, 0.30)
+              ),
+              url('{{ url_for(
+                'static',
+                filename='img/salvation/s_hero.jpg'
+              ) }}');
+          "
+          aria-hidden="true"
+        ></div>
+
+        <div class="study-hub-card-content">
+
+          <span class="study-hub-label">
+            Faith Foundations
+          </span>
+
+          <h3>
+            Salvation
+          </h3>
+
+          <p>
+            Understand God’s saving grace, what it means
+            to trust Jesus, and how salvation changes our lives.
+          </p>
+
+          <a
+            class="btn btn-secondary"
+            href="{{ url_for(
+              'study_series',
+              series_slug='salvation'
+            ) }}"
+          >
+            Open Study
+          </a>
+
+        </div>
+
+      </article>
+
+
+      <!-- KNOWING GOD'S WILL -->
+      <article class="study-hub-card study-image-card">
+
+        <div
+          class="study-card-image"
+          style="
+            background-image:
+              linear-gradient(
+                rgba(8, 31, 24, 0.08),
+                rgba(8, 31, 24, 0.30)
+              ),
+              url('{{ url_for(
+                'static',
+                filename='img/christian/cl_hero.jpg'
+              ) }}');
+          "
+          aria-hidden="true"
+        ></div>
+
+        <div class="study-hub-card-content">
+
+          <span class="study-hub-label">
+            Christian Living
+          </span>
+
+          <h3>
+            Knowing God’s Will
+          </h3>
+
+          <p>
+            Learn how Scripture, prayer, wisdom, and faithful
+            decisions help us recognize God’s direction.
+          </p>
+
+          <a
+            class="btn btn-secondary"
+            href="{{ url_for(
+              'study_series',
+              series_slug='gods_will'
+            ) }}"
+          >
+            Open Study
+          </a>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       STUDY ENCOURAGEMENT
+  ========================== -->
+  <aside
+    class="study-hub-note"
+    aria-label="Study encouragement"
+  >
+
+    <span aria-hidden="true">
+      🌱
+    </span>
+
+    <div>
+
+      <h2>
+        Study without pressure
+      </h2>
+
+      <p>
+        You do not have to finish everything at once.
+        Read slowly, reflect, pray, and return whenever
+        you are ready.
+      </p>
+
+    </div>
+
+  </aside>
+
+</section>
+
+
+{% include "components/prayer_invite.html" %}
+
+{% endblock %}

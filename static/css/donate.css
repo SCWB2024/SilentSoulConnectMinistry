@@ -1,0 +1,1283 @@
+/* =========================================================
+   DONATE.CSS — SILENT SOULCONNECT MINISTRY
+   Covers the public Donate / Support page only.
+   ========================================================= */
+
+
+/* =========================
+   1. PAGE VARIABLES
+========================= */
+
+:root {
+  --donate-bg: #f7f4ee;
+  --donate-surface: #ffffff;
+  --donate-surface-soft: #fbfaf7;
+  --donate-text: #1f2937;
+  --donate-text-soft: #5f676b;
+  --donate-green: #184f45;
+  --donate-green-dark: #103c35;
+  --donate-green-soft: #e8f3ef;
+  --donate-gold: #d8a42c;
+  --donate-gold-soft: #fff7df;
+  --donate-blue: #2f5fa7;
+  --donate-line: rgba(0, 0, 0, 0.07);
+  --donate-radius-sm: 12px;
+  --donate-radius-md: 18px;
+  --donate-radius-lg: 24px;
+  --donate-shadow-sm: 0 8px 20px rgba(0, 0, 0, 0.06);
+  --donate-shadow-md: 0 14px 34px rgba(0, 0, 0, 0.09);
+  --donate-shadow-lg: 0 24px 58px rgba(0, 0, 0, 0.16);
+  --donate-width: 1120px;
+}
+
+
+/* =========================
+   2. PAGE BASE
+========================= */
+
+body.donate-page {
+  background: var(--donate-bg);
+  color: var(--donate-text);
+}
+
+.donate-page-main {
+  min-height: 60vh;
+}
+
+.donate-shell {
+  width: min(100%, var(--donate-width));
+  margin: 0 auto;
+  padding: 4rem 1.25rem;
+}
+
+
+/* =========================
+   3. HERO
+========================= */
+
+.donate-hero {
+  position: relative;
+
+  min-height: 62vh;
+  padding: 3rem 1.25rem;
+
+  display: grid;
+  place-items: center;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  color: #ffffff;
+  text-align: center;
+
+  overflow: hidden;
+}
+
+.donate-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(9, 24, 21, 0.34) 0%,
+      rgba(9, 24, 21, 0.50) 48%,
+      rgba(7, 28, 24, 0.76) 100%
+    );
+}
+
+.donate-hero-inner {
+  position: relative;
+  z-index: 2;
+
+  width: min(100%, 850px);
+  margin: 0 auto;
+  padding: 1.7rem;
+
+  background: rgba(8, 35, 30, 0.56);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 22px;
+
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.donate-badge {
+  display: inline-block;
+  margin-bottom: 0.8rem;
+  padding: 0.45rem 0.85rem;
+
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+
+  color: #f3d46f;
+  font-size: 0.84rem;
+  font-weight: 850;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.donate-hero h1 {
+  margin: 0 0 0.8rem;
+
+  color: #ffffff;
+  font-size: clamp(2.3rem, 5vw, 4rem);
+  line-height: 1.08;
+
+  text-shadow: 0 3px 14px rgba(0, 0, 0, 0.36);
+}
+
+.donate-hero-text {
+  max-width: 680px;
+  margin: 0 auto;
+
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 1.08rem;
+  line-height: 1.75;
+}
+
+.donate-hero-actions {
+  margin-top: 1.4rem;
+
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+
+/* =========================
+   4. INTRODUCTION
+========================= */
+
+.donate-intro {
+  background: #ffffff;
+}
+
+.donate-intro-inner {
+  width: min(100%, 820px);
+  margin: 0 auto;
+
+  text-align: center;
+}
+
+.donate-intro h2 {
+  margin-bottom: 0.8rem;
+  color: var(--donate-green);
+}
+
+.donate-intro p {
+  color: #44504b;
+  line-height: 1.8;
+}
+
+.donate-scripture {
+  margin: 1.4rem auto 0;
+  padding: 1.2rem 1.4rem;
+
+  background: var(--donate-green-soft);
+  border-left: 4px solid var(--donate-green);
+  border-radius: 16px;
+
+  color: #26443b;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  line-height: 1.75;
+}
+
+.donate-scripture span {
+  display: block;
+  margin-top: 0.5rem;
+
+  color: var(--donate-green);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-size: 0.92rem;
+  font-weight: 850;
+}
+
+
+/* =========================
+   5. GIVING OPTIONS
+========================= */
+
+.donate-options {
+  background: #f8faf8;
+}
+
+.donate-section-heading {
+  max-width: 760px;
+  margin: 0 auto 2rem;
+
+  text-align: center;
+}
+
+.donate-section-heading h2 {
+  margin-bottom: 0.65rem;
+  color: var(--donate-green);
+}
+
+.donate-section-heading p {
+  color: var(--donate-text-soft);
+  line-height: 1.7;
+}
+
+.donate-options-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.donate-option-card {
+  min-height: 280px;
+  padding: 1.6rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--donate-surface);
+  border: 1px solid var(--donate-line);
+  border-radius: var(--donate-radius-lg);
+
+  text-align: center;
+
+  box-shadow: var(--donate-shadow-sm);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.donate-option-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--donate-shadow-md);
+}
+
+.donate-option-icon {
+  width: 66px;
+  height: 66px;
+  margin-bottom: 1rem;
+
+  display: grid;
+  place-items: center;
+
+  background: var(--donate-green-soft);
+  border-radius: 18px;
+
+  font-size: 2rem;
+}
+
+.donate-option-card h3 {
+  margin-bottom: 0.55rem;
+  color: var(--donate-green);
+}
+
+.donate-option-card p {
+  margin-bottom: 1rem;
+  color: var(--donate-text-soft);
+  line-height: 1.7;
+}
+
+.donate-option-note {
+  color: #6b7280;
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+
+/* =========================
+   6. DONATION FORM AREA
+========================= */
+
+.donate-form-section {
+  background: #eef5f2;
+}
+
+.donate-form-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.donate-form-card,
+.donate-side-card {
+  padding: 1.7rem;
+
+  background: #ffffff;
+  border: 1px solid var(--donate-line);
+  border-radius: var(--donate-radius-lg);
+
+  box-shadow: var(--donate-shadow-sm);
+}
+
+.donate-form-card h2,
+.donate-side-card h2,
+.donate-side-card h3 {
+  color: var(--donate-green);
+}
+
+.donate-form-intro {
+  margin-bottom: 1.25rem;
+  color: var(--donate-text-soft);
+  line-height: 1.7;
+}
+
+.donate-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.donate-form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.donate-field {
+  display: grid;
+  gap: 0.42rem;
+}
+
+.donate-field label {
+  color: #233f37;
+  font-weight: 800;
+}
+
+.donate-field input,
+.donate-field select,
+.donate-field textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 0.8rem 0.9rem;
+
+  background: #ffffff;
+  border: 1px solid #cfd8d4;
+  border-radius: 12px;
+
+  color: var(--donate-text);
+}
+
+.donate-field textarea {
+  min-height: 140px;
+  resize: vertical;
+  line-height: 1.65;
+}
+
+.donate-field input:focus,
+.donate-field select:focus,
+.donate-field textarea:focus {
+  border-color: var(--donate-green);
+  outline: 3px solid rgba(24, 79, 69, 0.13);
+}
+
+.donate-help {
+  color: #6b7280;
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.donate-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.donate-checkbox input {
+  width: 18px;
+  height: 18px;
+  margin-top: 0.2rem;
+
+  accent-color: var(--donate-green);
+}
+
+.donate-checkbox label {
+  color: #49534f;
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+
+.donate-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.donate-submit {
+  background: var(--donate-green);
+  color: #ffffff;
+}
+
+.donate-secondary {
+  background: #e9eeec;
+  color: #38453f;
+}
+
+
+/* =========================
+   7. AMOUNT CHOICES
+========================= */
+
+.donate-amounts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.donate-amount {
+  min-height: 48px;
+  padding: 0.75rem;
+
+  background: #ffffff;
+  border: 1px solid #cfd8d4;
+  border-radius: 12px;
+
+  color: var(--donate-green);
+  font-weight: 850;
+  text-align: center;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.donate-amount:hover,
+.donate-amount.active,
+.donate-amount[aria-pressed="true"] {
+  transform: translateY(-1px);
+
+  background: var(--donate-green-soft);
+  border-color: var(--donate-green);
+}
+
+.donate-custom-amount {
+  margin-top: 0.7rem;
+}
+
+
+/* =========================
+   8. SIDE CARD
+========================= */
+
+.donate-side-card {
+  position: sticky;
+  top: 110px;
+}
+
+.donate-side-list {
+  margin: 1rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.donate-side-list li {
+  margin-bottom: 0.65rem;
+  color: #46524d;
+  line-height: 1.6;
+}
+
+.donate-trust-box {
+  margin-top: 1.25rem;
+  padding: 1rem;
+
+  background: var(--donate-gold-soft);
+  border-left: 4px solid var(--donate-gold);
+  border-radius: 14px;
+
+  color: #66501c;
+  line-height: 1.65;
+}
+
+.donate-security-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  margin-top: 1rem;
+
+  color: #5f676b;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+
+/* =========================
+   9. IMPACT CARDS
+========================= */
+
+.donate-impact {
+  background: #ffffff;
+}
+
+.donate-impact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.2rem;
+}
+
+.donate-impact-card {
+  padding: 1.5rem;
+
+  background: var(--donate-surface-soft);
+  border: 1px solid var(--donate-line);
+  border-radius: 18px;
+
+  box-shadow: var(--donate-shadow-sm);
+}
+
+.donate-impact-card h3 {
+  color: var(--donate-green);
+}
+
+.donate-impact-card p {
+  margin-bottom: 0;
+  color: var(--donate-text-soft);
+  line-height: 1.7;
+}
+
+
+/* =========================
+   10. SUPPORT BANNER
+========================= */
+
+.donate-support-banner {
+  position: relative;
+
+    min-height: 390px;
+    padding: 3rem 1rem;
+
+  display: grid;
+  place-items: center;
+
+  background-size: cover;
+  background-position: center;
+
+  color: #ffffff;
+  text-align: center;
+
+  overflow: hidden;
+}
+
+.donate-support-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: rgba(5, 24, 20, 0.58);
+}
+
+.donate-support-inner {
+  position: relative;
+  z-index: 2;
+
+  width: min(100%, 780px);
+}
+
+.donate-support-inner h2 {
+  margin-bottom: 0.8rem;
+
+  color: #ffffff;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.donate-support-inner p {
+  max-width: 650px;
+  margin: 0 auto 1.3rem;
+
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+
+/* =========================
+   11. OTHER WAYS TO SUPPORT
+========================= */
+
+.donate-other {
+  background: #f8faf8;
+}
+
+.donate-other-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.2rem;
+}
+
+.donate-other-card {
+  padding: 1.5rem;
+
+  background: #ffffff;
+  border: 1px solid var(--donate-line);
+  border-radius: 18px;
+
+  text-align: center;
+
+  box-shadow: var(--donate-shadow-sm);
+}
+
+.donate-other-card h3 {
+  color: var(--donate-green);
+}
+
+.donate-other-card p {
+  margin-bottom: 1rem;
+  color: var(--donate-text-soft);
+  line-height: 1.7;
+}
+
+
+/* =========================
+   12. STATUS MESSAGES
+========================= */
+
+.donate-alert {
+  width: min(100%, 900px);
+  margin: 1rem auto;
+  padding: 1rem 1.15rem;
+
+  border-radius: 14px;
+
+  font-weight: 700;
+  line-height: 1.55;
+}
+
+.donate-alert.success {
+  background: #e8f6ee;
+  border: 1px solid #b8dfc7;
+  color: #1d6a42;
+}
+
+.donate-alert.error {
+  background: #fff0f0;
+  border: 1px solid #efc1c1;
+  color: #9a2d2d;
+}
+
+.donate-alert.info {
+  background: #edf4ff;
+  border: 1px solid #c7d9f4;
+  color: #2f5fa7;
+}
+
+
+/* =========================
+   13. THANK-YOU STATE
+========================= */
+
+.donate-thank-you {
+  padding: 4rem 1.25rem;
+
+  background: #f7faf8;
+}
+
+.donate-thank-you-card {
+  width: min(100%, 760px);
+  margin: 0 auto;
+  padding: 2rem;
+
+  background: #ffffff;
+  border: 1px solid var(--donate-line);
+  border-radius: var(--donate-radius-lg);
+
+  text-align: center;
+
+  box-shadow: var(--donate-shadow-md);
+}
+
+.donate-thank-you-icon {
+  width: 74px;
+  height: 74px;
+  margin: 0 auto 1rem;
+
+  display: grid;
+  place-items: center;
+
+  background: var(--donate-green-soft);
+  border-radius: 50%;
+
+  font-size: 2.2rem;
+}
+
+.donate-thank-you-card h2 {
+  color: var(--donate-green);
+}
+
+.donate-thank-you-card p {
+  color: var(--donate-text-soft);
+  line-height: 1.75;
+}
+
+
+/* =========================
+   14. RESPONSIVE
+========================= */
+
+@media (max-width: 940px) {
+  .donate-options-grid,
+  .donate-impact-grid,
+  .donate-other-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .donate-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .donate-side-card {
+    position: static;
+  }
+
+@media (max-width: 700px) {
+  .donate-hero {
+    min-height: 520px;
+    padding: 2rem 1rem;
+  }
+
+  .donate-hero-inner {
+    padding: 1.25rem;
+  }
+
+  .donate-shell {
+    padding: 3rem 1rem;
+  }
+
+  .donate-options-grid,
+  .donate-impact-grid,
+  .donate-other-grid,
+  .donate-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .donate-amounts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .donate-form-card,
+  .donate-side-card {
+    padding: 1.25rem;
+  }
+
+  .donate-form-actions,
+  .donate-hero-actions {
+    flex-direction: column;
+  }
+
+  .donate-form-actions .btn,
+  .donate-hero-actions .btn,
+  .donate-submit,
+  .donate-secondary {
+    width: 100%;
+  }
+
+/* =========================================================
+   15. BUTTON SYSTEM
+========================================================= */
+
+.donate-btn {
+  min-height: 46px;
+  padding: 0.78rem 1.2rem;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+
+  border: 0;
+  border-radius: 12px;
+
+  font: inherit;
+  font-weight: 800;
+  line-height: 1.2;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.donate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+.donate-btn:focus-visible {
+  outline: 3px solid rgba(216, 164, 44, 0.45);
+  outline-offset: 3px;
+}
+
+.donate-btn-gold {
+  background: var(--donate-gold);
+  color: #18211e;
+}
+
+.donate-btn-green,
+.donate-btn-dark {
+  background: var(--donate-green);
+  color: #ffffff;
+}
+
+.donate-btn-blue {
+  background: var(--donate-blue);
+  color: #ffffff;
+}
+
+.donate-btn-light {
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--donate-green-dark);
+}
+
+.donate-btn-outline {
+  background: transparent;
+  border: 2px solid var(--donate-green);
+  color: var(--donate-green);
+}
+
+
+/* =========================================================
+   16. GENERAL LABELS
+========================================================= */
+
+.donate-section-label {
+  margin: 0 0 0.65rem;
+
+  color: #2f7a5c;
+  font-size: 0.76rem;
+  font-weight: 850;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.donate-hero-trust {
+  margin: 1rem 0 0;
+
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 0.9rem;
+}
+
+
+/* =========================================================
+   17. IMPACT ICONS
+========================================================= */
+
+.donate-impact-icon {
+  width: 54px;
+  height: 54px;
+  margin-bottom: 1rem;
+
+  display: grid;
+  place-items: center;
+
+  background: var(--donate-green-soft);
+  border-radius: 15px;
+
+  font-size: 1.65rem;
+}
+
+
+/* =========================================================
+   18. FEATURED RESOURCE
+========================================================= */
+
+.donate-resource-section {
+  background: var(--donate-bg);
+}
+
+.donate-resource-card {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.72fr) minmax(0, 1.28fr);
+  gap: 2.25rem;
+  align-items: center;
+
+  padding: 2rem;
+
+  background: #ffffff;
+  border: 1px solid var(--donate-line);
+  border-radius: var(--donate-radius-lg);
+
+  box-shadow: var(--donate-shadow-md);
+}
+
+.donate-resource-image {
+  text-align: center;
+}
+
+.donate-resource-image img {
+  width: min(100%, 330px);
+  display: block;
+  margin: 0 auto;
+
+  border-radius: 18px;
+
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
+}
+
+.donate-resource-image p {
+  margin: 0.8rem 0 0;
+
+  color: var(--donate-text-soft);
+  font-size: 0.88rem;
+}
+
+.donate-resource-content h2 {
+  margin: 0 0 0.35rem;
+  color: var(--donate-green);
+}
+
+.donate-resource-content p {
+  color: #4d5753;
+  line-height: 1.75;
+}
+
+.donate-resource-subtitle {
+  margin-top: 0;
+
+  color: #6b7280;
+  font-size: 0.94rem;
+  font-weight: 700;
+}
+
+.donate-resource-lead {
+  color: #263f37 !important;
+  font-size: 1.08rem;
+  font-weight: 700;
+}
+
+.donate-resource-actions {
+  margin-top: 1.25rem;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+
+/* =========================================================
+   19. PAYMENT LOGOS
+========================================================= */
+
+.donate-payment-logo {
+  min-height: 88px;
+  margin-bottom: 1rem;
+
+  display: grid;
+  place-items: center;
+}
+
+.donate-payment-logo img {
+  width: auto;
+  max-width: 150px;
+  max-height: 86px;
+  object-fit: contain;
+}
+
+
+/* =========================================================
+   20. COMING SOON
+========================================================= */
+
+.coming-soon-box {
+  width: 100%;
+  padding: 1rem;
+
+  display: grid;
+  gap: 0.45rem;
+
+  background: #f1f5f9;
+  border: 1px dashed #aeb8c3;
+  border-radius: 14px;
+
+  color: #475569;
+}
+
+.coming-soon-box strong {
+  color: var(--donate-blue);
+}
+
+.coming-soon-box span {
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.coming-soon-box small {
+  color: #7a8490;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   21. PURPOSE SECTION
+========================================================= */
+
+.donate-purpose {
+  background: #ffffff;
+}
+
+.donate-purpose-card {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2.5rem;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fffaf0,
+      #edf7f2
+    );
+
+  border-left: 5px solid var(--donate-gold);
+  border-radius: var(--donate-radius-lg);
+
+  text-align: center;
+
+  box-shadow: var(--donate-shadow-sm);
+}
+
+.donate-purpose-card h2 {
+  color: var(--donate-green);
+}
+
+.donate-purpose-card p {
+  color: #4d5753;
+  line-height: 1.75;
+}
+
+.donate-purpose-card blockquote {
+  margin: 1.4rem auto;
+  padding: 1rem;
+
+  color: var(--donate-green-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-style: italic;
+  font-weight: 700;
+}
+
+.donate-trust-row {
+  margin-top: 1.3rem;
+
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.donate-trust-row span {
+  padding: 0.55rem 0.8rem;
+
+  background: rgba(255, 255, 255, 0.78);
+  border-radius: 999px;
+
+  color: #405049;
+  font-size: 0.88rem;
+  font-weight: 750;
+}
+
+
+/* =========================================================
+   22. QR MODAL
+========================================================= */
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.donate-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  padding: 1rem;
+}
+
+.donate-modal.is-open {
+  display: flex;
+}
+
+.donate-modal-backdrop {
+  position: absolute;
+  inset: 0;
+
+  background: rgba(4, 20, 17, 0.76);
+  backdrop-filter: blur(4px);
+}
+
+.donate-modal-card {
+  position: relative;
+  z-index: 2;
+
+  width: min(100%, 460px);
+  max-height: 92vh;
+  overflow-y: auto;
+
+  padding: 2rem;
+
+  background: #ffffff;
+  border-radius: 22px;
+
+  text-align: center;
+
+  box-shadow: var(--donate-shadow-lg);
+}
+
+.donate-modal-card img {
+  width: min(100%, 290px);
+  display: block;
+  margin: 1.25rem auto;
+
+  border-radius: 14px;
+}
+
+.donate-modal-card h2 {
+  color: var(--donate-green);
+}
+
+.donate-modal-card p {
+  color: var(--donate-text-soft);
+  line-height: 1.65;
+}
+
+.donate-modal-close {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+
+  width: 42px;
+  height: 42px;
+
+  display: grid;
+  place-items: center;
+
+  background: #edf4f1;
+  border: 0;
+  border-radius: 50%;
+
+  color: var(--donate-green-dark);
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   23. RESPONSIVE ADDITIONS
+========================================================= */
+
+@media (max-width: 800px) {
+
+  .donate-resource-card {
+    grid-template-columns: 1fr;
+    padding: 1.4rem;
+  }
+
+  .donate-resource-content {
+    text-align: center;
+  }
+
+  .donate-resource-actions {
+    justify-content: center;
+  }
+
+}
+
+@media (max-width: 700px) {
+
+  .donate-resource-actions {
+    flex-direction: column;
+  }
+
+  .donate-resource-actions .donate-btn {
+    width: 100%;
+  }
+
+  .donate-purpose-card {
+    padding: 1.75rem 1.2rem;
+  }
+
+  .donate-modal-card {
+    padding: 2rem 1.2rem 1.4rem;
+  }
+
+/* =========================
+   THANK-YOU IMAGE — FINAL FIX
+========================= */
+
+.donate-closing-card {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.donate-closing-card .donate-thankyou-image {
+  width: 180px;
+  max-width: 80%;
+  margin: 1.5rem auto;
+  padding: 0;
+}
+
+.donate-closing-card .donate-thankyou-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.10);
+}
+
+/* =========================
+   DONATE CLOSING
+========================= */
+
+.donate-closing {
+  background: var(--donate-bg);
+}
+
+.donate-closing-card {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 2.4rem;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fffaf0,
+      #edf7f2
+    );
+
+  border-left: 5px solid var(--donate-gold);
+  border-radius: var(--donate-radius-lg);
+
+  text-align: center;
+
+  box-shadow: var(--donate-shadow-sm);
+}
+
+.donate-closing-card h2 {
+  margin-bottom: 0.8rem;
+  color: var(--donate-green);
+}
+
+.donate-closing-card p {
+  margin: 0;
+  color: var(--donate-text-soft);
+  line-height: 1.75;
+}
+
+@media (max-width: 700px) {
+  .donate-closing-card {
+    padding: 1.8rem 1.25rem;
+  }
+}

@@ -1,338 +1,527 @@
 {% extends "base.html" %}
-{% block title %}Give & Support — Silent SoulConnect Ministry{% endblock %}
+
+{% block title %}
+Give &amp; Support — Silent SoulConnect Ministry
+{% endblock %}
+
 {% block body_class %}donate-page{% endblock %}
 
 {% block content %}
 
-<section class="donate-hero"
-  aria-label="Support Silent SoulConnect Ministry">
+<main class="donate-page-main">
 
-  <div class="donate-hero-card">
+  <!-- =========================
+       HERO
+  ========================== -->
 
-    <div class="donate-badge">
-      <span aria-hidden="true">💛</span>
-      Give With Purpose
-    </div>
+  <section
+    class="donate-hero"
+    aria-labelledby="donate-page-title"
+    style="
+      background-image:
+        url('{{ url_for(
+          'static',
+          filename='img/give/donate-hero.png'
+        ) }}');
+    "
+  >
 
-    <h1>Your Gift Can Reach Someone Who Feels Alone Today</h1>
+    <div class="donate-hero-inner">
 
-    <p class="donate-heart-line">
-      Someone is searching for hope… your support helps them find it.
-      Sometimes your kindness becomes the answer to someone’s silent prayer.
-    </p>
-
-    <p class="donate-quote">
-      “Honoring God through our gifts, our learning, and our legacy.”
-    </p>
-
-    <div class="donate-actions">
-
-      <a
-        href="#support"
-        class="donate-btn donate-btn-gold"
-        aria-label="Support Silent SoulConnect Ministry">
+      <div class="donate-badge">
         <span aria-hidden="true">💛</span>
-        Give & Make an Impact
-      </a>
+        Give With Purpose
+      </div>
 
-      <a
-        href="#resource"
-        class="donate-btn donate-btn-light"
-        aria-label="View ministry resource">
-        <span aria-hidden="true">📖</span>
-        Explore the Resource
-      </a>
+      <h1 id="donate-page-title">
+        Your Gift Can Reach Someone Who Feels Alone Today
+      </h1>
 
-    </div>
-
-    <p class="donate-trust">
-      Safe • Simple • Purpose-driven giving
-    </p>
-
-  </div>
-</section>
-
-<main class="donate-wrap">
-
-  <section class="donate-intro"
-    aria-label="Why giving matters">
-
-    <h2>Every Gift Carries a Message</h2>
-
-    <p>
-      Your support is not just financial — it becomes access,
-      understanding, and hope for someone who needs it.
-    </p>
-
-    <strong>Here’s what your giving is doing right now:</strong>
-  </section>
-
-  <section class="donate-impact-grid"
-    aria-label="Impact of ministry support">
-
-    <div class="donate-impact-card">
-      <div aria-hidden="true">🤟</div>
-      <h3>Deaf Access</h3>
-      <p>
-        Helping faith content become clearer, visual,
-        and easier to receive.
+      <p class="donate-hero-text">
+        Someone is searching for hope.
+        Your support helps them find accessible Gospel truth,
+        meaningful connection, and the reminder that they are not alone.
       </p>
-    </div>
 
-    <div class="donate-impact-card">
-      <div aria-hidden="true">📖</div>
-      <h3>Bible Learning</h3>
-      <p>
-        Supporting devotionals, studies,
-        and teaching tools for spiritual growth.
-      </p>
-    </div>
-
-    <div class="donate-impact-card">
-      <div aria-hidden="true">🌱</div>
-      <h3>Community Hope</h3>
-      <p>
-        Encouraging people who often feel unseen,
-        unheard, or forgotten.
-      </p>
-    </div>
-
-  </section>
-
-  <section id="resource"
-    class="donate-resource-card"
-    aria-label="Featured ministry resource">
-
-    <div class="donate-book-img">
-
-      <img
-        src="{{ url_for('static', filename='img/give/Sabrina1.jpg') }}"
-        alt="Cover of Sabrina’s Bajan Fruit Adventure">
-
-      <p>By SCWB Global Impact</p>
-    </div>
-
-    <div>
-
-    <!-- SCWB FAMILY / RESOURCE SECTION -->
-
-<span class="donate-label scwb-family-label">
-  🤝 Supporting the Mission Beyond SSCM
-</span>
-
-<p class="scwb-family-subtext">
-  Some ministry projects, community resources, educational materials,
-  and outreach initiatives are supported through SCWB Global Impact,
-  a community-focused initiative founded by Sandra White-Belgrave.
-</p>
-
-<h2>Sabrina’s Bajan Fruit Adventure</h2>
-
-<p class="donate-book-sub">
-  ABC Coloring & Early Hand Signs — Deaf Roots of Barbados
-</p>
-
-<p class="donate-book-hook">
-  A child’s first step into identity, culture, communication,
-  and the love of generations who help shape us.
-</p>
-
-<p>
-  This resource was developed through SCWB Global Impact,
-  an initiative that supports education, accessibility, culture,
-  and community development alongside the work of Silent SoulConnect Ministry.
-</p>
-
-<p>
-  Inspired by the care, wisdom, and quiet strength
-  passed from one generation to another, this resource helps children
-  ages 3–6 grow in confidence, appreciation, and early communication —
-  while learning alongside the
-  <strong>ASL Alphabet</strong>.
-</p>
-
-      <div class="donate-actions left">
+      <div class="donate-hero-actions">
 
         <a
-          href="https://a.co/d/6I55zOd"
-          target="_blank"
-          rel="noopener"
-          class="donate-btn donate-btn-dark"
-          aria-label="View Sabrina's Bajan Fruit Adventure on Amazon">
-
-          <span aria-hidden="true">🛒</span>
-          View on Amazon
+          href="#giving-options"
+          class="donate-btn donate-btn-gold"
+        >
+          <span aria-hidden="true">💛</span>
+          View Giving Options
         </a>
 
         <a
-          href="https://read.amazon.com/sample/B0G8HXNJ3H?clientId=share"
-          target="_blank"
-          rel="noopener"
+          href="#featured-resource"
           class="donate-btn donate-btn-light"
-          aria-label="Preview Sabrina's Bajan Fruit Adventure book sample">
-
+        >
           <span aria-hidden="true">📖</span>
-          Look Inside
+          Explore the Resource
         </a>
 
       </div>
+
+      <p class="donate-hero-trust">
+        Safe • Simple • Purpose-Driven
+      </p>
+
     </div>
+
   </section>
 
-  <section id="support"
-    class="donate-support-card"
-    aria-label="Ways to support the ministry">
 
-    <div class="donate-badge">
-      Giving Options
-    </div>
+  <!-- =========================
+       WHY GIVING MATTERS
+  ========================== -->
 
-    <h2>Support the Ministry</h2>
+  <section class="donate-intro">
 
-    <p class="donate-support-bold">
-      You are not just giving — you are helping someone feel seen,
-      understood, and connected.
-    </p>
+    <div class="donate-shell">
 
-    <p>
-    Every contribution helps support the ongoing work of Silent SoulConnect Ministry,
-    including Deaf-friendly devotionals, Bible studies, prayer support, accessibility
-    initiatives, and community outreach.
-    </p>
-    <p>
-    For administrative and financial purposes, some donations may be managed through
-    SCWB Global Impact, the ministry's supporting community initiative.
-    </p>
-    <p>
-      Your giving helps Silent SoulConnect Ministry continue sharing
-      the Gospel through accessible devotionals, Bible studies,
-      prayer support, and visual learning.
-    </p>
+      <div class="donate-intro-inner">
 
-    <p class="donate-trust">
-      <span aria-hidden="true">🔒</span>
-      Transparent • Purpose-Driven • Community-Focused
-    </p>
-
-    <div class="donate-giving-grid">
-
-      <div class="donate-giving-card gold-card">
-
-        <img
-          src="{{ url_for('static', filename='img/give/cibc.png') }}"
-          alt="CIBC FirstPay logo">
-
-        <h3>CIBC 1stPay</h3>
-
-        <p>
-          Direct local support through the
-          CIBC Caribbean digital network.
+        <p class="donate-section-label">
+          WHY GIVING MATTERS
         </p>
 
-        <button
-          type="button"
-          onclick="document.getElementById('qrModal').style.display='flex'"
-          aria-label="View CIBC FirstPay QR card">
+        <h2>Every Gift Carries a Message</h2>
 
-          <span aria-hidden="true">📱</span>
-          View 1stPay Card
-        </button>
+        <p>
+          Your support is not only financial.
+          It becomes access, understanding, encouragement,
+          and hope for someone who needs it.
+        </p>
+
+        <div class="donate-scripture">
+
+          <p>
+            “Everything comes from You,
+            and we have given You only
+            what comes from Your hand.”
+          </p>
+
+          <span>
+            1 Chronicles 29:14
+          </span>
+
+        </div>
+
       </div>
 
-      <div class="donate-giving-card blue-card">
+    </div>
 
-        <img
-          src="{{ url_for('static', filename='img/give/card.png') }}"
-          alt="Credit card and PayPal payment icon">
+  </section>
 
-        <h3>PayPal & Credit Cards</h3>
 
-        <p>
-          Global support for ministry outreach,
-          resources, and accessibility work.
+  <!-- =========================
+       IMPACT
+  ========================== -->
+
+  <section class="donate-impact">
+
+    <div class="donate-shell">
+
+      <div class="donate-section-heading">
+
+        <p class="donate-section-label">
+          YOUR IMPACT
         </p>
 
-        {% if paypal_link %}
-          <a
-            href="{{ paypal_link }}"
-            target="_blank"
-            rel="noopener"
-            class="donate-btn donate-btn-blue"
-            aria-label="Donate to Silent SoulConnect Ministry">
+        <h2>What Your Giving Supports</h2>
 
-            <span aria-hidden="true">💝</span>
-            Donate Now
-          </a>
-        {% else %}
-          <div class="coming-soon-box">
-            <strong>Global Giving Coming Soon</strong>
-            <span>
-              We’re preparing a secure global giving option.
-              Thank you for walking this journey with us.
-            </span>
-            <small>Coming Soon</small>
+        <p>
+          Each contribution helps SSCM continue creating
+          accessible faith resources and meaningful ministry support.
+        </p>
+
+      </div>
+
+
+      <div class="donate-impact-grid">
+
+        <article class="donate-impact-card">
+
+          <div class="donate-impact-icon" aria-hidden="true">
+            🤟
           </div>
-        {% endif %}
+
+          <h3>Deaf Access</h3>
+
+          <p>
+            Helping faith content become clearer,
+            more visual, and easier to understand.
+          </p>
+
+        </article>
+
+
+        <article class="donate-impact-card">
+
+          <div class="donate-impact-icon" aria-hidden="true">
+            📖
+          </div>
+
+          <h3>Bible Learning</h3>
+
+          <p>
+            Supporting devotionals, Bible studies,
+            and teaching resources for spiritual growth.
+          </p>
+
+        </article>
+
+
+        <article class="donate-impact-card">
+
+          <div class="donate-impact-icon" aria-hidden="true">
+            🌱
+          </div>
+
+          <h3>Community Hope</h3>
+
+          <p>
+            Encouraging people who often feel unseen,
+            unheard, isolated, or forgotten.
+          </p>
+
+        </article>
 
       </div>
+
     </div>
 
-<section class="donate-impact-message"
-  aria-label="Why support matters">
+  </section>
 
-  <h3>Why Your Support Matters</h3>
 
-  <p>
-    Many people quietly struggle with loneliness, faith,
-    communication barriers, grief, and feeling forgotten.
-    Your support helps remind someone:
-  </p>
+  <!-- =========================
+       FEATURED RESOURCE
+  ========================== -->
 
-  <blockquote>
-    “You are not alone.”
-  </blockquote>
+  <section
+    id="featured-resource"
+    class="donate-resource-section"
+    aria-labelledby="resource-title"
+  >
 
-</section>
+    <div class="donate-shell">
 
-    <div class="donate-scripture">
-      <p>
-        “Everything comes from you, and we have given you only what comes from your hand.”
-      </p>
-      <strong>— 1 Chronicles 29:14</strong>
+      <article class="donate-resource-card">
+
+      <p class="donate-section-label">
+            FEATURED MINISTRY RESOURCE
+          </p>
+
+        <div class="donate-resource-image">
+
+          <img
+            src="{{ url_for(
+              'static',
+              filename='img/give/Sabrina1.jpg'
+            ) }}"
+            alt="Cover of Sabrina’s Bajan Fruit Adventure"
+          >
+
+          <p>By SCWB Global Impact</p>
+
+        </div>
+
+
+        <div class="donate-resource-content">
+
+          <h2 id="resource-title">
+            Sabrina’s Bajan Fruit Adventure
+          </h2>
+
+          <p class="donate-resource-subtitle">
+            ABC Coloring &amp; Early Hand Signs —
+            Deaf Roots of Barbados
+          </p>
+
+          <p class="donate-resource-lead">
+            One example of how support helps create accessible,
+            faith-centered learning resources for children,
+            families, and the Deaf community.
+          </p>
+
+          <p>
+            This resource was developed through
+            SCWB Global Impact, an initiative supporting
+            education, accessibility, culture,
+            and community development alongside
+            Silent SoulConnect Ministry.
+          </p>
+
+          <p>
+            Inspired by the care, wisdom, and quiet strength
+            passed from one generation to another,
+            this book helps children ages 3–6 grow
+            in confidence, appreciation, and early communication
+            while learning the <strong>ASL alphabet</strong>.
+          </p>
+
+          <div class="donate-resource-actions">
+
+            <a
+              href="https://a.co/d/6I55zOd"
+              target="_blank"
+              rel="noopener"
+              class="donate-btn donate-btn-dark"
+            >
+              <span aria-hidden="true">🛒</span>
+              View on Amazon
+            </a>
+
+            <a
+              href="https://read.amazon.com/sample/B0G8HXNJ3H?clientId=share"
+              target="_blank"
+              rel="noopener"
+              class="donate-btn donate-btn-outline"
+            >
+              <span aria-hidden="true">📖</span>
+              Look Inside
+            </a>
+
+          </div>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       GIVING OPTIONS
+  ========================== -->
+
+  <section
+    id="giving-options"
+    class="donate-options"
+    aria-labelledby="giving-options-title"
+  >
+
+    <div class="donate-shell">
+
+      <div class="donate-section-heading">
+
+        <p class="donate-section-label">
+          GIVE WITH PURPOSE
+        </p>
+
+        <h2 id="giving-options-title">
+          Choose a Way to Give
+        </h2>
+
+        <p>
+          Select the giving option that works best for you.
+          Contributions help sustain SSCM devotionals,
+          Bible studies, prayer support,
+          accessibility resources, and community outreach.
+        </p>
+
+      </div>
+
+
+      <div class="donate-options-grid">
+
+        <!-- CIBC 1stPay -->
+
+        <article class="donate-option-card">
+
+          <div class="donate-payment-logo">
+
+            <img
+              src="{{ url_for(
+                'static',
+                filename='img/give/cibc.png'
+              ) }}"
+              alt="CIBC FirstPay"
+            >
+
+          </div>
+
+          <h3>CIBC 1stPay</h3>
+
+          <p>
+            Direct local support through
+            the CIBC Caribbean digital network.
+          </p>
+
+          <button
+            type="button"
+            class="donate-btn donate-btn-gold"
+            onclick="openQrModal()"
+            aria-haspopup="dialog"
+            aria-controls="qrModal"
+          >
+            <span aria-hidden="true">📱</span>
+            View 1stPay QR Code
+          </button>
+
+          <p class="donate-option-note">
+            Best for local and Caribbean giving.
+          </p>
+
+        </article>
+
+
+        <!-- PAYPAL AND CARDS -->
+
+        <article class="donate-option-card">
+
+          <div class="donate-payment-logo">
+
+            <img
+              src="{{ url_for(
+                'static',
+                filename='img/give/card.png'
+              ) }}"
+              alt="PayPal and credit card payments"
+            >
+
+          </div>
+
+          <h3>PayPal &amp; Credit Cards</h3>
+
+          <p>
+            Global support for ministry outreach,
+            resources, and accessibility work.
+          </p>
+
+          {% if paypal_link %}
+
+            <a
+              href="{{ paypal_link }}"
+              target="_blank"
+              rel="noopener"
+              class="donate-btn donate-btn-blue"
+            >
+              <span aria-hidden="true">💝</span>
+              Donate Securely
+            </a>
+
+          {% else %}
+
+            <div class="coming-soon-box">
+
+              <strong>
+                Global Giving Coming Soon
+              </strong>
+
+              <span>
+                We are preparing a secure global giving option.
+              </span>
+
+              <small>
+                Coming Soon
+              </small>
+
+            </div>
+
+          {% endif %}
+
+        </article>
+
+
+        <!-- JOIN THE MISSION -->
+
+        <article class="donate-option-card">
+
+          <div class="donate-option-icon" aria-hidden="true">
+            🤝
+          </div>
+
+          <h3>Join the Mission</h3>
+
+          <p>
+            Through prayer, volunteering, sharing resources,
+            or encouraging others, you become part
+            of the ministry’s mission.
+          </p>
+
+          <a
+            href="{{ url_for('join') }}"
+            class="donate-btn donate-btn-green"
+          >
+            Join the Community
+          </a>
+
+          <p class="donate-option-note">
+            Every contribution matters.
+          </p>
+
+        </article>
+
+      </div>
+
     </div>
 
   </section>
 
 </main>
 
+<!-- =========================
+     QR MODAL
+========================== -->
+
 <div
   id="qrModal"
   class="donate-modal"
   role="dialog"
-  aria-label="CIBC FirstPay QR code"
-  onclick="this.style.display='none'">
+  aria-modal="true"
+  aria-labelledby="qr-modal-title"
+  aria-hidden="true"
+>
 
-  <div class="donate-modal-card"
-    onclick="event.stopPropagation()">
-
-    <h3>Worship Through Giving</h3>
-
-    <p>
-      Scan the 1stPay QR code below using your CIBC Mobile App.
-    </p>
-
-    <img
-      src="{{ url_for('static', filename='img/give/CIBC_QR.jpg') }}"
-      alt="CIBC FirstPay QR code for ministry support">
-
-    <button
-      type="button"
-      onclick="document.getElementById('qrModal').style.display='none'"
-      aria-label="Close donation QR code">
-      Close
-    </button>
+  <div
+    class="donate-modal-backdrop"
+    onclick="closeQrModal()"
+  ></div>
 
   </div>
-</div>
+
+
+{% include "components/prayer_invite.html" %}
+
+<script>
+  const qrModal = document.getElementById("qrModal");
+  let qrTrigger = null;
+
+  function openQrModal() {
+    qrTrigger = document.activeElement;
+
+    qrModal.classList.add("is-open");
+    qrModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+
+    const closeButton =
+      qrModal.querySelector(".donate-modal-close");
+
+    closeButton.focus();
+  }
+
+  function closeQrModal() {
+    qrModal.classList.remove("is-open");
+    qrModal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+
+    if (qrTrigger) {
+      qrTrigger.focus();
+    }
+  }
+
+  document.addEventListener("keydown", function (event) {
+    if (
+      event.key === "Escape" &&
+      qrModal.classList.contains("is-open")
+    ) {
+      closeQrModal();
+    }
+  });
+</script>
 
 {% endblock %}

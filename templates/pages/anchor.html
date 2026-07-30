@@ -1,10 +1,400 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Anchor — The Rabbi’s Way | Silent SoulConnect Ministry{% endblock %}
+{% block body_class %}anchor-page{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section
+  class="foundation-hero anchor-hero"
+  aria-label="The Rabbi's Way"
+  style="
+    background-image:
+      url('{{ url_for('static', filename='img/rabbi/rabbi_hero.png') }}');
+  "
+>
+
+  <div class="foundation-hero-inner">
+
+    <span class="mini-label light">
+      ANCHOR
+    </span>
+
+    <h1>The Rabbi’s Way</h1>
+
+    <p class="foundation-hero-text">
+      Following Jesus is more than learning about Him.
+      It is walking with Him—one faithful step at a time.
+    </p>
+
+  </div>
+</section>
+
+
+<!-- INTRODUCTION -->
+<section
+  class="foundation-mission section-shell"
+  aria-label="Introduction to the Rabbi's Way"
+>
+  <div class="foundation-narrow center">
+
+    <h2>Take the Next Step</h2>
+
+    <p>
+      Jesus invites us to come, follow, learn, remain,
+      serve, stand, and help others begin the same journey.
+    </p>
+
+    <p>
+      The Rabbi’s Way will grow gradually.
+      For now, begin with the step already open:
+      walking with Jesus each day.
+    </p>
+
+    <div class="hero-verse">
+      <p>
+        “Come, follow me.”
+      </p>
+
+      <span>— Matthew 4:19</span>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- SEVEN STEPS -->
+<section
+  class="foundation-path section-shell anchor-journey"
+  aria-label="Seven steps of the Rabbi's Way"
+>
+  <div class="foundation-narrow center">
+
+    <span class="mini-label">
+      THE JOURNEY
+    </span>
+
+    <h2>Seven Steps with Jesus</h2>
+
+    <p>
+      Each step points toward a deeper life with Christ.
+      Begin simply and move at God’s pace.
+    </p>
+
+  </div>
+
+
+  <div class="path-steps-grid anchor-steps-grid">
+
+    <!-- COME -->
+    <article class="path-step anchor-step future-step">
+
+      <div class="path-ico" aria-hidden="true">🚪</div>
+
+      <span class="mini-label">
+        STEP 1
+      </span>
+
+      <h3>Come</h3>
+
+      <p class="path-subtitle">
+        Meet Jesus
+      </p>
+
+      <p>
+        Receive His invitation to know Him,
+        trust Him, and begin a new life.
+      </p>
+
+      <span class="anchor-status">
+        Story coming soon
+      </span>
+
+    </article>
+
+
+  <!-- FOLLOW: ACTIVE -->
+<article class="path-step anchor-step follow-step">
+
+  <div class="path-ico" aria-hidden="true">👣</div>
+
+  <span class="mini-label">
+    STEP 2 • OPEN
+  </span>
+
+  <h3>Follow</h3>
+
+  <p class="path-subtitle">
+    Walk with Jesus Daily
+  </p>
+
+  <p>
+    Make room for Scripture, reflection,
+    prayer, and one faithful step with Jesus today.
+  </p>
+
+  <p class="verse">
+    “Whoever follows me will never walk in darkness.”
+    — John 8:12
+  </p>
+
+  <a
+    href="{{ url_for('today') }}"
+    class="btn gold"
+    aria-label="Open today's daily devotion"
+  >
+    Begin Today’s Devotion
+  </a>
+
+</article>
+
+
+<!-- LEARN -->
+<article class="path-step anchor-step learn-step">
+
+  <div class="path-ico" aria-hidden="true">📖</div>
+
+  <span class="mini-label">
+    STEP 3 • OPEN
+  </span>
+
+  <h3>Learn</h3>
+
+  <p class="path-subtitle">
+    Learn from the Rabbi
+  </p>
+
+  <p>
+    Grow through biblical foundations,
+    guided lessons, and deeper study.
+  </p>
+
+  <button
+    type="button"
+    class="btn gold"
+    onclick="document.getElementById('learn-dialog').showModal()"
+  >
+    Choose How to Learn
+  </button>
+
+</article>
+
+    <!-- REMAIN -->
+    <article class="path-step anchor-step future-step">
+
+      <div class="path-ico" aria-hidden="true">🌿</div>
+
+      <span class="mini-label">
+        STEP 4
+      </span>
+
+      <h3>Remain</h3>
+
+      <p class="path-subtitle">
+        Stay Connected
+      </p>
+
+      <p>
+        Abide in Christ through prayer,
+        fellowship, worship, and faithful connection.
+      </p>
+
+      <span class="anchor-status">
+        Opening later
+      </span>
+
+    </article>
+
+
+    <!-- SERVE -->
+    <article class="path-step anchor-step future-step">
+
+      <div class="path-ico" aria-hidden="true">🤝</div>
+
+      <span class="mini-label">
+        STEP 5
+      </span>
+
+      <h3>Serve</h3>
+
+      <p class="path-subtitle">
+        Love Like Jesus
+      </p>
+
+      <p>
+        See people with compassion and allow faith
+        to become visible through loving service.
+      </p>
+
+      <span class="anchor-status">
+        Opening later
+      </span>
+
+    </article>
+
+
+    <!-- STAND -->
+    <article class="path-step anchor-step future-step">
+
+      <div class="path-ico" aria-hidden="true">🛡️</div>
+
+      <span class="mini-label">
+        STEP 6
+      </span>
+
+      <h3>Stand</h3>
+
+      <p class="path-subtitle">
+        Remain Faithful
+      </p>
+
+      <p>
+        Stand firm in truth, courage,
+        generosity, and faithful support.
+      </p>
+
+      <span class="anchor-status">
+        Opening later
+      </span>
+
+    </article>
+
+
+    <!-- MULTIPLY -->
+    <article class="path-step anchor-step future-step">
+
+      <div class="path-ico" aria-hidden="true">🌱</div>
+
+      <span class="mini-label">
+        STEP 7
+      </span>
+
+      <h3>Multiply</h3>
+
+      <p class="path-subtitle">
+        Help Others Begin
+      </p>
+
+      <p>
+        Share Jesus, encourage another person,
+        and help someone take their first step.
+      </p>
+
+      <span class="anchor-status">
+        Opening later
+      </span>
+
+    </article>
+
+  </div>
+</section>
+
+<!-- LEARN SELECTION WINDOW -->
+<dialog
+  id="learn-dialog"
+  class="anchor-dialog"
+  aria-labelledby="learn-dialog-title"
+>
+  <div class="anchor-dialog-inner">
+
+    <button
+      type="button"
+      class="dialog-close"
+      aria-label="Close learning choices"
+      onclick="document.getElementById('learn-dialog').close()"
+    >
+      ×
+    </button>
+
+    <span class="mini-label">
+      LEARN
+    </span>
+
+    <h2 id="learn-dialog-title">
+      Choose Your Learning Path
+    </h2>
+
+    <p>
+      Select the learning space that best supports
+      your next step with Jesus.
+    </p>
+
+    <div class="learn-choice-grid">
+
+      <a
+        href="{{ url_for('blog_index', category='Faith Foundations') }}"
+        class="learn-choice-card"
+      >
+        <span class="learn-choice-icon" aria-hidden="true">📖</span>
+
+        <h3>Faith Foundations</h3>
+
+        <p>
+          Understand the essential truths
+          that strengthen Christian faith.
+        </p>
+
+        <span class="path-link-text">
+          Explore Foundations →
+        </span>
+      </a>
+
+      <a
+        href="{{ url_for('study_index') }}"
+        class="learn-choice-card"
+      >
+        <span class="learn-choice-icon" aria-hidden="true">📚</span>
+
+        <h3>Study Hub</h3>
+
+        <p>
+          Explore guided Bible studies,
+          lessons, and Scripture resources.
+        </p>
+
+        <span class="path-link-text">
+          Enter Study Hub →
+        </span>
+      </a>
+
+    </div>
+
+  </div>
+</dialog>
+
+<!-- CURRENT INVITATION -->
+<section
+  class="foundation-next anchor-next"
+  aria-label="Begin following Jesus daily"
+>
+  <div class="foundation-next-inner">
+
+    <span class="mini-label">
+      YOUR OPEN STEP
+    </span>
+
+    <h2>Follow Jesus Today</h2>
+
+    <p class="foundation-next-text">
+      You do not need to complete the entire journey today.
+      Begin by meeting God in today’s devotion.
+    </p>
+
+    <a
+      href="{{ url_for('today') }}"
+      class="btn gold"
+    >
+      Open Today’s Devotion
+    </a>
+
+    <p class="foundation-next-caption">
+      Begin gently. Walk faithfully. Return tomorrow.
+    </p>
+
+  </div>
+</section>
+
+{% include "components/prayer_invite.html" %}
+
+{% endblock %}

@@ -1,0 +1,525 @@
+/* =========================================================
+   FOUNDATION.CSS — SILENT SOULCONNECT MINISTRY
+   Covers the Foundation page only.
+   ========================================================= */
+
+
+/* =========================
+   PAGE BASE
+========================= */
+
+body.foundation-page {
+  background: #f5f3ef;
+  color: #1f2937;
+}
+
+
+/* =========================
+   FOUNDATION HERO
+========================= */
+
+.foundation-hero {
+  min-height: 62vh;
+  padding: 3rem 1.25rem;
+
+  display: grid;
+  place-items: center;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  color: #ffffff;
+  text-align: center;
+}
+
+.foundation-hero-inner {
+  width: min(100%, 820px);
+  margin: 0 auto;
+}
+
+.foundation-badge {
+  display: inline-block;
+  margin-bottom: 1rem;
+  padding: 0.45rem 0.9rem;
+
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 800;
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.foundation-hero h1 {
+  margin: 0 0 0.85rem;
+
+  color: #ffffff;
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  line-height: 1.08;
+
+  text-shadow: 0 3px 14px rgba(0, 0, 0, 0.34);
+}
+
+.foundation-hero-text {
+  max-width: 620px;
+  margin: 0 auto;
+
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 1.12rem;
+  line-height: 1.75;
+}
+
+
+/* =========================
+   SHARED FOUNDATION LAYOUT
+========================= */
+
+.foundation-narrow {
+  width: min(100%, 760px);
+  margin: 0 auto;
+}
+
+.foundation-grid {
+  width: min(100%, 1180px);
+  margin: 0 auto;
+
+  display: grid;
+  gap: 1.5rem;
+}
+
+.foundation-grid.two-col {
+  grid-template-columns: 1.4fr 0.9fr;
+  align-items: start;
+}
+
+.foundation-copy p {
+  line-height: 1.75;
+}
+
+.foundation-mission,
+.foundation-focus,
+.foundation-genesis,
+.foundation-visual,
+.foundation-path,
+.foundation-community,
+.foundation-why,
+.foundation-voices {
+  padding: 4rem 1.25rem;
+}
+
+.foundation-mission h2,
+.foundation-focus h2,
+.foundation-genesis h2,
+.foundation-visual h2,
+.foundation-path h2,
+.foundation-community h2,
+.foundation-why h2,
+.foundation-voices h2 {
+  margin-bottom: 1rem;
+  color: #1b6b57;
+}
+
+
+/* =========================
+   MISSION + QUOTE
+========================= */
+
+.foundation-mission {
+  background: #ffffff;
+}
+
+.foundation-quote-card {
+  padding: 1.6rem;
+
+  background: #f7f4ef;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-left: 4px solid #1b6b57;
+  border-radius: 22px;
+
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+}
+
+.foundation-quote-card h3 {
+  margin-top: 0;
+  color: #1b6b57;
+}
+
+.foundation-quote-card p {
+  margin-bottom: 0;
+  line-height: 1.75;
+}
+
+
+/* =========================
+   FOCUS CARDS
+========================= */
+
+.foundation-focus {
+  background: #f7faf8;
+}
+
+.focus-grid {
+  width: min(100%, 1100px);
+  margin: 2.2rem auto 0;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.focus-card {
+  padding: 1.6rem;
+
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 22px;
+
+  text-align: center;
+
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.focus-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.09);
+}
+
+
+/* =========================
+   SCRIPTURE SECTION
+========================= */
+
+.foundation-scripture {
+  padding: 3rem 1rem;
+
+  background: #f3efe8;
+
+  text-align: center;
+}
+
+.foundation-scripture-inner {
+  width: min(100%, 820px);
+  margin: 0 auto;
+}
+
+.foundation-verse {
+  margin-bottom: 0.6rem;
+
+  color: #25312d;
+  font-size: clamp(1.2rem, 2.6vw, 1.8rem);
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.foundation-ref {
+  display: inline-block;
+
+  color: #1b6b57;
+  font-weight: 800;
+}
+
+
+/* =========================
+   VISUAL GOSPEL
+========================= */
+
+.foundation-visual {
+  background: #eef5f2;
+}
+
+.visual-gospel-grid {
+  width: min(100%, 1000px);
+  margin: 2rem auto 0;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.2rem;
+}
+
+.visual-card {
+  padding: 1.6rem;
+
+  background: #ffffff;
+  border-radius: 18px;
+
+  text-align: center;
+
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+.visual-card h3 {
+  margin-bottom: 0.5rem;
+  color: #1b6b57;
+}
+
+.visual-card p {
+  margin-bottom: 0;
+  color: #4b5563;
+  line-height: 1.7;
+}
+
+
+/* =========================
+   FOUNDATION PATH
+========================= */
+
+.foundation-path {
+  background: #f7faf8;
+}
+
+.path-steps-grid {
+  width: min(100%, 1100px);
+  margin: 2rem auto 1.5rem;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.path-step {
+  padding: 1.5rem;
+
+  background: #ffffff;
+  border-radius: 18px;
+
+  text-align: center;
+
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.07);
+}
+
+.path-step h3 {
+  color: #1b6b57;
+}
+
+.path-step p {
+  color: #4b5563;
+  line-height: 1.7;
+}
+
+.path-note {
+  margin-top: 1rem;
+  font-weight: 700;
+}
+
+
+/* =========================
+   VOICES
+========================= */
+
+.foundation-voices {
+  background: #f3efe8;
+}
+
+.voices-grid {
+  width: min(100%, 900px);
+  margin: 2rem auto 0;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.2rem;
+}
+
+.voice-card {
+  padding: 1.7rem;
+
+  background: #ffffff;
+  border-radius: 20px;
+
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.voice-card p {
+  margin-bottom: 0;
+  font-style: italic;
+  line-height: 1.7;
+}
+
+.voice-card span {
+  display: block;
+  margin-top: 1rem;
+
+  color: #1b6b57;
+  font-weight: 800;
+}
+
+
+/* =========================
+   MESSAGE BANNER
+========================= */
+
+.foundation-message-banner {
+  position: relative;
+
+  min-height: 340px;
+  padding: 4rem 1.5rem;
+
+  display: grid;
+  place-items: center;
+
+  background-size: cover;
+  background-position: center;
+
+  color: #ffffff;
+  text-align: center;
+}
+
+.foundation-message-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.52);
+}
+
+.foundation-message-inner {
+  position: relative;
+  z-index: 2;
+
+  width: min(100%, 850px);
+}
+
+.foundation-message-verse {
+  margin-bottom: 0.75rem;
+
+  color: #ffffff;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.foundation-message-ref {
+  margin-bottom: 1rem;
+
+  color: #f1c84a;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.foundation-message-sub {
+  max-width: 620px;
+  margin: 0 auto;
+
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+
+/* =========================
+   WHY FOUNDATION
+========================= */
+
+.foundation-why {
+  background: #f7faf8;
+  text-align: center;
+}
+
+.foundation-why .mini-label {
+  margin-bottom: 0.5rem;
+}
+
+.foundation-why p {
+  max-width: 760px;
+  margin: 0 auto 1rem;
+
+  color: #444444;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+
+/* =========================
+   NEXT STEP
+========================= */
+
+.foundation-next {
+  padding: 3.5rem 1rem 4rem;
+
+  background: #f7f5f1;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+
+  text-align: center;
+}
+
+.foundation-next-inner {
+  width: min(100%, 860px);
+  margin: 0 auto;
+}
+
+.foundation-next h2 {
+  color: #1b6b57;
+}
+
+.foundation-next-text {
+  margin-bottom: 1rem;
+
+  color: #444444;
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+.foundation-next-caption {
+  margin-top: 0.8rem;
+
+  color: #666666;
+  font-size: 0.95rem;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .foundation-grid.two-col {
+    grid-template-columns: 1fr;
+  }
+
+  .focus-grid,
+  .visual-gospel-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .path-steps-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .foundation-hero {
+    min-height: 520px;
+    padding: 2.5rem 1rem;
+  }
+
+  .foundation-mission,
+  .foundation-focus,
+  .foundation-genesis,
+  .foundation-visual,
+  .foundation-path,
+  .foundation-community,
+  .foundation-why,
+  .foundation-voices {
+    padding: 3rem 1rem;
+  }
+
+  .focus-grid,
+  .visual-gospel-grid,
+  .path-steps-grid,
+  .voices-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .foundation-message-banner {
+    min-height: 400px;
+    padding: 3rem 1rem;
+  }
+}

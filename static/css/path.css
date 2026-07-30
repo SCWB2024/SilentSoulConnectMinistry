@@ -1,0 +1,776 @@
+/* =========================================================
+   PATH.CSS — SILENT SOULCONNECT MINISTRY
+   Covers:
+   - PATH page
+   - Anchor page
+   - Anchor learning dialog
+   ========================================================= */
+
+
+/* =========================
+   PAGE BASE
+========================= */
+
+body.path-page,
+body.anchor-page {
+  background: #eef6f8;
+  color: #1f2937;
+}
+
+
+/* =========================
+   SHARED PATH ELEMENTS
+========================= */
+
+.path-link-text {
+  display: inline-block;
+  margin-top: 0.8rem;
+
+  color: #0a8b62;
+  font-weight: 800;
+}
+
+.path-subtitle {
+  display: block;
+  margin: 0.35rem 0 0.9rem;
+
+  color: #5b6470;
+  font-size: 0.95rem;
+  font-style: italic;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.verse {
+  color: #374151;
+  font-size: 0.92rem;
+  font-style: italic;
+  line-height: 1.65;
+}
+
+
+/* =========================
+   PATH HERO
+========================= */
+
+.path-hero {
+  position: relative;
+
+  min-height: 360px;
+  padding: 4rem 1.5rem;
+
+  display: grid;
+  place-items: center;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  color: #ffffff;
+  text-align: center;
+
+  overflow: hidden;
+}
+
+.path-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      rgba(10, 24, 22, 0.48),
+      rgba(10, 24, 22, 0.58)
+    );
+}
+
+.path-hero-inner {
+  position: relative;
+  z-index: 2;
+
+  width: min(100%, 850px);
+  margin: 0 auto;
+}
+
+.path-hero h1 {
+  margin: 0 0 0.75rem;
+
+  color: #ffffff;
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  line-height: 1.08;
+
+  text-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
+}
+
+.path-hero .path-subtitle {
+  max-width: 680px;
+  margin: 0 auto;
+
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.08rem;
+  font-style: normal;
+  line-height: 1.7;
+}
+
+.hero-verse {
+  margin-top: 1.2rem;
+}
+
+.hero-verse p {
+  max-width: 620px;
+  margin: 0 auto 0.35rem;
+
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 1.08rem;
+  font-style: italic;
+  line-height: 1.7;
+}
+
+.hero-verse span {
+  display: block;
+
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+
+/* =========================
+   PATH INTRODUCTION
+========================= */
+
+.path-intro {
+  padding: 3.5rem 1.5rem;
+
+  background: #eef6f8;
+}
+
+.path-intro h2 {
+  margin-bottom: 0.8rem;
+  color: #184f45;
+}
+
+.path-intro > p {
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+
+  color: #374151;
+  line-height: 1.75;
+}
+
+.path-meaning {
+  margin-top: 1rem;
+
+  font-weight: 850;
+}
+
+.path-letter-word {
+  display: inline-block;
+  margin: 0 0.35rem;
+}
+
+.path-letter-word.p {
+  color: #1f5ea8;
+}
+
+.path-letter-word.a {
+  color: #009b63;
+}
+
+.path-letter-word.t {
+  color: #d48a00;
+}
+
+.path-letter-word.h {
+  color: #7a4ee8;
+}
+
+.path-caption {
+  margin-top: 1rem;
+
+  color: #5b6470;
+  font-size: 0.96rem;
+}
+
+/* =========================
+   PATH CARDS
+========================= */
+
+.path-steps {
+  padding: 4rem 1.25rem;
+  background: #f4f1eb;
+}
+
+.path-grid {
+  width: min(100%, 1180px);
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.path-card {
+  min-height: 380px;
+  padding: 1.5rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-top-width: 4px;
+  border-radius: 22px;
+
+  color: #1f2937;
+  text-align: center;
+
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* PAUSE — BLUE */
+
+.path-card.pause,
+.path-card.pause-card {
+  border-top-color: #3b82f6;
+
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.06),
+    0 0 18px rgba(59, 130, 246, 0.16);
+}
+
+/* ANCHOR — GREEN */
+
+.path-card.anchor,
+.path-card.anchor-card {
+  border-top-color: #138a72;
+
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.06),
+    0 0 18px rgba(19, 138, 114, 0.16);
+}
+
+/* TRUST — GOLD */
+
+.path-card.trust,
+.path-card.trust-card {
+  border-top-color: #e5a800;
+
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.06),
+    0 0 18px rgba(229, 168, 0, 0.16);
+}
+
+/* HOPE — PURPLE */
+
+.path-card.hope,
+.path-card.hope-card {
+  border-top-color: #8b5cf6;
+
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.06),
+    0 0 18px rgba(139, 92, 246, 0.16);
+}
+
+.path-card:hover,
+.path-card:focus-visible {
+  transform: translateY(-6px);
+
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.10),
+    0 0 22px rgba(0, 0, 0, 0.08);
+}
+
+.path-card h3 {
+  margin: 0 0 0.25rem;
+  color: #111827;
+}
+
+.path-card p {
+  line-height: 1.7;
+}
+
+.path-ico {
+  display: grid;
+  place-items: center;
+
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1rem;
+
+  background: #eef6f3;
+  border-radius: 18px;
+
+  font-size: 2rem;
+}
+
+/* =========================
+   PATH GUIDANCE
+========================= */
+
+.path-guidance {
+  padding: 2rem 1rem;
+
+  background: #ffffff;
+
+  color: #555555;
+  font-style: italic;
+  text-align: center;
+}
+
+
+/* =========================
+   PATH COMMUNITY BANNER
+========================= */
+
+.path-community-banner {
+  position: relative;
+
+  min-height: 320px;
+  padding: 4rem 1.5rem;
+
+  display: grid;
+  place-items: center;
+
+  background-size: cover;
+  background-position: center;
+
+  color: #ffffff;
+  text-align: center;
+
+  overflow: hidden;
+}
+
+.path-community-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.48);
+}
+
+.path-community-inner {
+  position: relative;
+  z-index: 2;
+
+  width: min(100%, 850px);
+}
+
+.path-community-inner h2 {
+  margin-bottom: 0.8rem;
+
+  color: #ffffff;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.path-community-text {
+  max-width: 700px;
+  margin: 1rem auto 2rem;
+
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+
+/* =========================
+   ANCHOR HERO
+========================= */
+
+.anchor-page .foundation-hero.anchor-hero {
+  position: relative;
+
+  min-height: 460px;
+  padding: 4rem 1.25rem;
+
+  display: grid;
+  place-items: center;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  color: #ffffff;
+  text-align: center;
+
+  overflow: hidden;
+}
+
+.anchor-page .foundation-hero.anchor-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8, 29, 38, 0.38) 0%,
+      rgba(8, 38, 35, 0.58) 48%,
+      rgba(4, 24, 27, 0.82) 100%
+    );
+}
+
+.anchor-page .foundation-hero-inner {
+  position: relative;
+  z-index: 2;
+
+  width: min(100%, 820px);
+  padding: 1.75rem;
+
+  background: rgba(6, 35, 33, 0.48);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 22px;
+
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.anchor-page .foundation-hero h1 {
+  margin: 0 0 0.85rem;
+
+  color: #ffffff;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 1.08;
+
+  text-shadow: 0 3px 14px rgba(0, 0, 0, 0.42);
+}
+
+.anchor-page .foundation-hero-text {
+  max-width: 650px;
+  margin: 0 auto;
+
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 1.12rem;
+  line-height: 1.75;
+}
+
+.anchor-page .foundation-hero .mini-label {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+
+  color: #f2d36f;
+  font-size: 0.82rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* =========================
+   ANCHOR INTRODUCTION
+========================= */
+
+.anchor-page .foundation-mission {
+  padding: 4rem 1.25rem;
+
+  background: #ffffff;
+}
+
+.anchor-page .foundation-narrow {
+  width: min(100%, 760px);
+  margin: 0 auto;
+}
+
+.anchor-page .foundation-mission h2 {
+  color: #184f45;
+}
+
+.anchor-page .foundation-mission p {
+  line-height: 1.75;
+}
+
+.anchor-page .hero-verse {
+  margin-top: 1.4rem;
+}
+
+.anchor-page .hero-verse p,
+.anchor-page .hero-verse span {
+  color: #173f39;
+}
+
+/* STEP 2 — FOLLOW / DAILY DEVOTION */
+
+.anchor-step.follow-step {
+  border-top: 5px solid #3b82f6;
+
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.07),
+    0 0 20px rgba(59, 130, 246, 0.18);
+}
+
+.anchor-step.follow-step .path-ico,
+.anchor-step.follow-step .anchor-step-icon {
+  background: #eaf3ff;
+}
+
+
+/* STEP 3 — LEARN
+   Coral is separate from the PATH palette.
+*/
+
+.anchor-step.learn-step {
+  border-top: 5px solid #e46f51;
+
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.07),
+    0 0 20px rgba(228, 111, 81, 0.18);
+}
+
+.anchor-step.learn-step .path-ico,
+.anchor-step.learn-step .anchor-step-icon {
+  background: #fff0eb;
+}
+
+/* =========================
+   ANCHOR JOURNEY
+========================= */
+
+.anchor-journey {
+  padding: 4rem 1.25rem;
+
+  background: #f7faf8;
+}
+
+.anchor-steps-grid {
+  width: min(100%, 1100px);
+  margin: 2rem auto 0;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.2rem;
+}
+
+.anchor-step {
+  min-height: 330px;
+  padding: 1.5rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+
+  text-align: center;
+
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.07);
+}
+
+.anchor-step h3 {
+  margin-bottom: 0.25rem;
+  color: #184f45;
+}
+
+.anchor-step p {
+  color: #4b5563;
+  line-height: 1.7;
+}
+
+.future-step {
+  background: #f9fbfa;
+  opacity: 0.92;
+}
+
+.anchor-status {
+  display: inline-block;
+  margin-top: auto;
+  padding: 0.45rem 0.75rem;
+
+  background: #eef4f1;
+  border-radius: 999px;
+
+  color: #66736d;
+  font-size: 0.84rem;
+  font-weight: 750;
+}
+
+
+/* =========================
+   ANCHOR DIALOG
+========================= */
+
+.anchor-dialog {
+  position: fixed;
+  inset: 50% auto auto 50%;
+
+  width: min(680px, calc(100% - 2rem));
+  margin: 0;
+  padding: 0;
+
+  transform: translate(-50%, -50%);
+
+  background: #ffffff;
+  border: 0;
+  border-radius: 22px;
+
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+}
+
+.anchor-dialog::backdrop {
+  background: rgba(8, 24, 28, 0.72);
+
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.anchor-dialog-inner {
+  position: relative;
+
+  padding: 2.25rem;
+
+  text-align: center;
+}
+
+.dialog-close {
+  position: absolute;
+  top: 0.85rem;
+  right: 1rem;
+
+  width: 42px;
+  height: 42px;
+
+  display: grid;
+  place-items: center;
+
+  background: #eef4f3;
+  border: 0;
+  border-radius: 50%;
+
+  color: #153c37;
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.learn-choice-grid {
+  margin-top: 1.5rem;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.learn-choice-card {
+  padding: 1.5rem;
+
+  display: block;
+
+  background: #f8fbfa;
+  border: 1px solid #dce8e5;
+  border-radius: 18px;
+
+  color: inherit;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.learn-choice-card:hover,
+.learn-choice-card:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(16, 72, 62, 0.14);
+}
+
+.learn-choice-icon {
+  display: block;
+  margin-bottom: 0.5rem;
+
+  font-size: 2rem;
+}
+
+.learn-choice-card h3 {
+  margin: 0.4rem 0;
+  color: #184f45;
+}
+
+.learn-choice-card p {
+  color: #5b6470;
+  line-height: 1.65;
+}
+
+
+/* =========================
+   ANCHOR NEXT STEP
+========================= */
+
+.anchor-next {
+  padding: 3.5rem 1rem 4rem;
+
+  background: #f7f5f1;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+  text-align: center;
+}
+
+.anchor-next .foundation-next-inner {
+  width: min(100%, 860px);
+  margin: 0 auto;
+}
+
+.anchor-next h2 {
+  color: #184f45;
+}
+
+.anchor-next .foundation-next-text {
+  margin-bottom: 1rem;
+
+  color: #444444;
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+.anchor-next .foundation-next-caption {
+  margin-top: 0.8rem;
+
+  color: #666666;
+  font-size: 0.95rem;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 980px) {
+  .path-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .anchor-steps-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .path-hero {
+    min-height: 460px;
+    padding: 3rem 1rem;
+  }
+
+  .path-grid,
+  .anchor-steps-grid,
+  .learn-choice-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .path-card,
+  .anchor-step {
+    min-height: auto;
+  }
+
+  .path-letter-word {
+    display: block;
+    margin: 0.35rem 0;
+  }
+
+  .anchor-dialog-inner {
+    padding: 2rem 1.25rem 1.5rem;
+  }
+}

@@ -1,0 +1,179 @@
+{
+  "series": {
+    "id": "gods_will",
+    "title": "Knowing God's Will",
+    "subtitle": "Learning to walk with confidence and trust",
+    "description": "A four-lesson Bible study that helps believers understand how God leads His people through Scripture, prayer, wisdom, and daily obedience.",
+    "hero_image": "img/christian/cl_hero.jpg",
+    "category": "Faith Foundations",
+    "estimated_time": "4 Lessons",
+    "level": "Foundations",
+    "related_blog": "/blog/faith-foundation/can-we-really-know-gods-will"
+  },
+
+  "introduction": {
+    "title": "God Still Leads His People",
+
+    "summary": "Every believer faces important decisions. Many ask, 'How can I know God's will?' This study explores how God faithfully guides His children through His Word, prayer, wise counsel, and the Holy Spirit.",
+
+    "content": [
+      "God is not trying to hide His will from those who sincerely seek Him.",
+      "His guidance is rooted in relationship, not confusion.",
+      "The Christian life is a daily walk of trust rather than a search for secret signs.",
+      "As you study these lessons, allow God to shape both your understanding and your heart."
+    ],
+
+    "reflection": "Am I truly seeking God's direction, or simply asking Him to bless my own plans?",
+
+    "prayer": "Father, teach me to recognize Your voice above every other voice. Give me a willing heart to follow wherever You lead. In Jesus' name, Amen.",
+
+    "next": "lesson-1"
+  },
+
+  "lessons": [
+
+    {
+      "id": "lesson-1",
+
+      "title": "God Speaks Through His Word",
+
+      "scriptures": [
+        "Psalm 119:105",
+        "2 Timothy 3:16-17",
+        "Joshua 1:8"
+      ],
+
+      "core_truth": "The Bible is God's primary guide for every believer.",
+
+      "questions": [
+        {
+          "question": "How does God guide us today?",
+          "answer": "Through His Word.",
+          "meaning": "Scripture reveals God's character, wisdom, and principles for life."
+        },
+        {
+          "question": "Why should I study the Bible regularly?",
+          "answer": "Because God's truth shapes our decisions.",
+          "meaning": "A heart filled with Scripture learns to recognize God's direction."
+        }
+      ],
+
+      "pastoral_care": "Many people wait for extraordinary signs while neglecting the ordinary guidance already found in God's Word. Every time you open the Bible, God is inviting you to know Him more deeply.",
+
+      "reflection": "Am I allowing God's Word to shape my daily decisions?",
+
+      "prayer": "Lord, give me a hunger for Your Word. Help me listen, understand, and obey what You reveal. Amen.",
+
+      "next": "lesson-2"
+    },
+
+    {
+      "id": "lesson-2",
+
+      "title": "Prayer, Wisdom, and Discernment",
+
+      "scriptures": [
+        "James 1:5",
+        "Philippians 4:6-7",
+        "Proverbs 15:22"
+      ],
+
+      "core_truth": "God gives wisdom generously to those who sincerely seek Him.",
+
+      "questions": [
+        {
+          "question": "Should every decision be prayed about?",
+          "answer": "Yes.",
+          "meaning": "Prayer keeps our hearts connected to God's wisdom."
+        },
+        {
+          "question": "Does God use wise counsel?",
+          "answer": "Yes.",
+          "meaning": "He often guides through mature, godly believers."
+        }
+      ],
+
+      "pastoral_care": "Seeking advice is not a sign of weak faith. God often uses trusted believers to encourage, correct, and strengthen us as we seek His direction.",
+
+      "reflection": "Who helps me grow in wisdom and keeps me accountable to God's truth?",
+
+      "prayer": "Father, give me wisdom beyond my own understanding. Surround me with people who will point me toward You. Amen.",
+
+      "next": "lesson-3"
+    },
+
+    {
+      "id": "lesson-3",
+
+      "title": "Waiting When God Seems Silent",
+
+      "scriptures": [
+        "Isaiah 40:31",
+        "Psalm 27:14",
+        "Habakkuk 2:3"
+      ],
+
+      "core_truth": "Waiting is often part of God's guidance, not evidence of His absence.",
+
+      "questions": [
+        {
+          "question": "Why does God sometimes seem silent?",
+          "answer": "He may be preparing us before revealing the next step.",
+          "meaning": "Waiting builds trust and dependence upon Him."
+        }
+      ],
+
+      "pastoral_care": "Silence does not mean God has abandoned you. Sometimes He is growing your faith while preparing what comes next. His timing is always purposeful.",
+
+      "reflection": "Can I trust God even when I cannot yet see the next step?",
+
+      "prayer": "Lord, teach me patience. Help me trust Your timing and remain faithful while I wait. Amen.",
+
+      "next": "lesson-4"
+    },
+
+    {
+      "id": "lesson-4",
+
+      "title": "Walking by Faith Every Day",
+
+      "scriptures": [
+        "Proverbs 3:5-6",
+        "2 Corinthians 5:7",
+        "Micah 6:8"
+      ],
+
+      "core_truth": "Knowing God's will is not about finding one perfect moment—it is about faithfully walking with Him every day.",
+
+      "questions": [
+        {
+          "question": "What does walking by faith mean?",
+          "answer": "Choosing to trust and obey God even when we cannot see the whole path.",
+          "meaning": "Faith grows through daily dependence upon Christ."
+        }
+      ],
+
+      "pastoral_care": "God rarely reveals the entire journey at once. Like a lamp lighting only the next few steps, He invites us to trust Him one day at a time. Faith grows as we continue walking with Him.",
+
+      "reflection": "What next step is God asking me to take in faith today?",
+
+      "prayer": "Father, help me trust You with my future. Give me courage to obey, confidence in Your promises, and peace as I walk with You every day. In Jesus' name, Amen.",
+
+      "next": null
+    }
+
+  ],
+
+  "course_summary": {
+    "title": "Walking Confidently with God",
+
+    "points": [
+      "God speaks through His Word.",
+      "God gives wisdom through prayer and godly counsel.",
+      "Waiting is often part of God's guidance.",
+      "Faith grows one step of obedience at a time."
+    ],
+
+    "closing_thought": "God's will is not a hidden mystery designed to frustrate you. It is a daily relationship that grows as you trust, obey, and walk faithfully with Him."
+  }
+}

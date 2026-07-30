@@ -2,12 +2,12 @@
 
 from flask import Flask, render_template, redirect, request, url_for, jsonify, abort
 from flask_wtf import CSRFProtect
-from pathlib import Path
+from werkzeug.utils import secure_filename
 import json
 import random
 import os
 from urllib.parse import quote
-from soulstart.services.build_whatsapp_message import build_whatsapp_message
+from old_backup.build_whatsapp_message import build_whatsapp_message
 from datetime import datetime, date, timedelta
 from pathlib import Path
 
@@ -15,19 +15,50 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "your-secret-key"
 csrf = CSRFProtect(app)
 
-PRAYER_FILE = Path("data/prayer_requests.json")
+BASE_DIR = Path(__file__).resolve().parent
+
+PRAYER_FILE = BASE_DIR / "data" / "prayer_requests.json"
+
+DEVOTION_FILE = (
+    BASE_DIR
+    / "data"
+    / "devotions"
+    / "devotions_2026.json"
+)
+
+STUDY_DIR = BASE_DIR / "data" / "study"
+
+BLOG_DATA_PATH = (
+    BASE_DIR
+    / "data"
+    / "blog"
+    / "blog_backup.json"
+)
+
+BLOG_POSTS_JSON = (
+    BASE_DIR
+    / "data"
+    / "blog"
+    / "soul_speaks_2026.json"
+)
+
+FAITH_FOUNDATIONS_FILE = (
+    BASE_DIR
+    / "data"
+    / "faith_foundations"
+    / "faith_foundations_2026.json"
+)
+
+UPLOAD_FOLDER = (
+    BASE_DIR
+    / "static"
+    / "uploads"
+    / "blog_images"
+)
 
 DEFAULT_MODE = "morning"
 HERO_DAY_BG = "img/home/hero-day.jpg"
 HERO_NIGHT_BG = "img/home/hero-night.jpg"
-
-BASE_DIR = Path(__file__).resolve().parent
-DEVOTION_FILE = BASE_DIR / "devotions" / "devotions_2026.json"
-
-BLOG_DATA_PATH = BASE_DIR / "data" / "blog_backup.json"
-UPLOAD_FOLDER = BASE_DIR / "static" / "uploads" / "blog_images"
-BLOG_POSTS_JSON = BASE_DIR / "data" / "blog" / "soul_speaks_2026.json"
-
 
 CATEGORY_MAP = {
     "Soul Speaks": "soul_speaks",
@@ -140,15 +171,37 @@ SOCIAL_LINKS = {
     "email": f"mailto:{ADMIN_EMAIL}",
 }
 
+SUPPORT_LINES = [
+    "You do not have to walk alone.",
+    "A simple gift can bring quiet strength to a searching heart.",
+    "Together, we can make faith more accessible.",
+    "Your support helps another heart find hope.",
+    "Your generosity helps the message continue.",
+]
+
 def normalize_date_str(value: str) -> str:
     return value.strip()
 
 
 def load_all_devotions():
+    """Load the devotion JSON file safely."""
     if not DEVOTION_FILE.exists():
+        app.logger.warning("Devotion file not found: %s", DEVOTION_FILE)
         return []
-    with DEVOTION_FILE.open("r", encoding="utf-8") as f:
-        return json.load(f)
+
+    try:
+        with DEVOTION_FILE.open("r", encoding="utf-8") as f:
+            records = json.load(f)
+
+        return records if isinstance(records, list) else []
+
+    except json.JSONDecodeError as error:
+        app.logger.error("Devotion JSON error: %s", error)
+        return []
+
+    except OSError as error:
+        app.logger.error("Could not open devotion file: %s", error)
+        return []
 
 
 def load_devotion_for(target_date, mode):
@@ -158,89 +211,115 @@ def load_devotion_for(target_date, mode):
     for item in records:
         if item.get("date") == date_str:
             section = item.get(mode, {}) or {}
+
             return {
+                "date": item.get("date", ""),
                 "theme": item.get("theme", ""),
+
+                # Image can be stored in the morning/night section
+                # or at the main devotion level.
+                "image": (
+                    section.get("image")
+                    or section.get("background")
+                    or item.get("image")
+                    or item.get("background")
+                    or ""
+                ),
+
                 "verse_ref": section.get("verse_ref", ""),
                 "verse_text": section.get("verse_text", ""),
                 "verse_meaning": section.get("verse_meaning", ""),
                 "body": section.get("body", ""),
                 "prayer": section.get("prayer", ""),
             }
+
     return {}
 
-def ensure_devotion_image(target_date, mode="morning"):
-    year_str = target_date.strftime("%Y")
-    month_str = target_date.strftime("%B")
-    day_str = target_date.strftime("%d")
+def ensure_devotion_image(target_date):
+        """
+        Return one generated hero image for the devotion date.
 
-    image_rel = f"img/devotion/{year_str}/{month_str}/{day_str}.jpg"
-    image_full = Path(app.static_folder) / "img" / "devotion" / year_str / month_str / f"{day_str}.jpg"
+        Morning and night use the same image.
+        The night appearance is created with CSS.
+        """
 
-    print(f"[CHECK] Looking for: {image_full}")
+        date_str = target_date.strftime("%Y-%m-%d")
+        year = target_date.strftime("%Y")
 
-    if image_full.exists():
-        print("[FOUND] Daily devotion image exists")
-        return image_rel
+        image_rel = (
+                Path("img")
+                / "devotion"
+                / "hero"
+                / year
+                / f"{date_str}.jpg"
+        )
 
-    print("[MISSING] Using fallback devotion image")
+        image_full = Path(app.static_folder) / image_rel
 
-    # fallback image already in your background library
-    return "img/backgrounds/sunrise/1.jpg"
+        if image_full.exists():
+            return image_rel.as_posix()
 
-def get_devotion_image(devotion):
-    # devotion["date"] = "2026-07-15"
-    date_str = devotion.get("date", "")
-    year = date_str[:4]
-    month_num = date_str[5:7]
-    day = date_str[8:10]
+        try:
+            from services.generate_devotion_image import generate_devotion_image
 
-    month_names = {
-        "01": "January", "02": "February", "03": "March",
-        "04": "April", "05": "May", "06": "June",
-        "07": "July", "08": "August", "09": "September",
-        "10": "October", "11": "November", "12": "December"
-    }
+            generated_path = generate_devotion_image(date_str)
 
-    month_folder = month_names.get(month_num)
+            if generated_path and Path(generated_path).exists():
+                return image_rel.as_posix()
 
-    if not year or not month_folder or not day:
+        except Exception as error:
+            app.logger.exception(
+                "Could not generate devotion hero for %s: %s",
+                date_str,
+                error,
+            )
+
+        fallback = Path(app.static_folder) / HERO_DAY_BG
+
+        if fallback.exists():
+            return HERO_DAY_BG
+
         return None
 
-    return f"img/devotion/{year}/{month_folder}/{day}.jpg"
+def base_ctx(**extra):
+    """Shared context for public templates."""
+    ctx = {
+        "active": "",
+        "join_url": SITE_JOIN_URL,
+        "today": date.today(),
+        "page_bg_class": "",
+        "page_bg_url": "",
+    }
+    ctx.update(extra)
+    return ctx
+
 
 def common_page_ctx(active=""):
-    return {
-        "active": active,
-        "join_url": "#",
-    }
+    """Backward-compatible page context helper."""
+    return base_ctx(active=active)
 
-def load_soulspeaks_2026():
-    path = Path("data/blog/soulspeaks_2026.json")
-    if not path.exists():
-        return []
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
-
-def get_next_ss_number():
+## def get_next_ss_number():
     old_posts = load_blog_posts()
-    new_posts = load_soulspeaks_2026()
+    new_posts = load_soul_speaks()
 
     all_posts = old_posts + new_posts
 
     numbers = []
-    for p in all_posts:
-        num = p.get("blog_number", "")
-        if num.startswith("SS"):
+
+    for post in all_posts:
+        number = post.get("blog_number", "")
+
+        if number.startswith("SS"):
             try:
-                numbers.append(int(num.replace("SS", "")))
-            except:
+                numbers.append(int(number.replace("SS", "")))
+            except ValueError:
                 pass
 
     if not numbers:
         return "SS007"
 
-    next_num = max(numbers) + 1
-    return f"SS{str(next_num).zfill(3)}"
+    next_number = max(numbers) + 1
+    return f"SS{next_number:03d}"
 
 
 def load_blog_posts():
@@ -331,36 +410,6 @@ def format_content_to_html(text: str) -> str:
     return "\n".join(clean_paragraphs)
 
 
-def admin_whatsapp_send():
-
-    result = {}
-    selected_date = date.today().isoformat()
-    selected_mode = "morning"
-    selected_topic = ""
-    prayer_topics = []
-
-    if request.method == "POST":
-        selected_date = request.form.get("date", selected_date)
-        selected_mode = request.form.get("mode", "morning")
-        selected_topic = request.form.get("topic", "")
-
-        result = {
-            "text": f"🌅 SoulStart Preview — {selected_date} ({selected_mode})",
-            "share_wa": "https://web.whatsapp.com/",
-            "share_web": "/devotion",
-            "share_api": "#"
-        }
-
-    return render_template(
-        "admin/admin_whatsapp.html",
-        today=date.today(),
-        selected_date=selected_date,
-        selected_mode=selected_mode,
-        selected_topic=selected_topic,
-        prayer_topics=prayer_topics,
-        result=result
-    )
-
 @app.context_processor
 def inject_global_vars():
     return {
@@ -373,6 +422,7 @@ def inject_global_vars():
         "FACEBOOK_URL": FACEBOOK_URL,
         "LINKEDIN_URL": LINKEDIN_URL,
         "SOCIAL_LINKS": SOCIAL_LINKS,
+        "current_year": date.today().year,
     }
 
 # =========================
@@ -388,6 +438,10 @@ def home():
 def about():
     return render_template("pages/about.html", active="about")
 
+@app.route("/anchor")
+def anchor():
+    return render_template("pages/anchor.html", active="anchor")
+
 
 @app.route("/foundation")
 def foundation():
@@ -398,57 +452,37 @@ def foundation():
 def path():
     return render_template("path/path.html", active="path")
 
-@app.route("/devotion")
-def devotion():
-    return render_template("devotion/devotion.html")
-
-@app.route("/devotion/q3-welcome")
-def q3_welcome():
-    return render_template("devotion/q3_welcome.html")
-
-
 # =========================
-# DEVOTION ROUTE
+# DEVOTION ROUTES
 # =========================
+
 @app.route("/today", endpoint="today")
 def today_view():
+    """Display today's devotion or the single permitted previous day."""
     mode_arg = (request.args.get("mode") or "").strip().lower()
-    mode = mode_arg if mode_arg in ("morning", "night") else DEFAULT_MODE
+    mode = mode_arg if mode_arg in {"morning", "night"} else DEFAULT_MODE
 
-    raw_date = (request.args.get("date") or "").strip()
-    norm = normalize_date_str(raw_date) if raw_date else None
-
-    try:
-        target_date = datetime.strptime(norm, "%Y-%m-%d").date() if norm else date.today()
-    except Exception:
-        target_date = date.today()
-
-    WELCOME_DATES = {
-        date(2026, 7, 1): "devotion/q3_welcome.html",
-        date(2026, 10, 1): "devotion/q4_welcome.html",
+    actual_today = date.today()
+    allowed_dates = {
+        actual_today,
+        actual_today - timedelta(days=1),
     }
 
-    welcome_template = WELCOME_DATES.get(target_date)
+    raw_date = (request.args.get("date") or "").strip()
+    target_date = actual_today
 
-    show_welcome = (
-        welcome_template
-        and not request.args.get("begin")
-        and not mode_arg
-    )
+    if raw_date:
+        try:
+            requested_date = datetime.strptime(
+                normalize_date_str(raw_date),
+                "%Y-%m-%d",
+            ).date()
 
-    if show_welcome:
-        ctx = common_page_ctx(active="today")
-        ctx.update({
-            "today": target_date,
-            "mode": mode,
-            "begin_url": url_for(
-                "today",
-                date=target_date.isoformat(),
-                mode=mode,
-                begin=1
-            ),
-        })
-        return render_template(welcome_template, **ctx)
+            if requested_date in allowed_dates:
+                target_date = requested_date
+
+        except ValueError:
+            target_date = actual_today
 
     entry = load_devotion_for(target_date, mode)
     preview_text = build_whatsapp_message(target_date.isoformat(), mode)
@@ -456,24 +490,85 @@ def today_view():
     hero_bg = HERO_NIGHT_BG if mode == "night" else HERO_DAY_BG
     hero_class = "hero night-tone" if mode == "night" else "hero"
 
-    devotion_image = ensure_devotion_image(target_date, mode)
+    devotion_image = ensure_devotion_image(target_date)
 
-    ctx = common_page_ctx(active="today")
-    ctx.update({
-        "hero_bg": hero_bg,
-        "hero_class": hero_class,
-        "today": target_date,
-        "entry": entry,
-        "mode": mode,
-        "whatsapp_preview": preview_text,
-        "devotion_image": devotion_image,
-    })
+    ctx = base_ctx(
+        active="today",
+        entry=entry,
+        mode=mode,
+        target_date=target_date,
+        today=target_date,
+        devotion_image=devotion_image,
+        hero_bg=hero_bg,
+        hero_class=hero_class,
+        preview_text=preview_text,
+        whatsapp_preview=preview_text,
+        is_today=(target_date == actual_today),
+    )
 
-    yday_date = target_date - timedelta(days=1)
-    ctx["yday_url"] = url_for("today", date=yday_date.isoformat(), mode=mode)
-    ctx["yday_label"] = "← Yesterday’s devotion"
+    if target_date == actual_today:
+        yesterday = actual_today - timedelta(days=1)
+        ctx["yday_url"] = url_for(
+            "today",
+            date=yesterday.isoformat(),
+            mode=mode,
+        )
+        ctx["yday_label"] = "← Yesterday’s devotion"
+    else:
+        ctx["yday_url"] = None
+        ctx["yday_label"] = ""
+        ctx["today_url"] = url_for("today", mode=mode)
 
     return render_template("devotion/devotion.html", **ctx)
+
+
+@app.route("/devotion", endpoint="devotion")
+def devotion_welcome():
+    ctx = common_page_ctx(active="devotion")
+    ctx.update({
+        "begin_url": url_for("today")
+    })
+    return render_template("devotion/q3_welcome.html", **ctx)
+
+
+@app.route("/devotion/q3-welcome", endpoint="q3_welcome")
+def q3_welcome():
+    ctx = common_page_ctx(active="devotion")
+    ctx.update({
+        "begin_url": url_for("today")
+    })
+    return render_template("devotion/q3_welcome.html", **ctx)
+
+# =========================
+# STUDY JSON LOADER
+# =========================
+
+def load_study_series(series_slug):
+    study_file = (STUDY_DIR / f"{series_slug}.json").resolve()
+
+    print("=" * 60)
+    print("Slug      :", repr(series_slug))
+    print("File      :", repr(study_file))
+    print("Exists    :", study_file.exists())
+
+    if not study_file.exists():
+        print("Study JSON not found:", study_file)
+        return None
+
+    try:
+        with study_file.open("r", encoding="utf-8") as f:
+            study = json.load(f)
+
+        print("Study loaded:", study_file.name)
+        return study
+
+    except json.JSONDecodeError as e:
+        print(f"JSON error in {study_file.name}: {e}")
+        return None
+
+    except OSError as e:
+        print(f"File error opening {study_file}: {e}")
+        return None
 
 # =========================
 # STUDY ROUTES
@@ -482,8 +577,10 @@ def today_view():
 
 @app.route("/study")
 def study_index():
-    return render_template("study/intro_series.html")
-
+    return render_template(
+        "study/study_index.html",
+            active="study"
+        )
 
 @app.route("/study/introduction")
 def intro_series():
@@ -506,23 +603,8 @@ def study_lesson_3():
 
 
 # =========================
-# STUDY JSON LOADERS
-# new studies going forward
+# NEW JSON STUDY ROUTES
 # =========================
-
-def load_study_series(series_slug):
-    path = os.path.join(app.root_path, "data", "study", f"{series_slug}.json")
-
-    if not os.path.exists(path):
-        return None
-
-    try:
-        with open(path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception as e:
-        print(f"Study JSON error for {series_slug}:", e)
-        return None
-
 
 @app.route("/study/<series_slug>")
 def study_series(series_slug):
@@ -531,7 +613,10 @@ def study_series(series_slug):
     if not study:
         abort(404)
 
-    return render_template("study/study_series.html", study=study)
+    return render_template(
+        "study/study_series.html",
+        study=study
+    )
 
 
 @app.route("/study/<series_slug>/<lesson_slug>")
@@ -545,7 +630,11 @@ def study_lesson_json(series_slug, lesson_slug):
         lesson = study.get("introduction")
     else:
         lesson = next(
-            (item for item in study.get("lessons", []) if item.get("id") == lesson_slug),
+            (
+                item
+                for item in study.get("lessons", [])
+                if item.get("id") == lesson_slug
+            ),
             None
         )
 
@@ -560,37 +649,52 @@ def study_lesson_json(series_slug, lesson_slug):
 
 # =========================
 # BLOG LOADERS
-# current blog JSON only
 # =========================
 
 def load_soul_speaks():
-    path = os.path.join(app.root_path, "data", "blog", "soul_speaks_2026.json")
-
-    if not os.path.exists(path):
+    if not BLOG_POSTS_JSON.exists():
+        print("Soul Speaks file not found:", BLOG_POSTS_JSON)
         return []
 
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with BLOG_POSTS_JSON.open("r", encoding="utf-8") as f:
             posts = json.load(f)
-            return posts if isinstance(posts, list) else []
-    except Exception as e:
+
+        return posts if isinstance(posts, list) else []
+
+    except json.JSONDecodeError as e:
         print("Soul Speaks JSON error:", e)
         return []
 
-def load_faith_foundations():
-    path = os.path.join(app.root_path, "data", "faith_foundations", "faith_foundations_2026.json")
+    except OSError as e:
+        print("Soul Speaks file error:", e)
+        return []
 
-    if not os.path.exists(path):
+
+def load_faith_foundations():
+    if not FAITH_FOUNDATIONS_FILE.exists():
+        print(
+            "Faith Foundations file not found:",
+            FAITH_FOUNDATIONS_FILE
+        )
         return []
 
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with FAITH_FOUNDATIONS_FILE.open(
+            "r",
+            encoding="utf-8"
+        ) as f:
             posts = json.load(f)
-            return posts if isinstance(posts, list) else []
-    except Exception as e:
+
+        return posts if isinstance(posts, list) else []
+
+    except json.JSONDecodeError as e:
         print("Faith Foundations JSON error:", e)
         return []
 
+    except OSError as e:
+        print("Faith Foundations file error:", e)
+        return []
 
 # =========================
 # BLOG ROUTES
@@ -617,7 +721,7 @@ def blog_index():
 
     posts = [
         p for p in posts
-        if (p.get("publish_date") or p.get("date", "")) <= today
+        if (p.get("publish_date") or p.get("date", "1900-01-01")) <= today
     ]
 
     if selected_category:
@@ -644,14 +748,17 @@ def blog_index():
         "blog/index.html",
         posts=posts,
         selected_category=selected_category,
-        selected_tag=selected_tag,
+        selected_tag=selected_tag
     )
 
 @app.route("/blog/<slug>")
 def blog_post(slug):
     posts = load_soul_speaks()
 
-    post = next((p for p in posts if p.get("slug") == slug), None)
+    post = next(
+        (p for p in posts if p.get("slug") == slug),
+        None
+    )
 
     if not post:
         abort(404)
@@ -659,23 +766,24 @@ def blog_post(slug):
     return render_template(
         "blog/post.html",
         post=post,
-        support_line=random.choice(SUPPORT_LINES) if "SUPPORT_LINES" in globals() else ""
+        support_line=random.choice(SUPPORT_LINES)
+        if "SUPPORT_LINES" in globals()
+        else ""
     )
 
 @app.route("/blog/faith-foundation/<slug>")
 def faith_foundation_post(slug):
     posts = load_faith_foundations()
 
-    print("Faith posts loaded:", len(faith_posts))
-    print("Faith slugs:", [p.get("slug") for p in faith_posts])
-    print("Faith titles:", [p.get("title") for p in faith_posts])
-
     post = next((p for p in posts if p.get("slug") == slug), None)
 
     if not post:
         abort(404)
 
-    return render_template("blog/faith-foundation/faith_foundation.html", post=post)
+    return render_template(
+        "blog/faith-foundation/faith_foundation.html",
+        post=post
+    )
 
 # =========================
 # PRAYER ROUTE
@@ -901,6 +1009,7 @@ def edit_blog(slug):
     )
 
 @csrf.exempt
+
 @app.route("/admin/whatsapp", methods=["GET", "POST"])
 def admin_whatsapp_send():
     result = {}
@@ -932,7 +1041,7 @@ def admin_whatsapp_send():
         image_mode = "morning" if selected_mode == "both" else selected_mode
         devotion_image = ensure_devotion_image(
             datetime.strptime(selected_date, "%Y-%m-%d").date(),
-            image_mode
+            image_mode,
         )
 
         if selected_mode == "both":
@@ -953,7 +1062,7 @@ def admin_whatsapp_send():
 
             result = {
                 "text": text,
-                "share_wa": "https://wa.me/?text=" + quote(text.encode("utf-8"), safe=""),
+                "share_wa": "https://wa.me/?text=" + quote(text, safe=""),
                 "share_web": f"/today?date={selected_date}&mode={selected_mode}",
                 "share_api": "#",
             }

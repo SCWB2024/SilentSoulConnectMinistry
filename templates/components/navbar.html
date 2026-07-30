@@ -29,13 +29,13 @@
         About Us
       </a>
 
-      <a
-        href="{{ url_for('today') }}"
-        class="{% if active == 'today' %}active{% endif %}"
-        aria-label="Read today's SoulStart devotion"
-        {% if active == 'today' %}aria-current="page"{% endif %}>
-        Devotion
-      </a>
+     <a
+      href="{{ url_for('devotion') }}"
+      class="{% if active == 'devotion' %}active{% endif %}"
+      aria-label="Open the current SoulStart devotion season"
+      {% if active == 'devotion' %}aria-current="page"{% endif %}>
+      Devotion
+    </a>
 
       <a
         href="{{ url_for('prayer') }}"
@@ -49,9 +49,9 @@
       <a
         href="{{ url_for('study_index') }}"
         class="{% if active == 'study' %}active{% endif %}"
-        aria-label="Open Bible study lessons"
+         aria-label="Open Anchor learning and spiritual growth"
         {% if active == 'study' %}aria-current="page"{% endif %}>
-        Study
+        Anchor
       </a>
       {% endif %}
 

@@ -1,0 +1,42 @@
+<section
+  class="prayer-invite prayer-invite-image"
+  style="
+    background-image:
+      linear-gradient(
+        90deg,
+        rgba(7, 35, 28, 0.88) 0%,
+        rgba(7, 35, 28, 0.68) 48%,
+        rgba(7, 35, 28, 0.28) 100%
+      ),
+      url('{{ url_for(
+        'static',
+        filename='img/devotion/backgrounds/prayer/prayer.png'
+      ) }}');
+  "
+>
+  aria-label="Prayer invitation"
+>
+  <div class="prayer-invite-content">
+
+    <span class="mini-label light">
+      Prayer
+    </span>
+
+    <h2>
+      Need Prayer?
+    </h2>
+
+    <p>
+      You don’t have to walk alone. Whatever is on your heart,
+      we’d be honored to pray with you.
+    </p>
+
+    <a
+      class="btn gold"
+      href="{{ url_for('prayer') }}"
+    >
+      Submit Prayer Request
+    </a>
+
+  </div>
+</section>

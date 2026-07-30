@@ -1,10 +1,190 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}
+  {{ study.series.title }} — Silent SoulConnect Ministry
+{% endblock %}
+
+{% block body_class %}study-series-page{% endblock %}
+
+{% block content %}
+
+<section class="container page-wrap study-series">
+
+  <header class="study-series-hero">
+
+    {% if study.series.hero_image %}
+      <img
+        src="{{ url_for('static', filename=study.series.hero_image) }}"
+        alt="{{ study.series.title }}"
+        class="study-series-hero-image"
+        onerror="this.style.display='none';">
+    {% endif %}
+
+    <div class="study-series-hero-content">
+      <span class="study-badge">
+        {{ study.series.category or "Faith Foundations" }}
+      </span>
+
+      <h1>{{ study.series.title }}</h1>
+
+      {% if study.series.subtitle %}
+        <p class="study-series-subtitle">
+          {{ study.series.subtitle }}
+        </p>
+      {% endif %}
+
+      {% if study.series.description %}
+        <p class="study-series-description">
+          {{ study.series.description }}
+        </p>
+      {% endif %}
+
+      <div class="study-series-meta">
+        {% if study.series.estimated_time %}
+          <span>{{ study.series.estimated_time }}</span>
+        {% endif %}
+
+        {% if study.series.level %}
+          <span>{{ study.series.level }}</span>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+
+  <section class="study-series-layout">
+
+    <main class="study-series-main">
+
+      {% if study.introduction %}
+        <article class="card study-introduction-card">
+          <span class="study-step-label">Introduction</span>
+
+          <h2>{{ study.introduction.title }}</h2>
+
+          {% if study.introduction.summary %}
+            <p>{{ study.introduction.summary }}</p>
+          {% endif %}
+
+          <a
+            class="btn btn-primary"
+            href="{{ url_for(
+              'study_lesson_json',
+              series_slug=study.series.id,
+              lesson_slug='introduction'
+            ) }}">
+            Begin Introduction
+          </a>
+        </article>
+      {% endif %}
+
+
+      <section class="study-lessons">
+        <div class="study-section-heading">
+          <h2>Course Lessons</h2>
+          <p>Move through each lesson in order.</p>
+        </div>
+
+        <div class="study-lesson-grid">
+
+          {% for lesson in study.lessons %}
+            <article class="card study-lesson-card">
+
+              <span class="study-step-label">
+                Lesson {{ loop.index }}
+              </span>
+
+              <h3>{{ lesson.title }}</h3>
+
+              {% if lesson.core_truth %}
+                <p>{{ lesson.core_truth }}</p>
+              {% endif %}
+
+              <a
+                class="btn btn-secondary"
+                href="{{ url_for(
+                  'study_lesson_json',
+                  series_slug=study.series.id,
+                  lesson_slug=lesson.id
+                ) }}">
+                Open Lesson
+              </a>
+
+            </article>
+          {% endfor %}
+
+        </div>
+      </section>
+
+
+      {% if study.course_summary %}
+        <section class="card study-course-summary">
+          <h2>{{ study.course_summary.title }}</h2>
+
+          {% if study.course_summary.points %}
+            <ul>
+              {% for point in study.course_summary.points %}
+                <li>{{ point }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+
+          {% if study.course_summary.closing_thought %}
+            <p class="study-closing-thought">
+              {{ study.course_summary.closing_thought }}
+            </p>
+          {% endif %}
+        </section>
+      {% endif %}
+
+    </main>
+
+
+    <aside class="study-series-side">
+
+      <div class="card soft">
+        <h3>Study Information</h3>
+
+        <p>
+          <strong>Course:</strong><br>
+          {{ study.series.title }}
+        </p>
+
+        {% if study.series.estimated_time %}
+          <p>
+            <strong>Length:</strong><br>
+            {{ study.series.estimated_time }}
+          </p>
+        {% endif %}
+
+        {% if study.series.level %}
+          <p>
+            <strong>Level:</strong><br>
+            {{ study.series.level }}
+          </p>
+        {% endif %}
+
+        {% if study.series.related_blog %}
+          <a
+            class="btn btn-wide"
+            href="{{ study.series.related_blog }}">
+            Read Related Blog
+          </a>
+        {% endif %}
+
+        <a
+          class="btn btn-wide"
+          href="{{ url_for('study_index') }}">
+          Back to Study Hub
+        </a>
+      </div>
+
+    </aside>
+
+  </section>
+
+</section>
+
+{% include "components/prayer_invite.html" %}
+
+{% endblock %}

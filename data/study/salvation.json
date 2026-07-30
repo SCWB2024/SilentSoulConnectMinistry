@@ -1,0 +1,189 @@
+{
+  "series": {
+    "id": "salvation",
+    "title": "The Cross — God's Plan of Salvation",
+    "subtitle": "Understanding why Jesus had to die",
+    "description": "A four-lesson Bible study exploring humanity's greatest need, God's perfect plan, and the hope found through Jesus Christ.",
+    "hero_image": "img/salvation/s_hero.jpg",
+    "category": "Faith Foundations",
+    "estimated_time": "4 Lessons",
+    "level": "Foundations",
+    "related_blog": "/blog/faith-foundation/why-did-jesus-have-to-die"
+  },
+
+  "introduction": {
+    "title": "The Cross Was Never an Accident",
+
+    "summary": "Many people know Jesus died on a cross, but far fewer understand why His death was necessary. Before the foundation of the world, God had already prepared a way to rescue humanity through Jesus Christ.",
+
+    "content": [
+      "The cross was not God's backup plan.",
+      "It was His plan of redemption from the very beginning.",
+      "This study explores why Jesus had to die and what His sacrifice means for every person today.",
+      "Each lesson builds upon the previous one, helping you understand not only what happened at Calvary, but how it transforms your life."
+    ],
+
+    "reflection": "Before beginning this study, ask yourself: What does the cross truly mean to me?",
+
+    "prayer": "Father, thank You for preparing a way of salvation through Jesus Christ. Open my mind to understand Your truth and soften my heart to respond with faith. In Jesus' name, Amen.",
+
+    "next": "lesson-1"
+  },
+
+  "lessons": [
+
+    {
+      "id": "lesson-1",
+
+      "title": "The Problem — Why Sin Matters",
+
+      "scriptures": [
+        "Genesis 3",
+        "Romans 3:23",
+        "Romans 6:23"
+      ],
+
+      "core_truth": "Before we understand the cross, we must first understand why the cross became necessary.",
+
+      "questions": [
+        {
+          "question": "What is sin?",
+          "answer": "Sin is choosing our own way instead of God's way.",
+          "meaning": "Sin breaks our relationship with God."
+        },
+        {
+          "question": "Can good works remove sin?",
+          "answer": "No.",
+          "meaning": "Only Christ can provide forgiveness and reconciliation."
+        }
+      ],
+
+      "pastoral_care": "Many people carry guilt believing they are beyond God's forgiveness. Yet from the beginning, God came searching for Adam and Eve. He still seeks people today with grace and compassion.",
+
+      "reflection": "Where have I been trying to fix what only Christ can restore?",
+
+      "prayer": "Lord, help me honestly recognize my need for You. Thank You for loving me even when I fall short. Amen.",
+
+      "next": "lesson-2"
+    },
+
+    {
+      "id": "lesson-2",
+
+      "title": "The Promise — God Prepared a Savior",
+
+      "scriptures": [
+        "Genesis 3:15",
+        "Isaiah 53",
+        "John 1:29"
+      ],
+
+      "core_truth": "Long before Jesus came to earth, God promised a Savior who would defeat sin and bring hope to humanity.",
+
+      "questions": [
+        {
+          "question": "Who is the promised Savior?",
+          "answer": "Jesus Christ.",
+          "meaning": "Every prophecy ultimately points to Him."
+        },
+        {
+          "question": "Why is Jesus called the Lamb of God?",
+          "answer": "Because He became the perfect sacrifice for sin.",
+          "meaning": "His sacrifice fulfilled God's plan of redemption."
+        }
+      ],
+
+      "pastoral_care": "Your failures never surprised God. Before you were born, He had already prepared a way for you to experience forgiveness and new life.",
+
+      "reflection": "How does knowing God planned my salvation before I existed change the way I see His love?",
+
+      "prayer": "Thank You, Father, for keeping every promise You have made. Help me trust Your plan even when I cannot see the whole picture. Amen.",
+
+      "next": "lesson-3"
+    },
+
+    {
+      "id": "lesson-3",
+
+      "title": "The Cross — Justice and Mercy Meet",
+
+      "scriptures": [
+        "Romans 5:8",
+        "John 19:30",
+        "Hebrews 9:22"
+      ],
+
+      "core_truth": "Jesus willingly took our place so that God's justice could be satisfied and His mercy freely offered.",
+
+      "questions": [
+        {
+          "question": "Why was Jesus' death necessary?",
+          "answer": "He took the punishment our sins deserved.",
+          "meaning": "Only Christ could provide complete atonement."
+        },
+        {
+          "question": "What did Jesus mean when He said, 'It is finished'?",
+          "answer": "The work of redemption was complete.",
+          "meaning": "Nothing needs to be added to Christ's sacrifice."
+        }
+      ],
+
+      "pastoral_care": "The cross reminds us that sin is serious, but God's love is even greater. No one is beyond the reach of His grace.",
+
+      "reflection": "How does Christ's sacrifice change the way I view God's love for me?",
+
+      "prayer": "Jesus, thank You for willingly taking my place. Help me never treat Your sacrifice lightly, but to live each day in gratitude. Amen.",
+
+      "next": "lesson-4"
+    },
+
+    {
+      "id": "lesson-4",
+
+      "title": "Living Under Grace",
+
+      "scriptures": [
+        "Ephesians 2:8-9",
+        "Romans 8:1",
+        "2 Corinthians 5:17"
+      ],
+
+      "core_truth": "Salvation is God's gift of grace, received through faith, leading to a transformed life in Christ.",
+
+      "questions": [
+        {
+          "question": "Can salvation be earned?",
+          "answer": "No.",
+          "meaning": "Salvation is God's gift, received by faith."
+        },
+        {
+          "question": "What changes after accepting Christ?",
+          "answer": "We become a new creation.",
+          "meaning": "God begins transforming our lives from the inside out."
+        }
+      ],
+
+      "pastoral_care": "God did not save you simply to erase your past. He saved you to give you a new future, a new identity, and a living hope that continues every day.",
+
+      "reflection": "What area of my life is God inviting me to surrender as I walk in His grace?",
+
+      "prayer": "Father, thank You for the gift of salvation. Help me live each day in the freedom, joy, and purpose You have given me through Christ. Amen.",
+
+      "next": null
+    }
+
+  ],
+
+  "course_summary": {
+    "title": "Remember These Four Truths",
+
+    "points": [
+      "Sin separates us from God.",
+      "God promised a Savior.",
+      "Jesus fulfilled that promise through the cross.",
+      "Through faith in Christ we receive forgiveness, new life, and eternal hope."
+    ],
+
+    "closing_thought": "The cross is not simply the center of Christian history—it is the center of God's love story for humanity."
+  }
+}

@@ -1,0 +1,781 @@
+/* =========================================================
+   PRAYER.CSS — SILENT SOULCONNECT MINISTRY
+   Public Prayer page
+========================================================= */
+
+/* =========================
+   1. VARIABLES
+========================= */
+
+:root {
+  --prayer-bg: #f4f7f6;
+  --prayer-surface: #ffffff;
+  --prayer-surface-soft: #f8fbfa;
+
+  --prayer-text: #1f2937;
+  --prayer-text-soft: #5f676b;
+
+  --prayer-green: #184f45;
+  --prayer-green-dark: #103c35;
+  --prayer-green-soft: #e8f3ef;
+
+  --prayer-gold: #d8a42c;
+  --prayer-gold-soft: #fff8e8;
+
+  --prayer-line: rgba(0, 0, 0, 0.08);
+
+  --prayer-radius-sm: 12px;
+  --prayer-radius-md: 18px;
+  --prayer-radius-lg: 24px;
+
+  --prayer-shadow-sm:
+    0 8px 20px rgba(0, 0, 0, 0.07);
+
+  --prayer-shadow-md:
+    0 16px 38px rgba(0, 0, 0, 0.12);
+
+  --prayer-shadow-lg:
+    0 24px 58px rgba(0, 0, 0, 0.18);
+
+  --prayer-width: 1080px;
+}
+
+
+/* =========================
+   2. PAGE BASE
+========================= */
+
+body.prayer-page {
+  margin: 0;
+  background: var(--prayer-bg);
+  color: var(--prayer-text);
+}
+
+body.prayer-page .site-main {
+  padding: 0;
+}
+
+.prayer-page *,
+.prayer-page *::before,
+.prayer-page *::after {
+  box-sizing: border-box;
+}
+
+
+/* =========================
+   3. HERO
+========================= */
+
+.prayer-hero {
+  position: relative;
+
+  min-height: auto;
+  padding: 4.5rem 1.25rem;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  color: #ffffff;
+
+  overflow: hidden;
+}
+
+.prayer-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(7, 24, 22, 0.24) 0%,
+      rgba(7, 24, 22, 0.48) 45%,
+      rgba(6, 27, 23, 0.74) 100%
+    );
+
+  pointer-events: none;
+}
+
+.prayer-hero-inner {
+  position: relative;
+  z-index: 2;
+
+  width: min(100%, var(--prayer-width));
+  margin: 0 auto;
+}
+
+
+/* =========================
+   4. HERO HEADING
+========================= */
+
+.prayer-heading {
+  width: min(100%, 760px);
+  margin: 0 auto 2.25rem;
+
+  text-align: center;
+}
+
+.prayer-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+
+  margin-bottom: 1rem;
+  padding: 0.48rem 0.9rem;
+
+  background: rgba(255, 255, 255, 0.13);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+
+  color: #f3d46f;
+
+  font-size: 0.84rem;
+  font-weight: 850;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.prayer-heading h1 {
+  margin: 0 0 0.8rem;
+
+  color: #ffffff;
+
+  font-size: clamp(2.5rem, 5vw, 4.4rem);
+  line-height: 1.05;
+
+  text-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.38);
+}
+
+.prayer-lead {
+  max-width: 670px;
+  margin: 0 auto 0.7rem;
+
+  color: rgba(255, 255, 255, 0.98);
+
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  font-weight: 700;
+  line-height: 1.65;
+}
+
+.quick-sub {
+  max-width: 660px;
+  margin: 0 auto 1rem;
+
+  color: rgba(255, 255, 255, 0.90);
+
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.prayer-note {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+
+  margin: 0;
+  padding: 0.65rem 0.95rem;
+
+  background: rgba(8, 35, 30, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+
+  color: rgba(255, 255, 255, 0.96);
+
+  font-size: 0.92rem;
+  line-height: 1.5;
+
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+
+/* =========================
+   5. SUCCESS MESSAGE
+========================= */
+
+.prayer-success {
+  width: min(100%, 760px);
+  margin: 0 auto 2rem;
+  padding: 1.3rem 1.4rem;
+
+  background: rgba(232, 246, 238, 0.97);
+  border: 1px solid #b8dfc7;
+  border-radius: var(--prayer-radius-md);
+
+  color: #1d633f;
+  text-align: center;
+
+  box-shadow: var(--prayer-shadow-md);
+}
+
+.prayer-success p {
+  margin: 0.4rem 0;
+  line-height: 1.6;
+}
+
+
+/* =========================
+   6. MAIN LAYOUT
+========================= */
+
+.prayer-layout {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.25fr)
+    minmax(300px, 0.75fr);
+
+  gap: 2rem;
+  align-items: start;
+}
+
+
+/* =========================
+   7. FORM CARD
+========================= */
+
+.prayer-form-card {
+  padding: 2rem;
+
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.74);
+  border-radius: var(--prayer-radius-lg);
+
+  color: var(--prayer-text);
+
+  box-shadow: var(--prayer-shadow-lg);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.prayer-form-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.2rem;
+
+  border-bottom: 1px solid var(--prayer-line);
+}
+
+.prayer-form-icon {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+
+  display: grid;
+  place-items: center;
+
+  background: var(--prayer-green-soft);
+  border-radius: 16px;
+
+  font-size: 1.65rem;
+}
+
+.prayer-form-heading h2 {
+  margin: 0 0 0.35rem;
+
+  color: var(--prayer-green);
+
+  font-size: clamp(1.4rem, 3vw, 1.85rem);
+}
+
+.prayer-form-heading p {
+  margin: 0;
+
+  color: var(--prayer-text-soft);
+
+  line-height: 1.65;
+}
+
+
+/* =========================
+   8. FORM
+========================= */
+
+.prayer-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.prayer-form-row {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 1rem;
+}
+
+.prayer-field {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.prayer-field label {
+  color: #233f37;
+
+  font-size: 0.94rem;
+  font-weight: 800;
+}
+
+.optional-text {
+  color: #6b7280;
+  font-size: 0.84rem;
+  font-weight: 500;
+}
+
+.prayer-field input,
+.prayer-field select,
+.prayer-field textarea {
+  width: 100%;
+  min-height: 52px;
+  padding: 0.85rem 0.95rem;
+
+  background: #ffffff;
+  border: 1px solid #c9d4d0;
+  border-radius: 14px;
+
+  color: var(--prayer-text);
+
+  font-family: inherit;
+  font-size: 1rem;
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.prayer-field textarea {
+  min-height: 170px;
+
+  resize: vertical;
+
+  line-height: 1.65;
+}
+
+.prayer-field input::placeholder,
+.prayer-field textarea::placeholder {
+  color: #7b8581;
+}
+
+.prayer-field input:hover,
+.prayer-field select:hover,
+.prayer-field textarea:hover {
+  border-color: #9fb3ab;
+}
+
+.prayer-field input:focus,
+.prayer-field select:focus,
+.prayer-field textarea:focus {
+  background: #ffffff;
+  border-color: var(--prayer-green);
+
+  outline: none;
+
+  box-shadow:
+    0 0 0 4px rgba(24, 79, 69, 0.13);
+}
+
+.prayer-help {
+  color: #6b7280;
+
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+
+/* =========================
+   9. CONFIDENTIALITY NOTE
+========================= */
+
+.prayer-confidential-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+
+  margin: 0.15rem 0 0;
+  padding: 0.85rem 1rem;
+
+  background: var(--prayer-green-soft);
+  border-left: 4px solid var(--prayer-green);
+  border-radius: 12px;
+
+  color: #34544a;
+
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+
+/* =========================
+   10. BUTTONS
+========================= */
+
+.prayer-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+
+  margin-top: 0.35rem;
+}
+
+.prayer-form-actions .btn {
+  min-height: 50px;
+  padding: 0.85rem 1.25rem;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+
+  border: 2px solid transparent;
+  border-radius: 14px;
+
+  font-family: inherit;
+  font-size: 0.96rem;
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.prayer-submit {
+  flex: 1 1 260px;
+
+  background: var(--prayer-green);
+  border-color: var(--prayer-green);
+
+  color: #ffffff;
+
+  box-shadow:
+    0 8px 20px rgba(24, 79, 69, 0.24);
+}
+
+.prayer-submit:hover {
+  background: var(--prayer-green-dark);
+  border-color: var(--prayer-green-dark);
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 24px rgba(24, 79, 69, 0.28);
+}
+
+.prayer-submit:disabled {
+  opacity: 0.7;
+  cursor: wait;
+  transform: none;
+}
+
+.prayer-back {
+  flex: 0 1 180px;
+
+  background: #ffffff;
+  border-color: #b7c7c1;
+
+  color: var(--prayer-green);
+}
+
+.prayer-back:hover {
+  background: var(--prayer-green-soft);
+  border-color: var(--prayer-green);
+
+  transform: translateY(-2px);
+}
+
+
+/* =========================
+   11. QUICK PRAYER CARD
+========================= */
+
+.quick-prayer-card {
+  position: sticky;
+  top: 110px;
+
+  padding: 2rem;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 253, 248, 0.99),
+      rgba(248, 244, 232, 0.98)
+    );
+
+  border: 1px solid rgba(216, 164, 44, 0.28);
+  border-radius: var(--prayer-radius-lg);
+
+  color: var(--prayer-text);
+  text-align: center;
+
+  box-shadow: var(--prayer-shadow-md);
+
+  overflow: hidden;
+}
+
+.holy-glow {
+  position: absolute;
+  top: 0.85rem;
+  right: 1rem;
+
+  opacity: 0.55;
+
+  font-size: 1.25rem;
+}
+
+.quick-prayer-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1rem;
+
+  display: grid;
+  place-items: center;
+
+  background: #fff4cf;
+  border-radius: 20px;
+
+  font-size: 2rem;
+}
+
+.quick-prayer-card h2 {
+  margin: 0 0 0.8rem;
+
+  color: var(--prayer-green);
+
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  line-height: 1.25;
+}
+
+.prayer-card-intro {
+  margin: 0 auto 1.25rem;
+
+  color: var(--prayer-text-soft);
+
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.quick-prayer-text {
+  margin: 1rem 0;
+  padding: 1.2rem 1rem;
+
+  background: rgba(255, 255, 255, 0.68);
+  border-radius: 16px;
+}
+
+.quick-prayer-text p {
+  margin: 0 0 0.75rem;
+
+  color: #3f4d47;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.quick-prayer-text p:last-child {
+  margin-bottom: 0;
+}
+
+.quick-prayer-reference {
+  display: inline-block;
+
+  color: var(--prayer-green);
+
+  font-size: 0.92rem;
+  font-weight: 850;
+}
+
+
+/* =========================
+   12. CLOSING SECTION
+========================= */
+
+.prayer-closing {
+  padding: 3.5rem 1.25rem;
+
+  background: #f5f9f7;
+
+  text-align: center;
+}
+
+.prayer-closing-inner {
+  width: min(100%, 760px);
+  margin: 0 auto;
+}
+
+.prayer-closing-icon {
+  display: block;
+  margin-bottom: 0.75rem;
+
+  font-size: 1.8rem;
+}
+
+.prayer-closing blockquote {
+  margin: 0;
+
+  color: #29483f;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.65;
+}
+
+.prayer-closing p {
+  margin: 0.85rem 0 0;
+
+  color: var(--prayer-green);
+
+  font-weight: 850;
+}
+
+
+/* =========================
+   13. ACCESSIBILITY
+========================= */
+
+.prayer-form-actions .btn:focus-visible,
+.prayer-field input:focus-visible,
+.prayer-field select:focus-visible,
+.prayer-field textarea:focus-visible {
+  outline: 3px solid rgba(216, 164, 44, 0.72);
+  outline-offset: 3px;
+}
+
+
+/* =========================
+   14. RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .prayer-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-prayer-card {
+    position: static;
+
+    width: min(100%, 680px);
+    margin: 0 auto;
+  }
+}
+
+
+@media (max-width: 680px) {
+  .prayer-hero {
+    padding: 3.25rem 1rem;
+  }
+
+  .prayer-heading {
+    margin-bottom: 1.6rem;
+  }
+
+  .prayer-note {
+    border-radius: 16px;
+  }
+
+  .prayer-form-card,
+  .quick-prayer-card {
+    padding: 1.3rem;
+  }
+
+  .prayer-form-heading {
+    align-items: center;
+  }
+
+  .prayer-form-icon {
+    width: 46px;
+    height: 46px;
+    flex-basis: 46px;
+
+    font-size: 1.4rem;
+  }
+
+  .prayer-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .prayer-form-actions {
+    flex-direction: column;
+  }
+
+  .prayer-form-actions .btn,
+  .prayer-submit,
+  .prayer-back {
+    width: 100%;
+    flex-basis: auto;
+  }
+
+  .prayer-closing {
+    padding: 3rem 1rem;
+  }
+}
+
+
+@media (max-width: 420px) {
+  .prayer-heading h1 {
+    font-size: 2.35rem;
+  }
+
+  .prayer-form-heading {
+    display: block;
+    text-align: center;
+  }
+
+  .prayer-form-icon {
+    margin: 0 auto 0.85rem;
+  }
+
+  .prayer-form-card,
+  .quick-prayer-card {
+    border-radius: 18px;
+  }
+}
+
+
+/* =========================
+   15. REDUCED MOTION
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .prayer-form-actions .btn,
+  .prayer-field input,
+  .prayer-field select,
+  .prayer-field textarea {
+    transition: none;
+  }
+
+[hidden] {
+  display: none !important;
+}
+
+  .prayer-submit:hover,
+  .prayer-back:hover {
+    transform: none;
+  }
+}

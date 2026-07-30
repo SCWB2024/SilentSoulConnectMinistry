@@ -1,0 +1,1111 @@
+/* =========================================================
+   TODAY.CSS — SILENT SOULCONNECT MINISTRY
+   Covers the public Today / Daily Devotion experience.
+   Route: /today
+   ========================================================= */
+
+
+/* =========================
+   1. DEVOTION VARIABLES
+========================= */
+
+:root {
+  --today-bg: #eef6f8;
+  --today-surface: #ffffff;
+  --today-surface-soft: #f7faf9;
+  --today-text: #1f2937;
+  --today-text-soft: #5f676b;
+  --today-green: #184f45;
+  --today-green-dark: #103c35;
+  --today-green-soft: #e8f3ef;
+  --today-gold: #d8a42c;
+  --today-blue: #1f5ea8;
+  --today-purple: #6f55a5;
+  --today-line: rgba(0, 0, 0, 0.07);
+  --today-radius-sm: 12px;
+  --today-radius-md: 18px;
+  --today-radius-lg: 24px;
+  --today-shadow-sm: 0 8px 20px rgba(0, 0, 0, 0.06);
+  --today-shadow-md: 0 14px 34px rgba(0, 0, 0, 0.09);
+  --today-shadow-lg: 0 24px 58px rgba(0, 0, 0, 0.16);
+  --today-width: 980px;
+}
+
+
+/* =========================
+   2. PAGE BASE
+========================= */
+
+body.today-page,
+body.devotion-page-body {
+  background: var(--today-bg);
+  color: var(--today-text);
+}
+
+.today-page,
+.devotion-page {
+  width: min(100%, var(--today-width));
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+.today-stack,
+.devotion-stack {
+  display: grid;
+  gap: 1.5rem;
+}
+
+/* =========================
+   3. HERO
+========================= */
+
+.today-hero,
+.devotion-hero {
+  position: relative;
+
+  min-height: 440px;
+  margin-bottom: 1.5rem;
+  padding: 2rem;
+
+  display: flex;
+  align-items: flex-end;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  border-radius: var(--today-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--today-shadow-lg);
+}
+
+/* DEFAULT OVERLAY */
+
+.today-hero::before,
+.devotion-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.12) 0%,
+      rgba(0, 0, 0, 0.26) 42%,
+      rgba(6, 24, 20, 0.76) 100%
+    );
+
+  pointer-events: none;
+}
+
+/* HERO CONTENT */
+
+.today-hero-inner,
+.devotion-hero-inner,
+.devotion-hero-content {
+  position: relative;
+  z-index: 2;
+
+  width: min(100%, 720px);
+  padding: 1.5rem;
+
+  background: rgba(8, 35, 30, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 20px;
+
+  color: #ffffff;
+
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+/* KICKER */
+
+.today-kicker,
+.devotion-kicker {
+  display: inline-block;
+  margin-bottom: 0.55rem;
+
+  color: #f2d36f;
+  font-size: 0.82rem;
+  font-weight: 850;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+/* TITLE */
+
+.today-hero h1,
+.devotion-hero h1 {
+  margin: 0 0 0.65rem;
+
+  color: #ffffff;
+  font-size: clamp(2rem, 4.4vw, 3.4rem);
+  line-height: 1.08;
+}
+
+/* SUBTITLE */
+
+.today-hero-subtitle,
+.devotion-hero-subtitle,
+.devotion-verse-preview {
+  margin: 0;
+
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+/* VERSE REFERENCE */
+
+.devotion-verse-ref {
+  margin: 0 0 0.4rem;
+
+  color: #f2d36f;
+  font-weight: 800;
+}
+
+/* META */
+
+.today-meta,
+.devotion-meta {
+  margin-top: 1rem;
+
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+/* HERO CHIPS */
+
+.today-chip,
+.devotion-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+
+  padding: 0.42rem 0.72rem;
+
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 750;
+}
+
+/* MORNING OVERLAY */
+
+.today-hero.morning::before,
+.devotion-hero.morning::before {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 215, 128, 0.08) 0%,
+      rgba(28, 62, 52, 0.22) 44%,
+      rgba(10, 31, 27, 0.76) 100%
+    );
+}
+
+/* NIGHT OVERLAY
+   Same image, darker appearance only
+*/
+
+/* NIGHT OVERLAY */
+
+/* NIGHT OVERLAY */
+
+.today-hero.night::before,
+.devotion-hero.night::before,
+.devotion-hero.night-hero::before {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(12, 22, 55, 0.28) 0%,
+      rgba(9, 18, 46, 0.52) 45%,
+      rgba(3, 8, 24, 0.84) 100%
+    );
+}
+
+/* NIGHT CONTENT PANEL */
+
+.devotion-hero.night-hero .devotion-hero-inner,
+.devotion-hero.night .devotion-hero-inner {
+  background: rgba(7, 18, 36, 0.60);
+}
+
+/* =========================
+   4. SHARED CARDS
+========================= */
+
+.today-card,
+.devotion-card {
+  padding: 1.6rem;
+
+  background: var(--today-surface);
+  border: 1px solid var(--today-line);
+  border-radius: var(--today-radius-lg);
+
+  box-shadow: var(--today-shadow-sm);
+}
+
+.today-card h2,
+.today-card h3,
+.devotion-card h2,
+.devotion-card h3 {
+  color: var(--today-green);
+}
+
+.today-card p:last-child,
+.devotion-card p:last-child {
+  margin-bottom: 0;
+}
+
+.today-section-label,
+.devotion-section-label {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+
+  color: var(--today-green);
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+
+/* =========================
+   5. SCRIPTURE
+========================= */
+
+.today-scripture,
+.devotion-scripture {
+  position: relative;
+
+  padding: 2rem;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #f0f7f4 100%
+    );
+
+  border-left: 5px solid var(--today-green);
+}
+
+.today-scripture::before,
+.devotion-scripture::before {
+  content: "“";
+  position: absolute;
+  top: 0.6rem;
+  right: 1.25rem;
+
+  color: rgba(24, 79, 69, 0.1);
+  font-family: Georgia, serif;
+  font-size: 5rem;
+  line-height: 1;
+}
+
+.today-scripture-text,
+.devotion-scripture-text {
+  position: relative;
+  z-index: 1;
+
+  margin-bottom: 0.8rem;
+
+  color: #263630;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.16rem, 2.3vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.65;
+}
+
+.today-scripture-ref,
+.devotion-scripture-ref {
+  color: var(--today-green);
+  font-weight: 850;
+}
+
+
+/* =========================
+   6. REFLECTION
+========================= */
+
+.today-reflection,
+.devotion-reflection {
+  background: #ffffff;
+}
+
+.today-reflection p,
+.devotion-reflection p {
+  color: #3f4a46;
+  line-height: 1.8;
+}
+
+.today-reflection-callout,
+.devotion-reflection-callout {
+  margin-top: 1.2rem;
+  padding: 1rem 1.15rem;
+
+  background: var(--today-green-soft);
+  border-left: 4px solid var(--today-green);
+  border-radius: 14px;
+
+  color: #26443b;
+  font-weight: 700;
+  line-height: 1.7;
+}
+
+
+/* =========================
+   7. PRAYER
+========================= */
+
+.today-prayer,
+.devotion-prayer {
+  background:
+    linear-gradient(
+      145deg,
+      #f7f3ea 0%,
+      #ffffff 100%
+    );
+}
+
+.today-prayer p,
+.devotion-prayer p {
+  color: #4c463b;
+  line-height: 1.85;
+}
+
+.today-prayer .amen,
+.devotion-prayer .amen {
+  display: block;
+  margin-top: 1rem;
+
+  color: var(--today-green);
+  font-weight: 850;
+}
+
+
+/* =========================
+   8. TODAY'S CHALLENGE
+========================= */
+
+.today-challenge,
+.devotion-challenge {
+  position: relative;
+
+  background: #fffaf0;
+  border-left: 5px solid var(--today-gold);
+}
+
+.today-challenge h2,
+.devotion-challenge h2 {
+  color: #8a6500;
+}
+
+.today-challenge p,
+.devotion-challenge p {
+  color: #55492d;
+  line-height: 1.75;
+}
+
+.today-challenge-action,
+.devotion-challenge-action {
+  margin-top: 1rem;
+  padding: 1rem;
+
+  background: rgba(216, 164, 44, 0.12);
+  border-radius: 14px;
+
+  font-weight: 800;
+}
+
+
+/* =========================
+   9. REFLECTION QUESTIONS
+========================= */
+
+.today-questions,
+.devotion-questions {
+  background: #f8fbfa;
+}
+
+.today-question-list,
+.devotion-question-list {
+  margin: 1rem 0 0;
+  padding-left: 1.25rem;
+}
+
+.today-question-list li,
+.devotion-question-list li {
+  margin-bottom: 0.75rem;
+  padding-left: 0.25rem;
+
+  color: #36433e;
+  line-height: 1.7;
+}
+
+
+/* =========================
+   10. TAGS + CATEGORY
+========================= */
+
+.today-tags,
+.devotion-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.today-tag,
+.devotion-tag {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 0.42rem 0.72rem;
+
+  background: var(--today-green-soft);
+  border-radius: 999px;
+
+  color: var(--today-green);
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.today-category,
+.devotion-category {
+  background: #eef2fb;
+  color: var(--today-blue);
+}
+
+
+/* =========================
+   11. SHARE ACTIONS
+========================= */
+
+.today-share,
+.devotion-share {
+  padding: 1.4rem 1.5rem;
+
+  background: #ffffff;
+  border: 1px solid var(--today-line);
+  border-radius: var(--today-radius-lg);
+
+  box-shadow: var(--today-shadow-sm);
+}
+
+.today-share h2,
+.devotion-share h2 {
+  margin-bottom: 0.35rem;
+  color: var(--today-green);
+}
+
+.today-share p,
+.devotion-share p {
+  margin-bottom: 1rem;
+  color: var(--today-text-soft);
+}
+
+.today-share-actions,
+.devotion-share-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.today-share-btn,
+.devotion-share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+
+  min-height: 44px;
+  padding: 0.78rem 1rem;
+
+  border: 0;
+  border-radius: 13px;
+
+  color: #ffffff;
+  font-weight: 800;
+
+  transition:
+    transform 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.today-share-btn:hover,
+.devotion-share-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+.today-share-btn.whatsapp,
+.devotion-share-btn.whatsapp {
+  background: #238b57;
+}
+
+.today-share-btn.facebook,
+.devotion-share-btn.facebook {
+  background: #275aa8;
+}
+
+.today-share-btn.copy,
+.devotion-share-btn.copy {
+  background: #5e6670;
+}
+
+
+/* =========================
+   12. DEVOTION NAVIGATION
+========================= */
+
+.today-navigation,
+.devotion-navigation {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1rem;
+  align-items: center;
+
+  padding: 1rem 0;
+}
+
+.today-nav-link,
+.devotion-nav-link {
+  min-height: 46px;
+  padding: 0.8rem 1rem;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #ffffff;
+  border: 1px solid var(--today-line);
+  border-radius: 14px;
+
+  color: var(--today-green);
+  font-weight: 800;
+
+  box-shadow: var(--today-shadow-sm);
+}
+
+.today-nav-link.next,
+.devotion-nav-link.next {
+  justify-self: end;
+}
+
+.today-nav-link.prev,
+.devotion-nav-link.prev {
+  justify-self: start;
+}
+
+.today-nav-center,
+.devotion-nav-center {
+  color: var(--today-text-soft);
+  font-size: 0.9rem;
+  font-weight: 750;
+  text-align: center;
+}
+
+
+/* =========================
+   13. CALENDAR / DATE PICKER
+========================= */
+
+.today-calendar,
+.devotion-calendar {
+  padding: 1.5rem;
+
+  background: #ffffff;
+  border: 1px solid var(--today-line);
+  border-radius: var(--today-radius-lg);
+
+  box-shadow: var(--today-shadow-sm);
+}
+
+.today-calendar-form,
+.devotion-calendar-form {
+  display: flex;
+  align-items: end;
+  gap: 0.8rem;
+}
+
+.today-calendar-field,
+.devotion-calendar-field {
+  flex: 1;
+}
+
+.today-calendar label,
+.devotion-calendar label {
+  display: block;
+  margin-bottom: 0.4rem;
+
+  color: var(--today-green);
+  font-weight: 800;
+}
+
+.today-calendar input,
+.devotion-calendar input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0.75rem 0.9rem;
+
+  background: #ffffff;
+  border: 1px solid #cfd8d4;
+  border-radius: 12px;
+
+  color: var(--today-text);
+}
+
+.today-calendar input:focus,
+.devotion-calendar input:focus {
+  border-color: var(--today-green);
+  outline: 3px solid rgba(24, 79, 69, 0.13);
+}
+
+
+/* =========================
+   14. RELATED DEVOTIONS
+========================= */
+
+.today-related,
+.devotion-related {
+  padding-top: 1rem;
+}
+
+.today-related-grid,
+.devotion-related-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.today-related-card,
+.devotion-related-card {
+  overflow: hidden;
+
+  background: #ffffff;
+  border: 1px solid var(--today-line);
+  border-radius: 18px;
+
+  box-shadow: var(--today-shadow-sm);
+}
+
+.today-related-image,
+.devotion-related-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.generated-devotion-image {
+  position: relative;
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto 1.5rem;
+  overflow: hidden;
+  border-radius: 22px;
+  box-shadow: 0 16px 38px rgba(15, 55, 60, 0.16);
+  background: #dfe9e8;
+}
+
+.generated-devotion-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Same image at night, only visually softened and darkened. */
+.generated-devotion-image.night-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      rgba(5, 18, 28, 0.18),
+      rgba(5, 18, 28, 0.32)
+    );
+}
+
+.generated-devotion-image.night-image img {
+  filter: brightness(0.78) saturate(0.9);
+}
+
+.today-related-content,
+.devotion-related-content {
+  padding: 1rem;
+}
+
+.today-related-card h3,
+.devotion-related-card h3 {
+  margin-bottom: 0.4rem;
+  color: var(--today-green);
+}
+
+.today-related-card p,
+.devotion-related-card p {
+  margin-bottom: 0;
+  color: var(--today-text-soft);
+  font-size: 0.94rem;
+  line-height: 1.6;
+}
+
+
+/* =========================
+   15. EMPTY / ERROR STATE
+========================= */
+
+.today-empty,
+.devotion-empty {
+  padding: 3rem 1.5rem;
+
+  background: #ffffff;
+  border: 1px solid var(--today-line);
+  border-radius: var(--today-radius-lg);
+
+  text-align: center;
+
+  box-shadow: var(--today-shadow-sm);
+}
+
+.today-empty h2,
+.devotion-empty h2 {
+  color: var(--today-green);
+}
+
+
+/* =========================
+   16. RESPONSIVE
+========================= */
+
+@media (max-width: 820px) {
+  .today-related-grid,
+  .devotion-related-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .today-page,
+  .devotion-page {
+    padding: 1rem 0.75rem 3rem;
+  }
+
+  .today-hero,
+  .devotion-hero {
+    min-height: 500px;
+    padding: 1rem;
+    align-items: flex-end;
+  }
+
+  .today-hero-inner,
+  .devotion-hero-content {
+    width: 100%;
+    padding: 1.2rem;
+  }
+
+  .today-card,
+  .devotion-card,
+  .today-share,
+  .devotion-share,
+  .today-calendar,
+  .devotion-calendar {
+    padding: 1.25rem;
+  }
+
+  .today-navigation,
+  .devotion-navigation {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .today-nav-center,
+  .devotion-nav-center {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .today-nav-link.prev,
+  .devotion-nav-link.prev,
+  .today-nav-link.next,
+  .devotion-nav-link.next {
+    width: 100%;
+  }
+
+  .today-calendar-form,
+  .devotion-calendar-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .today-share-actions,
+  .devotion-share-actions {
+    flex-direction: column;
+  }
+
+  .today-share-btn,
+  .devotion-share-btn {
+    width: 100%;
+  }
+
+  .today-related-grid,
+  .devotion-related-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 420px) {
+  .today-hero,
+  .devotion-hero {
+    min-height: 520px;
+  }
+
+  .today-meta,
+  .devotion-meta {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+17. /* ===================================
+   QUARTER WELCOME
+=================================== */
+
+.q-welcome{
+    background:#eef6f8;
+    padding-bottom:4rem;
+}
+
+/* HERO */
+.q-hero{
+    position:relative;
+    min-height:480px;
+    border-radius:28px;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:2rem auto;
+    max-width:1200px;
+    background:
+    url("../img/devotion/hero/season_renewal.png")
+    center/cover no-repeat;
+
+}
+
+.q-hero-overlay{
+    position:absolute;
+    inset:0;
+    background:
+    linear-gradient(
+    rgba(9,30,24,.48),
+    rgba(9,30,24,.62));
+
+}
+
+.q-hero-content{
+    position:relative;
+    z-index:2;
+    max-width:760px;
+    color:#fff;
+    text-align:center;
+    padding:2rem;
+
+}
+
+.q-eyebrow{
+    letter-spacing:2px;
+    text-transform:uppercase;
+    margin-bottom:1rem;
+    opacity:.95;
+
+}
+
+.q-quarter{
+    font-weight:600;
+    margin:.8rem 0;
+
+}
+
+.q-subtitle{
+    font-size:1.15rem;
+    opacity:.95;
+
+}
+
+/* WRAPPER */
+.q-welcome-wrap{
+    max-width:1100px;
+    margin:auto;
+    padding:2rem 1rem;
+
+}
+
+/* CARDS */
+
+.q-card{
+    background:#fff;
+    border-radius:22px;
+    padding:2.5rem;
+    margin-bottom:2rem;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.section-label{
+    color:#4f8c67;
+    text-transform:uppercase;
+    font-size:.78rem;
+    letter-spacing:2px;
+    margin-bottom:.8rem;
+    font-weight:700;
+
+}
+
+/* MONTHS */
+
+.q-months{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1.8rem;
+    margin-bottom:2rem;
+
+}
+
+.q-month-card{
+    background:#fff;
+    border-radius:22px;
+    padding:2rem;
+    text-align:center;
+    box-shadow:0 8px 24px rgba(0,0,0,.08);
+    transition:.3s;
+
+}
+
+.q-month-card:hover{
+    transform:translateY(-6px);
+
+}
+
+.month-icon{
+
+    font-size:2.4rem;
+    margin-bottom:1rem;
+
+}
+
+/* TODAY */
+
+.q-today{
+    text-align:center;
+
+}
+
+.today-icon{
+
+    font-size:2.8rem;
+    margin-bottom:1rem;
+
+}
+
+/* DECLARATION */
+
+.q-declaration{
+    background:#f7f4ea;
+    border-left:6px solid #b89b4a;
+    border-radius:22px;
+    padding:3rem;
+    text-align:center;
+    box-shadow:0 8px 24px rgba(0,0,0,.08);
+
+}
+
+.q-declaration blockquote{
+
+    font-size:1.25rem;
+    line-height:1.8;
+    color:#355344;
+    margin:0;
+
+}
+
+/* BUTTON */
+
+.q-btn{
+    display:inline-block;
+    margin-top:1.5rem;
+    padding:14px 34px;
+    border-radius:999px;
+    background:#2d6f52;
+    color:#fff;
+    text-decoration:none;
+    font-weight:700;
+    transition:.3s;
+
+}
+
+.q-btn:hover{
+    background:#245843;
+
+}
+
+/* HERO SCRIPTURE */
+
+.q-hero-scripture {
+  max-width: 720px;
+  margin: 1.5rem auto 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+.q-hero-scripture blockquote {
+  margin: 0;
+  color: #ffffff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 1.65;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+}
+
+.q-hero-scripture p {
+  margin: 0.75rem 0 0;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+.q-months{
+grid-template-columns:1fr;
+
+}
+
+.q-hero{
+
+min-height:500px;
+margin:1rem;
+
+}
+
+.q-card{
+padding:2rem;
+
+}
+
+ .q-hero-content {
+    padding: 2rem 1.25rem;
+  }
+
+  .q-hero-scripture blockquote {
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+}

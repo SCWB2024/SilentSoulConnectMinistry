@@ -810,14 +810,34 @@ def prayer():
     if request.method == "POST":
         PRAYER_FILE.parent.mkdir(parents=True, exist_ok=True)
 
+        topic = request.form.get("topic", "").strip()
+        topic_other = request.form.get("topic_other", "").strip()
+        prayer_request = request.form.get("request", "").strip()
+
+        if not topic or not prayer_request:
+            return render_template(
+                "prayer/prayer.html",
+                active="prayer",
+                prayer_topics=prayer_topics,
+                error="Please choose a prayer topic and enter your prayer request.",
+            ), 400
+
+        if topic == "other" and not topic_other:
+            return render_template(
+                "prayer/prayer.html",
+                active="prayer",
+                prayer_topics=prayer_topics,
+                error="Please describe the other prayer topic.",
+            ), 400
+
         new_request = {
-            "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "date": datetime.now(MINISTRY_TZ).strftime("%Y-%m-%d %H:%M"),
             "name": request.form.get("name", "").strip() or "Anonymous",
             "contact": request.form.get("contact", "").strip(),
             "pref_method": request.form.get("pref_method", "").strip(),
-            "topic": request.form.get("topic", "").strip(),
-            "topic_other": request.form.get("topic_other", "").strip(),
-            "request": request.form.get("request", "").strip(),
+            "topic": topic,
+            "topic_other": topic_other,
+            "request": prayer_request,
         }
 
         if PRAYER_FILE.exists():
@@ -829,16 +849,21 @@ def prayer():
         prayers.append(new_request)
 
         with open(PRAYER_FILE, "w", encoding="utf-8") as f:
-            json.dump(prayers, f, indent=2, ensure_ascii=False)
+            json.dump(
+                prayers,
+                f,
+                indent=2,
+                ensure_ascii=False,
+            )
 
         return redirect(url_for("prayer", ok=1))
 
+    # IMPORTANT: this stays OUTSIDE the POST block
     return render_template(
         "prayer/prayer.html",
         active="prayer",
-        prayer_topics=prayer_topics
+        prayer_topics=prayer_topics,
     )
-
 
 # =========================
 # DONATION ROUTE

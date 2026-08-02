@@ -107,6 +107,16 @@
 
         </div>
 
+        {% if error %}
+  <div
+    class="prayer-error"
+    role="alert"
+  >
+    <p>
+      {{ error }}
+    </p>
+  </div>
+{% endif %}
 
         <form
           method="post"

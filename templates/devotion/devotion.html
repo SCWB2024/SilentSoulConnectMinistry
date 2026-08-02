@@ -55,13 +55,7 @@
           </p>
         {% endif %}
 
-        {% if entry.verse_text %}
-          <p class="devotion-verse-preview">
-            {{ entry.verse_text }}
-          </p>
-        {% endif %}
-
-      </div>
+        </div>
 
     </section>
 
@@ -78,7 +72,7 @@
       <a
         class="chip{% if mode == 'morning' %} active{% endif %}"
         href="{{ url_for('today', date=target_date.isoformat(), mode='morning') }}"
-        {% if mode == 'morning' %}aria-current="page"{% endif %}
+        {% if mode =='morning' %}aria-current="page"{% endif %}
       >
         <span aria-hidden="true">🌅</span>
         Morning
@@ -87,7 +81,7 @@
       <a
         class="chip{% if mode == 'night' %} active{% endif %}"
         href="{{ url_for('today', date=target_date.isoformat(), mode='night') }}"
-        {% if mode == 'night' %}aria-current="page"{% endif %}
+        {% if mode =='night' %}aria-current="page"{% endif %}
       >
         <span aria-hidden="true">🌙</span>
         Night
@@ -143,16 +137,6 @@
       <article
         class="devotion-card{% if mode == 'night' %} night-tone{% endif %}"
       >
-
-        {% if entry.theme %}
-
-          <div class="badge-theme">
-            <span aria-hidden="true">🏷</span>
-            Theme: {{ entry.theme }}
-          </div>
-
-        {% endif %}
-
 
         {% if entry.verse_ref or entry.verse_text %}
 
@@ -278,13 +262,13 @@
         >
 
           <a
-            class="btn"
-            href="{{ join_url }}"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span aria-hidden="true">💬</span>
-            Join WhatsApp
+              class="btn"
+              href="{{ join_url }}"
+              target="_blank"
+              rel="noopener noreferrer"
+      >
+              <span aria-hidden="true">💬</span>
+              Join WhatsApp
           </a>
 
           <a

@@ -8,7 +8,7 @@ import random
 import os
 from urllib.parse import quote
 from old_backup.build_whatsapp_message import build_whatsapp_message
-from datetime import datetime, date, timedelta
+from datetime import datetime, date, timedelta, timezone
 from pathlib import Path
 
 app = Flask(__name__)
@@ -57,6 +57,7 @@ UPLOAD_FOLDER = (
 )
 
 DEFAULT_MODE = "morning"
+MINISTRY_TZ = timezone(timedelta(hours=-4))
 HERO_DAY_BG = "img/home/hero-day.jpg"
 HERO_NIGHT_BG = "img/home/hero-night.jpg"
 
@@ -462,7 +463,8 @@ def today_view():
     mode_arg = (request.args.get("mode") or "").strip().lower()
     mode = mode_arg if mode_arg in {"morning", "night"} else DEFAULT_MODE
 
-    actual_today = date.today()
+    actual_today = datetime.now(MINISTRY_TZ).date()
+
     allowed_dates = {
         actual_today,
         actual_today - timedelta(days=1),

@@ -51,13 +51,13 @@
       >
     {% endif %}
 
-    <!-- TODAY / DEVOTION -->
-    {% if request.endpoint in ['today', 'devotion', 'q3_welcome'] %}
-      <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='css/today.css') }}?v=1"
-      >
-    {% endif %}
+<!-- TODAY / DEVOTION -->
+{% if request.endpoint in ['today', 'devotion', 'q3_welcome', 'q4_welcome'] %}
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/today.css') }}?v=2"
+  >
+{% endif %}
 
     <!-- PRAYER -->
     {% if request.endpoint == 'prayer' %}

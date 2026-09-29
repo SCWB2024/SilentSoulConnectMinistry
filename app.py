@@ -236,51 +236,216 @@ def load_devotion_for(target_date, mode):
 
     return {}
 
-def ensure_devotion_image(target_date):
-        """
-        Return one generated hero image for the devotion date.
+def choose_devotion_category(entry):
+    """
+    Choose the best existing image category
+    from the devotion's overall message.
+    """
 
-        Morning and night use the same image.
-        The night appearance is created with CSS.
-        """
+    if not entry:
+        return "nature"
 
-        date_str = target_date.strftime("%Y-%m-%d")
-        year = target_date.strftime("%Y")
+    story_text = " ".join([
+        entry.get("theme", ""),
+        entry.get("verse_meaning", ""),
+        entry.get("body", ""),
+    ]).lower()
 
-        image_rel = (
-                Path("img")
-                / "devotion"
-                / "hero"
-                / year
-                / f"{date_str}.jpg"
-        )
+    story_categories = [
+        (
+            "prayer",
+            ["pray", "prayer", "intercession", "ask god",
+             "seek god", "listen to god"]
+        ),
+        (
+            "worship",
+            ["worship", "praise", "glory", "adore",
+             "give thanks"]
+        ),
+        (
+            "salvation",
+            ["salvation", "saved", "redeem", "redemption",
+             "forgive", "forgiveness", "rescue"]
+        ),
+        (
+            "restoration",
+            ["restore", "restoration", "rebuild",
+             "recover", "made whole"]
+        ),
+        (
+            "renewal",
+            ["renew", "renewal", "new beginning",
+             "begin again"]
+        ),
+        (
+            "support",
+            ["support", "help one another", "encourage",
+             "carry one another", "community"]
+        ),
+        (
+            "relationship",
+            ["relationship", "together", "friendship",
+             "fellowship"]
+        ),
+        (
+            "peace",
+            ["peace", "stillness", "rest", "calm",
+             "quiet"]
+        ),
+        (
+            "courage",
+            ["courage", "fear", "afraid", "brave",
+             "do not fear"]
+        ),
+        (
+            "faith",
+            ["stand", "rock", "foundation", "rooted",
+             "firm", "faith", "trust", "stronghold",
+             "storm", "pressure", "shaken"]
+        ),
+        (
+            "light",
+            ["light", "lamp", "shine", "darkness",
+             "lighthouse"]
+        ),
+        (
+            "hope",
+            ["hope", "future", "expect", "promise"]
+        ),
+        (
+            "grace",
+            ["grace", "mercy", "undeserved"]
+        ),
+    ]
 
-        image_full = Path(app.static_folder) / image_rel
+    for category, keywords in story_categories:
+        if any(keyword in story_text for keyword in keywords):
+            return category
 
-        if image_full.exists():
-            return image_rel.as_posix()
+    return "nature"
 
-        try:
-            from services.generate_devotion_image import generate_devotion_image
+def ensure_devotion_image(target_date, entry=None):
+    """
+    Choose an existing image for the devotion.
 
-            generated_path = generate_devotion_image(date_str)
+    Priority:
+    1. Image explicitly assigned in the devotion JSON
+    2. Existing dated hero image
+    3. Existing background library based on the devotion theme
+    4. Default hero background
 
-            if generated_path and Path(generated_path).exists():
-                return image_rel.as_posix()
+    No new images are generated.
+    """
 
-        except Exception as error:
-            app.logger.exception(
-                "Could not generate devotion hero for %s: %s",
-                date_str,
-                error,
-            )
+    date_str = target_date.strftime("%Y-%m-%d")
+    year = target_date.strftime("%Y")
 
-        fallback = Path(app.static_folder) / HERO_DAY_BG
+    # ---------------------------------
+    # 1. IMAGE ASSIGNED IN DEVOTION JSON
+    # ---------------------------------
 
-        if fallback.exists():
-            return HERO_DAY_BG
+    if entry:
+        assigned_image = (entry.get("image") or "").strip()
 
-        return None
+        if assigned_image:
+            assigned_full = Path(app.static_folder) / assigned_image
+
+            if assigned_full.exists():
+                return assigned_image
+
+
+    # ---------------------------------
+    # 2. EXISTING DATED HERO IMAGE
+    # ---------------------------------
+
+    image_rel = (
+        Path("img")
+        / "devotion"
+        / "hero"
+        / year
+        / f"{date_str}.jpg"
+    )
+
+    image_full = Path(app.static_folder) / image_rel
+
+    if image_full.exists():
+        return image_rel.as_posix()
+
+
+    # ---------------------------------
+    # 3. EXISTING BACKGROUND LIBRARY
+    # ---------------------------------
+
+    background_root = (
+        Path(app.static_folder)
+        / "img"
+        / "devotion"
+        / "backgrounds"
+    )
+
+    theme = ""
+
+    if entry:
+        theme = (entry.get("theme") or "").lower()
+
+    category_map = {
+        "peace": "peace",
+        "stand": "faith",
+        "firm": "faith",
+        "faith": "faith",
+        "trust": "faith",
+        "courage": "courage",
+        "grace": "grace",
+        "hope": "hope",
+        "light": "light",
+        "pray": "prayer",
+        "prayer": "prayer",
+        "restore": "restoration",
+        "renew": "renewal",
+        "salvation": "salvation",
+        "worship": "worship",
+        "support": "support",
+        "relationship": "relationship",
+    }
+
+    category = "nature"
+
+    for keyword, folder in category_map.items():
+        if keyword in theme:
+            category = folder
+            break
+
+    category_folder = background_root / category
+
+    if category_folder.exists():
+
+        images = [
+            file
+            for file in category_folder.iterdir()
+            if file.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp"}
+        ]
+
+        if images:
+            # Same date always gets the same image.
+            images.sort()
+
+            image = images[target_date.toordinal() % len(images)]
+
+            return image.relative_to(
+                Path(app.static_folder)
+            ).as_posix()
+
+
+    # ---------------------------------
+    # 4. DEFAULT FALLBACK
+    # ---------------------------------
+
+    fallback = Path(app.static_folder) / HERO_DAY_BG
+
+    if fallback.exists():
+        return HERO_DAY_BG
+
+    return None
 
 def base_ctx(**extra):
     """Shared context for public templates."""
@@ -471,6 +636,8 @@ def today_view():
     }
 
     raw_date = (request.args.get("date") or "").strip()
+    preview = (request.args.get("preview") or "").strip() == "1"
+
     target_date = actual_today
 
     if raw_date:
@@ -480,7 +647,9 @@ def today_view():
                 "%Y-%m-%d",
             ).date()
 
-            if requested_date in allowed_dates:
+            # Normal visitors: today or yesterday only.
+            # Preview testing: allow any devotion date.
+            if preview or requested_date in allowed_dates:
                 target_date = requested_date
 
         except ValueError:
@@ -492,7 +661,10 @@ def today_view():
     hero_bg = HERO_NIGHT_BG if mode == "night" else HERO_DAY_BG
     hero_class = "hero night-tone" if mode == "night" else "hero"
 
-    devotion_image = ensure_devotion_image(target_date)
+    devotion_image = ensure_devotion_image(
+        target_date,
+        entry
+    )
 
     ctx = base_ctx(
         active="today",
@@ -523,24 +695,54 @@ def today_view():
 
     return render_template("devotion/devotion.html", **ctx)
 
+# =========================
+# DEVOTION WELCOME / QUARTERS
+# =========================
 
 @app.route("/devotion", endpoint="devotion")
 def devotion_welcome():
-    ctx = common_page_ctx(active="devotion")
-    ctx.update({
-        "begin_url": url_for("today")
-    })
-    return render_template("devotion/q3_welcome.html", **ctx)
+    """
+    Automatically open the current devotion quarter.
+
+    Q3 = July–September
+    Q4 = October–December
+    """
+    today = datetime.now(MINISTRY_TZ).date()
+
+    if today.month >= 10:
+        return redirect(url_for("q4_welcome"))
+
+    return redirect(url_for("q3_welcome"))
 
 
 @app.route("/devotion/q3-welcome", endpoint="q3_welcome")
 def q3_welcome():
     ctx = common_page_ctx(active="devotion")
-    ctx.update({
-        "begin_url": url_for("today")
-    })
-    return render_template("devotion/q3_welcome.html", **ctx)
 
+    ctx.update({
+        "begin_url": url_for("today"),
+        "next_quarter_url": url_for("q4_welcome"),
+    })
+
+    return render_template(
+        "devotion/q3_welcome.html",
+        **ctx
+    )
+
+
+@app.route("/devotion/q4-welcome", endpoint="q4_welcome")
+def q4_welcome():
+    ctx = common_page_ctx(active="devotion")
+
+    ctx.update({
+        "begin_url": url_for("today"),
+        "previous_quarter_url": url_for("q3_welcome"),
+    })
+
+    return render_template(
+        "devotion/q4_welcome.html",
+        **ctx
+    )
 # =========================
 # STUDY JSON LOADER
 # =========================

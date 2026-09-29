@@ -1,0 +1,313 @@
+{% extends "base.html" %}
+
+{% block title %}Faithful &amp; Thankful{% endblock %}
+
+{% block content %}
+
+<main class="q-welcome">
+
+  <!-- =========================
+       Q4 HERO
+       ========================= -->
+  <section
+    class="q-hero"
+    aria-label="Quarter 4 devotional season"
+    style="
+      background-image:
+        linear-gradient(
+          rgba(8, 24, 22, 0.40),
+          rgba(8, 24, 22, 0.62)
+        ),
+        url('{{ url_for(
+          'static',
+          filename='img/devotion/hero/q4-2026.jpg'
+        ) }}');
+    "
+  >
+
+    <div class="q-hero-overlay"></div>
+
+    <div class="q-hero-content">
+
+      <div class="q-eyebrow">
+        <span aria-hidden="true">🍂</span>
+        SoulStart Devotion 2026
+      </div>
+
+      <h1>
+        Welcome to a Season of Faithful &amp; Thankful
+      </h1>
+
+      <p class="q-quarter">
+        Quarter 4 • October – December 2026
+      </p>
+
+      <p class="q-subtitle">
+        Stand firm in faith.
+        Live with gratitude.
+        Remember God is with us.
+      </p>
+
+      <div class="q-hero-scripture">
+
+        <blockquote>
+          “Give thanks to the Lord, for He is good,
+          for His faithfulness is everlasting.”
+        </blockquote>
+
+        <p>
+          Psalm 136:1 (NASB)
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <div class="q-welcome-wrap">
+
+    <!-- =========================
+         OUR JOURNEY
+         ========================= -->
+    <section class="q-card">
+
+      <div class="section-label">
+        OUR JOURNEY
+      </div>
+
+      <h2>Continue the Journey</h2>
+
+      <p>
+        Every season with God prepares us
+        for the next.
+      </p>
+
+      <p>
+        Quarter 3 reminded us that God restores,
+        gives courage for the journey,
+        and provides peace while life continues moving.
+      </p>
+
+      <p>
+        Now Quarter 4 calls us to stand firm,
+        live with gratitude,
+        and finish the year remembering the promise
+        that has carried us through every season:
+        <strong>God is with us.</strong>
+      </p>
+
+    </section>
+
+
+    <!-- =========================
+         Q4 MONTH THEMES
+         ========================= -->
+    <section
+      class="q-months"
+      aria-label="Quarter 4 monthly themes"
+    >
+
+      <!-- OCTOBER -->
+      <article class="q-month-card">
+
+        <img
+          src="{{ url_for(
+            'static',
+            filename='img/devotion/hero/october-2026.jpg'
+          ) }}"
+          alt=""
+          class="q-month-image"
+        >
+
+        <div class="q-month-content">
+
+          <h3>October</h3>
+
+          <h4>Stand Firm</h4>
+
+          <p>
+            Stay rooted in God when life brings
+            pressure, uncertainty, or change.
+          </p>
+
+        </div>
+
+      </article>
+
+
+      <!-- NOVEMBER -->
+      <article class="q-month-card">
+
+        <img
+          src="{{ url_for(
+            'static',
+            filename='img/devotion/hero/november-2026.jpg'
+          ) }}"
+          alt=""
+          class="q-month-image"
+        >
+
+        <div class="q-month-content">
+
+          <h3>November</h3>
+
+          <h4>Grateful Living</h4>
+
+          <p>
+            Notice God’s goodness,
+            give thanks for His faithfulness,
+            and practice gratitude in everyday life.
+          </p>
+
+        </div>
+
+      </article>
+
+
+      <!-- DECEMBER -->
+      <article class="q-month-card">
+
+        <img
+          src="{{ url_for(
+            'static',
+            filename='img/devotion/hero/december-2026.jpg'
+          ) }}"
+          alt=""
+          class="q-month-image"
+        >
+
+        <div class="q-month-content">
+
+          <h3>December</h3>
+
+          <h4>Emmanuel</h4>
+
+          <p>
+            Celebrate the promise
+            and presence of God with us
+            through every season.
+          </p>
+
+        </div>
+
+      </article>
+
+    </section>
+
+
+    <!-- =========================
+         TODAY'S DEVOTION
+         ========================= -->
+    <section class="q-card q-today">
+
+      <div
+        class="today-icon"
+        aria-hidden="true"
+      >
+        📖
+      </div>
+
+      <div class="section-label">
+        ONE DAY AT A TIME
+      </div>
+
+      <h2>Begin Today’s Devotion</h2>
+
+      <p>
+        God meets us one day at a time.
+        Read today’s message,
+        reflect on His Word,
+        pray,
+        and return tomorrow for another step
+        in your journey with Christ.
+      </p>
+
+      <a
+        href="{{ begin_url }}"
+        class="q-btn"
+      >
+        Open Today’s Devotion
+      </a>
+
+    </section>
+
+
+    <!-- =========================
+         Q4 FOCUS
+         ========================= -->
+    <section class="q-card">
+
+      <div class="section-label">
+        Q4 FOCUS
+      </div>
+
+      <h2>Faithful Through Every Season</h2>
+
+      <p>
+        <strong>
+          Stand Firm.
+          Live Gratefully.
+          Remember God Is With Us.
+        </strong>
+      </p>
+
+      <p>
+        This quarter calls us to remain grounded in faith,
+        recognize God’s goodness in everyday life,
+        and finish the year remembering the promise
+        of Emmanuel — God with us.
+      </p>
+
+    </section>
+
+
+    <!-- =========================
+         Q4 DECLARATION
+         ========================= -->
+    <section class="q-declaration">
+
+      <div class="section-label">
+        OUR Q4 DECLARATION
+      </div>
+
+      <blockquote>
+        I will stand firm in faith,
+        live with a grateful heart,
+        and remember that God is with me.
+        Through every change,
+        every blessing,
+        and every unknown,
+        I will continue this journey
+        one faithful day at a time.
+      </blockquote>
+
+    </section>
+
+
+    <!-- =========================
+         PREVIOUS QUARTER
+         ========================= -->
+    <nav
+      class="q-quarter-nav"
+      aria-label="Devotion quarter navigation"
+    >
+
+      <a
+        href="{{ previous_quarter_url }}"
+        class="q-btn"
+      >
+        ← Quarter 3: Renewal &amp; Peace
+      </a>
+
+    </nav>
+
+  </div>
+
+</main>
+
+
+{% include "components/prayer_invite.html" %}
+
+{% endblock %}

@@ -967,36 +967,98 @@ body.devotion-page-body {
 
 }
 
-/* MONTHS */
+/* =========================
+   MONTHS
+   ========================= */
 
-.q-months{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:1.8rem;
-    margin-bottom:2rem;
-
+.q-months {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.8rem;
+    margin-bottom: 2rem;
 }
 
-.q-month-card{
-    background:#fff;
-    border-radius:22px;
-    padding:2rem;
-    text-align:center;
-    box-shadow:0 8px 24px rgba(0,0,0,.08);
-    transition:.3s;
-
+.q-month-card {
+    background: #fff;
+    border-radius: 22px;
+    overflow: hidden;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
+    transition: transform .3s ease;
 }
 
-.q-month-card:hover{
-    transform:translateY(-6px);
-
+.q-month-card:hover {
+    transform: translateY(-6px);
 }
 
-.month-icon{
 
-    font-size:2.4rem;
-    margin-bottom:1rem;
+/* Q4 MONTH IMAGES */
 
+.q-month-image {
+    display: block;
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+}
+
+
+/* MONTH CONTENT */
+
+.q-month-content {
+    padding: 1.7rem 2rem 2rem;
+}
+
+
+/* Q3 ICONS */
+
+.month-icon {
+    font-size: 2.4rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+/*
+   Q3 cards do not use .q-month-content,
+   so retain comfortable spacing for them.
+*/
+.q-month-card > h3,
+.q-month-card > h4,
+.q-month-card > p {
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+.q-month-card > p {
+    margin-bottom: 2rem;
+}
+
+
+/* QUARTER NAVIGATION */
+
+.q-quarter-nav {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+    .q-months {
+        grid-template-columns: 1fr;
+        gap: 1.4rem;
+    }
+
+    .q-month-image {
+        height: 200px;
+    }
+
+    .q-quarter-nav .q-btn {
+        width: 100%;
+        text-align: center;
+    }
 }
 
 /* TODAY */

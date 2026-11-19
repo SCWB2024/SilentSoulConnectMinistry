@@ -1,400 +1,342 @@
 {% extends "base.html" %}
 
-{% block title %}Anchor — The Rabbi’s Way | Silent SoulConnect Ministry{% endblock %}
+{% block title %}The Rabbi’s Way | Silent SoulConnect Ministry{% endblock %}
 {% block body_class %}anchor-page{% endblock %}
 
 {% block content %}
 
-<!-- HERO -->
-<section
-  class="foundation-hero anchor-hero"
-  aria-label="The Rabbi's Way"
-  style="
-    background-image:
-      url('{{ url_for('static', filename='img/rabbi/rabbi_hero.png') }}');
-  "
->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/rabbi-wheel.css') }}">
 
-  <div class="foundation-hero-inner">
+{% set steps = [
+  {
+    'sign': 'Come', 'sign_source': 'comeASL', 'sign_file': 'come.ia.mp4',
+    'id': 'come', 'name': 'Come', 'subtitle': 'Meet Jesus', 'icon': 'door',
+    'summary': 'Jesus invites you to come to Him. Tell Him what is troubling you. You can begin today.',
+    'verse': 'Matthew 11:28', 'scripture': 'Jesus invites people who are tired and weighed down to come to Him for rest.',
+    'question': 'What would you like to bring to Jesus today?'
+  },
+  {
+    'sign': 'Follow', 'sign_source': 'followASL', 'sign_file': 'follow.ia.mp4',
+    'id': 'follow', 'name': 'Follow', 'subtitle': 'Walk with Jesus', 'icon': 'footsteps',
+    'summary': 'Make time to read the Bible and pray. Choose one thing Jesus teaches and put it into practice today.',
+    'verse': 'John 8:12', 'scripture': 'Jesus is the light of the world. He guides the people who follow Him.',
+    'question': 'What is one way you can follow Jesus today?',
+    'links': [('Open today’s devotion', url_for('today'))]
+  },
+  {
+    'sign': 'Learn', 'sign_source': 'learnacquireASL', 'sign_file': 'learn,acquire.ia.mp4',
+    'id': 'learn', 'name': 'Learn', 'subtitle': 'Grow in God’s Word', 'icon': 'book',
+    'summary': 'Read a short Bible passage. Ask what it means and how you can use it in your life.',
+    'verse': '2 Timothy 3:14', 'scripture': 'Keep living by what you have learned and come to believe.',
+    'question': 'Which teaching of Jesus would you like to understand better?',
+    'links': [('Faith Foundations', url_for('foundation')), ('Study Hub', url_for('study_index'))]
+  },
+  {
+    'sign': 'Stay', 'sign_source': 'staystayonstickaroundASL', 'sign_file': 'stay,stay on,stick around.ia.mp4',
+    'id': 'remain', 'name': 'Remain', 'subtitle': 'Stay connected', 'icon': 'vine',
+    'summary': 'Stay close to Jesus through prayer, worship, and time with other believers.',
+    'verse': 'John 15:4', 'scripture': 'Jesus compares us to branches on a vine. A branch needs the vine to grow. We need Jesus to grow in faith.',
+    'question': 'What helps you stay close to Jesus during a busy week?'
+  },
+  {
+    'sign': 'Serve', 'sign_source': 'serveserviceserveup-assistASL', 'sign_file': 'serve,service,serve up-assist.ia.mp4',
+    'id': 'serve', 'name': 'Serve', 'subtitle': 'Show God’s love', 'icon': 'heart',
+    'summary': 'Look for someone who needs help. Ask what they need and offer one act of kindness.',
+    'verse': 'Galatians 5:13', 'scripture': 'God calls us to use our freedom to serve one another in love.',
+    'question': 'Who can you help this week?'
+  },
+  {
+    'sign': 'Strong', 'sign_source': 'strongASL', 'sign_file': 'strong.ia.mp4',
+    'id': 'stand', 'name': 'Stand', 'subtitle': 'Be strong in faith', 'icon': 'shield',
+    'summary': 'Stay faithful to Jesus when you feel pressure to give in. Ask God for courage to do what is right.',
+    'verse': 'Ephesians 6:13', 'scripture': 'God gives you what you need to resist evil and stand firm.',
+    'question': 'Where do you need courage to do what is right?'
+  },
+  {
+    'sign': 'Share', 'sign_source': 'shareshareinASL', 'sign_file': 'share,share in.ia.mp4',
+    'id': 'multiply', 'name': 'Multiply', 'subtitle': 'Share with others', 'icon': 'seedling',
+    'summary': 'Share what you are learning about Jesus. Help someone else take their first step.',
+    'verse': 'Matthew 28:19', 'scripture': 'Jesus sends His followers to help people from all nations become His disciples.',
+    'question': 'Who might need a word of hope from you?'
+  }
+] %}
+{% macro icon(name, class='rabbi-icon') %}
+  <svg class="{{ class }}" aria-hidden="true" viewBox="0 0 24 24"><use href="#rabbi-icon-{{ name }}"></use></svg>
+{% endmacro %}
 
-    <span class="mini-label light">
-      ANCHOR
-    </span>
+<div class="rabbi-way">
+  <svg class="rabbi-symbols" aria-hidden="true" width="0" height="0" focusable="false">
+    <defs>
+      <symbol id="rabbi-icon-door" viewBox="0 0 24 24"><path d="M4 21h16M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16M10 21V7l6-2v16m-3-7h.01"/></symbol>
+      <symbol id="rabbi-icon-footsteps" viewBox="0 0 24 24"><path d="M8 13c-1.5-.4-3-1.6-3-3.6C5 7.1 6.4 5 8 5c1.8 0 2.8 1.7 2.7 3.6L10.5 11m-5.2 1.5 4.8 1.5-.5 1.5a2.5 2.5 0 0 1-4.8-1.5l.5-1.5ZM15 17c-1.5-.4-2.7-1.6-2.7-3.5 0-2.3 1.3-4.4 3-4.4s2.9 1.7 2.9 3.6l-.3 2.7m-5 1.2 4.6 1.4-.4 1.3a2.5 2.5 0 0 1-4.7-1.4l.5-1.3Z"/></symbol>
+      <symbol id="rabbi-icon-book" viewBox="0 0 24 24"><path d="M12 6c-2.7-2-5.7-2.3-10-1v14c4.2-1.3 7.3-1.1 10 1 2.7-2.1 5.8-2.3 10-1V5c-4.3-1.3-7.3-1-10 1Zm0 0v14M5 8.8c1.6-.2 3.1 0 4 .4m6 0c.9-.4 2.4-.6 4-.4"/></symbol>
+      <symbol id="rabbi-icon-vine" viewBox="0 0 24 24"><path d="M4 20c7-3 10-9 12-15m-6 10c-5 0-7-3-7-7 4 0 7 2 7 7Zm3-4c1-5 4-7 8-7 0 4-3 7-8 7Zm-4 6c3-3 7-3 10-1-2 3-6 4-10 1Z"/></symbol>
+      <symbol id="rabbi-icon-heart" viewBox="0 0 24 24"><path d="M12 20S3.5 15.2 3.5 9.6a4.5 4.5 0 0 1 8.5-2 4.5 4.5 0 0 1 8.5 2C20.5 15.2 12 20 12 20Z"/></symbol>
+      <symbol id="rabbi-icon-shield" viewBox="0 0 24 24"><path d="M12 22c4.8-2 8-5.5 8-10V5l-8-3-8 3v7c0 4.5 3.2 8 8 10Zm-3-10 2 2 4-4"/></symbol>
+      <symbol id="rabbi-icon-seedling" viewBox="0 0 24 24"><path d="M12 21v-8m0 2C6 15 3 12 3 6c6 0 9 3 9 9Zm0-2c0-6 3-9 9-9 0 6-3 9-9 9ZM7 21h10"/></symbol>
+      <symbol id="rabbi-icon-reflect" viewBox="0 0 24 24"><path d="M5 17H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H10l-5 4v-4Zm3-6h.01m4 0h.01m4 0h.01"/></symbol>
+      <symbol id="rabbi-icon-spark" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M12 0c1.8 7.6 4.4 10.2 12 12-7.6 1.8-10.2 4.4-12 12C10.2 16.4 7.6 13.8 0 12 7.6 10.2 10.2 7.6 12 0Z"/></symbol>
+      <symbol id="rabbi-icon-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+      <symbol id="rabbi-icon-check" viewBox="0 0 24 24"><path d="m5 12 5 5L19 7"/></symbol>
+    </defs>
+  </svg>
 
-    <h1>The Rabbi’s Way</h1>
-
-    <p class="foundation-hero-text">
-      Following Jesus is more than learning about Him.
-      It is walking with Him—one faithful step at a time.
-    </p>
-
-  </div>
-</section>
-
-
-<!-- INTRODUCTION -->
-<section
-  class="foundation-mission section-shell"
-  aria-label="Introduction to the Rabbi's Way"
->
-  <div class="foundation-narrow center">
-
-    <h2>Take the Next Step</h2>
-
-    <p>
-      Jesus invites us to come, follow, learn, remain,
-      serve, stand, and help others begin the same journey.
-    </p>
-
-    <p>
-      The Rabbi’s Way will grow gradually.
-      For now, begin with the step already open:
-      walking with Jesus each day.
-    </p>
-
-    <div class="hero-verse">
-      <p>
-        “Come, follow me.”
-      </p>
-
-      <span>— Matthew 4:19</span>
+ <div class="rabbi-wrap">
+  <header class="rabbi-hero">
+    <div class="rabbi-hero__copy">
+      <p class="rabbi-kicker">Anchor</p>
+      <h1>The Rabbi’s Way</h1>
+      <p>Seven steps to follow Jesus in your daily life.</p>
+      <a class="rabbi-start" href="#rabbi-journey">
+        Explore the steps {{ icon('arrow') }}
+      </a>
     </div>
 
-  </div>
-</section>
-
-
-<!-- SEVEN STEPS -->
-<section
-  class="foundation-path section-shell anchor-journey"
-  aria-label="Seven steps of the Rabbi's Way"
->
-  <div class="foundation-narrow center">
-
-    <span class="mini-label">
-      THE JOURNEY
-    </span>
-
-    <h2>Seven Steps with Jesus</h2>
-
-    <p>
-      Each step points toward a deeper life with Christ.
-      Begin simply and move at God’s pace.
-    </p>
-
-  </div>
-
-
-  <div class="path-steps-grid anchor-steps-grid">
-
-    <!-- COME -->
-    <article class="path-step anchor-step future-step">
-
-      <div class="path-ico" aria-hidden="true">🚪</div>
-
-      <span class="mini-label">
-        STEP 1
-      </span>
-
-      <h3>Come</h3>
-
-      <p class="path-subtitle">
-        Meet Jesus
-      </p>
-
-      <p>
-        Receive His invitation to know Him,
-        trust Him, and begin a new life.
-      </p>
-
-      <span class="anchor-status">
-        Story coming soon
-      </span>
-
-    </article>
-
-
-  <!-- FOLLOW: ACTIVE -->
-<article class="path-step anchor-step follow-step">
-
-  <div class="path-ico" aria-hidden="true">👣</div>
-
-  <span class="mini-label">
-    STEP 2 • OPEN
-  </span>
-
-  <h3>Follow</h3>
-
-  <p class="path-subtitle">
-    Walk with Jesus Daily
-  </p>
-
-  <p>
-    Make room for Scripture, reflection,
-    prayer, and one faithful step with Jesus today.
-  </p>
-
-  <p class="verse">
-    “Whoever follows me will never walk in darkness.”
-    — John 8:12
-  </p>
-
-  <a
-    href="{{ url_for('today') }}"
-    class="btn gold"
-    aria-label="Open today's daily devotion"
-  >
-    Begin Today’s Devotion
-  </a>
-
-</article>
-
-
-<!-- LEARN -->
-<article class="path-step anchor-step learn-step">
-
-  <div class="path-ico" aria-hidden="true">📖</div>
-
-  <span class="mini-label">
-    STEP 3 • OPEN
-  </span>
-
-  <h3>Learn</h3>
-
-  <p class="path-subtitle">
-    Learn from the Rabbi
-  </p>
-
-  <p>
-    Grow through biblical foundations,
-    guided lessons, and deeper study.
-  </p>
-
-  <button
-    type="button"
-    class="btn gold"
-    onclick="document.getElementById('learn-dialog').showModal()"
-  >
-    Choose How to Learn
-  </button>
-
-</article>
-
-    <!-- REMAIN -->
-    <article class="path-step anchor-step future-step">
-
-      <div class="path-ico" aria-hidden="true">🌿</div>
-
-      <span class="mini-label">
-        STEP 4
-      </span>
-
-      <h3>Remain</h3>
-
-      <p class="path-subtitle">
-        Stay Connected
-      </p>
-
-      <p>
-        Abide in Christ through prayer,
-        fellowship, worship, and faithful connection.
-      </p>
-
-      <span class="anchor-status">
-        Opening later
-      </span>
-
-    </article>
-
-
-    <!-- SERVE -->
-    <article class="path-step anchor-step future-step">
-
-      <div class="path-ico" aria-hidden="true">🤝</div>
-
-      <span class="mini-label">
-        STEP 5
-      </span>
-
-      <h3>Serve</h3>
-
-      <p class="path-subtitle">
-        Love Like Jesus
-      </p>
-
-      <p>
-        See people with compassion and allow faith
-        to become visible through loving service.
-      </p>
-
-      <span class="anchor-status">
-        Opening later
-      </span>
-
-    </article>
-
-
-    <!-- STAND -->
-    <article class="path-step anchor-step future-step">
-
-      <div class="path-ico" aria-hidden="true">🛡️</div>
-
-      <span class="mini-label">
-        STEP 6
-      </span>
-
-      <h3>Stand</h3>
-
-      <p class="path-subtitle">
-        Remain Faithful
-      </p>
-
-      <p>
-        Stand firm in truth, courage,
-        generosity, and faithful support.
-      </p>
-
-      <span class="anchor-status">
-        Opening later
-      </span>
-
-    </article>
-
-
-    <!-- MULTIPLY -->
-    <article class="path-step anchor-step future-step">
-
-      <div class="path-ico" aria-hidden="true">🌱</div>
-
-      <span class="mini-label">
-        STEP 7
-      </span>
-
-      <h3>Multiply</h3>
-
-      <p class="path-subtitle">
-        Help Others Begin
-      </p>
-
-      <p>
-        Share Jesus, encourage another person,
-        and help someone take their first step.
-      </p>
-
-      <span class="anchor-status">
-        Opening later
-      </span>
-
-    </article>
-
-  </div>
-</section>
-
-<!-- LEARN SELECTION WINDOW -->
-<dialog
-  id="learn-dialog"
-  class="anchor-dialog"
-  aria-labelledby="learn-dialog-title"
->
-  <div class="anchor-dialog-inner">
-
-    <button
-      type="button"
-      class="dialog-close"
-      aria-label="Close learning choices"
-      onclick="document.getElementById('learn-dialog').close()"
-    >
-      ×
-    </button>
-
-    <span class="mini-label">
-      LEARN
-    </span>
-
-    <h2 id="learn-dialog-title">
-      Choose Your Learning Path
-    </h2>
-
-    <p>
-      Select the learning space that best supports
-      your next step with Jesus.
-    </p>
-
-    <div class="learn-choice-grid">
-
-      <a
-        href="{{ url_for('blog_index', category='Faith Foundations') }}"
-        class="learn-choice-card"
+    <div class="rabbi-hero__media">
+      <img
+        class="rabbi-hero__image"
+        src="{{ url_for('static', filename='rabbi/rabbi-hero.jpg') }}"
+        alt=""
+        fetchpriority="high"
       >
-        <span class="learn-choice-icon" aria-hidden="true">📖</span>
-
-        <h3>Faith Foundations</h3>
-
-        <p>
-          Understand the essential truths
-          that strengthen Christian faith.
-        </p>
-
-        <span class="path-link-text">
-          Explore Foundations →
-        </span>
-      </a>
-
-      <a
-        href="{{ url_for('study_index') }}"
-        class="learn-choice-card"
-      >
-        <span class="learn-choice-icon" aria-hidden="true">📚</span>
-
-        <h3>Study Hub</h3>
-
-        <p>
-          Explore guided Bible studies,
-          lessons, and Scripture resources.
-        </p>
-
-        <span class="path-link-text">
-          Enter Study Hub →
-        </span>
-      </a>
-
     </div>
+  </header>
 
+    <section class="rabbi-about" aria-labelledby="rabbi-about-title">
+      <div class="rabbi-about__icon">{{ icon('book') }}</div>
+      <div>
+        <h2 id="rabbi-about-title">About the Rabbi</h2>
+        <p><strong>Rabbi means teacher.</strong> Jesus taught people how to know God and live with love. These seven steps help us learn from Jesus and put His words into practice.</p>
+      </div>
+    </section>
+
+    <section class="rabbi-journey" id="rabbi-journey" aria-labelledby="rabbi-journey-title">
+      <header class="rabbi-journey__header">
+        <h2 id="rabbi-journey-title">Seven Steps with Jesus</h2>
+        <p id="rabbi-wheel-help">Tap or click a step on the wheel to read it.</p>
+      </header>
+      <div class="rabbi-journey__layout">
+        <nav class="rabbi-wheel" aria-label="Seven steps" aria-describedby="rabbi-wheel-help" id="rabbi-wheel">
+          <svg class="rabbi-wheel__drawing" viewBox="0 0 440 440">
+            <circle cx="220" cy="220" r="216" class="rabbi-wheel__rim" aria-hidden="true"/>
+            {% for step in steps %}
+            {% set angle = (360 / 7) * loop.index0 %}
+            <a href="#rabbi-{{ step.id }}" class="rabbi-wheel__link rabbi-{{ step.id }}" data-rabbi-step="{{ step.id }}" aria-controls="rabbi-{{ step.id }}" aria-label="Step {{ loop.index }} of 7, {{ step.name }}">
+              <path class="rabbi-wheel__slice" transform="rotate({{ angle }} 220 220)" d="M 127.583,28.092 A 213,213 0 0 1 312.417,28.092 L 254.711,147.92 A 80,80 0 0 0 185.289,147.92 Z"/>
+              <path class="rabbi-wheel__outline" transform="rotate({{ angle }} 220 220)" d="M 134.25,29.57 A 208,208 0 0 1 305.75,29.57 L 252.14,141.31 A 85,85 0 0 0 187.86,141.31 Z" aria-hidden="true"/>
+              <g class="rabbi-wheel__check" transform="rotate({{ angle }} 220 220) translate(220 35) rotate({{ -angle }})" aria-hidden="true">
+                <circle r="10"/>
+                <use href="#rabbi-icon-check" x="-7" y="-7" width="14" height="14"/>
+              </g>
+              <g transform="rotate({{ angle }} 220 220) translate(220 74) rotate({{ -angle }})" aria-hidden="true">
+                <use href="#rabbi-icon-{{ step.icon }}" x="-12" y="-20" width="24" height="24" class="rabbi-wheel__icon"/>
+                <text y="23" class="rabbi-wheel__label">{{ loop.index }}. {{ step.name }}</text>
+              </g>
+            </a>
+            {% endfor %}
+            <g class="rabbi-wheel__center" aria-hidden="true">
+  <circle cx="220" cy="220" r="77" class="rabbi-wheel__hub"/>
+
+  <defs>
+    <clipPath id="rabbi-hope-image-clip">
+      <circle cx="220" cy="220" r="71"/>
+    </clipPath>
+    <linearGradient id="rabbi-hope-text-fade" x1="0" y1="210"
+                    x2="0" y2="252" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff3d5" stop-opacity="0"/>
+      <stop offset=".78" stop-color="#fff3d5" stop-opacity=".98"/>
+      <stop offset="1" stop-color="#fff3d5"/>
+    </linearGradient>
+  </defs>
+
+  <image href="{{ url_for('static', filename='rabbi/rabbi-hero.jpg') }}"
+         x="149" y="149" width="142" height="142"
+         preserveAspectRatio="xMidYMid slice"
+         clip-path="url(#rabbi-hope-image-clip)"/>
+
+  <circle cx="220" cy="220" r="71" fill="url(#rabbi-hope-text-fade)"/>
+  <circle cx="220" cy="220" r="71" class="rabbi-wheel__hub-ring"/>
+  <text x="220" y="246">Our Eternal Hope</text>
+  <text x="220" y="264">Revelation 21:1</text>
+</g>
+          </svg>
+          <p class="rabbi-sr-only">At the center of the wheel. Our Eternal Hope, Revelation 21:1.</p>
+        </nav>
+        <div class="rabbi-details">
+          <p class="rabbi-sr-only" role="status" id="rabbi-selection-status"></p>
+          {% for step in steps %}
+          <article class="rabbi-panel rabbi-{{ step.id }}" id="rabbi-{{ step.id }}" aria-labelledby="rabbi-title-{{ step.id }}">
+            <header class="rabbi-panel__header">
+              <div class="rabbi-panel__icon">{{ icon(step.icon) }}</div>
+              <div>
+                <p class="rabbi-panel__count">Step {{ loop.index }} of 7</p>
+                <h3 id="rabbi-title-{{ step.id }}" tabindex="-1">{{ step.name }}</h3>
+                <p class="rabbi-panel__subtitle">{{ step.subtitle }}</p>
+              </div>
+            </header>
+            <div class="rabbi-panel__body">
+              <p class="rabbi-panel__summary">{{ step.summary }}</p>
+              <div class="rabbi-scripture">
+                {{ icon('book') }}
+                <div>
+                  <p class="rabbi-scripture__ref"><strong>{{ step.verse }}</strong> <span>In simple words</span></p>
+                  <p>{{ step.scripture }}</p>
+                </div>
+              </div>
+              <div class="rabbi-reflect">
+                {{ icon('reflect') }}
+                <div>
+                  <h4>Reflect</h4>
+                  <p>{{ step.question }}</p>
+                </div>
+              </div>
+              <details class="rabbi-asl">
+                <summary>Watch ASL <strong>{{ step.sign }}</strong></summary>
+                <div class="rabbi-asl__content">
+                  {% set archive_video = 'https://archive.org/download/' ~ step.sign_source ~ '/' ~ (step.sign_file|urlencode) %}
+                  <video controls muted playsinline preload="none" aria-label="ASL sign for {{ step.sign }}">
+                    <source src="{{ url_for('static', filename='rabbi/asl/' ~ step.sign|lower ~ '.mp4') }}" type="video/mp4">
+                    <source src="{{ archive_video }}" type="video/mp4">
+                  </video>
+                  <a href="https://archive.org/details/{{ step.sign_source }}">Video source · Center for Accessible Technology in Sign</a>
+                </div>
+              </details>
+              {% if step.links %}
+              <div class="rabbi-panel__links">
+                {% for label, href in step.links %}
+                <a href="{{ href }}">{{ label }} {{ icon('arrow') }}</a>
+                {% endfor %}
+              </div>
+              {% endif %}
+            </div>
+          </article>
+          {% endfor %}
+          <div class="rabbi-controls" hidden>
+            <button type="button" data-rabbi-direction="-1">{{ icon('arrow') }} <span>Previous</span></button>
+            <a class="rabbi-back-to-wheel" href="#rabbi-wheel">Back to wheel</a>
+            <button type="button" data-rabbi-direction="1"><span>Next</span> {{ icon('arrow') }}</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="rabbi-prayer-area">
+      {% include "components/prayer_invite.html" %}
+    </div>
   </div>
-</dialog>
+</div>
+{% endblock %}
 
-<!-- CURRENT INVITATION -->
-<section
-  class="foundation-next anchor-next"
-  aria-label="Begin following Jesus daily"
->
-  <div class="foundation-next-inner">
+{% block extra_js %}
+{{ super() }}
+<script type="module">
+const rabbiWay = document.querySelector(".rabbi-way");
+const wheelLinks = [...rabbiWay.querySelectorAll("[data-rabbi-step]")];
+const panels = wheelLinks.map((link) => document.getElementById(link.getAttribute("aria-controls")));
+const controls = rabbiWay.querySelector(".rabbi-controls");
+const previous = controls.querySelector("[data-rabbi-direction='-1']");
+const next = controls.querySelector("[data-rabbi-direction='1']");
+const backToWheel = controls.querySelector(".rabbi-back-to-wheel");
+const status = document.getElementById("rabbi-selection-status");
+const narrowScreen = window.matchMedia("(max-width: 780px)");
+let selectedIndex = 0;
 
-    <span class="mini-label">
-      YOUR OPEN STEP
-    </span>
+function showStep(index, { updateUrl = false, announce = false } = {}) {
+  if (index !== selectedIndex) {
+    const sign = panels[selectedIndex].querySelector(".rabbi-asl");
+    sign.open = false;
+    sign.querySelector("video").pause();
+  }
+  selectedIndex = index;
 
-    <h2>Follow Jesus Today</h2>
+  for (const [stepIndex, link] of wheelLinks.entries()) {
+    const selected = index === stepIndex;
+    panels[stepIndex].hidden = !selected;
 
-    <p class="foundation-next-text">
-      You do not need to complete the entire journey today.
-      Begin by meeting God in today’s devotion.
-    </p>
+    if (selected) {
+      link.setAttribute("aria-current", "step");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  }
 
-    <a
-      href="{{ url_for('today') }}"
-      class="btn gold"
-    >
-      Open Today’s Devotion
-    </a>
+  previous.setAttribute("aria-disabled", String(index === 0));
+  next.setAttribute("aria-disabled", String(index === wheelLinks.length - 1));
 
-    <p class="foundation-next-caption">
-      Begin gently. Walk faithfully. Return tomorrow.
-    </p>
+  const link = wheelLinks[index];
+  const hash = link.getAttribute("href");
+  if (updateUrl && location.hash !== hash) {
+    history.pushState(null, "", hash);
+  }
+  if (announce) {
+    status.textContent = link.getAttribute("aria-label");
+  }
+}
 
-  </div>
-</section>
+function selectFromLocation() {
+  const index = wheelLinks.findIndex((link) => link.getAttribute("href") === location.hash);
+  if (index !== -1 || !location.hash) {
+    showStep(Math.max(0, index));
+  }
+}
 
-{% include "components/prayer_invite.html" %}
+for (const disclosure of rabbiWay.querySelectorAll(".rabbi-asl")) {
+  disclosure.addEventListener("toggle", () => {
+    const video = disclosure.querySelector("video");
+    if (disclosure.open && !disclosure.closest(".rabbi-panel").hidden) {
+      video.scrollIntoView({ block: "nearest", behavior: "instant" });
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  });
+}
 
+controls.hidden = false;
+showStep(0);
+selectFromLocation();
+window.addEventListener("hashchange", selectFromLocation);
+window.addEventListener("popstate", selectFromLocation);
+
+wheelLinks.forEach((link, index) => {
+  link.addEventListener("click", (event) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+      return;
+    }
+
+    event.preventDefault();
+    showStep(index, { updateUrl: true, announce: true });
+
+    const heading = panels[index].querySelector("h3");
+    if (event.detail === 0) {
+      heading.focus({ preventScroll: narrowScreen.matches });
+    }
+    if (narrowScreen.matches) {
+      panels[index].scrollIntoView({ block: "start", behavior: "instant" });
+    }
+  });
+});
+
+for (const button of [previous, next]) {
+  button.addEventListener("click", () => {
+    if (button.getAttribute("aria-disabled") === "true") {
+      return;
+    }
+
+    showStep(selectedIndex + Number(button.dataset.rabbiDirection), {
+      updateUrl: true,
+      announce: true,
+    });
+    if (narrowScreen.matches) {
+      panels[selectedIndex].querySelector("h3").scrollIntoView({ block: "nearest", behavior: "instant" });
+    }
+  });
+}
+
+backToWheel.addEventListener("click", (event) => {
+  event.preventDefault();
+  wheelLinks[selectedIndex].focus({ preventScroll: true });
+  rabbiWay.querySelector(".rabbi-journey__header").scrollIntoView({ block: "start", behavior: "instant" });
+});
+</script>
 {% endblock %}

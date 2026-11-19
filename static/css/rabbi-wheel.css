@@ -1,0 +1,381 @@
+/* SSCM — The Rabbi’s Way */
+
+.rabbi-way {
+  --rabbi-forest: #173e34;
+  --rabbi-text: #2e4139;
+  --rabbi-muted: #486056;
+  --rabbi-line: #dddccf;
+  color: var(--rabbi-text);
+  background:
+    radial-gradient(ellipse at 0% 51%, #e8efd7 0%, transparent 45%),
+    radial-gradient(ellipse at 100% 79%, #f3e8bf 0%, transparent 41%),
+    #faf9f2;
+  padding: 24px 22px 50px;
+  font: 1rem/1.55 "Atkinson Hyperlegible Next", "Segoe UI", system-ui, sans-serif;
+}
+
+.rabbi-way *, .rabbi-way *::before, .rabbi-way *::after { box-sizing: border-box; }
+.rabbi-way [hidden] { display: none !important; }
+.rabbi-way h1, .rabbi-way h2, .rabbi-way h3, .rabbi-way h4, .rabbi-way p { margin: 0; }
+.rabbi-way h1, .rabbi-way h2, .rabbi-way h3 { text-transform: none; }
+.rabbi-way a { text-decoration: none; }
+.rabbi-way :focus-visible { outline: 3px solid #164c82; outline-offset: 4px; }
+
+.rabbi-wrap { max-width: 1100px; margin: 0 auto; }
+.rabbi-symbols { position: absolute; }
+.rabbi-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.rabbi-icon,
+.rabbi-wheel__icon,
+.rabbi-wheel__check use {
+  display: block;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.rabbi-wheel__icon { width: 24px; height: 24px; }
+.rabbi-wheel__check use { width: 14px; height: 14px; stroke-width: 3; }
+
+.rabbi-hero {
+  position: relative;
+  display: grid;
+  align-items: end;
+  min-height: clamp(310px, 33vw, 365px);
+  overflow: hidden;
+  border: 1px solid #e6dfc8;
+  border-radius: 23px;
+  background: #193b2d;
+}
+.rabbi-hero::before {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: linear-gradient(to top, #0a281dfc 0%, #102c21e8 34%, #102c21a6 56%, transparent 83%);
+  content: "";
+}
+.rabbi-hero__copy {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 105px 22px 28px;
+  color: #fffaf0;
+  text-align: center;
+}
+.rabbi-hero .rabbi-kicker {
+  margin-bottom: 6px;
+  color: #ffdd71;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .17em;
+  text-transform: uppercase;
+}
+.rabbi-hero h1 {
+  color: #fffdf4;
+  text-shadow: 0 2px 10px #0a281dc9;
+  font: 600 clamp(2.35rem, 5.55vw, 4.6rem)/1.01 Georgia, serif;
+  letter-spacing: -.057em;
+  text-wrap: balance;
+}
+.rabbi-hero h1 + p { margin-top: 12px; font-size: clamp(1rem, 1.7vw, 1.19rem); }
+.rabbi-hero__media { position: absolute; inset: 0; }
+.rabbi-hero__image {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 48%;
+}
+.rabbi-start {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .65rem;
+  min-height: 46px;
+  padding: 9px 16px;
+  border-radius: 8px;
+  background: var(--rabbi-forest);
+  color: #fff;
+  font-size: .94rem;
+  font-weight: 750;
+}
+.rabbi-hero .rabbi-start { margin-top: 17px; background: #f4d56c; color: #173e34; }
+.rabbi-hero .rabbi-start:hover { background: #ffe797; color: #173e34; }
+.rabbi-hero .rabbi-start:focus-visible { outline-color: #fffdf4; }
+.rabbi-start .rabbi-icon { width: 17px; height: 17px; }
+
+.rabbi-about {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 16px;
+  margin-top: 20px;
+  padding: 19px 25px;
+  border: 1px solid var(--rabbi-line);
+  border-radius: 14px;
+  background: #fffefa;
+}
+.rabbi-about__icon {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 11px;
+  background: #e9efe4;
+  color: var(--rabbi-forest);
+}
+.rabbi-about h2 { color: var(--rabbi-forest); font-size: 1.23rem; line-height: 1.25; }
+.rabbi-about p { margin-top: 5px; max-width: 73ch; }
+
+.rabbi-journey { margin-top: 33px; scroll-margin-top: 24px; }
+.rabbi-journey__header { margin-bottom: 22px; text-align: center; scroll-margin-top: 24px; }
+.rabbi-journey__header h2 {
+  color: var(--rabbi-forest);
+  font: 600 clamp(1.9rem, 4vw, 3rem)/1.12 Georgia, serif;
+  letter-spacing: -.035em;
+}
+.rabbi-journey__header p { margin-top: 7px; color: var(--rabbi-muted); }
+.rabbi-journey__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr);
+  align-items: start;
+  gap: clamp(20px, 4.5vw, 54px);
+}
+.rabbi-wheel {
+  width: min(100%, 470px);
+  margin: 0 auto;
+  scroll-margin-top: 24px;
+}
+.rabbi-wheel__drawing {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 2px 7px #d19c414d) drop-shadow(0 5px 7px #24392c22);
+  overflow: visible;
+}
+.rabbi-wheel__rim { fill: #fff; stroke: #d7b75c; stroke-width: 1.7; }
+.rabbi-wheel__link { cursor: pointer; color: var(--step-on); }
+.rabbi-wheel__link:focus { outline: none; }
+.rabbi-wheel__slice {
+  fill: var(--step);
+  stroke: #fffdfa;
+  stroke-width: 2.8;
+  stroke-linejoin: round;
+}
+.rabbi-wheel__outline {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+.rabbi-wheel__link[aria-current="step"] .rabbi-wheel__outline,
+.rabbi-wheel__link:focus-visible .rabbi-wheel__outline { stroke: var(--step-on); }
+.rabbi-wheel__link:focus-visible .rabbi-wheel__outline { stroke-width: 4; stroke-dasharray: 6 3; }
+@media (hover: hover) {
+  .rabbi-wheel__link:hover .rabbi-wheel__outline { stroke: var(--step-on); }
+}
+.rabbi-wheel__check { visibility: hidden; pointer-events: none; }
+.rabbi-wheel__link[aria-current="step"] .rabbi-wheel__check { visibility: visible; }
+.rabbi-wheel__check circle { fill: var(--step-on); }
+.rabbi-wheel__check use { color: var(--step); }
+.rabbi-wheel__label {
+  fill: currentColor;
+  font-size: 19px;
+  font-weight: 800;
+  text-anchor: middle;
+  pointer-events: none;
+}
+.rabbi-wheel__icon { pointer-events: none; }
+.rabbi-wheel__center { pointer-events: none; }
+.rabbi-wheel__hub { fill: #f9efd4; stroke: #fffdfa; stroke-width: 3; }
+.rabbi-wheel__hub-ring { fill: none; stroke: #d0bb7d; }
+.rabbi-wheel__center text { fill: var(--rabbi-forest); font-size: 14px; font-weight: 800; text-anchor: middle; }
+.rabbi-wheel__center text:last-child { font-size: 12px; font-weight: 600; }
+
+.rabbi-come     { --step: #f3c333; --step-ink: #654806; --step-tint: #fff4d1; --step-line: #ddbe62; --step-on: #352602; }
+.rabbi-follow   { --step: #075aa5; --step-ink: #154d81; --step-tint: #e9f2fd; --step-line: #a8c8e9; --step-on: #fff; }
+.rabbi-learn    { --step: #77298c; --step-ink: #552680; --step-tint: #f2e9f8; --step-line: #cbb5e1; --step-on: #fff; }
+.rabbi-remain   { --step: #2b681c; --step-ink: #275922; --step-tint: #edf4e4; --step-line: #abceb2; --step-on: #fff; }
+.rabbi-serve    { --step: #ae4f05; --step-ink: #863e0b; --step-tint: #fff0df; --step-line: #e6b786; --step-on: #fff; }
+.rabbi-stand    { --step: #a6282d; --step-ink: #902832; --step-tint: #fcebec; --step-line: #e3b4b8; --step-on: #fff; }
+.rabbi-multiply { --step: #086f6c; --step-ink: #075b57; --step-tint: #e2f3ef; --step-line: #a4cecf; --step-on: #fff; }
+
+.rabbi-details { min-width: 0; }
+.rabbi-panel {
+  overflow: hidden;
+  border: 1px solid var(--step-line);
+  border-top: 5px solid var(--step);
+  border-radius: 16px;
+  background: #fffefa;
+  box-shadow: 0 4px 14px #2c3d2910;
+  scroll-margin-top: 24px;
+}
+.rabbi-panel + .rabbi-panel { margin-top: 14px; }
+.rabbi-panel__header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 22px;
+  background: var(--step-tint);
+  color: var(--step-ink);
+}
+.rabbi-panel__icon {
+  display: grid;
+  flex: none;
+  width: 56px;
+  height: 56px;
+  place-items: center;
+  border-radius: 13px;
+  background: var(--step);
+  color: var(--step-on);
+}
+.rabbi-panel__icon .rabbi-icon { width: 28px; height: 28px; }
+.rabbi-panel__count { font-size: .75rem; font-weight: 800; letter-spacing: .075em; text-transform: uppercase; }
+.rabbi-panel__header h3 {
+  margin: 2px 0;
+  color: var(--step-ink);
+  font: 700 2.3rem/1.02 Georgia, serif;
+  letter-spacing: -.04em;
+}
+.rabbi-panel__header h3:focus { outline-offset: 1px; }
+.rabbi-panel__subtitle { font-weight: 750; }
+.rabbi-panel__body { display: grid; gap: 14px; padding: 17px 22px 21px; }
+.rabbi-scripture, .rabbi-reflect {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 10px;
+}
+.rabbi-scripture {
+  padding: 13px;
+  border-radius: 10px;
+  background: var(--step-tint);
+}
+.rabbi-scripture > .rabbi-icon, .rabbi-reflect > .rabbi-icon { margin-top: 2px; color: var(--step-ink); }
+.rabbi-scripture__ref { margin-bottom: 3px !important; color: var(--step-ink); }
+.rabbi-scripture__ref span {
+  display: inline-block;
+  margin-left: .35rem;
+  font-size: .82rem;
+  font-weight: 600;
+}
+.rabbi-reflect h4 { color: var(--step-ink); font-size: 1rem; line-height: 1.5; }
+.rabbi-asl {
+  border: 1px solid var(--step-line);
+  border-radius: 8px;
+  color: var(--step-ink);
+}
+.rabbi-asl summary {
+  min-height: 44px;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+.rabbi-asl summary strong { margin-left: .32rem; }
+.rabbi-asl summary:hover { background: var(--step-tint); }
+.rabbi-asl__content { display: grid; gap: 8px; padding: 0 12px 12px; }
+.rabbi-asl__content video {
+  display: block;
+  width: min(100%, 360px);
+  aspect-ratio: 16 / 9;
+  background: #161c18;
+  border-radius: 7px;
+}
+.rabbi-asl__content a { color: var(--step-ink); font-size: .85rem; text-decoration: underline; }
+
+.rabbi-panel__links { display: flex; flex-wrap: wrap; gap: 8px; }
+.rabbi-panel__links a {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  min-height: 44px;
+  padding: 6px 11px;
+  border: 1px solid var(--step-line);
+  border-radius: 7px;
+  color: var(--step-ink);
+  font-size: .91rem;
+  font-weight: 750;
+}
+.rabbi-panel__links a:hover { background: var(--step-tint); }
+.rabbi-panel__links .rabbi-icon { width: 16px; height: 16px; }
+
+.rabbi-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.rabbi-controls button, .rabbi-back-to-wheel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 6px 11px;
+  border: 1px solid var(--rabbi-line);
+  border-radius: 8px;
+  background: #fffefa;
+  color: var(--rabbi-forest);
+  font: 700 .9rem/1.2 "Segoe UI", system-ui, sans-serif;
+  cursor: pointer;
+}
+.rabbi-controls button[aria-disabled="true"] { color: #666c64; background: #f1f0e7; cursor: default; }
+.rabbi-controls button:not([aria-disabled="true"]):hover, .rabbi-back-to-wheel:hover { background: #ebefe4; }
+.rabbi-controls .rabbi-icon { width: 17px; height: 17px; }
+.rabbi-controls button:first-child .rabbi-icon { transform: rotate(180deg); }
+.rabbi-back-to-wheel { border-color: transparent; background: transparent; text-decoration: underline !important; }
+
+.rabbi-prayer-area { margin-top: 35px; }
+
+@media (max-width: 780px) {
+  .rabbi-journey__layout { grid-template-columns: minmax(0, 1fr); gap: 17px; }
+  .rabbi-details { width: min(100%, 520px); margin-inline: auto; }
+}
+
+@media (max-width: 700px) {
+  .rabbi-hero { min-height: 0; }
+  .rabbi-hero::before { display: none; }
+  .rabbi-hero__media { position: relative; grid-row: 1; min-height: clamp(120px, 28vw, 190px); }
+  .rabbi-hero__copy { padding: 20px; }
+}
+
+@media (max-width: 540px) {
+  .rabbi-way { padding: 13px 15px 30px; }
+  .rabbi-hero { border-radius: 16px; }
+  .rabbi-hero h1 { font-size: clamp(2.32rem, 9.6vw, 3.2rem); }
+  .rabbi-hero h1 + p { margin-top: 8px; }
+  .rabbi-hero .rabbi-start { margin-top: 12px; }
+  .rabbi-about { margin-top: 13px; padding: 14px; gap: 10px; }
+  .rabbi-about__icon { width: 34px; height: 34px; }
+  .rabbi-about__icon .rabbi-icon { width: 19px; height: 19px; }
+  .rabbi-journey { margin-top: 26px; }
+  .rabbi-journey__header { margin-bottom: 13px; }
+  .rabbi-journey__header h2 { font-size: clamp(1.67rem, 7vw, 2.2rem); }
+  .rabbi-panel__header, .rabbi-panel__body { padding: 14px; }
+  .rabbi-panel__header h3 { font-size: 2.05rem; }
+  .rabbi-panel__icon { width: 48px; height: 48px; }
+  .rabbi-panel__icon .rabbi-icon { width: 25px; height: 25px; }
+  .rabbi-controls { gap: 4px; }
+  .rabbi-controls button, .rabbi-back-to-wheel { gap: 4px; padding-inline: 5px; font-size: .85rem; }
+  .rabbi-controls .rabbi-icon { width: 15px; height: 15px; }
+  .rabbi-prayer-area { margin-top: 22px; }
+}
